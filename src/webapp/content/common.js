@@ -22,8 +22,8 @@ function changeImages() {
 
 var preloadFlag = false;
 if (document.images) {
-	arrow_o = newImage("imgs/sm_arrow_o.gif");
-	arrow = newImage("imgs/sm_arrow.gif");
+	arrow_o = newImage(ROOT + "/imgs/sm_arrow_o.gif");
+	arrow = newImage(ROOT + "/imgs/sm_arrow.gif");
 	preloadFlag = true;
 }
 
@@ -53,7 +53,7 @@ function Highlight(e)
 function OverRow(e,which)
 {
   //alert ('which: ' + which);
-  changeImages(which, ROOT + '/imgs/sm_arrow_o.gif');
+  changeImages(which, arrow_o.src);
   var r = null;
   if(e.className) {
     r = e;
@@ -82,7 +82,7 @@ function OverRow(e,which)
 function OutRow(e,which)
 {
   var r = null;
-  changeImages(which, ROOT + '/imgs/sm_arrow.gif');
+  changeImages(which, arrow.src);
   if(e.className) {
     r = e;
   }
