@@ -28,6 +28,8 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -141,9 +143,20 @@ public class DomainAdminAction extends JammAction
                             String domain)
         throws MailManagerException
     {
-        List accounts = manager.getAccounts(domain);
+        List accounts;
+        String startsWith = request.getParameter("startsWith");
+        if (StringUtils.isAlphanumeric(startsWith) &&
+            !startsWith.equals(""))
+        {
+            accounts = manager.getAccountsStartingWith(startsWith, domain);
+        }
+        else
+        {
+            accounts = manager.getAccounts(domain);
+        }
+         
+        
         request.setAttribute("accounts", accounts);
-
         List activeAccounts = new ArrayList();
         List adminAccounts = new ArrayList();
         List deleteAccounts = new ArrayList();
@@ -195,6 +208,7 @@ public class DomainAdminAction extends JammAction
                            String domain)
         throws MailManagerException
     {
+        // todo add startswith filter
         List aliases = manager.getAliases(domain);
         request.setAttribute("aliases", aliases);
 
