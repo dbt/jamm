@@ -250,6 +250,10 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking destination", "mail1@abc.test", destination);
         destination = (String) destinations.get(1);
         assertEquals("Checking destination", "mail2@xyz.test", destination);
+
+        // Test for alias that doesn't exist.  Make sure null is returned
+        alias = manager.getAlias("noalias@" + domain);
+        assertNull("Checking return null on no alias", alias);
     }
 
     /**
