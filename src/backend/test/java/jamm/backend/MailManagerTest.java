@@ -136,10 +136,32 @@ public class MailManagerTest extends TestCase
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAlias");
         objectClass = mLdap.getAllResultAttributeValues("objectClass");
-        assertEquals("Checking alias objectClass", expectedObjectClass,
+        assertEquals("Checking alias object classes", expectedObjectClass,
                      objectClass);
 
         mLdap.close();
+    }
+
+    public void testModifyAlias()
+        throws NamingException, MailManagerException
+    {
+        String domain = "modify-alias.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        String aliasName = "alias";
+        String aliasMail = aliasName + "@" + domain;
+        manager.createDomain(domain);
+        manager.createAlias(domain, aliasName, "mail1@abc.test");
+        manager.modifyAlias(domain, aliasName, "mail2@xyz.test");
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + aliasMail);
+        assertTrue("Checking for a result", mLdap.nextResult());
+        assertEquals("Checking alias mail", "mail2@xyz.test",
+                     mLdap.getResultAttribute("maildrop"));
     }
 
     public void testCreateAccount()

@@ -14,11 +14,11 @@ public class MailManager
     {
         mHost = host;
         mBase = base;
-        mBinddn = binddn;
-        mBindpw = bindpw;
+        mBindDn = binddn;
+        mBindPassword = bindpw;
     }
 
-    public void createDomain(String domainName)
+    public void createDomain(String domain)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -28,7 +28,7 @@ public class MailManager
         try
         {
             ldap = new LdapFacade(mHost);
-            ldap.simpleBind(mBinddn, mBindpw);
+            ldap.simpleBind(mBindDn, mBindPassword);
 
             // Create the domain
             objectClass = new BasicAttribute("objectClass");
@@ -36,9 +36,9 @@ public class MailManager
             objectClass.add("JammVirtualDomain");
             attributes = new BasicAttributes();
             attributes.put(objectClass);
-            attributes.put("jvd", domainName);
+            attributes.put("jvd", domain);
             attributes.put("postfixTransport", "virtual:");
-            String domainDn = domainDn(domainName);
+            String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
 
             // Create the postmaster
@@ -49,7 +49,7 @@ public class MailManager
             attributes = new BasicAttributes();
             attributes.put(objectClass);
             attributes.put("cn", "postmaster");
-            attributes.put("mail", "postmaster@" + domainName);
+            attributes.put("mail", mail(domain, "postmaster"));
             attributes.put("maildrop", "postmaster");
             String dn = "cn=postmaster," + domainDn;
             attributes.put("roleOccupant", dn);
@@ -61,16 +61,15 @@ public class MailManager
             objectClass.add("JammMailAlias");
             attributes = new BasicAttributes();
             attributes.put(objectClass);
-            String mail = "abuse@" + domainName;
+            String mail = mail(domain, "abuse");
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
-            dn = "mail=" + mail + "," + domainDn;
-            ldap.addElement(dn, attributes);
+            ldap.addElement(mailDn(domain, mail), attributes);
         }
         catch (NamingException e)
         {
             throw new MailManagerException("Count not create domain: " +
-                                           domainName, e);
+                                           domain, e);
         }
         finally
         {
@@ -82,29 +81,48 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        BasicAttribute objectClass;
-        BasicAttributes attributes;
-        String email = alias + "@" + domain;
+        String mail = mail(domain, alias);
         
         try
         {
             ldap = new LdapFacade(mHost);
-            ldap.simpleBind(mBinddn, mBindpw);
+            ldap.simpleBind(mBindDn, mBindPassword);
 
-            objectClass = new BasicAttribute("objectClass");
+            BasicAttribute objectClass = new BasicAttribute("objectClass");
             objectClass.add("top");
             objectClass.add("JammMailAlias");
-            attributes = new BasicAttributes();
+            BasicAttributes attributes = new BasicAttributes();
             attributes.put(objectClass);
-            attributes.put("mail", email);
+            attributes.put("mail", mail);
             attributes.put("maildrop", destination);
-            String dn = "mail=" + email + "," + domainDn(domain);
-            ldap.addElement(dn, attributes);
+            ldap.addElement(mailDn(domain, mail), attributes);
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Count not create alias " + email,
+            throw new MailManagerException("Count not create alias: " + mail,
                                            e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
+    public void modifyAlias(String domain, String alias, String newDestination)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String mail = mail(domain, alias);
+        try
+        {
+            ldap = new LdapFacade(mHost);
+            ldap.simpleBind(mBindDn, mBindPassword);
+            String dn = mailDn(domain, mail);
+            ldap.modifyElementAttribute(dn, "maildrop", newDestination);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Could not modify alias" + mail, e);
         }
         finally
         {
@@ -118,13 +136,13 @@ public class MailManager
         LdapFacade ldap = null;
         BasicAttribute objectClass;
         BasicAttributes attributes;
-        String email = account + "@" + domain;
+        String mail = mail(domain, account);
         String hashedPassword;
 
         try
         {
             ldap = new LdapFacade(mHost);
-            ldap.simpleBind(mBinddn, mBindpw);
+            ldap.simpleBind(mBindDn, mBindPassword);
 
             objectClass = new BasicAttribute("objectClass");
             objectClass.add("top");
@@ -132,17 +150,16 @@ public class MailManager
             attributes = new BasicAttributes();
             attributes.put(objectClass);
             attributes.put("homeDirectory", "/home/vmail/domains");
-            attributes.put("mail", email);
+            attributes.put("mail", mail);
             attributes.put("mailbox", domain + "/" + account + "/");
             hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
                                                password);
             attributes.put("userPassword", hashedPassword);
-            ldap.addElement("mail=" + email + "," + domainDn(domain),
-                            attributes);
+            ldap.addElement(mailDn(domain, mail), attributes);
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Could not create account " + email,
+            throw new MailManagerException("Could not create account: " + mail,
                                            e);
         }
         finally
@@ -163,7 +180,7 @@ public class MailManager
         try
         {
             ldap = new LdapFacade(mHost);
-            ldap.simpleBind(mBinddn, mBindpw);
+            ldap.simpleBind(mBindDn, mBindPassword);
 
             objectClass = new BasicAttribute("objectClass");
             objectClass.add("top");
@@ -172,8 +189,7 @@ public class MailManager
             attributes.put(objectClass);
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
-            String dn = "mail=" + catchAll + "," + domainDn(domain);
-            ldap.addElement(dn, attributes);
+            ldap.addElement(mailDn(domain, catchAll), attributes);
         }
         catch (NamingException e)
         {
@@ -189,7 +205,24 @@ public class MailManager
 
     private String domainDn(String domain)
     {
-        return "jvd=" + domain + "," + mBase;
+        StringBuffer domainDn = new StringBuffer();
+        domainDn.append("jvd=").append(domain).append(",").append(mBase);
+        return domainDn.toString();
+    }
+
+    private String mailDn(String domain, String mail)
+    {
+        StringBuffer mailDn = new StringBuffer();
+        mailDn.append("mail=").append(mail).append(",");
+        mailDn.append(domainDn(domain));
+        return mailDn.toString();
+    }
+
+    private static final String mail(String domain, String user)
+    {
+        StringBuffer mail = new StringBuffer();
+        mail.append(user).append("@").append(domain);
+        return mail.toString();
     }
 
     private void closeLdap(LdapFacade ldap)
@@ -202,6 +235,6 @@ public class MailManager
 
     private String mHost;
     private String mBase;
-    private String mBinddn;
-    private String mBindpw;
+    private String mBindDn;
+    private String mBindPassword;
 }
