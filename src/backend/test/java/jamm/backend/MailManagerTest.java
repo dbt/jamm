@@ -103,6 +103,9 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking editCatchalls",
                      "TRUE",
                      mLdap.getResultAttribute("editCatchalls"));
+        assertEquals("Checking accountActive",
+                     "TRUE",
+                     mLdap.getResultAttribute("editCatchalls"));
 
         long domainTime =
             Long.parseLong(mLdap.getResultAttribute("lastChange"));
@@ -817,7 +820,7 @@ public class MailManagerTest extends TestCase
 
         DomainInfo di = manager.getDomain(domain);
         di.setCanEditAccounts(false);
-
+        
         long startTime = getUnixTime();
         manager.modifyDomain(di);
         long endTime = getUnixTime();
@@ -832,6 +835,27 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking editPostmasters",
                    stringToBoolean(
                        mLdap.getResultAttribute("editPostmasters")));
+        assertTrue("Checking accountActive",
+                   stringToBoolean(
+                       mLdap.getResultAttribute("accountActive")));
+
+        AliasInfo ai = manager.getAlias("abuse@" + domain);
+        assertNotNull("Checking abuse account existance", ai);
+        assertTrue("Checking abuse account active", ai.isActive());
+
+        di.setActive(false);
+        manager.modifyDomain(di);
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(BASE, "jvd=" + domain);
+        assertTrue("Checking for result", mLdap.nextResult());
+        assertTrue("Checking accountActive",
+                   !stringToBoolean(
+                       mLdap.getResultAttribute("accountActive")));
+
+        ai = manager.getAlias("abuse@" + domain);
+        assertNotNull("Checking abuse account existance", ai);
+        assertTrue("Checking abuse account not active", !ai.isActive());
 
         long domainTime =
             Long.parseLong(mLdap.getResultAttribute("lastChange"));

@@ -73,6 +73,11 @@ public class SiteConfigAction extends JammAction
         i = form.getCheckedEditPostmasters().iterator();
         modifyCapability(EDIT_POSTMASTERS, true, manager, domainInfos, i);
 
+        i = form.getUncheckedActive().iterator();
+        modifyCapability(EDIT_ACTIVE, false, manager, domainInfos, i);
+        i = form.getCheckedActive().iterator();
+        modifyCapability(EDIT_ACTIVE, true, manager, domainInfos, i);
+
         i = domainInfos.values().iterator();
         while (i.hasNext())
         {
@@ -123,6 +128,10 @@ public class SiteConfigAction extends JammAction
                     di.setCanEditPostmasters(setTo);
                     break;
 
+                case EDIT_ACTIVE:
+                    di.setActive(setTo);
+                    break;
+
                 default:
                     throw new Exception("The should never be here");
             }
@@ -133,4 +142,6 @@ public class SiteConfigAction extends JammAction
     private static final int EDIT_ACCOUNTS = 1;
     /** a final meaning "call setCanEditPostmasters" */
     private static final int EDIT_POSTMASTERS = 2;
+    /** a final meaning "call setActive" */
+    private static final int EDIT_ACTIVE = 3;
 }

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -444,11 +445,10 @@ public class MailManager
             ldap.getResultAttribute("editAccounts"));
         boolean canEditPostmasters = stringToBoolean(
             ldap.getResultAttribute("editPostmasters"));
-        /*
-          boolean active = stringToBoolean(
-          ldap.getResultAttribute("active"));
-        */
-        return new DomainInfo(name, canEditAccounts, canEditPostmasters, true);
+        boolean active = stringToBoolean(
+            ldap.getResultAttribute("accountActive"));
+        return new DomainInfo(name, canEditAccounts, canEditPostmasters,
+                              active);
     }
 
     /**
@@ -503,7 +503,8 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        String domaindn = domainDn(domain.getName());
+        String domainName = domain.getName();
+        String domaindn = domainDn(domainName);
         try
         {
             ldap = getLdap();
@@ -513,18 +514,79 @@ public class MailManager
             ldap.modifyElementAttribute(domaindn, "editPostmasters",
                                         booleanToString(
                                             domain.getCanEditPostmasters()));
+            ldap.modifyElementAttribute(domaindn, "accountActive",
+                                        booleanToString(
+                                            domain.getActive()));
             ldap.modifyElementAttribute(domaindn, "lastChange",
                                         getUnixTimeString());
 
+            // We should recursively set stuff inactive if inactive.  If
+            // active, set abuse and postmaster to be active.
+            if (domain.getActive())
+            {
+                hiddenAccountUpdate(ldap, domainName, true);
+            }
+            else
+            {
+                hiddenAccountUpdate(ldap, domainName, false);
+                
+                Iterator i = getAccounts(domainName).iterator();
+                while (i.hasNext())
+                {
+                    AccountInfo ai = (AccountInfo) i.next();
+                    ai.setActive(false);
+                    modifyAccount(ai);
+                }
+
+                i = getAliases(domainName).iterator();
+                while (i.hasNext())
+                {
+                    AliasInfo ali = (AliasInfo) i.next();
+                    ali.setActive(false);
+                    modifyAlias(ali);
+                }
+            }
         }
         catch (NamingException e)
         {
-            throw new MailManagerException(domain.getName(), e);
+            throw new MailManagerException(domainName, e);
         }
         finally
         {
             closeLdap(ldap);
         }
+    }
+
+    /**
+     * Updates the accountActive flag on the hidden accounts.  (These
+     * are postmaster and abuse.
+     *
+     * @param ldap the ldap block we're using
+     * @param domainName the domain name to update
+     * @param active activate or deactive accounts
+     * @exception NamingException if an ldap error occurs
+     * @exception MailManagerException if a mail manager error occurs
+     */
+    private void hiddenAccountUpdate(LdapFacade ldap, String domainName,
+                                     boolean active)
+        throws NamingException, MailManagerException
+    {
+                AliasInfo ai = getAlias("abuse@" + domainName);
+                if (ai != null)
+                {
+                    ai.setActive(active);
+                    modifyAlias(ai);
+                }
+
+                String pmMail = "postmaster@" + domainName;
+                ldap.searchOneLevel(domainDn(domainName), "mail=" + pmMail);
+
+                if (ldap.nextResult())
+                {
+                    ldap.modifyElementAttribute(ldap.getResultName(),
+                                                "accountActive",
+                                                booleanToString(active));
+                }
     }
 
     /**
@@ -613,6 +675,7 @@ public class MailManager
             attributes.put("editAccounts", "TRUE");
             attributes.put("editPostmasters", "TRUE");
             attributes.put("editCatchalls", "TRUE");
+            attributes.put("accountActive", "TRUE");
             attributes.put("lastChange", getUnixTimeString());
             String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
@@ -639,6 +702,7 @@ public class MailManager
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
             attributes.put("lastChange", getUnixTimeString());
+            attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
