@@ -170,16 +170,79 @@ public class SiteConfigForm extends JammForm
     }
 
     /**
-     * Returns the newly unchecked edit account items from the form.
+     * Returns the newly unchecked edit postmaster items from the form.
      *
-     * @return a Set of the newly unchecked edit account items.
+     * @return a Set of the newly unchecked edit postmaster items.
      */
     public Set getUncheckedEditPostmasters()
     {
         return getDifference(mOriginalAllowEditPostmasters,
                              mAllowEditPostmasters);
     }
+
     /**
+     * Sets the list of domains that were originall active.
+     *
+     * @param active a string array of the originally active domains
+     */
+    public void setOriginalActive(String[] active)
+    {
+        mOriginalActive = active;
+    }
+
+    /**
+     * Returns the list of originally active domains.
+     *
+     * @return a string array of domains
+     */
+    public String[] getOriginalActive()
+    {
+        return mOriginalActive;
+    }
+
+    /**
+     * Sets the list of active domains
+     *
+     * @param active a string array of domains
+     */
+    public void setActive(String[] active)
+    {
+        mActive = active;
+    }
+
+    /**
+     * Returns the list of originally active domains.
+     *
+     * @return a string array of domains
+     */
+    public String[] getActive()
+    {
+        return mActive;
+    }
+
+    /**
+     * Returns the newly checked active items from the form.
+     *
+     * @return a Set of the newly checked active items.
+     */
+    public Set getCheckedActive()
+    {
+        return getDifference(mActive, mOriginalActive);
+    }
+
+    /**
+     * Returns the newly unchecked active items from the form.
+     *
+     * @return a Set of the newly unchecked account items.
+     */
+    public Set getUncheckedActive()
+    {
+        return getDifference(mOriginalActive, mActive);
+    }
+
+    /**
+     * Resets the accounts, postmasters, and active domains to empty
+     * arrays.
      *
      * @param mapping an <code>ActionMapping</code> value
      * @param request a <code>HttpServletRequest</code> value
@@ -190,6 +253,8 @@ public class SiteConfigForm extends JammForm
         mOriginalAllowEditAccounts = new String[0];
         mAllowEditPostmasters = new String[0];
         mOriginalAllowEditPostmasters = new String[0];
+        mActive = new String[0];
+        mOriginalActive = new String[0];
     }
 
     /** the domains */
@@ -202,4 +267,8 @@ public class SiteConfigForm extends JammForm
     private String[] mAllowEditPostmasters;
     /** original domains that allow postmaster editing */
     private String[] mOriginalAllowEditPostmasters;
+    /** original list of active domains */
+    private String[] mOriginalActive;
+    /** List of active domains */
+    private String[] mActive;
 }

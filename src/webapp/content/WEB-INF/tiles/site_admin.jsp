@@ -15,11 +15,17 @@
     <html:hidden property="originalAllowEditPostmasters" value="<%=domain%>"/>
   </logic:iterate>
 
-  <table width="50%" border="1" cellspacing="0" cellpadding="3" align="center">
+  <logic:iterate id="domain" name="siteConfigForm"
+                 property="originalActive" type="String">
+    <html:hidden property="originalActive" value="<%=domain%>"/>
+  </logic:iterate>
+
+  <table width="65%" border="1" cellspacing="0" cellpadding="3" align="center">
     <tr>
       <th> <bean:message key="site_admin.header.domains" /> </th>
       <th> <bean:message key="site_admin.header.edit_accounts" /> </th>
       <th> <bean:message key="site_admin.header.appoint_postmasters" /> </th>
+      <th> <bean:message key="site_admin.header.active" /> </th>
     </tr>
 
     <logic:iterate indexId="i" id="domain" name="domains"
@@ -38,6 +44,11 @@
         </td>
         <td align="center">
           <html:multibox property="allowEditPostmasters">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
+        </td>
+        <td align="center">
+          <html:multibox property="active">
             <bean:write name="domain" property="name"/>
           </html:multibox>
         </td>

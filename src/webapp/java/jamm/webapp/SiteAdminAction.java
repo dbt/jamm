@@ -79,10 +79,9 @@ public class SiteAdminAction extends JammAction
         SiteConfigForm siteConfigForm = new SiteConfigForm();
 
         List domainNames = new ArrayList();
-        List allowEditAliases = new ArrayList();
         List allowEditAccounts = new ArrayList();
         List allowEditPostmasters = new ArrayList();
-        List allowEditCatchalls = new ArrayList();
+        List active = new ArrayList();
 
         Iterator i = domains.iterator();
         while (i.hasNext())
@@ -92,10 +91,6 @@ public class SiteAdminAction extends JammAction
             
             domainNames.add(name);
 
-            if (di.getCanEditAliases())
-            {
-                allowEditAliases.add(name);
-            }
             if (di.getCanEditAccounts())
             {
                 allowEditAccounts.add(name);
@@ -104,9 +99,9 @@ public class SiteAdminAction extends JammAction
             {
                 allowEditPostmasters.add(name);
             }
-            if (di.getCanEditCatchalls())
+            if (di.getActive())
             {
-                allowEditCatchalls.add(name);
+                active.add(name);
             }
         }
             
@@ -122,6 +117,11 @@ public class SiteAdminAction extends JammAction
             (String []) allowEditPostmasters.toArray(new String[0]);
         siteConfigForm.setAllowEditPostmasters(editPostmastersArray);
         siteConfigForm.setOriginalAllowEditPostmasters(editPostmastersArray);
+
+        String[] activeArray =
+            (String []) active.toArray(new String[0]);
+        siteConfigForm.setActive(activeArray);
+        siteConfigForm.setOriginalActive(activeArray);
 
         request.setAttribute("siteConfigForm", siteConfigForm);
 
