@@ -356,12 +356,15 @@
         <include name="README"/>
         <include name="LICENSE"/>
         <include name="NEWS"/>
+        <include name="UPGRADE"/>
         <include name="src/schema/jamm.schema"/>
         <include name="doc/samples/sample.ldif"/>
         <include name="build/${project.string}.war"/>
         <include name="build/jammUtils-${project.version}.tar.gz"/>
+        <include name="src/util/perl/updateLdif.pl"/>
       </fileset>
     </copy>
+    <chmod file="build/dist-bin/${project.string}/updateLdif.pl" perm="555" />
     <tar tarfile="build/${project.string}-bin.tar"
          basedir="build/dist-bin"/>
     <gzip zipfile="dist/${project.string}-bin.tar.gz"
