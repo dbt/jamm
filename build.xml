@@ -22,15 +22,18 @@
 
   <path id="xdoclet.path">
     <pathelement path="${ant.home}/lib/ant.jar" />
-    <pathelement path="${xdoclet.jar}" />
-    <pathelement path="${log4j.jar}" />
+    <fileset dir="${xdoclet.lib}" includes="commons-*.jar"/>
+    <pathelement location="${xdoclet.jar}"/>
+    <pathelement location="${xdoclet.xdoclet.jar}"/>
+    <pathelement location="${xjavadoc.jar}"/>
   </path>
 
-  <taskdef name="webdoclet" classname="xdoclet.web.WebDocletTask">
-    <classpath>
-      <path refid="xdoclet.path" />
-    </classpath>
-  </taskdef>
+<!--   <taskdef name="webdoclet" classname="xdoclet.web.WebDocletTask"> -->
+<!--   <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask"> -->
+<!--     <classpath> -->
+<!--       <path refid="xdoclet.path" /> -->
+<!--     </classpath> -->
+<!--   </taskdef> -->
 
   <taskdef name="checkstyle"
            classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
@@ -215,15 +218,18 @@
   <target name="b-w-j" depends="build-webapp-java" />
 
   <target name="build-webapp-webdoclet" depends="build-webapp-java">
-    <webdoclet sourcepath="src/webapp/java"
-               destdir="build/webapp/generated"
-               packagenames="jamm.*">
+    <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask">
       <classpath>
+        <path refid="xdoclet.path"/>
+        <path location="${xdoclet.web.jar}"/>
+        <pathelement location="${servlet.jar}"/>
         <pathelement location="build/backend/classes" />
         <path refid="lib.path" />
-        <path refid="xdoclet.path" />
       </classpath>
+    </taskdef>
 
+    <webdoclet destdir="build/webapp/generated" verbose="false">
+      <fileset dir="src/webapp/java"/>
       <deploymentdescriptor servletspec="2.3"
                             destdir="build/webapp/root/WEB-INF"
                             sessiontimeout="30"
