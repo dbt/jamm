@@ -3,6 +3,7 @@
   Add Account
 </h1>
 
+<bean:parameter id="domain" name="domain"/>
 <html:errors/>
 <html:form action="/private/add_account" focus="name">
   <html:hidden property="domain"/>
@@ -12,7 +13,7 @@
         Account Name
       </th>
       <td align="left">
-        <html:text property="name" size="30"/>
+        <html:text property="name" size="30"/>@<bean:write name="domain"/>
       </td>
     </tr>
     <tr>
