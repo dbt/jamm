@@ -82,24 +82,41 @@ public abstract class JammAction extends Action
     protected ActionForward findForward(ActionMapping mapping, String name,
                                         HttpServletRequest request)
     {
-        ActionForward forward = mapping.findForward(name);
         if (name.equals("domain_admin"))
         {
             String domain = request.getParameter("domain");
-            if (domain != null)
-            {
-                return addParameter(forward, "domain", domain);
-            }
+            return getDomainAdminForward(mapping, domain);
         }
         else if (name.equals("account_admin"))
         {
             String mail = request.getParameter("mail");
-            if (mail != null)
-            {
-                return addParameter(forward, "mail", mail);
-            }
+            return getAccountAdminForward(mapping, mail);
         }
+        else
+        {
+            return mapping.findForward(name);
+        }
+    }
 
+    protected ActionForward getDomainAdminForward(ActionMapping mapping,
+                                                  String domain)
+    {
+        ActionForward forward = mapping.findForward("domain_admin");
+        if (domain != null)
+        {
+            return addParameter(forward, "domain", domain);
+        }
+        return forward;
+    }
+
+    protected ActionForward getAccountAdminForward(ActionMapping mapping,
+                                                   String mail)
+    {
+        ActionForward forward = mapping.findForward("account_admin");
+        if (mail != null)
+        {
+            return addParameter(forward, "mail", mail);
+        }
         return forward;
     }
 
