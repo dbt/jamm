@@ -100,6 +100,26 @@ public class UpdateAliasForm extends ActionForm
     }
 
     /**
+     * Get the CommonName value.
+     *
+     * @return the CommonName value.
+     */
+    public String getCommonName()
+    {
+        return mCommonName;
+    }
+
+    /**
+     * Set the CommonName value.
+     *
+     * @param newCommonName The new CommonName value.
+     */
+    public void setCommonName(String commonName)
+    {
+        mCommonName = commonName;
+    }
+
+    /**
      * Returns the addresses to add as a List instead of the
      * whitespace or comma seperated string.
      *
@@ -155,4 +175,6 @@ public class UpdateAliasForm extends ActionForm
     private String[] mDeleted;
     /** The addresses to add to the alias. */
     private String mAdded;
+    /** The common name associated with this alias. */
+    private String mCommonName;
 }
