@@ -487,25 +487,53 @@ public class MailManager
      * alias element.
      *
      * @param ldap LDAP facade where result exists
+     * @param postmasters a Set of postmasters for this domain
      * @return A new account information bean
      * @throws NamingException If the object could not be created
      * @throws MailManagerException If there is a problem looking up postmaster
      */
-    private AccountInfo createAccountInfo(LdapFacade ldap)
+    private AccountInfo createAccountInfo(LdapFacade ldap, Set postmasters)
         throws NamingException, MailManagerException
     {
+        String dn = ldap.getResultName();
+        boolean isAdmin = postmasters.contains(dn);
+
         String name = ldap.getResultAttribute("mail");
         String commonName = ldap.getResultAttribute("cn");
         boolean isActive =
             stringToBoolean(ldap.getResultAttribute("accountActive"));
-        boolean isAdmin = isPostmaster(name);
         String homeDirectory = ldap.getResultAttribute("homeDirectory");
         String mailbox = ldap.getResultAttribute("mailbox");
         int lastChange =
             Integer.parseInt(ldap.getResultAttribute("lastChange"));
         boolean delete = stringToBoolean(ldap.getResultAttribute("delete"));
+        
         return new AccountInfo(name, commonName, isActive, isAdmin,
                                homeDirectory, mailbox, delete, lastChange);
+    }
+    
+    /**
+     * Helper method that gets the postmasters for a domain.
+     * 
+     * @param ldap a new/reset LdapFacade
+     * @param domain The domain we want the postmasters for
+     * @return a Set of DNs for the postmaster
+     * @throws NamingException if a ldap error occurs
+     */
+    private Set getPostmasters(LdapFacade ldap, String domain)
+        throws NamingException
+    {
+        String filter = "jvd=" + domain;
+
+        Set result = null;
+        ldap.setReturningAttributes(new String[] { "roleOccupant" });
+        ldap.searchOneLevel(mBase, filter);
+        if (ldap.nextResult())
+        {
+            result = ldap.getAllAttributeValues("roleOccupant");
+        }
+        ldap.resetSearch();
+        return result;
     }
 
     /**
@@ -592,11 +620,12 @@ public class MailManager
      * alias element.
      *
      * @param ldap LDAP facade where result exists
+     * @param postmasters a Set of postmaster DNs for the domain
      * @return A new alias information bean
      * @throws NamingException If the object could not be created
      * @throws MailManagerException If their is a problem looking up postmaster
      */
-    private AliasInfo createAliasInfo(LdapFacade ldap)
+    private AliasInfo createAliasInfo(LdapFacade ldap, Set postmasters)
         throws NamingException, MailManagerException
     {
         String name = ldap.getResultAttribute("mail");
@@ -607,7 +636,7 @@ public class MailManager
         Collections.sort(destinations, String.CASE_INSENSITIVE_ORDER);
         boolean isActive = stringToBoolean(
             ldap.getResultAttribute("accountActive"));
-        boolean isAdmin = isPostmaster(name);
+        boolean isAdmin = postmasters.contains(ldap.getResultName());
         return new AliasInfo(name, commonName, destinations, isActive, isAdmin);
     }
 
@@ -717,13 +746,16 @@ public class MailManager
         LdapFacade ldap = null;
         try
         {
-            if (isPostmaster(mail))
+            ldap = getLdap();
+            Set postmasters =
+                getPostmasters(ldap, MailAddress.hostFromAddress(mail));
+            searchForMail(ldap, mail);
+            String dn = ldap.getResultName();
+            if (postmasters.contains(dn))
             {
                 removePostmaster(mail);
             }
-            ldap = getLdap();
-            searchForMail(ldap, mail);
-            ldap.deleteElement(ldap.getResultName());
+            ldap.deleteElement(dn);
         }
         catch (NoPermissionException e)
         {
@@ -807,31 +839,19 @@ public class MailManager
      * @return an AccountInfo object or null
      * @exception MailManagerException if an error occurs
      */
-    public AccountInfo getAccount(String mail)
-        throws MailManagerException
-    {
-        LdapFacade ldap = null;
-        AccountInfo account = null;
-        try
-        {
-            ldap = getLdap();
-            searchForMail(ldap, mail);
-            account = createAccountInfo(ldap);
-        }
-        catch (MailNotFoundException e)
-        {
-            account = null;
-        }
-        catch (NamingException e)
-        {
-            throw new MailManagerException(e);
-        }
-        finally
-        {
-            closeLdap(ldap);
-        }
-        return account;
-    }
+  public AccountInfo getAccount(String mail)
+      throws MailManagerException
+      {
+          String domain = MailAddress.hostFromAddress(mail);
+          String filter = "mail=" + mail;
+          List foo = getFilteredAccounts(filter, domain);
+          if (foo.size() > 1)
+          {
+              // todo bitch about more than one domain here.
+          }
+          
+          return (AccountInfo) foo.get(0);
+      }
     
     /**
      * Returns all accounts for the specified domain as a list of
@@ -844,34 +864,8 @@ public class MailManager
     public List getAccounts(String domain)
         throws MailManagerException
     {
-        LdapFacade ldap = null;
-        List accounts = new ArrayList();
-
-        try
-        {
-            ldap = getLdap();
-            String domainDn = domainDn(domain);
-            ldap.searchOneLevel(domainDn, "objectClass=" +
-                                ACCOUNT_OBJECT_CLASS);
-
-            while (ldap.nextResult())
-            {
-                AccountInfo account = createAccountInfo(ldap);
-                accounts.add(account);
-            }
-
-        }
-        catch (NamingException e)
-        {
-            throw new MailManagerException(e);
-        }
-        finally
-        {
-            closeLdap(ldap);
-        }
-
-        Collections.sort(accounts, new AccountNameComparator());
-        return accounts;
+        String filter = "objectClass=" + ACCOUNT_OBJECT_CLASS;
+        return getFilteredAccounts(filter, domain);
     }
 
     /**
@@ -884,27 +878,50 @@ public class MailManager
     public AliasInfo getAlias(String mail)
         throws MailManagerException
     {
-        LdapFacade ldap = null;
-        AliasInfo alias = null;
-        try
+        String domain = MailAddress.hostFromAddress(mail);
+        String filter = "mail=" + mail;
+        List foo = getFilteredAliases(filter, domain);
+        if (foo.size() > 1)
         {
-            ldap = getLdap();
-            searchForMail(ldap, mail);
-            alias = createAliasInfo(ldap);
+            //todo bitch about more than one alias here.
         }
-        catch (MailNotFoundException e)
+        
+        if (foo.size() != 0)
         {
-            alias = null;
+            return (AliasInfo) foo.get(0);
         }
-        catch (NamingException e)
+      
+        return null;
+    }
+
+    /**
+     * Get all aliases for a domain.
+     * 
+     * @param domain the domain to get aliases for
+     * @return a list of AliasInfo objects
+     * @throws MailManagerException If an error occured
+     */
+    public List getAliases(String domain)
+        throws MailManagerException
+    {
+        String filter = "objectClass=" + ALIAS_OBJECT_CLASS;
+        List aliases = getFilteredAliases(filter, domain);
+        
+        // Skip the "special" accounts
+        Iterator i = aliases.iterator();
+        while (i.hasNext())
         {
-            throw new MailManagerException(e);
+            AliasInfo ai = (AliasInfo) i.next();
+            String name = ai.getName();
+            if (name.startsWith("postmaster@") ||
+                name.startsWith("abuse@") ||
+                name.startsWith("@"))
+            {
+                i.remove();
+            }
         }
-        finally
-        {
-            closeLdap(ldap);
-        }
-        return alias;
+
+        return aliases;
     }
 
     /**
@@ -912,10 +929,11 @@ public class MailManager
      * AliasInfo} objects.
      *
      * @param domain Domain name
+     * @param filter the filter to search against
      * @return List of {@link AliasInfo} objects
      * @throws MailManagerException If an error occured
      */
-    public List getAliases(String domain)
+    public List getFilteredAliases(String filter, String domain)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -924,21 +942,23 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            Set postmasters = getPostmasters(ldap, domain);
+            
             String domainDn = domainDn(domain);
-            ldap.searchOneLevel(domainDn, "objectClass=" + ALIAS_OBJECT_CLASS);
+            ldap.searchOneLevel(domainDn, filter);
 
             while (ldap.nextResult())
             {
-                String name = ldap.getResultAttribute("mail");
-                // Skip "special" accounts
-                if (name.startsWith("postmaster@") ||
-                    name.startsWith("abuse@") ||
-                    name.startsWith("@"))
-                {
-                    continue;
-                }
+//                String name = ldap.getResultAttribute("mail");
+//                // Skip "special" accounts
+//                if (name.startsWith("postmaster@") ||
+//                    name.startsWith("abuse@") ||
+//                    name.startsWith("@"))
+//                {
+//                    continue;
+//                }
 
-                AliasInfo alias = createAliasInfo(ldap);
+                AliasInfo alias = createAliasInfo(ldap, postmasters);
                 aliases.add(alias);
             }
         }
@@ -1072,12 +1092,14 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            Set postmasters = getPostmasters(ldap, domain);
+
             String domainDn = domainDn(domain);
             ldap.searchOneLevel(domainDn, filter);
 
             while (ldap.nextResult())
             {
-                AccountInfo account = createAccountInfo(ldap);
+                AccountInfo account = createAccountInfo(ldap, postmasters);
                 accounts.add(account);
             }
 
@@ -1440,6 +1462,7 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            Set postmasters = getPostmasters(ldap, domain);
             String commonName = account.getCommonName();
             if (commonName != null && commonName.equals(""))
             {
@@ -1448,7 +1471,8 @@ public class MailManager
             ldap.modifyElementAttribute(dn, "cn", account.getCommonName());
             ldap.modifyElementAttribute(dn, "accountActive",
                                         booleanToString(account.isActive()));
-            if (isPostmaster(domain, mail))
+
+            if (postmasters.contains(dn))
             {
                 if (!account.isAdministrator())
                 {
@@ -1462,6 +1486,7 @@ public class MailManager
                     addPostmaster(domain, mail);
                 }
             }
+
             ldap.modifyElementAttribute(dn, "lastChange",
                                         getUnixTimeString());
             ldap.modifyElementAttribute(dn, "delete",
@@ -1500,6 +1525,7 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            Set postmasters = getPostmasters(ldap, domain);
             String commonName = alias.getCommonName();
             if (commonName != null && commonName.equals(""))
             {
@@ -1510,7 +1536,8 @@ public class MailManager
                                         alias.getMailDestinations());
             ldap.modifyElementAttribute(dn, "accountActive",
                                         booleanToString(alias.isActive()));
-            if (isPostmaster(domain, mail))
+
+            if (postmasters.contains(dn))
             {
                 if (!alias.isAdministrator())
                 {
