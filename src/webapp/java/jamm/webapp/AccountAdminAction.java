@@ -40,6 +40,10 @@ import jamm.backend.MailAddress;
  * administration, either the alias_admin page or the account_admin
  * page.  If the request contains a "mail=" arguement, that will be used,
  * if not, it will default to the current users information.
+ * 
+ * @struts.action validate="false" path="/private/account_admin"
+ * @struts.action-forward name="view" path="/private/account_admin.jsp"
+ * @struts.action-forward name="alias_admin" path="/private/alias_admin.jsp"
  */
 public class AccountAdminAction extends JammAction
 {

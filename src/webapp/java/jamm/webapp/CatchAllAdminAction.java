@@ -33,6 +33,8 @@ import jamm.backend.AliasInfo;
 
 /**
  * Updates the catch-all.
+ * @struts.action validate="false" path="/private/catch_all_admin"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class CatchAllAdminAction extends JammAction
 {

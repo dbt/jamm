@@ -36,6 +36,10 @@ import jamm.backend.MailAddress;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.AddDomainForm
+ * 
+ * @struts.action scope="request" validate="true" name="addDomainForm"
+ *                path="/private/add_domain" input="/private/add_domain.jsp"
+ *                roles="Site Administrator"
  */
 public class AddDomainAction extends JammAction
 {

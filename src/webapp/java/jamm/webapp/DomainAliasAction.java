@@ -42,6 +42,11 @@ import jamm.backend.DomainInfo;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.DomainConfigForm
+ * 
+ * @struts.action scope="request" validate="false"
+ *                name="domainAccountAliasForm"
+ *                path="/private/domain_alias"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class DomainAliasAction extends JammAction
 {

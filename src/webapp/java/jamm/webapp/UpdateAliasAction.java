@@ -46,6 +46,10 @@ import jamm.backend.AliasInfo;
  *
  * @see jamm.webapp.UpdateAliasForm
  * @see jamm.backend.MailManager
+ * 
+ * @struts.action scope="request" validate="true" name="updateAliasForm"
+ *                path="/private/update_alias"
+ *                input="/private/account_admin.do"
  */
 public class UpdateAliasAction extends JammAction
 {

@@ -35,6 +35,10 @@ import org.apache.struts.action.ActionForward;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.ChangePasswordForm
+ * 
+ * @struts.action scope="request" validate="true" name="changePasswordForm"
+ *                path="/private/change_password"
+ *                input="/private/change_password.jsp"
  */
 public class ChangePasswordAction extends JammAction
 {

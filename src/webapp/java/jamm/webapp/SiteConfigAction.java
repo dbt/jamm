@@ -36,6 +36,11 @@ import jamm.backend.DomainInfo;
 /**
  *
  * @see jamm.backend.MailManager
+ * 
+ * @struts.action scope="request" validate="false" name="siteConfigForm"
+ *                path="/private/site_config"
+ *                input="/private/site_admin.jsp"
+ *                roles="Site Administrator"
  */
 public class SiteConfigAction extends JammAction
 {

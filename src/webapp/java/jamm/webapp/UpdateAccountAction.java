@@ -29,13 +29,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
-* This action updates an alias entry with the changes as specified by the
-* information in the UpdateAccountForm. Right now this is limited to
-* CommonName.
-* 
-* @see jamm.webapp.UpdateAccountForm
-* @see jamm.backend.MailManager
-*/
+ * This action updates an alias entry with the changes as specified by the
+ * information in the UpdateAccountForm. Right now this is limited to
+ * CommonName.
+ * 
+ * @see jamm.webapp.UpdateAccountForm
+ * @see jamm.backend.MailManager
+ * 
+ * @struts.action scope="request" validate="true" name="updateAccountForm"
+ *                path="/private/update_account"
+ *                input="/private/account_admin.do"
+ */
 public class UpdateAccountAction extends JammAction
 {
     /**

@@ -35,6 +35,11 @@ import org.apache.struts.action.ActionForward;
  * account_admin forward.
  *
  * @see jamm.webapp.User
+ * 
+ * @struts.action scope="request" validate="false" path="/private/index"
+ * @struts.action-forward name="account_admin" path="/private/account_admin.do"
+ * @struts.action-forward name="domain_admin" path="/private/domain_admin.do"
+ * @struts.action-forward name="site_admin" path="/private/site_admin.do"
  */
 public class MainMenuAction extends JammAction
 {

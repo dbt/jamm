@@ -38,6 +38,11 @@ import jamm.backend.MailManager;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.AddAccountForm
+ * 
+ * @struts.action scope="request" validate="true" name="addAccountForm"
+ *                path="/private/add_account"
+ *                input="/private/add_account.jsp"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class AddAccountAction extends JammAction
 {

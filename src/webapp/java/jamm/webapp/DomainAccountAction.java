@@ -43,6 +43,10 @@ import jamm.backend.DomainInfo;
  * forwards to user_home.
  *
  * @see jamm.webapp.DomainConfigForm
+ * @struts.action scope="request" validate="false"
+ *                name="domainAccountAliasForm"
+ *                path="/private/domain_account"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class DomainAccountAction extends JammAction
 {

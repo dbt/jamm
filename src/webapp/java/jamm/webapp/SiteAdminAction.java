@@ -41,6 +41,10 @@ import jamm.backend.DomainInfo;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.SiteConfigForm
+ * 
+ * @struts.action validate="false" path="/private/site_admin"
+ *                roles="Site Administrator"
+ * @struts.action-forward name="view" path="/private/site_admin.jsp"
  */
 public class SiteAdminAction extends JammAction
 {

@@ -38,6 +38,10 @@ import jamm.backend.MailAddress;
  *
  * @see jamm.backend.MailManager
  * @see jamm.webapp.AddAliasForm
+ * 
+ * @struts.action scope="request" validate="true" name="addAliasForm"
+ *                path="/private/add_alias" input="/private/add_alias.jsp"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class AddAliasAction extends JammAction
 {

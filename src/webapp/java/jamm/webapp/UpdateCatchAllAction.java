@@ -31,8 +31,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 /**
+ * Update the catch all.
+ * 
  * @see jamm.backend.MailManager
  * @see jamm.webapp.UpdateCatchAllForm
+ * 
+ * @struts.action scope="request" validate="true" name="updateCatchAllForm"
+ *                path="/private/update_catch_all"
+ *                input="/private/catch_all_admin.do"
+ *                roles="Site Administrator, Domain Administrator"
  */
 public class UpdateCatchAllAction extends JammAction
 {
