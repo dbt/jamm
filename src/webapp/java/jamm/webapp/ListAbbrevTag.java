@@ -33,7 +33,7 @@ import org.apache.struts.util.RequestUtils;
 /**
  * Abbreviates a list and ends it with ellipses.
  *
- * @jsp:tag name="list-abbrev"
+ * @jsp:tag name="join"
  */
 public class ListAbbrevTag extends TagSupport
 {
@@ -43,24 +43,34 @@ public class ListAbbrevTag extends TagSupport
     public ListAbbrevTag()
     {
         super();
-        mLimit = 3;
+        mLimit = Integer.MAX_VALUE;
         mName = null;
         mProperty = null;
         mScope = null;
+        mSeparator = ",";
+        mEllipsis = "...";
+        mNoEllipsis = false;
     }
     
     /**
      * How many of the list should we show before the ellipses?
-     * Defaults to 3 in the constructor.
+     * Defaults to 0 aka "infinite."
      *
-     * @param limit the upper bounds on the number to show
+     * @param limit the upper bounds on the number to show, 0 for "infinite"
      *
-     * @jsp:attribute required="false" rtexprvalue="true"
+     * @jsp:attribute required="false" rtexprvalue="false"
      *                description="The upper limit of items to show"
      */
     public void setLimit(int limit)
     {
-        mLimit = limit;
+        if (limit == 0)
+        {
+            mLimit = Integer.MAX_VALUE;
+        }
+        else
+        {
+            mLimit = limit;
+        }
     }
 
     /**
@@ -69,7 +79,7 @@ public class ListAbbrevTag extends TagSupport
      *
      * @param name the name of the bean
      *
-     * @jsp:attribute required="true" rtexprvalue="true"
+     * @jsp:attribute required="true" rtexprvalue="false"
      *                description="name of bean"
      */
     public void setName(String name)
@@ -82,7 +92,7 @@ public class ListAbbrevTag extends TagSupport
      *
      * @param property the name of the property
      *
-     * @jsp:attribute required="false" rtexprvalue="true"
+     * @jsp:attribute required="false" rtexprvalue="false"
      *                description="name of property"
      */
     public void setProperty(String property)
@@ -91,16 +101,55 @@ public class ListAbbrevTag extends TagSupport
     }
 
     /**
+     * Sets the separator.  Default is a comma.
+     *
+     * @param separator the separator
+     *
+     * @jsp:attribute required="false" rtexprvalue="false"
+     *                description="what is our separator"
+     */
+    public void setSeparator(String separator)
+    {
+        mSeparator = separator;
+    }
+
+    /**
      * Set the scope to seach for the bean in.
      *
      * @param scope the scope to look in
      *
-     * @jsp:attribute required="false" rtexprvalue="true"
+     * @jsp:attribute required="false" rtexprvalue="false"
      *                description="scope to locate bean in"
      */
     public void setScope(String scope)
     {
         mScope = scope;
+    }
+
+    /**
+     * Sets what the ellipsis should be.  Defaults to "..."
+     *
+     * @param ellipsis the ellipsis
+     *
+     * @jsp:attribute required="false" rtexprvalue="false"
+     *                description="what should the ellipsis be"
+     */
+    public void setEllipsis(String ellipsis)
+    {
+        mEllipsis = ellipsis;
+    }
+
+    /**
+     * Do not show the ellipsis.  Defaults to false.
+     *
+     * @param noEllipsis true or false
+     *
+     * @jsp:attribute required="false" rtexprvalue="false"
+     *                description="do not show ellipsis"
+     */
+    public void setNoEllipsis(boolean noEllipsis)
+    {
+        mNoEllipsis = noEllipsis;
     }
 
     /**
@@ -148,7 +197,7 @@ public class ListAbbrevTag extends TagSupport
             {
                 if (firstDone)
                 {
-                    out.print(", ");
+                    out.print(mSeparator + " ");
                 }
                 else
                 {
@@ -158,9 +207,9 @@ public class ListAbbrevTag extends TagSupport
                 out.print(item);
             }
 
-            if (list.size() > mLimit)
+            if ((list.size() > mLimit) && !mNoEllipsis)
             {
-                out.print(", ...");
+                out.print(mSeparator + " " + mEllipsis);
             }
         }
         catch (IOException e)
@@ -179,4 +228,10 @@ public class ListAbbrevTag extends TagSupport
     private String mProperty;
     /** the scope to find the bean in */
     private String mScope;
+    /** the separator */
+    private String mSeparator;
+    /** the ellipsis */
+    private String mEllipsis;
+    /** do not show the ellipsis */
+    private boolean mNoEllipsis;
 }
