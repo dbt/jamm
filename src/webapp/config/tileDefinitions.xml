@@ -16,4 +16,7 @@
   <definition name="change_password" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
   </definition>
+  <definition name="domain_admin" extends="mainLayout">
+    <put name="body" value="/WEB-INF/tiles/domain_admin.jsp"/>
+  </definition>
 </component-definitions>

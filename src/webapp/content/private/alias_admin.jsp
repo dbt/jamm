@@ -42,7 +42,7 @@
         List email addresses to add as destinations:
       </p>
       <p>
-        <textarea rows="6" cols="35"/>
+        <textarea rows="6" cols="35"></textarea>
       </p>
       <p>
         <input type="submit" value="Add Addresses"/>

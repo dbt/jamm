@@ -18,7 +18,7 @@ public class MainMenuAction extends Action
     {
         if (isDomainAdmin(request))
         {
-            return (mapping.findForward("domain_menu"));
+            return (mapping.findForward("domain_admin"));
         }
         else if (isAccountAdmin(request))
         {

@@ -15,6 +15,8 @@
                type="jamm.webapp.LoginForm"/>
     <form-bean name="changePasswordForm"
                type="jamm.webapp.ChangePasswordForm"/>
+    <form-bean name="domainAccountForm"
+               type="jamm.webapp.DomainAccountForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -26,6 +28,7 @@
     <forward name="user_home" path="/private/" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
+    <forward name="domain_admin" path="/private/domain_admin.do"/>
   </global-forwards>
 
 
@@ -60,14 +63,13 @@
 
     <action path="/private/index"
             type="jamm.webapp.MainMenuAction">
-      <forward name="domain_menu" path="/private/domain_menu.do"/>
       <forward name="account_admin" path="/private/account_admin.jsp"/>
       <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
-    <action path="/private/domain_menu"
-            type="jamm.webapp.DomainMenuAction">
-      <forward name="domain_menu" path="/private/domain_menu.jsp"/>
+    <action path="/private/domain_admin"
+            type="jamm.webapp.DomainAdminAction">
+      <forward name="domain_admin" path="/private/domain_admin.jsp"/>
     </action>
 
     <action path="/change_password"
@@ -76,6 +78,13 @@
             scope="request"
             validate="true"
             input="/private/change_password.jsp">
+    </action>
+
+    <action path="/private/domain_account"
+            type="jamm.webapp.DomainAccountAction"
+            name="domainAccountForm"
+            scope="request"
+            validate="false">
     </action>
 
     <!-- This will reload tileDefinitions.xml -->
