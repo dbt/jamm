@@ -118,16 +118,33 @@ public class ChangePasswordForm extends ActionForm
         return mDone;
     }
 
+    /**
+     * Sets the clear option.  If set to a non-empty string, then the
+     * password should be cleared.
+     *
+     * @param clear Value of clear option.
+     */
     public void setClear(String clear)
     {
         mClear = clear;
     }
 
+    /**
+     * Returns the clear option value.
+     *
+     * @return The clear option value.
+     */
     public String getClear()
     {
         return mClear;
     }
 
+    /**
+     * Checks the value of the clear option and determines if the
+     * clear button was clicked.
+     *
+     * @return True if the clear button was clicked.
+     */
     public boolean wasClearClicked()
     {
         return (!mClear.equals(""));
@@ -200,5 +217,9 @@ public class ChangePasswordForm extends ActionForm
     /** The name of the page to forward to when done with the action. */
     private String mDone;
 
+    /**
+     * The value of the clear option.  An empty string means that the
+     * clear button was pressed.
+     */
     private String mClear;
 }
