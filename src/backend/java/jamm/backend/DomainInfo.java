@@ -31,20 +31,16 @@ public class DomainInfo implements Serializable
      * Creates a new <code>DomainInfo</code> instance with specified data.
      *
      * @param name a <code>String</code> value
-     * @param canEditAliases a <code>boolean</code> value
      * @param canEditAccounts a <code>boolean</code> value
      * @param canEditPostmasters a <code>boolean</code> value
-     * @param canEditCatchalls a <code>boolean</code> value
      */
-    public DomainInfo(String name, boolean canEditAliases,
-                      boolean canEditAccounts, boolean canEditPostmasters,
-                      boolean canEditCatchalls)
+    public DomainInfo(String name, boolean canEditAccounts,
+                      boolean canEditPostmasters, boolean active)
     {
         mName = name;
-        mCanEditAliases = canEditAliases;
         mCanEditAccounts = canEditAccounts;
         mCanEditPostmasters = canEditPostmasters;
-        mCanEditCatchalls = canEditCatchalls;
+        mActive = active;
     }
 
     /**
@@ -65,26 +61,6 @@ public class DomainInfo implements Serializable
     public void setName(String argName)
     {
         this.mName = argName;
-    }
-
-    /**
-     * Gets the value of canEditAliases
-     *
-     * @return the value of canEditAliases
-     */
-    public boolean getCanEditAliases()
-    {
-        return this.mCanEditAliases;
-    }
-
-    /**
-     * Sets the value of canEditAliases
-     *
-     * @param argCanEditAliases Value to assign to this.canEditAliases
-     */
-    public void setCanEditAliases(boolean argCanEditAliases)
-    {
-        this.mCanEditAliases = argCanEditAliases;
     }
 
     /**
@@ -128,33 +104,31 @@ public class DomainInfo implements Serializable
     }
 
     /**
-     * Gets the value of canEditCatchalls
+     * Returns wether the domain is active or not.
      *
-     * @return the value of canEditCatchalls
+     * @return true if active, false if not.
      */
-    public boolean getCanEditCatchalls()
+    public boolean getActive()
     {
-        return this.mCanEditCatchalls;
+        return mActive;
     }
 
     /**
-     * Sets the value of canEditCatchalls
+     * Set domain active or not.
      *
-     * @param argCanEditCatchalls Value to assign to this.canEditCatchalls
+     * @param active true if active, false if not.
      */
-    public void setCanEditCatchalls(boolean argCanEditCatchalls)
+    public void setActive(boolean active)
     {
-        this.mCanEditCatchalls = argCanEditCatchalls;
+        mActive = active;
     }
 
     /** The domain name */
     private String mName;
-    /** Can domain admin edit aliases */
-    private boolean mCanEditAliases;
     /** Can domain admin edit accounts */
     private boolean mCanEditAccounts;
     /** Can domain admin edit postmasters */
     private boolean mCanEditPostmasters;
-    /** Can domains admin edit catchalls */
-    private boolean mCanEditCatchalls;
+    /** is this domain active? */
+    private boolean mActive;
 }
