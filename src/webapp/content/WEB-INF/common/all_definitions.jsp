@@ -9,3 +9,4 @@
 </logic:present>
 <% String ROOT = request.getContextPath(); %>
 <% String CSS = ROOT + "/common.css"; %>
+<% String JS = ROOT + "/common.js"; %>

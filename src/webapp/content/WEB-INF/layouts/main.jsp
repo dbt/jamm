@@ -6,6 +6,13 @@
   <head>
     <title><tiles:getAsString name="title"/></title>
     <link rel="STYLESHEET" type="text/css" href="<%= CSS %>">
+    <script>
+    <!--
+     ROOT = "<%= ROOT %>";
+     //-->
+    </script>
+    <script type="text/javascript" LANGUAGE="Javascript1.2"
+            SRC="<%= JS %>"></script>
     <html:base/>
   </head>
 

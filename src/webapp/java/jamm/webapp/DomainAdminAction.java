@@ -193,18 +193,26 @@ public class DomainAdminAction extends JammAction
         caf.setDomain(domain);
         request.setAttribute("catchAllForm", caf);
 
-
-        // Help the jsp page deceide how to render.
         DomainInfo domainInfo = manager.getDomain(domain);
-        boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
+            domainInfo.getCanEditPostmasters())
+        {
+            request.setAttribute("canEditPostmasters", Boolean.TRUE);
+        }
+        else
+        {
+            request.setAttribute("canEditPostmasters", Boolean.FALSE);
+        }
 
-        RenderDomainInfo renderDomain = new RenderDomainInfo();
-        renderDomain.setCanEditAccounts(
-            domainInfo.getCanEditAccounts() || userIsSiteAdmin);
-        renderDomain.setCanEditPostmasters(
-            domainInfo.getCanEditPostmasters() || userIsSiteAdmin);
-        
-        request.setAttribute("domainInfo", renderDomain);
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
+            domainInfo.getCanEditAccounts())
+        {
+            request.setAttribute("canEditAccounts", Boolean.TRUE);
+        }
+        else
+        {
+            request.setAttribute("canEditAccounts", Boolean.FALSE);
+        }
 
         return (mapping.findForward("view"));
     }

@@ -21,6 +21,8 @@ package jamm.webapp;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -101,6 +103,11 @@ public class AccountAdminAction extends JammAction
             breadCrumbs.add(breadCrumb);
             request.setAttribute("breadCrumbs", breadCrumbs);
 
+            Map passwordParameters = new HashMap();
+            passwordParameters.put("mail", mail);
+            passwordParameters.put("done", "account_admin");
+            request.setAttribute("passwordParameters", passwordParameters);
+
             AliasInfo alias = manager.getAlias(mail);
             request.setAttribute("alias", alias);
             return (mapping.findForward("alias_admin"));
@@ -112,6 +119,11 @@ public class AccountAdminAction extends JammAction
                 "Account Admin");
             breadCrumbs.add(breadCrumb);
             request.setAttribute("breadCrumbs", breadCrumbs);
+
+            Map passwordParameters = new HashMap();
+            passwordParameters.put("mail", mail);
+            passwordParameters.put("done", "account_admin");
+            request.setAttribute("passwordParameters", passwordParameters);
 
             return (mapping.findForward("view"));
         }

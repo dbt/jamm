@@ -1,40 +1,75 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<h1 align="center">
-  Alias Admin for <bean:write name="mail"/>
-</h1>
+<table width="90%" border="0">
+  <tr>
+    <td vAlign=top width="20">&nbsp;</td>
+    <td vAlign=top>
+      <table width="100%" border="0" cellspacing="0" cellpadding="3">
+        <tbody>
+          <tr>
+            <td vAlign=bottom colspan="2">
+              <html:img page="/imgs/jamm_logo.gif" width="230"
+                        height="48" alt="" border="0"/>
+                
+              <br />
+              <span class=header>ALIAS ADMINISTRATION</span>
+              <br />
+              <span class=title><bean:write name="mail"/></span>
+              <html:link forward="change_password" paramId="mail"
+                         name="passwordParameters">
+                Change Password
+              </html:link>
 
-<form>
-  <table>
-    <tr>
-      <td align="right">Full Name</td>
-      <td><input type="text" value="Joe User"/></td>
-      <td><input type="submit" value="Change"/></td>
-    </tr>
-  </table>
-</form>
-
-<html:errors/>
-
-<html:form action="/private/update_alias">
+              <!--
+              <form>
+                <table>
+                  <tr>
+                    <td align="right">Full Name</td>
+                    <td><input type="text" value="Joe User"/></td>
+                    <td><input type="submit" value="Change"/></td>
+                  </tr>
+                </table>
+              </form>
+              -->
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><html:errors/>&nbsp;</td>
+          </tr>
+          <tr>
+            <th align="left">Destination</th>
+            <td align=middle width=79>
+              <html:img page='/imgs/delete_alias.gif'
+                        alt='Delete Alias'
+                        width='79' height='23'/>
+            </td>
+          </tr>
+          <tr>
+            <td bgcolor="#FFFFFF" colspan=2>
+              <html:form action="/private/update_alias">
   <html:hidden property="mail"/>
-  <table width="85%" border="1" cellspacing="0">
-    <tr>
-      <th>Destination</th>
-      <th>Delete</th>
-    </tr>
 
-    <logic:iterate indexId="i" id="destination" name="alias"
-                   property="destinations">
-      <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
-        <td><bean:write name="destination"/></td>
-        <td align="center">
-          <html:multibox property="deleted">
-            <bean:write name="destination"/>
-          </html:multibox>
-        </td>
-      </jamm:tr>
-    </logic:iterate>
-  </table>
+                <table width="100%" border="0" cellspacing="1" cellpadding="0">
+                  <logic:iterate indexId="i" id="destination" name="alias"
+                                 property="destinations"
+                                 type="java.lang.String">
+                    <tr class="datarow"
+                        onmouseover='OverRow(this, "<%=destination%>")'
+                        onmouseout='OutRow(this, "<%=destination%>")'>
+                      <td>&nbsp;<bean:write name="destination"/></td>
+                      <td align="left" width="6" bgcolor="#FFFFFF">
+                        <html:img page='/imgs/sm_arrow.gif'
+                                  width="6" height="9"
+                                  border="0" align="middle"
+                                  imageName='<%=destination%>'/>
+                      </td>
+                      <td align="center" width="79" class="multibox">
+                        <html:multibox property="deleted">
+                          <bean:write name="destination"/>
+                        </html:multibox>
+                      </td>
+                    </tr>
+                  </logic:iterate>
+                </table>
   <p>
     List email addresses to add as destinations:
   </p>
@@ -42,37 +77,10 @@
     <html:textarea rows="6" cols="35" property="added"/>
   </p>
   <p>
-    <input type="submit" value="Update destinations"/>
+    <html:submit styleClass="button">Update Destinations</html:submit>
   </p>
 </html:form>
 
-<html:form action="/private/change_password">
-  <html:hidden property="mail"/>
-  <html:hidden property="done" value="account_admin"/>
-  <table border="0">
-    <tr>
-      <td align="right">
-        <bean:message key="change_password.prompt.password"/>
-      </td>
-      <td align="left">
-        <html:password property="password" size="30"/>
-      </td>
-    </tr>
-    <tr>
-      <td align="right">
-        <bean:message key="change_password.prompt.retype_password"/>
-      </td>
-      <td align="left">
-        <html:password property="retypedPassword" size="30"/>
-      </td>
-    </tr>
-    <tr>
-      <td><br></td>
-      <td>
-        <html:submit>
-          <bean:message key="change_password.button.submit"/>
-        </html:submit>
-      </td>
-    </tr>
-  </table>
-</html:form>
+    </td>
+  </tr>
+</table>
