@@ -75,14 +75,23 @@ public class ChangePasswordAction extends JammAction
                             user.getDn(),
                             user.getPassword());
 
-        System.out.println("mail: " + form.getMail());
-        manager.changePassword(form.getMail(), form.getPassword());
+        String password;
+        if (form.wasClearClicked())
+        {
+            password = "";
+        }
+        else
+        {
+            password = form.getPassword();
+        }
+
+        manager.changePassword(form.getMail(), password);
 
         // Update user object stored in session with the new password,
         // if we changed our own password.
         if (form.getMail().equals(user.getUsername()))
         {
-            user.setPassword(form.getPassword());
+            user.setPassword(password);
         }
         
         return findForward(mapping, done, request);
