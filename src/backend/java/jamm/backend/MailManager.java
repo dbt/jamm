@@ -1,5 +1,8 @@
 package jamm.backend;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import javax.naming.NamingException;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
@@ -22,32 +25,25 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        BasicAttribute objectClass;
-        BasicAttributes attributes;
-
         try
         {
             ldap = new LdapFacade(mHost);
             ldap.simpleBind(mBindDn, mBindPassword);
 
             // Create the domain
-            objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("JammVirtualDomain");
-            attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            Map attributes = new HashMap();
+            attributes.put("objectClass",
+                           new String[] {"top", "JammVirtualDomain"});
             attributes.put("jvd", domain);
             attributes.put("postfixTransport", "virtual:");
             String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
 
             // Create the postmaster
-            objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("organizationalRole");
-            objectClass.add("JammMailAlias");
-            attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            attributes.clear();
+            attributes.put("objectClass",
+                           new String[] {"top", "organizationalRole",
+                                         "JammMailAlias"});
             attributes.put("cn", "postmaster");
             attributes.put("mail", mail(domain, "postmaster"));
             attributes.put("maildrop", "postmaster");
@@ -56,11 +52,9 @@ public class MailManager
             ldap.addElement(dn, attributes);
 
             // Create the abuse account
-            objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("JammMailAlias");
-            attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            attributes.clear();
+            attributes.put("objectClass",
+                           new String[] {"top", "JammMailAlias"});
             String mail = mail(domain, "abuse");
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
