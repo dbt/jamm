@@ -1008,6 +1008,47 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking account time",
                    timeOrdered(startTime, domainTime, endTime));
     }
+    
+    public void testCatchAllInactiveAfterDomainSetToDelete()
+        throws MailManagerException
+    {
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        
+        // Create the domain and the conditions we want.
+        String domain = "catchall-after-domain.test";
+        manager.createDomain(domain);
+        manager.addCatchall(domain, "postmaster");
+        DomainInfo di = manager.getDomain(domain);
+        di.setDelete(true);
+        manager.modifyDomain(di);
+
+        String tmp = "abuse@" + domain;
+        AliasInfo ai = manager.getAlias(tmp);
+        if (ai != null)
+        {
+            assertFalse("Checking to see if " + tmp + " is not marked active",
+                        ai.isActive());
+        }
+
+        tmp = "postmaster@" + domain;
+        ai = manager.getAlias(tmp);
+        if (ai != null)
+        {
+            assertFalse("Checking to see if " + tmp + " is not marked active",
+                        ai.isActive());
+        }
+
+        tmp = "@" + domain;
+        ai = manager.getAlias(tmp);
+        if (ai != null)
+        {
+            assertFalse("Checking to see if catchall is not marked active",
+                        ai.isActive());
+        }
+
+    }
 
     /**
      * Tests the adding and removing of domain admin/postmaster power
@@ -1058,7 +1099,6 @@ public class MailManagerTest extends TestCase
     /**
      * tests the getInactiveAccounts
      *
-     * @exception NamingException if an error occurs
      * @exception MailManagerException if an error occurs
      */
     public void testGetInactiveAccounts()
@@ -1090,7 +1130,6 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests getDeleteMarkedAccounts
-     * @throws NamingException on error
      * @throws MailManagerException on error
      */
     public void testGetDeleteMarkedAccounts()
@@ -1123,7 +1162,6 @@ public class MailManagerTest extends TestCase
     /**
      * Tests getInactiveDomains.
      * 
-     * @throws NamingException on error
      * @throws MailManagerException on error
      */
     public void testGetInactiveDomains()
@@ -1164,7 +1202,6 @@ public class MailManagerTest extends TestCase
     /**
      * Tests getDeleteMarkedDomains
      * 
-     * @throws NamingException on error
      * @throws MailManagerException on error
      */
     public void testGetDeleteMarkedDomains()
