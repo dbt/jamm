@@ -36,7 +36,7 @@ import jamm.util.FileUtils;
  * The account cleaner object.  To nuke all accounts for a domain,
  * create with a specified domain and set cut off time to be 0.
  */
-public class AccountCleaner
+public class AccountCleaner extends AbstractCleaner
 {
     /**
      * Creates a new <code>AccountCleaner</code> instance.
@@ -50,7 +50,7 @@ public class AccountCleaner
                                    JammCleanerOptions.getPassword());
 
         mDeadAccounts = new ArrayList();
-        mCutOffTime = 5;
+        setCutOffTime(5);
         mDomain = null;
     }
 
@@ -68,29 +68,10 @@ public class AccountCleaner
                                    JammCleanerOptions.getPassword());
 
         mDeadAccounts = new ArrayList();
-        mCutOffTime = 5;
+        setCutOffTime(5);
         mDomain = domain;
     }
     
-    /**
-     * How long should an account be inactive before we nuke it.
-     *
-     * @param time delta for time in milliseconds
-     */
-    public void setCutOffTime(long time)
-    {
-        mCutOffTime = time;
-    }
-
-    /**
-     * Return the cuttoff time in milliseconds
-     *
-     * @return a long containing the time
-     */
-    public long getCutOffTime()
-    {
-        return mCutOffTime;
-    }
 
     /**
      * Actually do the cleanup
@@ -191,12 +172,13 @@ public class AccountCleaner
         Iterator a = inactiveAccts.iterator();
         
         int currentUnixTime = (int) (System.currentTimeMillis() / 1000);
+        long cutOffTime = getCutOffTime();
 
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
             int timeDelta = currentUnixTime - account.getLastChange();
-            if (timeDelta > mCutOffTime)
+            if (timeDelta > cutOffTime)
             {
                 if (JammCleanerOptions.isAssumeYes())
                 {
@@ -230,8 +212,6 @@ public class AccountCleaner
         }
     }
 
-    /** The cutoff time */
-    private long mCutOffTime;
     /** Our mail manager */
     private MailManager mManager;
     /** the accounts to remove */
