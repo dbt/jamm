@@ -39,9 +39,9 @@ public class AccountInfo implements Serializable
      * @param delete is this marked for deletion?
      * @param lastChange time of last change
      */
-    public AccountInfo(String name, boolean active, boolean administrator,
-                       String homeDirectory, String mailbox, boolean delete,
-                       int lastChange)
+    public AccountInfo(String name, String commonName, boolean active,
+                       boolean administrator, String homeDirectory, String mailbox,
+                       boolean delete, int lastChange)
     {
         mName = name;
         mActive = active;
@@ -49,6 +49,64 @@ public class AccountInfo implements Serializable
         mHomeDirectory = homeDirectory;
         mMailbox = mailbox;
         mDelete = delete;
+    }
+
+    /**
+     * @return a String with the Common Name
+     */
+    public String getCommonName()
+    {
+        return mCommonName;
+    }
+
+    /**
+     * get the value of delete
+     *
+     * @return boolean value
+     */
+    public boolean getDelete()
+    {
+        return mDelete;
+    }
+
+    /**
+     * 
+     *
+     * @return a string with the full path to the mailbox
+     */
+    public String getFullPathToMailbox()
+    {
+        return mHomeDirectory + "/" + mMailbox;
+    }
+
+    /**
+     * Gets the value of homeDirectory
+     *
+     * @return the value of homeDirectory
+     */
+    public String getHomeDirectory() 
+    {
+        return this.mHomeDirectory;
+    }
+
+    /**
+     * Gets the value of lastChange in unix time
+     *
+     * @return the value of lastChange in unix time
+     */
+    public int getLastChange()
+    {
+        return this.lastChange;
+    }
+
+    /**
+     * Gets the value of mailbox
+     *
+     * @return the value of mailbox
+     */
+    public String getMailbox() 
+    {
+        return this.mMailbox;
     }
 
     /**
@@ -72,16 +130,6 @@ public class AccountInfo implements Serializable
     }
 
     /**
-     * Sets the value of active.
-     *
-     * @param value boolean value representing activeness
-     */
-    public void setActive(boolean value)
-    {
-        mActive = value;
-    }
-
-    /**
      * Returns true if this account is an administrator.
      *
      * @return rue if this account is an administrator
@@ -89,6 +137,16 @@ public class AccountInfo implements Serializable
     public boolean isAdministrator()
     {
         return mAdministrator;
+    }
+
+    /**
+     * Sets the value of active.
+     *
+     * @param value boolean value representing activeness
+     */
+    public void setActive(boolean value)
+    {
+        mActive = value;
     }
 
     /**
@@ -102,43 +160,11 @@ public class AccountInfo implements Serializable
     }
 
     /**
-     * Gets the value of homeDirectory
-     *
-     * @return the value of homeDirectory
+     * @param string String with the common name
      */
-    public String getHomeDirectory() 
+    public void setCommonName(String string)
     {
-        return this.mHomeDirectory;
-    }
-
-    /**
-     * Gets the value of mailbox
-     *
-     * @return the value of mailbox
-     */
-    public String getMailbox() 
-    {
-        return this.mMailbox;
-    }
-
-    /**
-     * 
-     *
-     * @return a string with the full path to the mailbox
-     */
-    public String getFullPathToMailbox()
-    {
-        return mHomeDirectory + "/" + mMailbox;
-    }
-
-    /**
-     * Gets the value of lastChange in unix time
-     *
-     * @return the value of lastChange in unix time
-     */
-    public int getLastChange()
-    {
-        return this.lastChange;
+        mCommonName = string;
     }
 
     /**
@@ -151,28 +177,21 @@ public class AccountInfo implements Serializable
         mDelete = delete;
     }
 
-    /**
-     * get the value of delete
-     *
-     * @return boolean value
-     */
-    public boolean getDelete()
-    {
-        return mDelete;
-    }
-
-    /** Account name. */
-    private String mName;
+    /** time of last change */
+    private int lastChange;
     /** True if this account active. */
     private boolean mActive;
-    /** True if this account should be deleted. */
-    private boolean mDelete;
     /** True if this account is an adiministrator. */
     private boolean mAdministrator;
+    /** cn / Common Name */
+    private String mCommonName;
+    /** True if this account should be deleted. */
+    private boolean mDelete;
     /** Home Directory */
     private String mHomeDirectory;
     /** mailbox */
     private String mMailbox;
-    /** time of last change */
-    private int lastChange;
+    /** Account name. */
+    private String mName;
+
 }
