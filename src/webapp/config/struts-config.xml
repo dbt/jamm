@@ -44,6 +44,12 @@
     <forward name="add_account" path="/private/add_account.jsp"/>
     <forward name="add_alias" path="/private/add_alias.jsp"/>
     <forward name="general_error" path="/private/general_error.jsp"/>
+    <forward name="domain_admin" path="/private/domain_admin.do"
+             redirect="true"/>
+    <forward name="account_admin" path="/private/account_admin.do"
+             redirect="true"/>
+    <forward name="alias_admin" path="/private/alias_admin.do"
+             redirect="true"/>
   </global-forwards>
 
 
