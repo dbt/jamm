@@ -49,4 +49,7 @@
   <definition name="general_error" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/general_error.jsp"/>
   </definition>
+  <definition name="access_error" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/access_error.jsp"/>
+  </definition>
 </component-definitions>

@@ -35,6 +35,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
+import jamm.backend.MailManagerException;
 import jamm.backend.AccountInfo;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
@@ -87,6 +88,22 @@ public class DomainAdminAction extends JammAction
                        new ActionError("general.error.domain.is.null"));
             saveErrors(request, errors);
             return mapping.findForward("general_error");
+        }
+
+        if (!isAllowedToBeHere(manager, domain, user))
+        {
+            errors.add(ActionErrors.GLOBAL_ERROR,
+                       new ActionError("access.error"));
+            saveErrors(request, errors);
+
+            List breadCrumbs = new ArrayList();
+            BreadCrumb breadCrumb = new BreadCrumb(
+                findForward(mapping, "home", request).getPath(),
+                "Home");
+            breadCrumbs.add(breadCrumb);
+            request.setAttribute("breadCrumbs", breadCrumbs);
+
+            return mapping.findForward("access_error");
         }
         
         request.setAttribute("domain", domain);
@@ -211,5 +228,31 @@ public class DomainAdminAction extends JammAction
         }
 
         return (mapping.findForward("view"));
+    }
+
+    /**
+     * Are we supposed to be here?
+     *
+     * @param manager the mail manager to use
+     * @param domain the domain trying to be looked at
+     * @param user the user who's trying to access the page
+     * @return the value of whether you are allowed
+     * @exception MailManagerException if an error occurs
+     */
+    private boolean isAllowedToBeHere(MailManager manager, String domain,
+                                      User user)
+        throws MailManagerException
+    {
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            return true;
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            return manager.isPostmaster(domain, user.getUsername());
+        }
+
+        return false;
     }
 }
