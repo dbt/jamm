@@ -44,7 +44,7 @@ public class LoginForm extends ActionForm
         mDone = null;
     }
 
-    protected String mUsername;
-    protected String mPassword;
-    protected String mDone;
+    private String mUsername;
+    private String mPassword;
+    private String mDone;
 }

@@ -1,5 +1,7 @@
 package jamm.webapp;
 
+import jamm.backend.MailManager;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -26,6 +28,38 @@ public class LoginAction extends Action
         ActionErrors errors = new ActionErrors();
         LoginForm form = (LoginForm) actionForm;
    
+        MailManager manager = new MailManager(Globals.getLdapHost(),
+                                              Globals.getLdapPort(),
+                                              Globals.getLdapSearchBase());
+                                              
+        String userDn = manager.findByMail(form.getUsername());
+        if (userDn == null)
+        {
+            errors.add(ActionErrors.GLOBAL_ERROR,
+                       new ActionError("login.error.invalid_login"));
+        }
+        else
+        {
+            manager.setBindEntry(userDn, form.getPassword());
+            if (!manager.authenticate())
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR,
+                           new ActionError("login.error.invalid_login"));
+            }
+        }
+
+        if (!errors.empty())
+        {
+            saveErrors(request, errors);
+            // Clear out password
+            form.setPassword(null);
+            return new ActionForward(mapping.getInput());
+        }
+
+        User user = new User(form.getUsername(), form.getPassword());
+        HttpSession session = request.getSession();
+        session.setAttribute("is_authenticated", "true");
+        session.setAttribute("user", user);
         return mapping.findForward("home");
     }
 }
