@@ -29,9 +29,17 @@ public final class JammCleaner
      */
     private static void printHelp()
     {
-        System.out.println("This is some izzoutput");
+        System.out.println("Usage:  JammCleaner -b <dn> -D <dn> " +
+                           "[other options]");
+        System.out.println("    -v    act verbosely");
+        System.out.println("    -y    assume \"yes\" for all questions");
+        System.out.println("    -h    ldap host   (default: localhost)");
+        System.out.println("    -p    ldap port   (default: 389)");
+        System.out.println("    -w    password to connect to LDAP with");
+        System.out.println("    -D    the DN to bind with");
+        System.out.println("    -b    base dn to search from");
     }
-    
+
     /**
      * Parse the arguements that were passed in on the command line.
      *
@@ -67,7 +75,8 @@ public final class JammCleaner
                         else
                         {
                             String nextArg = null;
-                            try {
+                            try
+                            {
                                 nextArg = argv[i + 1];
                             }
                             catch (ArrayIndexOutOfBoundsException e)
@@ -97,7 +106,8 @@ public final class JammCleaner
                         else
                         {
                             String nextArg = null;
-                            try {
+                            try
+                            {
                                 nextArg = argv[i + 1];
                             }
                             catch (ArrayIndexOutOfBoundsException e)
@@ -119,7 +129,8 @@ public final class JammCleaner
                         }
                         break;
 
-                    case 'P':
+                    // Followed convention from OpenLDAP tools
+                    case 'w':
                         if (argv[i].length() > 2)
                         {
                             JammCleanerOptions.setPassword(
@@ -128,7 +139,8 @@ public final class JammCleaner
                         else
                         {
                             String nextArg = null;
-                            try {
+                            try
+                            {
                                 nextArg = argv[i + 1];
                             }
                             catch (ArrayIndexOutOfBoundsException e)
@@ -143,12 +155,72 @@ public final class JammCleaner
                             }
                             else
                             {
-                                System.err.println("-P must have an argument");
+                                System.err.println("-w must have an argument");
                                 System.exit(1);
                             }
                         }
                         break;
-                        
+
+                    // Followed convention from OpenLDAP tools
+                    case 'D':
+                        if (argv[i].length() > 2)
+                        {
+                            JammCleanerOptions.setRootDn(argv[i].substring(2));
+                        }
+                        else
+                        {
+                            String nextArg = null;
+                            try
+                            {
+                                nextArg = argv[i + 1];
+                            }
+                            catch (ArrayIndexOutOfBoundsException e)
+                            {
+                                // Hmm
+                            }
+                            if ((nextArg != null) &&
+                                (!nextArg.startsWith("-")))
+                            {
+                                JammCleanerOptions.setRootDn(nextArg);
+                                i++;
+                            }
+                            else
+                            {
+                                System.err.println("-D must have an argument");
+                                System.exit(1);
+                            }
+                        }
+                        break;
+
+                    case 'b':
+                        if (argv[i].length() > 2)
+                        {
+                            JammCleanerOptions.setBaseDn(argv[i].substring(2));
+                        }
+                        else
+                        {
+                            String nextArg = null;
+                            try
+                            {
+                                nextArg = argv[i + 1];
+                            }
+                            catch (ArrayIndexOutOfBoundsException e)
+                            {
+                                // Hmm
+                            }
+                            if ((nextArg != null) &&
+                                (!nextArg.startsWith("-")))
+                            {
+                                JammCleanerOptions.setBaseDn(nextArg);
+                                i++;
+                            }
+                            else
+                            {
+                                System.err.println("-b must have an argument");
+                                System.exit(1);
+                            }
+                        }
+                        break;
                 }
             }
         }

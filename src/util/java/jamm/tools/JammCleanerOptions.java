@@ -144,6 +144,31 @@ public final class JammCleanerOptions
         JammCleanerOptions.mPort = port;
     }
 
+    /**
+     * Gets the value of baseDn
+     *
+     * @return the value of baseDn
+     */
+    public static String getBaseDn() 
+    {
+        return JammCleanerOptions.mBaseDn;
+    }
+
+    /**
+     * Sets the value of baseDn
+     *
+     * @param baseDn Value to assign to this.baseDn
+     */
+    public static void setBaseDn(String baseDn)
+    {
+        JammCleanerOptions.mBaseDn = baseDn;
+    }
+
+    /**
+     * Dump out the args for debugging purposes
+     *
+     * @return a string with the args
+     */
     public static String argDump()
     {
         StringBuffer sb = new StringBuffer();
@@ -151,14 +176,24 @@ public final class JammCleanerOptions
         sb.append("assume yes: ").append(mAssumeYes).append("\n");
         sb.append("host: ").append(mHost).append("\n");
         sb.append("port: ").append(mPort).append("\n");
+        sb.append("root dn: ").append(mRootDn).append("\n");
+        sb.append("base dn: ").append(mBaseDn).append("\n");
 
         return sb.toString();
     }
         
+    /** verbosity */
     private static boolean mVerbose = false;
+    /** assume yes to questions */
     private static boolean mAssumeYes = false;
+    /** what's the DN to connect as */
     private static String mRootDn = null;
+    /** The password to use */
     private static String mPassword = null;
+    /** The host to connect to */
     private static String mHost = "localhost";
+    /** The port to connect using */
     private static int mPort = 389;
+    /** Base DN */
+    private static String mBaseDn;
 }
