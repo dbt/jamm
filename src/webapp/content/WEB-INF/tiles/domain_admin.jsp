@@ -24,7 +24,13 @@
     <logic:iterate indexId="i" id="account" name="accounts"
                    type="jamm.backend.AccountInfo">
       <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
-        <td><bean:write name="account" property="name"/></td>
+        <td>
+          <html:link page="/private/account_admin.do" paramId="mail"
+                     paramName="account" paramProperty="name">
+            <bean:write name="account" property="name"/>
+          </html:link>
+        </td>
+        
         <td align="center">
           <html:multibox property="accountsToDelete">
             <bean:write name="account" property="name"/>
@@ -62,7 +68,12 @@
   </tr>
   <logic:iterate indexId="i" id="alias" name="aliases">
     <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
-      <td><bean:write name="alias" property="name"/></td>
+      <td>
+          <html:link page="/private/account_admin.do" paramId="mail"
+                     paramName="alias" paramProperty="name">
+            <bean:write name="alias" property="name"/>
+          </html:link>
+      </td>
       <td>
         <logic:iterate id="destination" name="alias"
                        property="destinations">
