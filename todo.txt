@@ -16,6 +16,8 @@
 
     * Quota editor?
 
+    * Let root change where postmaster@domain mail goes to.
+
   Post 1.0:
 
     * Have an account from one domain be a postmaster for multiple domains
