@@ -1,8 +1,12 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<h1 align="center">
-  Account Admin for <bean:write name="mail"/>
-</h1>
+<span class=header>ACCOUNT ADMINISTRATION for <bean:write name="mail"/></span>
+<br />
+<html:link forward="change_password" paramId="mail"
+           name="passwordParameters">
+  Change Password
+</html:link>
 
+<%--
 <form>
   <table>
     <tr>
@@ -12,33 +16,4 @@
     </tr>
   </table>
 </form>
-<html:form action="/private/change_password">
-  <html:hidden property="mail"/>
-  <html:hidden property="done" value="account_admin"/>
-  <table border="0">
-    <tr>
-      <td align="right">
-        <bean:message key="change_password.prompt.password"/>
-      </td>
-      <td align="left">
-        <html:password property="password" size="30"/>
-      </td>
-    </tr>
-    <tr>
-      <td align="right">
-        <bean:message key="change_password.prompt.retype_password"/>
-      </td>
-      <td align="left">
-        <html:password property="retypedPassword" size="30"/>
-      </td>
-    </tr>
-    <tr>
-      <td><br></td>
-      <td>
-        <html:submit>
-          <bean:message key="change_password.button.submit"/>
-        </html:submit>
-      </td>
-    </tr>
-  </table>
-</html:form>
+--%>
