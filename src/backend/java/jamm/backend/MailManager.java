@@ -340,9 +340,9 @@ public class MailManager
 
             searchForMail(ldap, mail);
 
-            Set maildrops = ldap.getAllResultAttributeValues("maildrop");
-            destinations = (String[]) maildrops.toArray(destinations);
-            Arrays.sort(destinations);
+            AliasInfo alias = createAliasInfo(ldap);
+            destinations =
+                (String[]) alias.getDestinations().toArray(destinations);
         }
         catch (NamingException e)
         {
@@ -378,13 +378,7 @@ public class MailManager
                     continue;
                 }
 
-                Set destinations =
-                    ldap.getAllResultAttributeValues("maildrop");
-                boolean isActive = true;
-                boolean isAdmin = false;
-                AliasInfo alias =
-                    new AliasInfo(name, new ArrayList(destinations), isActive,
-                                  isAdmin);
+                AliasInfo alias = createAliasInfo(ldap);
                 aliases.add(alias);
             }
         }
@@ -399,6 +393,19 @@ public class MailManager
 
         Collections.sort(aliases, new AliasNameComparator());
         return aliases;
+    }
+
+    private AliasInfo createAliasInfo(LdapFacade ldap)
+        throws NamingException
+    {
+        String name = ldap.getResultAttribute("mail");
+
+        List destinations =
+            new ArrayList(ldap.getAllResultAttributeValues("maildrop"));
+        Collections.sort(destinations, String.CASE_INSENSITIVE_ORDER);
+        boolean isActive = true;
+        boolean isAdmin = false;
+        return new AliasInfo(name, destinations, isActive, isAdmin);
     }
 
     public void createAccount(String domain, String account, String password)
