@@ -137,6 +137,26 @@ public class DomainInfo implements Serializable
         return mLastChange;
     }
 
+    /**
+     * Set whether this domain should be marked for deletion.
+     *
+     * @param delete boolean value
+     */
+    public void setDelete(boolean delete)
+    {
+        mDelete = delete;
+    }
+
+    /**
+     * Is this domain marked for deletion?
+     *
+     * @return boolean value
+     */
+    public boolean getDelete()
+    {
+        return mDelete;
+    }
+
     /** The domain name */
     private String mName;
     /** Can domain admin edit accounts */
@@ -147,4 +167,7 @@ public class DomainInfo implements Serializable
     private boolean mActive;
     /** time of last change */
     private int mLastChange;
+    /* True if this domain should be deleted. */
+    private boolean mDelete;
+
 }

@@ -138,10 +138,32 @@ public class AccountInfo implements Serializable
         return this.lastChange;
     }
 
+    /**
+     * Should this account be deleted during the sweep?
+     *
+     * @param delete boolean value
+     */
+    public void setDelete(boolean delete)
+    {
+        mDelete = delete;
+    }
+
+    /**
+     * get the value of delete
+     *
+     * @return boolean value
+     */
+    public boolean getDelete()
+    {
+        return mDelete;
+    }
+
     /** Account name. */
     private String mName;
     /** True if this account active. */
     private boolean mActive;
+    /** True if this account should be deleted. */
+    private boolean mDelete;
     /** True if this account is an adiministrator. */
     private boolean mAdministrator;
     /** Home Directory */
