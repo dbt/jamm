@@ -35,6 +35,6 @@ public class DomainAccountAction extends Action
         System.out.println("Checked admin: " +
                            form.getCheckedAdminItems());
 
-        return mapping.findForward("domain_admin");
+        return mapping.findForward("user_home");
     }
 }
