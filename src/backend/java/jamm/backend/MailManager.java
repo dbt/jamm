@@ -1130,7 +1130,8 @@ public class MailManager
             Map attributes = new HashMap();
             attributes.put("objectClass",
                            new String[] { "top", ACCOUNT_OBJECT_CLASS});
-            attributes.put("homeDirectory", "/home/vmail/domains");
+            attributes.put("homeDirectory",
+                           MailManagerOptions.getVmailHomedir());
             attributes.put("mail", mail);
             attributes.put("mailbox", domain + "/" + account + "/");
             attributes.put("accountActive", booleanToString(true));
