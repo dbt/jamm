@@ -1,5 +1,5 @@
-UPGRADING FROM 0.9.2 OR BEFORE TO 0.9.4
----------------------------------------
+UPGRADING FROM 0.9.2 OR BEFORE TO 0.9.4 or later
+------------------------------------------------
 
 Due to a schema change that first appeared in version 0.9.3, you'll
 need to update your existing LDAP data.  Unfortunately, there is no
