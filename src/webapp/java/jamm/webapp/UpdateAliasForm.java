@@ -16,6 +16,16 @@ import org.apache.struts.action.ActionErrors;
  */
 public class UpdateAliasForm extends ActionForm
 {
+    public void setMail(String mail)
+    {
+        mMail = mail;
+    }
+
+    public String getMail()
+    {
+        return mMail;
+    }
+
     public void setDeleted(String[] deleted)
     {
         mDeleted = deleted;
@@ -52,6 +62,7 @@ public class UpdateAliasForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
+        mMail = request.getParameter("mail");
         mDeleted = new String[0];
         mAdded = "";
     }
@@ -63,7 +74,7 @@ public class UpdateAliasForm extends ActionForm
         return errors;
     }
 
+    private String mMail;
     private String[] mDeleted;
     private String mAdded;
-
 }
