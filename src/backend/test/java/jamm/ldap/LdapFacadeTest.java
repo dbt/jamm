@@ -179,7 +179,7 @@ public class LdapFacadeTest extends TestCase
         // This element should not exist
         mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   ! mLdap.nextResult());
+                   !mLdap.nextResult());
 
         // Create a new element
         attributes = new BasicAttributes();
@@ -204,7 +204,7 @@ public class LdapFacadeTest extends TestCase
         mLdap.resetSearch();
         mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   ! mLdap.nextResult());
+                   !mLdap.nextResult());
     }
 
     private LdapFacade mLdap;

@@ -2,7 +2,7 @@ package jamm;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.extensions.TestSetup;
+// import junit.extensions.TestSetup;
 
 public class AllTests
 {

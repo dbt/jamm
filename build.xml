@@ -70,16 +70,16 @@
   <target name="build-backend" depends="prepare"
           description="Builds all code for the backend.">
     <javac srcdir="src/backend/java"
-	   destdir="build/backend/classes"
+       destdir="build/backend/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
-	   classpathref="lib.path" />
+       classpathref="lib.path" />
 
     <javac srcdir="src/backend/test/java"
-	   destdir="test/backend/classes"
-	   debug="on" optimize="off">
+       destdir="test/backend/classes"
+       debug="on" optimize="off">
       <classpath>
        <pathelement location="build/backend/classes" />
-	<path refid="lib.path" />
+    <path refid="lib.path" />
       </classpath>
     </javac>
   </target>
@@ -88,16 +88,16 @@
   <target name="build-webapp-java" depends="prepare"
           description="Builds all code for the web application.">
     <javac srcdir="src/webapp/java"
-	   destdir="build/webapp/root/WEB-INF/classes"
+       destdir="build/webapp/root/WEB-INF/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
-	   classpathref="lib.path" />
+       classpathref="lib.path" />
 
     <javac srcdir="src/webapp/test/java"
-	   destdir="test/webapp/classes"
-	   debug="on" optimize="off">
+       destdir="test/webapp/classes"
+       debug="on" optimize="off">
       <classpath>
        <pathelement location="build/webapp/root/WEB-INF/classes" />
-	<path refid="lib.path" />
+    <path refid="lib.path" />
       </classpath>
     </javac>
 
@@ -165,10 +165,10 @@
   <target name="test" depends="test-webapp" />
 
   <target name="dist-webapp"
-	  depends="build-webapp, build-webapp-webdoclet">
+      depends="build-webapp, build-webapp-webdoclet">
     <jar jarfile="dist/${project.string}.war"
-	 basedir="build/webapp/root"
-	 excludes="WEB-INF/jamm.properties">
+     basedir="build/webapp/root"
+     excludes="WEB-INF/jamm.properties">
       <manifest>
         <attribute name="Main-Class" value="dude" />
       </manifest>
@@ -193,6 +193,22 @@
                 javadocScope="nothing"
                 >
       <fileset dir="src/webapp/test/java" includes="**/*.java" />
+    </checkstyle>
+    <checkstyle lcurlyType="nl"
+                lcurlyMethod="nl"
+                lcurlyOther="nl"
+                rcurly="alone"
+                javadocScope="nothing"
+                >
+      <fileset dir="src/backend/java" includes="**/*.java" />
+    </checkstyle>
+    <checkstyle lcurlyType="nl"
+                lcurlyMethod="nl"
+                lcurlyOther="nl"
+                rcurly="alone"
+                javadocScope="nothing"
+                >
+      <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
   </target>
 
