@@ -88,7 +88,7 @@ public class UpdateCatchAllAction extends JammAction
             else
             {
                 String destArray[] = { destination };
-                ai.setDestinations(destArray);
+                ai.setMailDestinations(destArray);
                 manager.modifyAlias(ai);
             }
         }

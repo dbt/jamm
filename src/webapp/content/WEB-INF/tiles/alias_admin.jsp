@@ -25,14 +25,14 @@
       <th align="left">Destination</th>
       <td align="left" width="6">&nbsp;</td>
       <td align="right" width="79">
-        <html:img page='/imgs/delete_alias.gif'
-                  alt='Delete Alias'
-                  width='79' height='23'/>
+        <html:img page="/imgs/delete_alias.gif"
+                  alt="Delete Alias"
+                  width="79" height="23"/>
       </td>
     </tr>
-    <logic:iterate indexId="i" id="destination" name="alias"
-                   property="destinations"
-                   type="java.lang.String">
+    <logic:iterate indexId="count" id="destination" name="alias"
+                   property="mailDestinations"
+                   type="String">
       <tr class="datarow"
           onmouseover='OverRow(this, "<%=destination%>")'
           onmouseout='OutRow(this, "<%=destination%>")'>

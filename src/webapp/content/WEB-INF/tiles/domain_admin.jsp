@@ -163,7 +163,7 @@ Catch-All:
             // FIX ME: Put this in a custom tag
 
             jamm.backend.AliasInfo dd_alias = (jamm.backend.AliasInfo) alias;
-            java.util.List dd_destinations = dd_alias.getDestinations();
+            java.util.List dd_destinations = dd_alias.getMailDestinations();
             for (int dd_j = 0; dd_j < dd_destinations.size(); dd_j++) {
             if (dd_j == 3)
             {

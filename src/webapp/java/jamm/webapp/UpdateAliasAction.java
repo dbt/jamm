@@ -77,7 +77,7 @@ public class UpdateAliasAction extends JammAction
         String mail = form.getMail();
         AliasInfo alias = manager.getAlias(mail);
         
-        Set newDestinations = new HashSet(alias.getDestinations());
+        Set newDestinations = new HashSet(alias.getMailDestinations());
         newDestinations.addAll(form.getAddedAddresses());
         newDestinations.removeAll(Arrays.asList(form.getDeleted()));
 
@@ -95,7 +95,7 @@ public class UpdateAliasAction extends JammAction
             return new ActionForward(mapping.getInput());
         }
 
-        alias.setDestinations(newDestinations);
+        alias.setMailDestinations(newDestinations);
         manager.modifyAlias(alias);
 
         return findForward(mapping, "account_admin", request);

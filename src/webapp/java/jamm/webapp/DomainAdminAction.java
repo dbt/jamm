@@ -252,7 +252,7 @@ public class DomainAdminAction extends JammAction
         AliasInfo catchAllAlias = manager.getAlias("@" + domain);
         if (catchAllAlias != null)
         {
-            List destinations = catchAllAlias.getDestinations();
+            List destinations = catchAllAlias.getMailDestinations();
             request.setAttribute("catchAllAlias", destinations.get(0));
         }
         else

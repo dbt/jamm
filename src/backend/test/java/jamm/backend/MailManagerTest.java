@@ -235,8 +235,8 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, aliasName,
                             new String[] {"mail1@abc.test"});
         AliasInfo alias = manager.getAlias(aliasMail);
-        alias.setDestinations(new String[] {"mail2@xyz.test",
-                                            "mail3@mmm.test"});
+        alias.setMailDestinations(new String[] {"mail2@xyz.test",
+                                                "mail3@mmm.test"});
         alias.setActive(false);
         alias.setAdministrator(true);
         long startTime = getUnixTime();
@@ -328,7 +328,7 @@ public class MailManagerTest extends TestCase
                             new String[] {"mail2@xyz.test", "mail1@abc.test"});
 
         AliasInfo alias = manager.getAlias(aliasMail);
-        List destinations = alias.getDestinations();
+        List destinations = alias.getMailDestinations();
         assertEquals("Checking number of destinations", 2,
                      destinations.size());
         String destination = (String) destinations.get(0);

@@ -83,7 +83,7 @@ public class CatchAllAdminAction extends JammAction
         if (catchAll != null)
         {
             ucaf.setCatchAllOn();
-            List destinations = catchAll.getDestinations();
+            List destinations = catchAll.getMailDestinations();
             ucaf.setDestination((String) destinations.get(0));
         }
         else

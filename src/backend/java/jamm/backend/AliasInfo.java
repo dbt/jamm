@@ -66,7 +66,7 @@ public class AliasInfo implements Serializable
      *
      * @param destinations New destinations
      */
-    public void setDestinations(Collection destinations)
+    public void setMailDestinations(Collection destinations)
     {
         mDestinations = new ArrayList(destinations);
     }
@@ -77,7 +77,7 @@ public class AliasInfo implements Serializable
      *
      * @param destinations New destinations
      */
-    public void setDestinations(String[] destinations)
+    public void setMailDestinations(String[] destinations)
     {
         mDestinations = Arrays.asList(destinations);
     }
@@ -87,7 +87,7 @@ public class AliasInfo implements Serializable
      *
      * @return An unmodifialbe list of destinations as strings.
      */
-    public List getDestinations()
+    public List getMailDestinations()
     {
         return Collections.unmodifiableList(mDestinations);
     }

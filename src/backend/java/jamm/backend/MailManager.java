@@ -749,7 +749,7 @@ public class MailManager
         {
             ldap = getLdap();
             ldap.modifyElementAttribute(dn, "maildrop",
-                                        alias.getDestinations());
+                                        alias.getMailDestinations());
             ldap.modifyElementAttribute(dn, "accountActive",
                                         booleanToString(alias.isActive()));
             if (isPostmaster(domain, mail))
