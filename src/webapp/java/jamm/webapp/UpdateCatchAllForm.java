@@ -29,7 +29,7 @@ import org.apache.struts.action.ActionError;
 /**
  * Bean to hold information for the CatchAllAction.
  *
- * @see jamm.webapp.CatchAllAction
+ * @see jamm.webapp.UpdateCatchAllAction
  */
 public class UpdateCatchAllForm extends ActionForm
 {
