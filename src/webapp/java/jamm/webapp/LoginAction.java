@@ -105,7 +105,7 @@ public class LoginAction extends Action
             }
         }
 
-        if (!errors.empty())
+        if (!errors.isEmpty())
         {
             saveErrors(request, errors);
             // Clear out password
