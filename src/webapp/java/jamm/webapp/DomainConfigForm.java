@@ -226,4 +226,3 @@ public class DomainConfigForm extends ActionForm
     /** The checked list of admin items. */
     private String[] mAdminItems;
 }
-P
