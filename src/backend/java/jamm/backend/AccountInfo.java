@@ -34,6 +34,8 @@ public class AccountInfo implements Serializable
      * @param active True if this account is active.
      * @param administrator True if this account has administrator
      * priveleges.
+     * @param homeDirectory The home directory of the accounts
+     * @param mailbox The mailbox within the home directory
      */
     public AccountInfo(String name, boolean active, boolean administrator,
                        String homeDirectory, String mailbox)
