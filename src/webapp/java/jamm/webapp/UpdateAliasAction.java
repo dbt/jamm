@@ -67,12 +67,7 @@ public class UpdateAliasAction extends JammAction
     {
         UpdateAliasForm form = (UpdateAliasForm) actionForm;
         User user = getUser(request);
-        MailManager manager =
-            new MailManager(Globals.getLdapHost(),
-                            Globals.getLdapPort(),
-                            Globals.getLdapSearchBase(),
-                            user.getDn(),
-                            user.getPassword());
+        MailManager manager = getMailManager(user);
 
         String mail = form.getMail();
         AliasInfo alias = manager.getAlias(mail);
