@@ -44,7 +44,7 @@ import jamm.backend.DomainInfo;
  *
  * @see jamm.webapp.DomainConfigForm
  * @struts.action scope="request" validate="false"
- *                name="domainAccountAliasForm"
+ *                name="domainAccountForm"
  *                path="/private/domain_account"
  *                roles="Site Administrator, Domain Administrator"
  */
