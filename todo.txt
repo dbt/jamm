@@ -25,6 +25,8 @@ Jamm itself:
 
 * Install doc
 
+* Send e-mail after account creation to assure creation of user directory
+
 
 Jamm related items:
 
