@@ -34,6 +34,8 @@ import javax.naming.NameAlreadyBoundException;
 import javax.naming.CommunicationException;
 import javax.naming.NoPermissionException;
 
+import org.apache.log4j.Logger;
+
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
 import jamm.ldap.PasswordScheme;
@@ -494,7 +496,6 @@ public class MailManager
      * @param postmasters a Set of postmasters for this domain
      * @return A new account information bean
      * @throws NamingException If the object could not be created
-     * @throws MailManagerException If there is a problem looking up postmaster
      */
     private AccountInfo createAccountInfo(LdapFacade ldap, Set postmasters)
         throws NamingException
@@ -628,7 +629,6 @@ public class MailManager
      * @param postmasters a Set of postmaster DNs for the domain
      * @return A new alias information bean
      * @throws NamingException If the object could not be created
-     * @throws MailManagerException If their is a problem looking up postmaster
      */
     private AliasInfo createAliasInfo(LdapFacade ldap, Set postmasters)
         throws NamingException
@@ -852,7 +852,10 @@ public class MailManager
           List foo = getFilteredAccounts(filter, domain);
           if (foo.size() > 1)
           {
-              // todo bitch about more than one account here.
+              // We log this for the admin to find as the user of the
+              // webapp can't really do anything about this.
+              LOG.warn("Search for " + filter +
+                       " returned more than one account.");
           }
           
           if (foo.size() == 0)
@@ -910,7 +913,10 @@ public class MailManager
         List foo = getFilteredAliases(filter, domain);
         if (foo.size() > 1)
         {
-            //todo bitch about more than one alias here.
+            // We log this for the admin to find as the user of the
+            // webapp can't really do anything about this.
+            LOG.warn("Search for " + filter +
+                     " returned more than one alias.");
         }
         
         if (foo.size() != 0)
@@ -1075,10 +1081,14 @@ public class MailManager
     public DomainInfo getDomain(String domainName)
         throws MailManagerException
     {
-        List foo = getFilteredDomains("jvd=" + domainName);
+        String filter = "jvd=" + domainName;
+        List foo = getFilteredDomains(filter);
         if (foo.size() > 1)
         {
-            // todo Bitch about more than one domain here.
+            // We log this for the admin to find as the user of the
+            // webapp can't really do anything about this.
+            LOG.warn("Search for " + filter +
+                     " returned more than one domain.");
         }
         
         if (foo.size() == 0)
@@ -1810,4 +1820,6 @@ public class MailManager
     private static final String ALIAS_OBJECT_CLASS = "JammMailAlias";
     /** Name of the object class used for domains. */
     private static final String DOMAIN_OBJECT_CLASS = "JammVirtualDomain";
+    /** Our logging agent */
+    private static final Logger LOG = Logger.getLogger(MailManager.class);
 }
