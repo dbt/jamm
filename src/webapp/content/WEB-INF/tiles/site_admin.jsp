@@ -30,6 +30,10 @@
         <html:img page="/imgs/edit_accounts.gif"
                   width="79" height="23" alt="" border="0"/>
       </td>
+      <td width="79">
+        <html:img page="/imgs/edit_accounts.gif"
+                  width="79" height="23" alt="" border="0"/>
+      </td>
       <td width="81">
         <html:img page="/imgs/appoint_postmasters.gif"
                   width="79" height="23" alt="" border="0"
@@ -56,7 +60,12 @@
                     border="0" align="middle"
                     imageName='<%=domain.getName()%>'/>
         </td>
-        <td align="center" width=79 class="multibox">
+        <td align="center" width="79" class="multibox">
+          <html:multibox property="delete">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
+        </td>
+        <td align="center" width="79" class="multibox">
           <html:multibox property="allowEditAccounts" onclick="Toggle(this)">
             <bean:write name="domain" property="name"/>
           </html:multibox>
