@@ -80,12 +80,14 @@
     </action>
 
     <action path="/private/site_admin"
-            type="jamm.webapp.SiteAdminAction">
+            type="jamm.webapp.SiteAdminAction"
+            roles="Site Administrator">
       <forward name="view" path="/private/site_admin.jsp"/>
     </action>
 
     <action path="/private/domain_admin"
-            type="jamm.webapp.DomainAdminAction">
+            type="jamm.webapp.DomainAdminAction"
+            roles="Site Administrator, Domain Administrator">
       <forward name="view" path="/private/domain_admin.jsp"/>
     </action>
 
@@ -107,18 +109,21 @@
             type="jamm.webapp.DomainAccountAction"
             name="domainAccountForm"
             scope="request"
-            validate="false">
+            validate="false"
+            roles="Site Administrator, Domain Administrator">
     </action>
 
     <action path="/private/domain_alias"
             type="jamm.webapp.DomainAliasAction"
             name="domainAliasForm"
             scope="request"
-            validate="false">
+            validate="false"
+            roles="Site Administrator, Domain Administrator">
     </action>
 
     <action path="/private/catch_all_admin"
-            type="jamm.webapp.CatchAllAdminAction">
+            type="jamm.webapp.CatchAllAdminAction"
+            roles="Site Administrator, Domain Administrator">
       <forward name="view" path="/private/catch_all_admin.jsp"/>
     </action>
 
@@ -135,7 +140,8 @@
             name="updateCatchAllForm"
             scope="request"
             validate="true"
-            input="/private/catch_all_admin.do">
+            input="/private/catch_all_admin.do"
+            roles="Site Administrator, Domain Administrator">
     </action>
 
     <action path="/private/add_domain"
@@ -143,7 +149,8 @@
             name="addDomainForm"
             scope="request"
             validate="true"
-            input="/private/add_domain.jsp">
+            input="/private/add_domain.jsp"
+            roles="Site Administrator">
     </action>
 
     <action path="/private/add_account"
@@ -151,7 +158,8 @@
             name="addAccountForm"
             scope="request"
             validate="true"
-            input="/private/add_account.jsp">
+            input="/private/add_account.jsp"
+            roles="Site Administrator, Domain Administrator">
     </action>
 
     <action path="/private/add_alias"
@@ -159,7 +167,8 @@
             name="addAliasForm"
             scope="request"
             validate="true"
-            input="/private/add_alias.jsp">
+            input="/private/add_alias.jsp"
+            roles="Site Administrator, Domain Administrator">
     </action>
 
     <action path="/private/site_config"
@@ -167,7 +176,8 @@
             name="siteConfigForm"
             scope="request"
             validate="false"
-            input="/private/site_admin.jsp">
+            input="/private/site_admin.jsp"
+            roles="Site Administrator">
     </action>
 
     <!-- This will reload tileDefinitions.xml -->
@@ -175,7 +185,7 @@
             type="org.apache.struts.tiles.actions.ReloadDefinitionsAction"/>
   </action-mappings>
 
-  <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
+  <controller processorClass="jamm.webapp.JammTilesRequestProcessor"/>
 
   <!-- ========== Message Resources Definitions =========================== -->
 
