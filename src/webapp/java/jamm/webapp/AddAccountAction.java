@@ -46,7 +46,8 @@ public class AddAccountAction extends JammAction
      * @param actionForm An AddAccountForm object with the required
      *                   information.
      * @param request The http request that caused this action.
-     * @param request The http response that will be returned from this action.
+     * @param response The http response that will be returned from
+     *                 this action.
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

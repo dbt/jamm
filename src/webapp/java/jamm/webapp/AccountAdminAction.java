@@ -44,7 +44,10 @@ public class AccountAdminAction extends JammAction
      * @param actionForm This action does not depend on a form,
      *                   so this should be null.
      * @param request The http request that caused this action.
-     * @param request The http response that will be returned from this action.
+     * @param response The http response that will be returned from
+     *                 this action.
+     *
+     * @return the ActionForward of the next page to show.
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

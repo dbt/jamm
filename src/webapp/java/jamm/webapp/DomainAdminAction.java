@@ -37,8 +37,27 @@ import jamm.backend.AccountInfo;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
 
+/**
+ * Loads data via Mail Manager needed for the domain administration
+ * page.  It puts the following into the request's attributes after
+ * seeding them from the MailManager: domainName, accounts,
+ * domainAccountForm (a DomainConfigForm), aliases, and
+ * domainAliasForm (a DomainConfigForm).  It then forwards to the
+ * domain_admin page.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.DomainConfigForm
+ */
 public class DomainAdminAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping The action mapping with possible destinations.
+     * @param actionForm Not used in this action.  Is ignored.
+     * @param request the http request that caused this action.
+     * @param response the http response
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,
@@ -61,8 +80,8 @@ public class DomainAdminAction extends JammAction
                        new ActionError("general.error.domain.is.null"));
             saveErrors(request, errors);
             return mapping.findForward("general_error");
-        }      
-            
+        }
+        
         request.setAttribute("domainName", domain);
 
         List accounts = manager.getAccounts(domain);

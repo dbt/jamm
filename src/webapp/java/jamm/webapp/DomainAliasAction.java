@@ -30,8 +30,25 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 
+/**
+ * Calls MailManager to perform the assigned actions on aliases in a
+ * domain based on the information in the DomainConfigForm.  Currently
+ * only deleting works.  Admin and active changes are just printed
+ * out/logged.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.DomainConfigForm
+ */
 public class DomainAliasAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping the action mapping of destinations
+     * @param actionForm a DomainConfigForm with the required info
+     * @param request the http request for this action
+     * @param response the http response for this action.
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

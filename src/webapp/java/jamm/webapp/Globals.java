@@ -21,43 +21,90 @@ package jamm.webapp;
 
 import java.text.MessageFormat;
 
+/**
+ * Bean to make certain objects globally accessable for ease of
+ * access.
+ */
 public final class Globals
 {
+    /**
+     * Sets the host to use to talk to the ldap server.
+     *
+     * @param ldapHost a string containing the ldap host.
+     */
     public static void setLdapHost(String ldapHost)
     {
         mLdapHost = ldapHost;
     }
 
+    /**
+     * Returns the ldap host.
+     *
+     * @return a string returning the ldap host.
+     */
     public static String getLdapHost()
     {
         return mLdapHost;
     }
 
+    /**
+     * Sets the port to use to talk to the ldap server.
+     *
+     * @param ldapPort an int representing the ldap port.
+     */
     public static void setLdapPort(int ldapPort)
     {
         mLdapPort = ldapPort;
     }
 
+    /**
+     * Returns the ldap port.
+     *
+     * @return an int representing the ldap port.
+     */
     public static int getLdapPort()
     {
         return mLdapPort;
     }
 
+    /**
+     * Set the search base for our LDAP interaction.
+     *
+     * @param ldapSearchBase a string containing the search base.
+     */
     public static void setLdapSearchBase(String ldapSearchBase)
     {
         mLdapSearchBase = ldapSearchBase;
     }
 
+    /**
+     * Returns the ldap search base.
+     *
+     * @return a string containin the search base.
+     */
     public static String getLdapSearchBase()
     {
         return mLdapSearchBase;
     }
 
+    /**
+     * Sets the query filter to use when doing ldap searches for users.
+     * The string "{0}" will be replaced when used.
+     *
+     * @param ldapQueryFilter a string containing the query
+     */
     public static void setLdapQueryFilter(String ldapQueryFilter)
     {
         mLdapQueryFormat = new MessageFormat(ldapQueryFilter);
     }
 
+    /**
+     * Returns the ldap query filter, with the substition done.
+     *
+     * @param address the string to replace "{0}" with.
+     *
+     * @return a string with the substituted query filter.
+     */
     public static String getLdapQueryFilter(String address)
     {
         Object[] args = {address};
@@ -65,19 +112,33 @@ public final class Globals
         return mLdapQueryFormat.format(args);
     }
 
+    /**
+     * Return the rootdn to use when logging in as "root".
+     *
+     * @return a string containing the root dn
+     */
     public static String getRootDn()
     {
         return mRootDn;
     }
 
+    /**
+     * Sets the root dn to use when loggin in as "root".
+     *
+     * @param rootDn a string containing the root dn
     public static void setRootDn(String rootDn)
     {
         mRootDn = rootDn;
     }
 
+    /** The ldap host */
     private static String mLdapHost;
+    /** the ldap port */
     private static int mLdapPort;
+    /** the search base */
     private static String mLdapSearchBase;
+    /** the query stored as a MessageFormat object */
     private static MessageFormat mLdapQueryFormat;
+    /** The root dn */
     private static String mRootDn;
 }

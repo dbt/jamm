@@ -29,8 +29,25 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+/**
+ * It should call MailManager to perform the assigned actions on
+ * accounts from a domain.  Currently, it prints out/logs the changes
+ * to the checkboxes and then forwards to user_home.
+ *
+ * @see jamm.webapp.DomainConfigForm
+ */
 public class DomainAccountAction extends Action
 {
+    /**
+     * Performs the action.
+     *
+     * @see jamm.webapp.DomainConfigForm
+     *
+     * @param mapping The action mapping of possible destinations
+     * @param actionForm a DomainConfigForm with the required info
+     * @param request the http request
+     * @param response the http response
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,
