@@ -66,7 +66,7 @@ public class DomainAccountAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
-        int modifiedItems = 0;
+        // int modifiedItems = 0;
         DomainConfigForm form = (DomainConfigForm) actionForm;
         User user = getUser(request);
 
@@ -88,12 +88,12 @@ public class DomainAccountAction extends JammAction
         if (domainInfo.getCanEditAccounts() || userIsSiteAdmin)
         {
             s = form.getUncheckedActiveItems();
-            modifiedItems += s.size();
+            // modifiedItems += s.size();
             i = s.iterator();
             modifyActive(manager, accountInfos, false, i);
 
             s = form.getCheckedActiveItems();
-            modifiedItems += s.size();
+            // modifiedItems += s.size();
             i = s.iterator();
             modifyActive(manager, accountInfos, true, i);
         }
@@ -101,12 +101,12 @@ public class DomainAccountAction extends JammAction
         if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
         {
             s = form.getUncheckedAdminItems();
-            modifiedItems += s.size();
+            // modifiedItems += s.size();
             i = s.iterator();
             modifyAdministrator(manager, accountInfos, false, i);
 
             s = form.getCheckedAdminItems();
-            modifiedItems += s.size();
+            // modifiedItems += s.size();
             i = s.iterator();
             modifyAdministrator(manager, accountInfos, true, i);
         }
