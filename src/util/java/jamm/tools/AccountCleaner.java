@@ -115,7 +115,7 @@ public class AccountCleaner
             else
             {
                 domains = new ArrayList();
-                domains.add(mDomain);
+                domains.add(mManager.getDomain(mDomain));
             }
             
             Iterator d = domains.iterator();
