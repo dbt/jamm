@@ -90,7 +90,7 @@ public class AuthenticationFilter implements Filter
             if ((session == null) ||
                 (session.getAttribute(AUTHENTICATION_KEY) == null))
             {
-                StringBuffer done = request.getRequestURL();
+                StringBuffer done = new StringBuffer(request.getServletPath());
                 String query = request.getQueryString();
                 if (query != null)
                 {
