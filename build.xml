@@ -267,6 +267,7 @@
           file="${cli.jar}" />
     <copy todir="build/util/dist/bin"
           file="src/util/shell/jammCleaner" />
+    <chmod file="build/util/dist/bin/jammCleaner" perm="555" />
   </target>
         
     
