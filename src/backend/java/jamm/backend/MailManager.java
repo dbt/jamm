@@ -1210,8 +1210,8 @@ public class MailManager
                 ldap.setReturningAttributes(new String[] { "objectClass" });
                 String aFilter =
                      "(&(objectClass=" + ALIAS_OBJECT_CLASS +
-                     ")(!(|(mail=postmaster@" + domain + ")(mail=abuse@" +
-                     domain + ")(mail=@" + domain + "))))";
+                     ")(!(|(mail=postmaster@" + name + ")(mail=abuse@" +
+                     name + ")(mail=@" + name + "))))";
 
                 ldap.searchOneLevel(domainDn(name), aFilter);
                         
