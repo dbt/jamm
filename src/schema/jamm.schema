@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.7 2002-05-09 18:48:36 ark-sf Exp $
+#$Id: jamm.schema,v 1.8 2002-06-04 19:19:42 ark-sf Exp $
 # We depend on courier.schema
 #
 # OID prefix: 1.3.6.1.4.1.12461
@@ -56,6 +56,28 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.9 NAME 'mailsource'
         SUBSTR caseIgnoreIA5SubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
 
+# Back to more of Jamm specific attributes
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.10 NAME 'editAliases'
+	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.11 NAME 'editAccounts'
+	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.12 NAME 'editPostmasters'
+	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.13 NAME 'editCatchalls'
+	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
+
 #
 # Objects: 1.3.6.1.4.1.12461.1.2
 #
@@ -75,4 +97,6 @@ objectclass ( 1.3.6.1.4.1.12461.1.2.2 NAME 'JammMailAlias' SUP top AUXILIARY
 objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain' SUP top AUXILIARY
 	DESC 'Virtual Domain entry to be used with postfix transport maps'
 	MUST ( jvd )
-	MAY ( postfixTransport $ description $ accountActive $ lastChange ) )
+	MAY ( postfixTransport $ description $ accountActive $ lastChange $
+                editAliases $ editAccounts $ editPostmasters $ 
+                editCatchalls ) )
