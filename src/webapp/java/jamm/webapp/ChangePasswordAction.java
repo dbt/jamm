@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -37,7 +36,7 @@ import org.apache.struts.action.ActionForward;
  * @see jamm.backend.MailManager
  * @see jamm.webapp.ChangePasswordForm
  */
-public class ChangePasswordAction extends Action
+public class ChangePasswordAction extends JammAction
 {
     /**
      * Performs the action.
@@ -62,10 +61,11 @@ public class ChangePasswordAction extends Action
         ChangePasswordForm form = (ChangePasswordForm) actionForm;
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        String done = form.getDone();
    
         if (isCancelled(request))
         {
-            return mapping.findForward("user_home");
+            return findForward(mapping, done, request);
         }
         
         MailManager manager =
@@ -75,6 +75,7 @@ public class ChangePasswordAction extends Action
                             user.getDn(),
                             user.getPassword());
 
+        System.out.println("mail: " + form.getMail());
         manager.changePassword(form.getMail(), form.getPassword());
 
         // Update user object stored in session with the new password,
@@ -84,6 +85,6 @@ public class ChangePasswordAction extends Action
             user.setPassword(form.getPassword());
         }
         
-        return mapping.findForward("user_home");
+        return findForward(mapping, done, request);
     }
 }
