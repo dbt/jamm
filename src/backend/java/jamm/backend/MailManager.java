@@ -953,6 +953,7 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            ldap.modifyElementAttribute(dn, "cn", alias.getCommonName());
             ldap.modifyElementAttribute(dn, "maildrop",
                                         alias.getMailDestinations());
             ldap.modifyElementAttribute(dn, "accountActive",
@@ -1119,6 +1120,7 @@ public class MailManager
         throws NamingException, MailManagerException
     {
         String name = ldap.getResultAttribute("mail");
+        String commonName = ldap.getResultAttribute("cn");
 
         List destinations =
             new ArrayList(ldap.getAllResultAttributeValues("maildrop"));
@@ -1126,7 +1128,7 @@ public class MailManager
         boolean isActive = stringToBoolean(
             ldap.getResultAttribute("accountActive"));
         boolean isAdmin = isPostmaster(name);
-        return new AliasInfo(name, destinations, isActive, isAdmin);
+        return new AliasInfo(name, commonName, destinations, isActive, isAdmin);
     }
 
     /**
@@ -1265,6 +1267,7 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            ldap.modifyElementAttribute(dn, "cn", account.getCommonName());
             ldap.modifyElementAttribute(dn, "accountActive",
                                         booleanToString(account.isActive()));
             if (isPostmaster(domain, mail))
@@ -1465,6 +1468,7 @@ public class MailManager
         throws NamingException, MailManagerException
     {
         String name = ldap.getResultAttribute("mail");
+        String commonName = ldap.getResultAttribute("cn");
         boolean isActive =
             stringToBoolean(ldap.getResultAttribute("accountActive"));
         boolean isAdmin = isPostmaster(name);
@@ -1473,8 +1477,8 @@ public class MailManager
         int lastChange =
             Integer.parseInt(ldap.getResultAttribute("lastChange"));
         boolean delete = stringToBoolean(ldap.getResultAttribute("delete"));
-        return new AccountInfo(name, isActive, isAdmin, homeDirectory,
-                               mailbox, delete, lastChange);
+        return new AccountInfo(name, commonName, isActive, isAdmin,
+                               homeDirectory, mailbox, delete, lastChange);
     }
 
     /**
