@@ -1,5 +1,25 @@
+Version 0.9.3 - 24 Oct 2002
+---------------------------
+
+* First version of jammCleaner
+
+* delete flags for accounts and domains
+
+* schema changes - perl script to help update
+
+* all java taken out of jsp pages.  Only custom tags remain.
+
+* root's login now configurable
+
+* active flag now works on domains
+
+Version 0.9.2 - 29 Aug 2002
+---------------------------
+
+* We never updated this for 0.9.2.  Oh well.
+
 Version 0.9.1 - 15 Jul 2002
-----------------------------------
+---------------------------
 
 * Better looking JSP pages....
 
