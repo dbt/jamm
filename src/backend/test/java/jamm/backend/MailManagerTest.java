@@ -73,13 +73,17 @@ public class MailManagerTest extends TestCase
         MailManager manager;
         Set expectedObjectClass;
         Set objectClass;
+        long startTime;
+        long endTime;
 
         String domain = "domain3.test";
         String domainDn = "jvd=" + domain + "," + BASE;
 
         manager = new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                                   LdapConstants.MGR_PW);
+        startTime = getUnixTime();
         manager.createDomain(domain);
+        endTime = getUnixTime();
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -100,6 +104,10 @@ public class MailManagerTest extends TestCase
                      "TRUE",
                      mLdap.getResultAttribute("editCatchalls"));
 
+        long domainTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking domain time",
+                   timeOrdered(startTime, domainTime, endTime));
 
         mLdap.searchOneLevel(domainDn, "objectClass=*");
         int counter = 0;
@@ -161,6 +169,8 @@ public class MailManagerTest extends TestCase
         String email;
         Set expectedObjectClass;
         Set objectClass;
+        long startTime;
+        long endTime;
 
         domain = "aliadomainDn.test";
         domainDn = "jvd=" + domain + "," + BASE;
@@ -169,7 +179,9 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
 
         aliasName = "alias";
+        startTime = getUnixTime();
         manager.createAlias(domain, aliasName, new String[] {"postmaster"});
+        endTime = getUnixTime();
 
         email = aliasName + "@" + domain;
 
@@ -184,6 +196,12 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("maildrop"));
         assertTrue("Checking for alias active",
                    stringToBoolean(mLdap.getResultAttribute("accountActive")));
+
+        long accountTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking alias time",
+                   timeOrdered(startTime, accountTime, endTime));
+
         assertTrue("Checking for no more aliases", !mLdap.nextResult());
 
 
@@ -218,7 +236,9 @@ public class MailManagerTest extends TestCase
                                             "mail3@mmm.test"});
         alias.setActive(false);
         alias.setAdministrator(true);
+        long startTime = getUnixTime();
         manager.modifyAlias(alias);
+        long endTime = getUnixTime();
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -235,6 +255,11 @@ public class MailManagerTest extends TestCase
 
         assertTrue("Checking is postmaster",
                    manager.isPostmaster(domain, aliasMail));
+
+        long aliasTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking account time",
+                   timeOrdered(startTime, aliasTime, endTime));
     }
 
     /**
@@ -246,6 +271,9 @@ public class MailManagerTest extends TestCase
     public void testModifyAccount()
         throws NamingException, MailManagerException
     {
+        long startTime;
+        long endTime;
+        
         String domain = "modify-account.test";
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
@@ -259,7 +287,9 @@ public class MailManagerTest extends TestCase
         AccountInfo account = manager.getAccount(accountEmail);
         account.setActive(false);
         account.setAdministrator(true);
+        startTime = getUnixTime();
         manager.modifyAccount(account);
+        endTime = getUnixTime();
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -270,6 +300,11 @@ public class MailManagerTest extends TestCase
                        mLdap.getResultAttribute("accountActive")));
         assertTrue("Checking to see if postmaster",
                    manager.isPostmaster(domain, accountEmail));
+
+        long accountTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking account time",
+                   timeOrdered(startTime, accountTime, endTime));
     }
     
     /**
@@ -359,6 +394,8 @@ public class MailManagerTest extends TestCase
         String email;
         Set expectedObjectClass;
         Set objectClass;
+        long startTime;
+        long endTime;
 
         domain = "accountdomain.test";
         domainDn = "jvd=" + domain + "," + BASE;
@@ -368,7 +405,9 @@ public class MailManagerTest extends TestCase
 
         accountName = "account";
         accountPassword = "account1pw";
+        startTime = getUnixTime();
         manager.createAccount(domain, accountName, accountPassword);
+        endTime = getUnixTime();
 
         email = accountName + "@" + domain;
 
@@ -385,6 +424,12 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking account mailbox",
                      domain + "/" + accountName + "/",
                      mLdap.getResultAttribute("mailbox"));
+
+        long accountTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking account time",
+                   timeOrdered(startTime, accountTime, endTime));
+        
         assertTrue("Checking for no more account results",
                    !mLdap.nextResult());
 
@@ -753,7 +798,9 @@ public class MailManagerTest extends TestCase
         DomainInfo di = manager.getDomain(domain);
         di.setCanEditAccounts(false);
 
+        long startTime = getUnixTime();
         manager.modifyDomain(di);
+        long endTime = getUnixTime();
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -765,6 +812,11 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking editPostmasters",
                    stringToBoolean(
                        mLdap.getResultAttribute("editPostmasters")));
+
+        long domainTime =
+            Long.parseLong(mLdap.getResultAttribute("lastChange"));
+        assertTrue("Checking account time",
+                   timeOrdered(startTime, domainTime, endTime));
     }
 
     /**
@@ -812,9 +864,51 @@ public class MailManagerTest extends TestCase
                    !roleOccupants.contains(pmDn));
     }
     
+    /**
+     * Creates a boolean representation of the string passed in,
+     * ignoring case.
+     *
+     * @param string the value to decode
+     * @return true for "true", false for everything else
+     */
     private boolean stringToBoolean(String string)
     {
         return Boolean.valueOf(string).booleanValue();
+    }
+
+    /**
+     * Returns the current time in seconds since the unix epoch.
+     *
+     * @return a long with current unix time
+     */
+    private long getUnixTime()
+    {
+        return (System.currentTimeMillis() / 1000);
+    }
+
+    /**
+     * Returns the current time in seconds since the epoch, as a
+     * string.
+     *
+     * @return string with the time in seconds 
+     */
+    private String getUnixTimeString()
+    {
+        return String.valueOf(getUnixTime());
+    }
+
+    /**
+     * Returns true if the start time is before the event which is
+     * before the end.
+     *
+     * @param start the start time
+     * @param event the event in the middle we care about
+     * @param end the end time
+     * @return true if times are in order
+     */
+    private boolean timeOrdered(long start, long event, long end)
+    {
+        return ((start <= event) && (event <= end));
     }
 
     /** The LDAP facade used for most tests. */

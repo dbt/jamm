@@ -446,6 +446,9 @@ public class MailManager
             ldap.modifyElementAttribute(domaindn, "editPostmasters",
                                         booleanToString(
                                             domain.getCanEditPostmasters()));
+            ldap.modifyElementAttribute(domaindn, "lastChange",
+                                        getUnixTimeString());
+
         }
         catch (NamingException e)
         {
@@ -543,6 +546,7 @@ public class MailManager
             attributes.put("editAccounts", "TRUE");
             attributes.put("editPostmasters", "TRUE");
             attributes.put("editCatchalls", "TRUE");
+            attributes.put("lastChange", getUnixTimeString());
             String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
 
@@ -566,6 +570,7 @@ public class MailManager
             String mail = MailAddress.addressFromParts("abuse", domain);
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
+            attributes.put("lastChange", getUnixTimeString());
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
@@ -621,6 +626,7 @@ public class MailManager
             attributes.put("mail", mail);
             attributes.put("maildrop", destinations);
             attributes.put("accountActive", booleanToString(true));
+            attributes.put("lastChange", getUnixTimeString());
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
@@ -669,6 +675,9 @@ public class MailManager
                     addPostmaster(domain, mail);
                 }
             }
+
+            ldap.modifyElementAttribute(dn, "lastChange",
+                                        getUnixTimeString());
         }
         catch (NamingException e)
         {
@@ -872,6 +881,7 @@ public class MailManager
                 LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
             attributes.put("userPassword", hashedPassword);
             attributes.put("accountActive", booleanToString(true));
+            attributes.put("lastChange", getUnixTimeString());
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
@@ -919,6 +929,8 @@ public class MailManager
                     addPostmaster(domain, mail);
                 }
             }
+            ldap.modifyElementAttribute(dn, "lastChange",
+                                        getUnixTimeString());
         }
         catch (NamingException e)
         {
@@ -1046,6 +1058,7 @@ public class MailManager
                            new String[] { "top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
+            attributes.put("lastChange", getUnixTimeString());
             ldap.addElement(mailDn(catchAll), attributes);
         }
         catch (NamingException e)
@@ -1185,6 +1198,27 @@ public class MailManager
         mailDn.append("mail=").append(mail).append(",");
         mailDn.append(domainDn(domain));
         return mailDn.toString();
+    }
+
+    /**
+     * Returns the system time in seconds since the unix epoch.
+     *
+     * @return a long with the current time.
+     */
+    private long getUnixTime()
+    {
+        return (System.currentTimeMillis() / 1000);
+    }
+
+    /**
+     * Returns a string representation of the system time in seconds
+     * since the unix epoch.
+     *
+     * @return a string with the current time.
+     */
+    private String getUnixTimeString()
+    {
+        return String.valueOf(getUnixTime());
     }
 
     /** Name of the object class used for accounts. */
