@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 /**

@@ -1,8 +1,6 @@
 package jamm.webapp;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
@@ -66,7 +64,9 @@ public class RowTag extends BodyTagSupport
 
         // Add Body Content
         if (bodyContent != null)
-          buffer.append(bodyContent.getString().trim());
+        {
+            buffer.append(bodyContent.getString().trim());
+        }
 
         buffer.append("</tr>");
 
