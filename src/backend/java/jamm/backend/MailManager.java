@@ -1181,7 +1181,7 @@ public class MailManager
                     
                 domains.add(new DomainInfo(name, canEditAccounts,
                                            canEditPostmasters, active, delete,
-                                           0, 0, lastChange));
+                                           lastChange));
             }
             
             Iterator i = domains.iterator();
