@@ -29,7 +29,7 @@
         Password
       </th>
       <td align="left">
-        <html:password property="password" size="30"/>
+        <html:password property="password" size="30"/> (Optional)
       </td>
     </tr>
     <tr>
@@ -37,14 +37,14 @@
         Retype Password
       </th>
       <td align="left">
-        <html:password property="retypedPassword" size="30"/>
+        <html:password property="retypedPassword" size="30"/> (Optional)
       </td>
     </tr>
     <tr>
       <td><br></td>
       <td>
         <html:submit>
-          <bean:message key="login.button.submit"/>
+          <bean:message key="add_alias.button.submit"/>
         </html:submit>
       </td>
     </tr>

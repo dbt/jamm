@@ -26,7 +26,11 @@ public class AddAliasAction extends JammAction
 
         manager.createAlias(form.getDomain(), form.getName(),
                             form.getDestinationAddresses());
-        manager.changePassword(mail, form.getPassword());
+        
+        if (!form.isPasswordEmpty())
+        {
+            manager.changePassword(mail, form.getPassword());
+        }
 
         return mapping.findForward("success");
     }

@@ -107,25 +107,37 @@ public class AddAliasForm extends ActionForm
         if (mAddresses.size() == 0)
         {
             errors.add("destinations",
-                       new ActionError(
-                           "Must specify at least one destination"));
+                       new ActionError("add_alias.error.non_zero_aliases"));
         }
 
-        if ((mPassword != null) && (!mPassword.equals(mRetypedPassword)))
+        if (!isPasswordEmpty())
         {
-            errors.add("password",
-                       new ActionError("change_password.error.no_match"));
-            clearPasswords();
-        }
-        else if ((mPassword == null) ||
-                 (mPassword.length() < MINIMUM_LENGTH))
-        {
-            errors.add("password",
-                       new ActionError("change_password.error.too_short"));
-            clearPasswords();
+            if ((mPassword != null) && (!mPassword.equals(mRetypedPassword)))
+            {
+                errors.add("password",
+                           new ActionError("change_password.error.no_match"));
+                clearPasswords();
+            }
+            else if ((mPassword == null) ||
+                     (mPassword.length() < MINIMUM_LENGTH))
+            {
+                errors.add("password",
+                           new ActionError("change_password.error.too_short"));
+                clearPasswords();
+            }
         }
 
         return errors;
+    }
+
+    /**
+     * The password is empty if the password is null or the empty
+     * string.  The retyped password must match.
+     */
+    public boolean isPasswordEmpty()
+    {
+        return (((mPassword == null) && (mRetypedPassword == null)) ||
+                ((mPassword.equals("") && mRetypedPassword.equals(""))));
     }
 
     private void clearPasswords()
