@@ -34,6 +34,9 @@ h3 {
 .account {
   background-color: #EEEEFF;
 }
+.multibox {
+  background-color: #EFF7FF;
+}
 a {
   font-family: verdana,helvetica;
   font-size: 12px;

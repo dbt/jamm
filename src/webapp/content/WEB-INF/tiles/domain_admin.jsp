@@ -84,8 +84,7 @@ function OutRow(e)
           <tbody>
             <tr>
               <td vAlign=bottom>
-                <html:img page="/imgs/jamm_icon.gif" width="36" height="36" alt="" border="0"/>
-                  <html:img page="/imgs/jamm.gif" width="156" height="44" alt="" border="0"/>
+                <html:img page="/imgs/jamm_logo.gif" width="230" height="48" alt="" border="0"/>
 
                     <br>
                       <span class=header>DOMAIN ADMINISTRATION</span>
@@ -100,16 +99,25 @@ function OutRow(e)
               </td>
               <td vAlign=bottom align=right>
 
-                <div>
-                  <a href="http://dave-dsl.dribin.org:8080/jamm/private/add_domain.jsp">Add
-                    Domain</a><br><br>
-                </div>
-
                 <!--<img src="imgs/site_header.gif" width="270" height="19" alt="" border="0">-->
                 <table cellpadding=0 cellspacing=0><tr>
+                  <td align=middle width=79>
+                    <html:img page='/imgs/delete_account.gif'
+                         alt='Delete Account' width=79 height=23/>
+                  </td>
+                  <td align=middle width=81>
+                    <html:img page='/imgs/account_is_active.gif'
+                              alt='Account is active' width=79 height=23 hspace=2/>
+                  </td>
+                  <td align=middle width=79>
+                    <html:img page='/imgs/postmaster.gif' alt='Postmaster'
+                         width=79 height=23/>
+                  </td>
+<!--
                     <td width=79 align="center">DEL</td>
                     <td width=81 align="center">ACT</td>
                     <td width=79 align="center">ADM</td>
+-->
                   </tr></table>
               </td>
             </tr>
@@ -165,17 +173,17 @@ function OutRow(e)
               </td>
               
 		<td align=left width=13><html:img page='/imgs/arrow.gif' width=13 height=25 border=0 vspace=0 hspace=0 align=right/>&nbsp;</td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="itemsToDelete" onclick="Toggle(this)">
                   <bean:write name="account" property="name"/>
                 </html:multibox>
               </td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="activeItems">
                   <bean:write name="account" property="name"/>
                 </html:multibox>
               </td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="adminItems">
                   <bean:write name="account" property="name"/>
                 </html:multibox>
@@ -198,13 +206,36 @@ function OutRow(e)
 </table>
       </html:form>
 
-      <br/>
+              </td>
+          </tr>
+          <tr>
+            <td>
 
                         <span class=title>MANAGE ALIASES</span>
             <html:link forward="add_alias" paramId="domain"
                        paramName="domain">
               <bean:message key="domain_admin.link.add_alias"/>
             </html:link>
+            </td>
+            <td valign="bottom" align="right">
+                <table cellpadding=0 cellspacing=0><tr>
+                  <td align=middle width=79>
+                    <html:img page='/imgs/delete_alias.gif'
+                         alt='Delete Account' width=79 height=23/>
+                  </td>
+                  <td align=middle width=81>
+                    <html:img page='/imgs/account_is_active.gif'
+                              alt='Account is active' width=79 height=23 hspace=2/>
+                  </td>
+                  <td align=middle width=79>
+                    <html:img page='/imgs/postmaster.gif' alt='Postmaster'
+                         width=79 height=23/>
+                  </td>
+                  </tr></table>
+            </td>
+            </tr>
+          <tr>
+            <td colspan=2>
 
       <html:form action="/private/domain_alias">
         <html:hidden property="domain"/>
@@ -275,18 +306,18 @@ oddColor="#FFDEAD"> -->
                   <bean:write name="destination"/><br>
                 </logic:iterate>
               </td> -->
-		<td align=left width=13><html:img page='/imgs/arrow.gif' width=13 height=25 border=0 vspace=0 hspace=0 align=right/>&nbsp;</td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+		<td align=left width=13><html:img page='/imgs/arrow_alias.gif' width=13 height=32 border=0 vspace=0 hspace=0 align=right/>&nbsp;</td>
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="itemsToDelete">
                   <bean:write name="alias" property="name"/>
                 </html:multibox>
               </td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="activeItems">
                   <bean:write name="alias" property="name"/>
                 </html:multibox>
               </td>
-              <td align="center" width="79" bgcolor="#FFFFFF">
+              <td align="center" width="79" class="multibox">
                 <html:multibox property="adminItems">
                   <bean:write name="alias" property="name"/>
                 </html:multibox>

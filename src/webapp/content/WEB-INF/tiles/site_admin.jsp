@@ -83,22 +83,19 @@ function OutRow(e)
           <tbody>
             <tr>
               <td vAlign=bottom>
-                <html:img page="/imgs/jamm_icon.gif" width="36" height="36" alt="" border="0"/>
-                  <html:img page="/imgs/jamm.gif" width="156" height="44" alt="" border="0"/>
+                <html:img page="/imgs/jamm_logo.gif" width="230" height="48" alt="" border="0"/>
 
                     <br>
                       <span class=header>SITE ADMINISTRATION</span>
                       <br>
 
                         <span class=title>MANAGE DOMAINS</span>
+                  <html:link forward="add_domain">
+                    <bean:message key="site_admin.link.add_domain"/>
+                  </html:link>
 
               </td>
               <td vAlign=bottom align=right>
-
-                <div>
-                  <a href="http://dave-dsl.dribin.org:8080/jamm/private/add_domain.jsp">Add
-                    Domain</a><br><br>
-                </div>
 
                 <!--<img src="imgs/site_header.gif" width="270" height="19" alt="" border="0">-->
                 <table cellpadding=0 cellspacing=0><tr>
@@ -158,17 +155,17 @@ function OutRow(e)
           </html:link>
         </td>
 		<td align=left width=13><html:img page='/imgs/arrow.gif' width=13 height=25 border=0 vspace=0 hspace=0 align=right/>&nbsp;</td>
-        <td align="center" width=79 bgcolor="#FFFFFF">
+        <td align="center" width=79 class="multibox">
           <html:multibox property="allowEditAccounts" onclick="Toggle(this)">
             <bean:write name="domain" property="name"/>
           </html:multibox>
         </td>
-        <td align="center" width=79 bgcolor="#FFFFFF">
+        <td align="center" width=79 class="multibox">
           <html:multibox property="allowEditPostmasters">
             <bean:write name="domain" property="name"/>
           </html:multibox>
         </td>
-        <td align="center" width=79 bgcolor="#FFFFFF">
+        <td align="center" width=79 class="multibox">
           <html:multibox property="active">
             <bean:write name="domain" property="name"/>
           </html:multibox>
