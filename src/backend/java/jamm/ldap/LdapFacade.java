@@ -12,6 +12,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
 
 /**
  * This class provides an easier to use interface for LDAP on top of
@@ -167,13 +168,6 @@ public class LdapFacade
         mControls.setReturningAttributes(attributes);
     }
 
-    public void replaceModifiedAttributes(Attributes attributes)
-        throws NamingException
-    {
-        mContext.modifyAttributes(getName(), DirContext.REPLACE_ATTRIBUTE,
-                                  attributes);
-    }
-
     public void addElement(String distinguishedName, Attributes attributes)
         throws NamingException
     {
@@ -181,6 +175,24 @@ public class LdapFacade
 
         subcontext = mContext.createSubcontext(distinguishedName, attributes);
         subcontext.close();
+    }
+
+    /**
+     * Replace a value of an attribute with a new value.
+     *
+     * @param dn DN of element to modify
+     * @param attributeName Attribute to modify
+     * @param newValue The new value.
+     * @throws NamingException if the attribute could not be modified
+     */
+    public void modifyElementAttribute(String dn, String attributeName,
+                                       String newValue)
+        throws NamingException
+    {
+        BasicAttributes attributes = new BasicAttributes();
+        attributes.put(attributeName, newValue);
+        mContext.modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE,
+                                  attributes);
     }
 
     public void deleteElement(String distinguishedName)

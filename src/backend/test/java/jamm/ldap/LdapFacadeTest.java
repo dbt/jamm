@@ -218,11 +218,28 @@ public class LdapFacadeTest extends TestCase
         attributes.put("description", "my description");
         mLdap.addElement(dn, attributes);
 
-        // See if the element exists
+        // See if the element exists and check the values
         mLdap.resetSearch();
         mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
                    mLdap.nextResult());
+
+        Set expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("organizationalUnit");
+        assertEquals("Checking objectClass", expectedObjectClass,
+                     mLdap.getAllResultAttributeValues("objectClass"));
+        assertEquals("Checking ou", ouName, mLdap.getResultAttribute("ou"));
+        assertEquals("Checking description", "my description",
+                     mLdap.getResultAttribute("description"));
+
+        // Modify the description
+        mLdap.modifyElementAttribute(dn, "description", "new description");
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("Checking for results", mLdap.nextResult());
+        assertEquals("Checking description", "new description",
+                     mLdap.getResultAttribute("description"));
 
         // Delete element
         mLdap.deleteElement(dn);
