@@ -477,8 +477,10 @@ public class MailManager
             ldap.getResultAttribute("accountActive"));
         int lastChange =
             Integer.parseInt(ldap.getResultAttribute("lastChange"));
+        boolean delete = stringToBoolean(
+            ldap.getResultAttribute("delete"));
         return new DomainInfo(name, canEditAccounts, canEditPostmasters,
-                              active, lastChange);
+                              active, delete, lastChange);
     }
 
     /**
@@ -1165,6 +1167,8 @@ public class MailManager
             }
             ldap.modifyElementAttribute(dn, "lastChange",
                                         getUnixTimeString());
+            ldap.modifyElementAttribute(dn, "delete",
+                                        booleanToString(account.getDelete()));
         }
         catch (NamingException e)
         {
@@ -1314,8 +1318,9 @@ public class MailManager
         String mailbox = ldap.getResultAttribute("mailbox");
         int lastChange =
             Integer.parseInt(ldap.getResultAttribute("lastChange"));
-        return new AccountInfo(name, isActive, isAdmin,
-                               homeDirectory, mailbox, lastChange);
+        boolean delete = stringToBoolean(ldap.getResultAttribute("delete"));
+        return new AccountInfo(name, isActive, isAdmin, homeDirectory,
+                               mailbox, delete, lastChange);
     }
 
     /**
