@@ -907,6 +907,39 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking for pm not as roleOccupant",
                    !roleOccupants.contains(pmDn));
     }
+
+    /**
+     * tests the getInactiveAccounts
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
+    public void testGetInactiveAccounts()
+        throws NamingException, MailManagerException
+    {
+        String domain = "test-inactive.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+        manager.createAccount(domain, "active", "active");
+        manager.createAccount(domain, "inactive", "inactive");
+        String mail = "inactive@" + domain;
+        AccountInfo inactiveAccount = manager.getAccount(mail);
+
+        inactiveAccount.setActive(false);
+        manager.modifyAccount(inactiveAccount);
+
+        List accounts = manager.getInactiveAccounts(domain);
+        assertTrue("Checking to see if only one is returned",
+                   (accounts.size() == 1));
+
+        AccountInfo newAccount = (AccountInfo) accounts.get(0);
+        assertTrue("Checking to see if inactive account is returned",
+                   newAccount.getName().equals(inactiveAccount.getName()));
+        
+    }
     
     /**
      * Creates a boolean representation of the string passed in,
