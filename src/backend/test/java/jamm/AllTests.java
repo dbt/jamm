@@ -60,6 +60,22 @@ public class AllTests
         setupLdapData();
     }
 
+    /**
+     * Clears out LDAP data and adds initial dataset.
+     *
+     * Add this to the end of your <tt>slapd.conf</tt> to create a separate
+     * database for Jamm testing:
+     *
+     * <pre>
+     * database      ldbm
+     * suffix        "dc=jamm,dc=test"
+     * rootdn        "cn=Manager,dc=jamm,dc=test"
+     * rootpw        jammtest
+     * directory     /var/lib/ldap/jamm
+     * access to * by * read
+     * </pre>
+     */
+
     private static void setupLdapData()
         throws Exception
     {
@@ -136,6 +152,7 @@ public class AllTests
         attributes.put("mail", "acct1@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
         attributes.put("mailbox", "domain1.test/acct1");
+        // This password is "acct1pw
         attributes.put("userPassword",
                        "{SSHA}tk3w4vV6xghX4r7P0F1EAeA55jo53sSO");
         element = context.createSubcontext(
@@ -152,12 +169,15 @@ public class AllTests
         attributes.put("mail", "acct2@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
         attributes.put("mailbox", "domain1.test/acct2");
+        // This password is "acct2pw
         attributes.put("userPassword",
                        "{SSHA}z0pxwHQV6nvrFLMW07ZgOqjoFRPWzoPk");
         element = context.createSubcontext(
             "mail=acct2@domain1.test, jvd=domain1.test, o=hosting, dc=jamm, " +
             "dc=test", attributes);
         element.close();
+
+        context.close();
     }
 
     private static void destroySubtree(DirContext context, String dn)
@@ -187,6 +207,7 @@ public class AllTests
 
             destroySubtree(context, rdn);
         }
+        results.close();
 
         context.destroySubcontext(dn);
     }
