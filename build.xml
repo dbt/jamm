@@ -176,8 +176,6 @@
     </copy>
 
     <copy todir="build/webapp/root/WEB-INF/"
-          file="src/webapp/config/struts-config.xml"/>
-    <copy todir="build/webapp/root/WEB-INF/"
           file="src/webapp/config/tileDefinitions.xml"/>
     <copy todir="build/webapp/root/WEB-INF/"
           file="src/webapp/config/jamm.properties"/>
@@ -210,13 +208,13 @@
       </deploymentdescriptor>
       <jsptaglib jspversion="1.2" destdir="build/webapp/root/WEB-INF/tld"
                  shortname="jamm" filename="jamm.tld" />
-      <strutsconfigxml version="1.1" destdir="build/tmp"
+      <strutsconfigxml version="1.1" destdir="build/webapp/root/WEB-INF"
                        mergedir="src/webapp/config/struts-merge"/>
     </webdoclet>
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />
 
-  <target name="build-webapp" depends="build-webapp-java" />
+  <target name="build-webapp" depends="build-webapp-webdoclet" />
 
   <target name="build" depends="build-webapp, build-backend, build-util" />
 
@@ -308,15 +306,19 @@
       </sourcepath>
       <classpath>
         <path refid="lib.path" />
-        <pathelement location="${ant.home}/lib/junit.jar" />
+        <pathelement location="${junit.jar}" />
       </classpath>
-      <tag name="web.servlet" scope="all" description="Servlet"/>
-      <tag name="web.filter" scope="all" description="Filter"/>
-      <tag name="web.filter-mapping" scope="all" description="Filter Mapping"/>
-      <tag name="jsp.attribute" scope="all" description="JSP Tag Attribute"/>
-      <tag name="jsp.tag" scope="all" description="JSP Tag"/>
-      <tag name="struts.form" scope="all" description="Struts Form"/>
-      <tag name="struts.action" scope="all" description="Struts Action"/>
+      <tag name="web.servlet" scope="types" description="Servlet"/>
+      <tag name="web.filter" scope="types" description="Filter"/>
+      <tag name="web.filter-mapping" scope="types"
+           description="Filter Mapping"/>
+      <tag name="jsp.attribute" scope="methods"
+           description="JSP Tag Attribute"/>
+      <tag name="jsp.tag" scope="types" description="JSP Tag"/>
+      <tag name="struts.form" scope="types" description="Struts Form"/>
+      <tag name="struts.action" scope="types" description="Struts Action"/>
+      <tag name="struts.action-forward" scope="types"
+           description="Struts Action Forward"/>
     </javadoc>
   </target>
 
