@@ -35,6 +35,7 @@ public class AllTests
         TestSuite suite;
 
         suite = new TestSuite();
+        suite.addTestSuite(MailManagerOptionsTest.class);
         suite.addTestSuite(MailManagerTest.class);
         suite.addTestSuite(MailAddressTest.class);
         return suite;
