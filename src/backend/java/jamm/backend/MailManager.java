@@ -931,6 +931,10 @@ public class MailManager
         LdapFacade ldap = null;
         try
         {
+            if (isPostmaster(mail))
+            {
+                removePostmaster(mail);
+            }
             ldap = getLdap();
             searchForMail(ldap, mail);
             ldap.deleteElement(ldap.getResultName());
@@ -1332,6 +1336,18 @@ public class MailManager
             throw new MailManagerException("Removing " + mail +
                                            " as postmaster", e);
         }
+    }
+
+    /**
+     * Removes postmaster power from mail in domain that mail is in.
+     *
+     * @param mail the address to remove power from
+     * @exception MailManagerException if an error occurs
+     */
+    public void removePostmaster(String mail)
+        throws MailManagerException
+    {
+        removePostmaster(MailAddress.hostFromAddress(mail), mail);
     }
             
     /**
