@@ -19,7 +19,6 @@
 
 package jamm.tools;
 
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -110,7 +109,8 @@ public final class JammCleaner
     /**
      * Our main method
      *
-     * @param argv the array of args
+     * @param argv command line arguments
+     * @exception Exception if an error occurs
      */
     public static final void main(String argv[])
         throws Exception
@@ -121,8 +121,8 @@ public final class JammCleaner
         
         System.out.println(JammCleanerOptions.argDump());
 
-        //AccountCleaner ac = new AccountCleaner();
-        //ac.cleanUp();
+        AccountCleaner ac = new AccountCleaner();
+        ac.cleanUp();
     }
 
     /** static define for addOption */
