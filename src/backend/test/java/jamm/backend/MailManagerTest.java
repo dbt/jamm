@@ -869,6 +869,14 @@ public class MailManagerTest extends TestCase
                            di.getCanEditAccounts());
                 assertTrue("Testing editPostmasters",
                            !di.getCanEditPostmasters());
+                assertTrue("Checking for number of accounts",
+                           di.getAccountCount() == 2);
+                assertTrue("Checking for number of alias",
+                           di.getAliasCount() == 1);
+                assertTrue("Testing active",
+                           di.getActive());
+                assertTrue("Testing delete",
+                           !di.getDelete());
             }
         }
         assertTrue("Checking for domain1.test", domainFound);
@@ -887,6 +895,10 @@ public class MailManagerTest extends TestCase
                    di.getCanEditAccounts());
         assertTrue("Testing editPostmasters",
                    !di.getCanEditPostmasters());
+        assertTrue("Checking for number of accounts",
+                   di.getAccountCount() == 2);
+        assertTrue("Checking for number of alias",
+                   di.getAliasCount() == 1);
         assertTrue("Testing active",
                    di.getActive());
         assertTrue("Testing delete",

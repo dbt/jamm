@@ -228,6 +228,8 @@ public class LdapFacadeTest extends TestCase
 
         expectedResults = new HashSet();
         expectedResults.add(DOMAIN1_DN);
+        expectedResults.add(POSTMASTER_DN);
+        expectedResults.add(ALIAS1_DN);
         expectedResults.add(LdapConstants.ACCT1_DN);
         expectedResults.add(ACCT2_DN);
 
@@ -542,6 +544,12 @@ public class LdapFacadeTest extends TestCase
         "mail=acct1@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
     private static final String ACCT1_PW = "acct1pw";
     */
+
+    private static final String POSTMASTER_DN =
+        "cn=postmaster,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
+        
+    private static final String ALIAS1_DN =
+        "mail=alias1@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
 
     private static final String ACCT2_DN =
         "mail=acct2@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";

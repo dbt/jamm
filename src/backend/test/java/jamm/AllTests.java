@@ -60,7 +60,7 @@ public class AllTests
         suite.addTest(jamm.ldap.AllTests.suite());
         suite.addTest(jamm.backend.AllTests.suite());
         
-                // This wraps all lower test suites around global setup and
+        // This wraps all lower test suites around global setup and
         // tear down routines.
         wrapper = new TestSetup(suite)
             {
@@ -122,7 +122,6 @@ public class AllTests
      *     by * read
      * </pre>
      */
-
     private static void setupLdapData()
         throws Exception
     {
@@ -195,6 +194,38 @@ public class AllTests
         attributes.put("delete", "FALSE");
         element = context.createSubcontext(
             "jvd=domain1.test, o=hosting, dc=jamm, dc=test", attributes);
+        element.close();
+        
+        // Add postmaster
+        String postmasterDn =
+            "cn=postmaster, jvd=domain1.test, o=hosting, dc=jamm, dc=test";
+        attributes = new BasicAttributes();
+        objectClass = new BasicAttribute("objectClass");
+        objectClass.add("top");
+        objectClass.add("jammPostmaster");
+        objectClass.add("jammMailAlias");
+        attributes.put(objectClass);
+        attributes.put("roleOccupant", postmasterDn);
+        attributes.put("mail", "postmaster@domain1.test");
+        attributes.put("maildrop", "postmaster");
+        attributes.put("accountActive", "TRUE");
+        attributes.put("lastChange", "123456");
+        element = context.createSubcontext(postmasterDn, attributes);
+        element.close();
+        
+        // Add alias1@domain1.test
+        attributes = new BasicAttributes();
+        objectClass = new BasicAttribute("objectClass");
+        objectClass.add("top");
+        objectClass.add("jammMailAlias");
+        attributes.put(objectClass);
+        attributes.put("mail", "alias1@domain1.test");
+        attributes.put("maildrop", "alias1@otherdomain1.test");
+        attributes.put("accountActive", "TRUE");
+        attributes.put("lastChange", "123456");
+        element = context.createSubcontext(
+            "mail=alias1@domain1.test, jvd=domain1.test, o=hosting, " +
+            "dc=jamm, dc=test", attributes);
         element.close();
 
         // Add acct1@domain1.test

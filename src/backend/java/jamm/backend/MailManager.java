@@ -691,32 +691,6 @@ public class MailManager
     }
 
     /**
-     * Creates a DomainInfo object assuming the ldapfacade points at
-     * an appropriate object.
-     *
-     * @param ldap a <code>LdapFacade</code> value
-     * @return a <code>DomainInfo</code> value
-     * @exception NamingException if an error occurs
-     */
-    private DomainInfo createDomainInfo(LdapFacade ldap)
-        throws NamingException
-    {
-        String name = ldap.getResultAttribute("jvd");
-        boolean canEditAccounts = stringToBoolean(
-            ldap.getResultAttribute("editAccounts"));
-        boolean canEditPostmasters = stringToBoolean(
-            ldap.getResultAttribute("editPostmasters"));
-        boolean active = stringToBoolean(
-            ldap.getResultAttribute("accountActive"));
-        int lastChange =
-            Integer.parseInt(ldap.getResultAttribute("lastChange"));
-        boolean delete = stringToBoolean(
-            ldap.getResultAttribute("delete"));
-        return new DomainInfo(name, canEditAccounts, canEditPostmasters,
-                              active, delete, lastChange);
-    }
-
-    /**
      * Delete the specified account.  Note: <b>this only removes the
      * account from LDAP!</b> The code is currently no different from
      * deleteAlias in implementation, so this just calls deleteAlias.
@@ -1058,29 +1032,14 @@ public class MailManager
     public DomainInfo getDomain(String domainName)
         throws MailManagerException
     {
-        LdapFacade ldap = null;
-        DomainInfo domainInfo = null;
-        try
+        List foo = getFilteredDomains("jvd=" + domainName);
+        if (foo.size() > 1)
         {
-            ldap = getLdap();
+            // todo Bitch about more than one domain here.
+        }
 
-            ldap.searchOneLevel(mBase, "jvd=" + domainName);
-            ldap.nextResult();
-
-            domainInfo = createDomainInfo(ldap);
-        }
-        catch (NamingException e)
-        {
-            throw new MailManagerException(e);
-        }
-        finally
-        {
-            closeLdap(ldap);
-        }
-        
-        return domainInfo;
+        return (DomainInfo) foo.get(0);
     }
-
 
     /**
      * Returns a list of all domains that are present in this
@@ -1092,29 +1051,7 @@ public class MailManager
     public List getDomains()
         throws MailManagerException
     {
-        LdapFacade ldap = null;
-        List  domains = new ArrayList();
-        try
-        {
-            ldap = getLdap();
-
-            ldap.searchOneLevel(mBase, "jvd=*");
-            while (ldap.nextResult())
-            {
-                domains.add(createDomainInfo(ldap));
-            }
-        }
-        catch (NamingException e)
-        {
-            throw new MailManagerException(e);
-        }
-        finally
-        {
-            closeLdap(ldap);
-        }
-
-        Collections.sort(domains, new DomainNameComparator());
-        return domains;
+        return getFilteredDomains("jvd=*");
     }
 
     /**
@@ -1169,17 +1106,54 @@ public class MailManager
     private List getFilteredDomains(String filter)
         throws MailManagerException
     {
-        LdapFacade ldap = null;
+        LdapFacade derivedLdap = null; 
+        LdapFacade domainLdap = null;
         List domains = new ArrayList();
         try
         {
-            ldap = getLdap();
+            domainLdap = getLdap();
+            derivedLdap = getLdap();
 
-            ldap.searchOneLevel(mBase, filter);
+            domainLdap.searchOneLevel(mBase, filter);
             
-            while (ldap.nextResult())
+            while (domainLdap.nextResult())
             {
-                domains.add(createDomainInfo(ldap));
+                String dn = domainLdap.getResultName();
+                String name = domainLdap.getResultAttribute("jvd");
+                boolean canEditAccounts = stringToBoolean(
+                    domainLdap.getResultAttribute("editAccounts"));
+                boolean canEditPostmasters = stringToBoolean(
+                    domainLdap.getResultAttribute("editPostmasters"));
+                boolean active = stringToBoolean(
+                    domainLdap.getResultAttribute("accountActive"));
+                int lastChange = Integer.parseInt(
+                    domainLdap.getResultAttribute("lastChange"));
+                boolean delete = stringToBoolean(
+                    domainLdap.getResultAttribute("delete"));
+
+                // Get the count the best way we can.  Maybe we can
+                // make a helper that does this?
+                derivedLdap.setReturningAttributes(new String[] { "mail" });
+                derivedLdap.searchOneLevel(
+                    domainDn(name), "objectClass=" + ACCOUNT_OBJECT_CLASS);
+                int accountCount = 0;
+                while (derivedLdap.nextResult())
+                {
+                    accountCount++;
+                }
+                derivedLdap.searchOneLevel(
+                    domainDn(name),
+                    "(&(!(cn=postmaster))(objectClass=" + ALIAS_OBJECT_CLASS +
+                        "))");
+                int aliasCount = 0;
+                while (derivedLdap.nextResult())
+                {
+                    aliasCount++;
+                }
+
+                domains.add(
+                    new DomainInfo(name, canEditAccounts, canEditPostmasters,
+                    active, delete, aliasCount, accountCount, lastChange));
             }
         }
         catch (NamingException e)
@@ -1188,7 +1162,8 @@ public class MailManager
         }
         finally
         {
-            closeLdap(ldap);
+            closeLdap(domainLdap);
+            closeLdap(derivedLdap);
         }
 
         Collections.sort(domains, new DomainNameComparator());
