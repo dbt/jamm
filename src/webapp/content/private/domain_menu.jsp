@@ -13,17 +13,19 @@
         <th>Account</th>
         <th>Delete</th>
         <th>Active</th>
+        <th>Admin</th>
       </tr>
       <logic:iterate indexId="i" id="account" name="accounts">
         <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
           <td><bean:write name="account"/></td>
           <td align="center">D</td>
           <td align="center">A</td>
+          <td align="center">Y/N</td>
         </jamm:tr>
       </logic:iterate>
     </table>
 
-    <br></br>
+    <br/>
 
     <table width="80%" border="1" cellspacing="0" cellpadding="3"
            align="center">
@@ -32,6 +34,7 @@
         <th>Destinations</th>
         <th>Delete</th>
         <th>Active</th>
+        <th>Admin</th>
       </tr>
       <logic:iterate indexId="i" id="alias" name="aliases">
         <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
@@ -44,9 +47,14 @@
           </td>
           <td align="center">D</td>
           <td align="center">A</td>
+          <td align="center">Y/N</td>
         </jamm:tr>
       </logic:iterate>
     </table>
+
+    <p>
+      Do something for catch all.
+    </p>
 
   </body>
 </html:html>
