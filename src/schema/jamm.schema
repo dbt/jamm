@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.4 2002-03-14 21:46:14 ark-sf Exp $
+#$Id: jamm.schema,v 1.5 2002-03-18 22:19:18 ddribin Exp $
 # We depend on courier.schema
 #
 # OID prefix: 1.3.6.1.4.1.12461
@@ -20,6 +20,11 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.3 NAME 'lastChange'
 	DESC 'Time in unix time of last change in entry'
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.12461.1.1.4 NAME 'jvd'
+        DESC 'A virtual domain managed by Jamm'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
 #
 # Objects: 1.3.6.1.4.1.12461.1.2
 #
@@ -38,5 +43,5 @@ objectclass ( 1.3.6.1.4.1.12461.1.2.2 NAME 'JammMailAlias' SUP top AUXILIARY
 
 objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain' SUP top AUXILIARY
 	DESC 'Virtual Domain entry to be used with postfix transport maps'
-	MUST ( virtualdomain )
+	MUST ( jvd )
 	MAY ( postfixTransport $ description $ accountActive $ lastChange ) )
