@@ -18,10 +18,10 @@
         <table width="100%" border="1" cellspacing="0" cellpadding="3"
                align="center">
           <tr>
-            <th>Account</th>
-            <th>Delete</th>
-            <th>Active</th>
-            <th>Admin</th>
+            <th> <bean:message key="domain_admin.header.account"/> </th>
+            <th> <bean:message key="domain_admin.header.delete"/> </th>
+            <th> <bean:message key="domain_admin.header.active"/> </th>
+            <th> <bean:message key="domain_admin.header.admin"/> </th>
           </tr>
 
           <logic:iterate indexId="i" id="account" name="accounts"
@@ -53,9 +53,9 @@
           </logic:iterate>
         </table>
         <html:submit>
-          Submit Changes
+          <bean:message key="domain_admin.button.submit"/>
         </html:submit>
-        <html:reset>Reset</html:reset>
+        <html:reset> <bean:message key="button.reset"/> </html:reset>
       </html:form>
 
       <br/>
@@ -74,11 +74,11 @@
         <table width="100%" border="1" cellspacing="0" cellpadding="3"
                align="center">
           <tr>
-            <th>Alias</th>
-            <th>Destinations</th>
-            <th>Delete</th>
-            <th>Active</th>
-            <th>Admin</th>
+            <th> <bean:message key="domain_admin.header.alias"/> </th>
+            <th> <bean:message key="domain_admin.header.destinations"/> </th>
+            <th> <bean:message key="domain_admin.header.delete"/> </th>
+            <th> <bean:message key="domain_admin.header.active"/> </th>
+            <th> <bean:message key="domain_admin.header.admin"/> </th>
           </tr>
           <logic:iterate indexId="i" id="alias" name="aliases">
             <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
@@ -113,9 +113,9 @@
           </logic:iterate>
         </table>
         <html:submit>
-          Submit Changes
+          <bean:message key="domain_admin.button.submit"/>
         </html:submit>
-        <html:reset>Reset</html:reset>
+        <html:reset> <bean:message key="button.reset"/> </html:reset>
       </html:form>
 
       <br/>
@@ -124,11 +124,15 @@
         <tr>
           <td>
             <html:link forward="add_account" paramId="domain"
-                       paramName="domainName">Add Account</html:link>
+                       paramName="domainName">
+              <bean:message key="domain_admin.link.add_account"/>
+            </html:link>
           </td>
           <td>
             <html:link forward="add_alias" paramId="domain"
-                       paramName="domainName">Add Alias</html:link>
+                       paramName="domainName">
+              <bean:message key="domain_admin.link.add_alias"/>
+            </html:link>
           </td>
           <td> Do something for catch all.</td>
         </tr>

@@ -6,7 +6,7 @@
     <ul>
       <li>
         <html:link forward="user_home">
-          Go to your home page.
+          <bean:message key="home.link.user_home"/>
         </html:link>
       </li>
       <li>
