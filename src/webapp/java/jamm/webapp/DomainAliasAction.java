@@ -44,6 +44,6 @@ public class DomainAliasAction extends JammAction
             manager.deleteAlias(deletions[i]);
         }
 
-        return mapping.findForward("domain_admin");
+        return mapping.findForward("user_home");
     }
 }
