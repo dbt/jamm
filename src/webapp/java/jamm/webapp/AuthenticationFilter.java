@@ -42,8 +42,14 @@ public class AuthenticationFilter implements Filter
             if ((session == null) ||
                 (session.getAttribute(AUTHENTICATION_KEY) == null))
             {
+                StringBuffer done = hreq.getRequestURL();
+                String query = hreq.getQueryString();
+                if (query != null)
+                {
+                    done.append("?").append(query);
+                }
                 hresp.sendRedirect(hreq.getContextPath() + "/login.jsp?done=" +
-                                   hreq.getRequestURL().toString());
+                                   done.toString());
                 return;
             }
         }
