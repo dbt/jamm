@@ -271,33 +271,6 @@ public class ZipCreator
         mZos.close();
     }
 
-    /**
-     * main method for testing
-     *
-     * @param args the arguments
-     * @exception Exception if an error occurs
-     */
-    public static void main(String args[])
-        throws Exception
-    {
-        ZipCreator zc = new ZipCreator("/tmp/dude.test.zip");
-        zc.open();
-        if (args.length < 1)
-        {
-            zc.add("./build.xml");
-            zc.add("NEWS");
-            zc.add("README");
-            zc.add("/usr/src/linux-2.4.19.tar.bz2");
-            zc.add("build/jamm-0.9.3.war");
-            zc.add("doc");
-        }
-        else
-        {
-            zc.add(args[0]);
-        }
-        zc.close();
-    }
-
     /** A File object representing the zip file */
     private File mFile;
     /** the zip output stream we're writing to */
