@@ -20,6 +20,7 @@
 package jamm.webapp;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.FilterChain;
@@ -31,23 +32,43 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * This filter makes sure that people are authenticated before they
+ * enter into the private area.  It redirects to "/login.jsp" with
+ * the argument of "done=<URL ORIGINALLY SPECIFIED>".
  *
  * @web:filter name="Authentication Filter"
  * @web:filter-mapping url-pattern="/private/*"
  */
 public class AuthenticationFilter implements Filter
 {
+    /**
+     * initializes the authentication filter.
+     *
+     * @param config the FilterConfig object that this Filter should use
+     */
     public void init(FilterConfig config)
         throws ServletException
     {
         mConfig = config;
     }
 
+    /**
+     * Cleans up any resources the filter may have taken.
+     */
     public void destroy()
     {
         mConfig = null;
     }
 
+    /**
+     * Checks to see if AUTHENTICATION_KEY is set in the session, if
+     * not it redirects to "/login.jsp?done=<ORIGINAL URL CALL>".  If
+     * AUTHENTICATION_KEY is present it passes the request and
+     * response to the next level of the FilterChain.
+     *
+     * @param servletRequest the request we're filtering.
+     * @param servletResponse the response of the servlet transaction
+     * @param chain the filter chain
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain chain)
@@ -79,6 +100,8 @@ public class AuthenticationFilter implements Filter
         chain.doFilter(servletRequest, servletResponse);
     }
 
+    /** The configuration for the filter. */
     private FilterConfig mConfig;
+    /** The static string for use in the session attributes. */
     private static final String AUTHENTICATION_KEY = "is_authenticated";
 }
