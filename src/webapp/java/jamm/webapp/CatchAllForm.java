@@ -137,8 +137,8 @@ public class CatchAllForm extends ActionForm
     /** The domain for the catchall */
     private String mDomain;
     /** The value for status to be considered on. */
-    public final static String ON = "on";
+    public static final String ON = "on";
     /** The default value for status to be considered not on. */
-    public final static String OFF = "off";
+    public static final String OFF = "off";
 
 }
