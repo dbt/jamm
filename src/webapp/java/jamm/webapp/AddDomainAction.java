@@ -29,8 +29,26 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 import jamm.backend.MailAddress;
 
+/**
+ * Calls MailManager to create a domain based on the information
+ * provided in the actionForm.  It will also set the postmaster
+ * password if a password was passed in via the form.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.AddDomainForm
+ */
 public class AddDomainAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @see jamm.webapp.AddDomainForm
+     *
+     * @param mapping The action mapping of possible destinations.
+     * @param actionForm an AddDomainForm object holding the required info.
+     * @param request The http request that caused this action to happen.
+     * @param response The http response to this action.
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

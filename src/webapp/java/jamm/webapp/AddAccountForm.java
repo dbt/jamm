@@ -121,8 +121,8 @@ public class AddAccountForm extends ActionForm
      * domain to the domain name passed in via the reqest and sets all
      * the other parameters to null.
      *
-     * @param mapping The mapping of possible destinations.
-     * @param request The http request that created this form.
+     * @param mapping The mapping used to select this instance.
+     * @param request The servlet request we are processing.
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {

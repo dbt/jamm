@@ -25,33 +25,70 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionErrors;
 
+/**
+ * Bean which holds the information from an HTML form that calls the
+ * AddDomainAction. Also, contains methods to validate the information
+ * as well as reset/clear the form.
+ *
+ * @see jamm.webapp.AddDomainAction
+ */
 public class AddDomainForm extends ActionForm
 {
+    /**
+     * Sets the domain.
+     *
+     * @param domain a string containing the domain name.
+     */
     public void setDomain(String domain)
     {
         mDomain = domain;
     }
 
+    /**
+     * Returns the domain name.
+     *
+     * @return a string containing the domain name.
+     */
     public String getDomain()
     {
         return mDomain;
     }
-    
+
+    /**
+     * Sets the password.
+     *
+     * @param password a string containing the password.
+     */
     public void setPassword(String password)
     {
         mPassword = password;
     }
 
+    /**
+     * Returns the password.
+     *
+     * @return a string containing the password.
+     */
     public String getPassword()
     {
         return mPassword;
     }
 
+    /**
+     * Sets the retyped password.
+     *
+     * @param retypedPassword a string containing the retyped password
+     */
     public void setRetypedPassword(String retypedPassword)
     {
         mRetypedPassword = retypedPassword;
     }
 
+    /**
+     * Returns the retyped password.
+     *
+     * @return a string containing the retyped password.
+     */
     public String getRetypedPassword()
     {
         return mRetypedPassword;
@@ -67,6 +104,13 @@ public class AddDomainForm extends ActionForm
                 ((mPassword.equals("") && mRetypedPassword.equals(""))));
     }
 
+    /**
+     * Resets the form.  Sets the domain name to null and clears the
+     * passwords.
+     * 
+     * @param mapping The mapping of possible destinations.
+     * @param request The http request that created this form.
+     */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
         mDomain = null;
@@ -100,13 +144,19 @@ public class AddDomainForm extends ActionForm
         return errors;
     }
 
+    /**
+     * Clears both passwords by setting them to null.
+     */
     private void clearPasswords()
     {
         mPassword = null;
         mRetypedPassword = null;
     }
 
+    /** The domain name */
     private String mDomain;
+    /** The password */
     private String mPassword;
+    /** The retyped password */
     private String mRetypedPassword;
 }
