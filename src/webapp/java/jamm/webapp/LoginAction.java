@@ -56,7 +56,7 @@ public class LoginAction extends Action
             return new ActionForward(mapping.getInput());
         }
 
-        User user = new User(form.getUsername(), form.getPassword());
+        User user = new User(form.getUsername(), userDn, form.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute("is_authenticated", "true");
         session.setAttribute("user", user);

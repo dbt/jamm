@@ -13,18 +13,20 @@ public class User implements Serializable
      */
     public User()
     {
-        this("", "");
+        this("", "", "");
     }
 
     /**
      * Constructs a new user.
      *
-     * @param username The username
-     * @param password The password
+     * @param username The username.
+     * @param dn The distinguished name.
+     * @param password The password.
      */
-    public User(String username, String password)
+    public User(String username, String dn, String password)
     {
         mUsername = username;
+        mDn = dn;
         mPassword = password;
     }
 
@@ -47,6 +49,16 @@ public class User implements Serializable
     }
 
     /**
+     * Returns this users's LDAP distinguished name.
+     *
+     * @return An LDAP DN
+     */
+    public String getDn()
+    {
+        return mDn;
+    }
+
+    /**
      * Returns this user's password.
      *
      * @return A password
@@ -58,6 +70,9 @@ public class User implements Serializable
 
     /**  The username. */
     private String mUsername;
+
+    /** The distinguished name. */
+    private String mDn;
 
     /** The password. */
     private String mPassword;
