@@ -125,7 +125,8 @@
   <target name="dist-webapp"
 	  depends="build-webapp, build-webapp-webdoclet">
     <jar jarfile="dist/${project.string}.war"
-	 basedir="build/webapp/root" />
+	 basedir="build/webapp/root"
+	 excludes="WEB-INF/jamm.properties"/>
   </target>
     
   <target name="dist" depends="dist-webapp" />
