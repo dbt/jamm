@@ -129,68 +129,13 @@ public class DomainAdminAction extends JammAction
         breadCrumbs.add(breadCrumb);
         request.setAttribute("breadCrumbs", breadCrumbs);
 
+        // Prepare accounts
         List accounts = manager.getAccounts(domain);
-        request.setAttribute("accounts", accounts);
-
-        List activeAccounts = new ArrayList();
-        List adminAccounts = new ArrayList();
-        Iterator i = accounts.iterator();
-        while (i.hasNext())
-        {
-            AccountInfo account = (AccountInfo) i.next();
-            if (account.isActive())
-            {
-                activeAccounts.add(account.getName());
-            }
-            if (account.isAdministrator())
-            {
-                adminAccounts.add(account.getName());
-            }
-        }
-
-        String[] activeAccountsArray =
-            (String []) activeAccounts.toArray(new String[0]);
-        String[] adminAccountsArray =
-            (String []) adminAccounts.toArray(new String[0]);
-        DomainConfigForm dcf = new DomainConfigForm();
-        dcf.setOriginalActiveItems(activeAccountsArray);
-        dcf.setActiveItems(activeAccountsArray);
-        dcf.setOriginalAdminItems(adminAccountsArray);
-        dcf.setAdminItems(adminAccountsArray);
-        dcf.setDomain(domain);
-        request.setAttribute("domainAccountForm", dcf);
+        doAccounts(request, manager, domain, accounts);
 
         // Prepare aliases
         List aliases = manager.getAliases(domain);
-        request.setAttribute("aliases", aliases);
-
-        List activeAliases = new ArrayList();
-        List adminAliases = new ArrayList();
-        i = aliases.iterator();
-        while (i.hasNext())
-        {
-            AliasInfo alias = (AliasInfo) i.next();
-            if (alias.isActive())
-            {
-                activeAliases.add(alias.getName());
-            }
-            if (alias.isAdministrator())
-            {
-                adminAliases.add(alias.getName());
-            }
-        }
-
-        String[] activeAliasesArray =
-            (String []) activeAliases.toArray(new String[0]);
-        String[] adminAliasesArray =
-            (String []) adminAliases.toArray(new String[0]);
-        dcf = new DomainConfigForm();
-        dcf.setOriginalActiveItems(activeAliasesArray);
-        dcf.setActiveItems(activeAliasesArray);
-        dcf.setOriginalAdminItems(adminAliasesArray);
-        dcf.setAdminItems(adminAliasesArray);
-        dcf.setDomain(domain);
-        request.setAttribute("domainAliasForm", dcf);
+        doAliases(request, manager, domain, aliases);
 
         AliasInfo catchAllAlias = manager.getAlias("@" + domain);
         if (catchAllAlias != null)
@@ -251,5 +196,89 @@ public class DomainAdminAction extends JammAction
         }
 
         return false;
+    }
+
+    /**
+     * Prepares the account information and adds it to the web page.
+     *
+     * @param request The request we're servicing
+     * @param manager a mail manager instance to use
+     * @param domain The domain we're manipulating
+     * @param accounts a List of accounts
+     */
+    private void doAccounts(HttpServletRequest request, MailManager manager,
+                            String domain, List accounts)
+    {
+        request.setAttribute("accounts", accounts);
+
+        List activeAccounts = new ArrayList();
+        List adminAccounts = new ArrayList();
+        Iterator i = accounts.iterator();
+        while (i.hasNext())
+        {
+            AccountInfo account = (AccountInfo) i.next();
+            if (account.isActive())
+            {
+                activeAccounts.add(account.getName());
+            }
+            if (account.isAdministrator())
+            {
+                adminAccounts.add(account.getName());
+            }
+        }
+
+        String[] activeAccountsArray =
+            (String []) activeAccounts.toArray(new String[0]);
+        String[] adminAccountsArray =
+            (String []) adminAccounts.toArray(new String[0]);
+        DomainConfigForm dcf = new DomainConfigForm();
+        dcf.setOriginalActiveItems(activeAccountsArray);
+        dcf.setActiveItems(activeAccountsArray);
+        dcf.setOriginalAdminItems(adminAccountsArray);
+        dcf.setAdminItems(adminAccountsArray);
+        dcf.setDomain(domain);
+        request.setAttribute("domainAccountForm", dcf);
+    }
+
+    /**
+     * Prepares the aliases for the page.
+     *
+     * @param request the request being serviced
+     * @param manager The mail manager to use
+     * @param domain which domain are we manipulating
+     * @param aliases a List of aliases
+     */
+    private void doAliases(HttpServletRequest request, MailManager manager,
+                           String domain, List aliases)
+    {
+        request.setAttribute("aliases", aliases);
+
+        List activeAliases = new ArrayList();
+        List adminAliases = new ArrayList();
+        Iterator i = aliases.iterator();
+        while (i.hasNext())
+        {
+            AliasInfo alias = (AliasInfo) i.next();
+            if (alias.isActive())
+            {
+                activeAliases.add(alias.getName());
+            }
+            if (alias.isAdministrator())
+            {
+                adminAliases.add(alias.getName());
+            }
+        }
+
+        String[] activeAliasesArray =
+            (String []) activeAliases.toArray(new String[0]);
+        String[] adminAliasesArray =
+            (String []) adminAliases.toArray(new String[0]);
+        DomainConfigForm dcf = new DomainConfigForm();
+        dcf.setOriginalActiveItems(activeAliasesArray);
+        dcf.setActiveItems(activeAliasesArray);
+        dcf.setOriginalAdminItems(adminAliasesArray);
+        dcf.setAdminItems(adminAliasesArray);
+        dcf.setDomain(domain);
+        request.setAttribute("domainAliasForm", dcf);
     }
 }
