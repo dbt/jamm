@@ -136,6 +136,15 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * 
+     * @param i
+     */
+    public void setAccountCount(int accountCount)
+    {
+        mAccountCount = accountCount;
+    }
+
+    /**
      * Set domain active or not.
      *
      * @param active true if active, false if not.
@@ -143,6 +152,15 @@ public class DomainInfo implements Serializable
     public void setActive(boolean active)
     {
         mActive = active;
+    }
+
+    /**
+     * 
+     * @param aliasCount
+     */
+    public void setAliasCount(int aliasCount)
+    {
+        mAliasCount = aliasCount;
     }
 
     /**
@@ -227,5 +245,4 @@ public class DomainInfo implements Serializable
     public static final boolean NO_DELETE = false;
     /** Static final for helping make setActive more readable */
     public static final boolean NOT_ACTIVE = false;
-
 }
