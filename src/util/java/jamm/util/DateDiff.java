@@ -31,7 +31,8 @@ import java.io.File;
 
 /**
  * This tells you the diff between two dates.  For the get method, use
- * the defines from Calendar.
+ * the defines from Calendar.  Currently, only SECOND, MINUTE, HOUR,
+ * DAY_OF_MONTH, MONTH, and YEAR are calcuated.
  *
  * @see java.util.Calendar
  */
