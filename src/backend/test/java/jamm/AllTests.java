@@ -36,6 +36,7 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
 import jamm.ldap.LdapPassword;
+import jamm.backend.MailManagerOptions;
 
 /**
  * A top level test suite for all the backend classes.  It connects to
@@ -93,6 +94,7 @@ public class AllTests
     {
         setupLdapData();
         setupLdapPassword();
+        setupMailManagerOptions();
     }
 
     /**
@@ -289,6 +291,14 @@ public class AllTests
         // Use normal random as SecureRandom takes too long to
         // initialize for testing.
         LdapPassword.setRandomClass("java.util.Random");
+    }
+
+    /**
+     * Sets up the MailManagerOptions to have the expected value.
+     */
+    private static void setupMailManagerOptions()
+    {
+        MailManagerOptions.setVmailHomedir("/home/vmail/domains");
     }
     
     /**
