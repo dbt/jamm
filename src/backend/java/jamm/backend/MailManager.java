@@ -48,7 +48,7 @@ public class MailManager
         mBindPassword = bindPassword;
     }
 
-    private LdapFacade getFacade()
+    private LdapFacade getLdap()
         throws NamingException
     {
         LdapFacade ldap = new LdapFacade(mHost, mPort);
@@ -63,6 +63,14 @@ public class MailManager
         return ldap;
     }
     
+    private void closeLdap(LdapFacade ldap)
+    {
+        if (ldap != null)
+        {
+            ldap.close();
+        }
+    }
+
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
     {
@@ -70,7 +78,7 @@ public class MailManager
 
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             searchForMail(ldap, mail);
 
             String foundDn = ldap.getResultName();
@@ -102,7 +110,7 @@ public class MailManager
         
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             authenticated = true;
         }
         catch (AuthenticationException e)
@@ -128,7 +136,7 @@ public class MailManager
         boolean isPostmaster = false;
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
 
             // Get all users in this domain who have postamster
             // privileges.  The results are full DNs.
@@ -156,14 +164,14 @@ public class MailManager
         return isPostmaster;
     }
 
-    public String findByMail(String mail)
+    public String getDnFromMail(String mail)
         throws MailManagerException
     {
         LdapFacade ldap = null;
         String foundDn = null;
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             searchForMail(ldap, mail);
             foundDn = ldap.getResultName();
         }
@@ -200,7 +208,7 @@ public class MailManager
         LdapFacade ldap = null;
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
 
             // Create the domain
             Map attributes = new HashMap();
@@ -215,7 +223,7 @@ public class MailManager
             attributes.clear();
             attributes.put("objectClass",
                            new String[] {"top", "organizationalRole",
-                                         "JammMailAlias"});
+                                         ALIAS_OBJECT_CLASS});
             attributes.put("cn", "postmaster");
             attributes.put("mail",
                            MailAddress.addressFromParts("postmaster", domain));
@@ -227,7 +235,7 @@ public class MailManager
             // Create the abuse account
             attributes.clear();
             attributes.put("objectClass",
-                           new String[] {"top", "JammMailAlias"});
+                           new String[] {"top", ALIAS_OBJECT_CLASS});
             String mail = MailAddress.addressFromParts("abuse", domain);
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
@@ -252,11 +260,11 @@ public class MailManager
         
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
 
             Map attributes = new HashMap();
             attributes.put("objectClass",
-                           new String[] {"top", "JammMailAlias"});
+                           new String[] {"top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", mail);
             attributes.put("maildrop", destinations);
             ldap.addElement(mailDn(domain, mail), attributes);
@@ -278,7 +286,7 @@ public class MailManager
         LdapFacade ldap = null;
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             ldap.modifyElementAttribute(mailDn(alias.getName()), "maildrop",
                                         alias.getDestinations());
         }
@@ -300,11 +308,11 @@ public class MailManager
         
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             searchForMail(ldap, mail);
             Set objectClasses =
                 ldap.getAllResultAttributeValues("objectClass");
-            isAlias = objectClasses.contains("JammMailAlias");
+            isAlias = objectClasses.contains(ALIAS_OBJECT_CLASS);
         }
         catch (NamingException e)
         {
@@ -325,7 +333,7 @@ public class MailManager
         AliasInfo alias = null;
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             searchForMail(ldap, mail);
             alias = createAliasInfo(ldap);
         }
@@ -348,9 +356,9 @@ public class MailManager
 
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             String domainDn = domainDn(domain);
-            ldap.searchOneLevel(domainDn, "objectClass=JammMailAlias");
+            ldap.searchOneLevel(domainDn, "objectClass=" + ALIAS_OBJECT_CLASS);
 
             while (ldap.nextResult())
             {
@@ -400,10 +408,10 @@ public class MailManager
 
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             Map attributes = new HashMap();
             attributes.put("objectClass",
-                           new String[] { "top", "JammMailAccount" });
+                           new String[] { "top", ACCOUNT_OBJECT_CLASS});
             attributes.put("homeDirectory", "/home/vmail/domains");
             attributes.put("mail", mail);
             attributes.put("mailbox", domain + "/" + account + "/");
@@ -431,9 +439,10 @@ public class MailManager
 
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             String domainDn = domainDn(domain);
-            ldap.searchOneLevel(domainDn, "objectClass=JammMailAccount");
+            ldap.searchOneLevel(domainDn, "objectClass=" +
+                                ACCOUNT_OBJECT_CLASS);
 
             while (ldap.nextResult())
             {
@@ -466,10 +475,10 @@ public class MailManager
 
         try
         {
-            ldap = getFacade();
+            ldap = getLdap();
             Map attributes = new HashMap();
             attributes.put("objectClass",
-                           new String[] { "top", "JammMailAlias" });
+                           new String[] { "top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
             ldap.addElement(mailDn(domain, catchAll), attributes);
@@ -510,13 +519,8 @@ public class MailManager
         return mailDn.toString();
     }
 
-    private void closeLdap(LdapFacade ldap)
-    {
-        if (ldap != null)
-        {
-            ldap.close();
-        }
-    }
+    private final String ACCOUNT_OBJECT_CLASS = "JammMailAccount";
+    private final String ALIAS_OBJECT_CLASS = "JammMailAlias";
 
     private String mHost;
     private int mPort;
