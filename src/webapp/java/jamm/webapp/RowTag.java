@@ -131,8 +131,8 @@ public class RowTag extends BodyTagSupport
     }
 
     /**
-     * Returns "bgcolor=?????" where the appropriate color is filled
-     * in based on wether mIndex is even or odd.
+     * Returns "bgcolor=xxx" the appropriate color is filled in based
+     * on wether mIndex is even or odd.
      *
      * @param buffer a <code>StringBuffer</code> object to which the
      *               bgcolor information can be appended to.
