@@ -66,6 +66,12 @@ public class AddAccountForm extends ActionForm
                                  HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
+        if ((mName == null) || mName.equals(""))
+        {
+            errors.add("name",
+                       new ActionError("add_account.error.no_name"));
+        }
+
         if (!PasswordValidator.validatePassword(mPassword, mRetypedPassword,
                                                 errors))
         {
