@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import jamm.backend.MailManager;
+import jamm.backend.MailAddress;
 
 /**
  * Class provides utility functions that all/most of the Actions in
@@ -85,6 +86,11 @@ public abstract class JammAction extends Action
         if (name.equals("domain_admin"))
         {
             String domain = request.getParameter("domain");
+            if (domain == null)
+            {
+                String mail = request.getParameter("mail");
+                domain = MailAddress.hostFromAddress(mail);
+            }
             return getDomainAdminForward(mapping, domain);
         }
         else if (name.equals("account_admin"))
