@@ -6,8 +6,6 @@
 
 * Delete domain.
 
-* Add domain (site-admin web page)
-
 * Assign "postmasters"
 
 * Create/manage catch-alls (web pages)
