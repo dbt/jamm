@@ -520,7 +520,7 @@ public class MailManagerTest extends TestCase
      * Tests changing passwords.
      */
     public void testChangePassword()
-        throws MailManagerException
+        throws MailManagerException, NamingException
     {
         String domain = "chpasswd.test";
         String domainDn = "jvd=" + domain + "," + BASE;
@@ -564,6 +564,19 @@ public class MailManagerTest extends TestCase
         manager.setBindEntry(accountDn, newPassword2);
         assertTrue("Double checking new password 2",
                    manager.authenticate());
+
+        // Clear password
+        // manager.setBindEntry(postmasterDn, postmasterPassword);
+        // manager.changePassword(mail, "a");
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(postmasterDn, postmasterPassword);
+        mLdap.searchSubtree(BASE, "mail=" + mail);
+        assertTrue("Checking for result", mLdap.nextResult());
+        assertEquals("Checking mail", mail, mLdap.getResultAttribute("mail"));
+        /*
+        assertEquals("Checking password field is empty", "",
+                     mLdap.getResultAttribute("userPassword"));
+        */
     }
 
     /**
