@@ -20,3 +20,6 @@ Jamm itself:
 * Install doc
 
 * Send e-mail after account creation to assure creation of user directory
+
+* Generate passwords for accounts and/or aliases
+  Port diceware to Java?
