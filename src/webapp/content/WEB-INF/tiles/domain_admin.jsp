@@ -164,8 +164,9 @@ Catch-All:
                     Will have to look at struts tags as example on how
                     to do it.
             -->
-            <jamm:list-abbrev limit="3"
-                              list="<%=alias.getMailDestinations()%>"/>
+            <jamm:list-abbrev limit="3" name="alias"
+                              property="mailDestinations"/>
+                              
           </div>
         </td>
         <td align="left" width="6" bgcolor="#FFFFFF">

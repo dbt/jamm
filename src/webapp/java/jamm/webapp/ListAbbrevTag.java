@@ -28,6 +28,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspException;
 
+import org.apache.struts.util.RequestUtils;
+
 /**
  * Abbreviates a list and ends it with ellipses.
  *
@@ -41,7 +43,10 @@ public class ListAbbrevTag extends TagSupport
     public ListAbbrevTag()
     {
         super();
-        setLimit(3);
+        mLimit = 3;
+        mName = null;
+        mProperty = null;
+        mScope = null;
     }
     
     /**
@@ -59,16 +64,69 @@ public class ListAbbrevTag extends TagSupport
     }
 
     /**
-     * sets the list of Strings to abbrev
+     * Set the bean name of the list, or the name the bean the list is a
+     * property of.
      *
-     * @param list the list to abbrev
+     * @param name the name of the bean
      *
      * @jsp:attribute required="true" rtexprvalue="true"
-     *                description="The list to abbrev"
+     *                description="name of bean"
      */
-    public void setList(List list)
+    public void setName(String name)
     {
-        mList = list;
+        mName = name;
+    }
+
+    /**
+     * Set the name of the property of the bean to use.
+     *
+     * @param property the name of the property
+     *
+     * @jsp:attribute required="false" rtexprvalue="true"
+     *                description="name of property"
+     */
+    public void setProperty(String property)
+    {
+        mProperty = property;
+    }
+
+    /**
+     * Set the scope to seach for the bean in.
+     *
+     * @param scope the scope to look in
+     *
+     * @jsp:attribute required="false" rtexprvalue="true"
+     *                description="scope to locate bean in"
+     */
+    public void setScope(String scope)
+    {
+        mScope = scope;
+    }
+
+    /**
+     * helper function to locate our list
+     *
+     * @return the list or null
+     *
+     * @exception JspException if an error occurs
+     */
+    private List getList()
+        throws JspException
+    {
+        List ourList = null;
+        RequestUtils util = new RequestUtils();
+
+        if (mProperty == null)
+        {
+            ourList = (List) util.lookup(pageContext, mName, mScope);
+        }
+        else
+        {
+            ourList =
+                (List) util.lookup(pageContext, mName, mProperty, mScope);
+        }
+
+        return ourList;
     }
 
     /**
@@ -81,7 +139,8 @@ public class ListAbbrevTag extends TagSupport
         throws JspException
     {
         JspWriter out = pageContext.getOut();
-        Iterator i = mList.iterator();
+        List list = getList();
+        Iterator i = list.iterator();
         boolean firstDone = false;
         try
         {
@@ -99,7 +158,7 @@ public class ListAbbrevTag extends TagSupport
                 out.print(item);
             }
 
-            if (mList.size() > mLimit)
+            if (list.size() > mLimit)
             {
                 out.print(", ...");
             }
@@ -114,6 +173,10 @@ public class ListAbbrevTag extends TagSupport
 
     /** The upper limit to cutoff at */
     private int mLimit;
-    /** The list to cut off */
-    private List mList;
+    /** The name of the bean */
+    private String mName;
+    /** the property on the bean */
+    private String mProperty;
+    /** the scope to find the bean in */
+    private String mScope;
 }
