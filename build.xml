@@ -262,12 +262,12 @@
   <target name="cs" depends="checkstyle" />
 
   <target name="prepare-doc" depends="prepare">
-    <mkdir dir="doc" />
+    <mkdir dir="doc/javadoc" />
   </target>
   
   <target name="doc" depends="prepare-doc">
     <javadoc packagenames="jamm.*"
-             destdir="doc"
+             destdir="doc/javadoc"
              author="true"
              version="true"
              use="true"
