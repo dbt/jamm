@@ -193,20 +193,48 @@ public abstract class JammAction extends Action
     }
 
     /**
-     * Changes the password based on which password choice to use from
-     * Globals.
+     * Given a domain or a mail argument, checks to see if the user
+     * had permission.
      *
-     * @param manager The MailManager to call against
-     * @param mail the e-mail address to change the password for
-     * @param password the password to set to
-     * @exception MailManagerException if an error occurs while
-     *                                 attempting to change the password
+     * @param manager A mail manager object
+     * @param request http request
+     * @param mail mail address being worked on
+     * @param domain domain name being worked on
+     * @return true if perms okay, false otherwise
+     * @exception MailManagerException if an error occurs
      */
-    protected void changePassword(MailManager manager, String mail,
-                                  String password)
+    protected boolean permCheck(MailManager manager,
+                                HttpServletRequest request, String mail,
+                                String domain)
         throws MailManagerException
     {
-        manager.setUsePasswordExOp(Globals.isPasswordUseExOp());
-        manager.changePassword(mail, password);
+        User user = getUser(request);
+
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            return true;
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            if (domain != null)
+            {
+                return manager.isPostmaster(domain, user.getUsername());
+            }
+
+            if (mail != null)
+            {
+                String mDomain = MailAddress.hostFromAddress(mail);
+                return manager.isPostmaster(mDomain, user.getUsername());
+            }
+        }
+
+        // we must just be a normal user
+        if (mail != null)
+        {
+            return mail.equals(user.getUsername());
+        }
+
+        return false;
     }
 }

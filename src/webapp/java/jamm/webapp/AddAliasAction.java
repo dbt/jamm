@@ -74,7 +74,7 @@ public class AddAliasAction extends JammAction
 
         if (!form.isPasswordEmpty())
         {
-            changePassword(manager, mail, form.getPassword());
+            manager.changePassword(mail, form.getPassword());
         }
 
         return findForward(mapping, "domain_admin", request);

@@ -68,7 +68,6 @@ public class AddAccountAction extends JammAction
         User user = getUser(request);
         MailManager manager = getMailManager(user);
 
-        manager.setUsePasswordExOp(Globals.isPasswordUseExOp());
         manager.createAccount(form.getDomain(), form.getName(),
                               form.getPassword());
 
