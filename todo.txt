@@ -12,6 +12,9 @@
 
     * Send e-mail after account creation to assure creation of user directory
 
+    * A configurable limit of the number of accounts/aliases a domain
+      can have.
+
   Post 1.0:
 
     * Have an account from one domain be a postmaster for multiple domains
