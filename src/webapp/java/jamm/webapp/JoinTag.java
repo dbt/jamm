@@ -53,7 +53,7 @@ public class JoinTag extends TagSupport
     }
     
     /**
-     * How many of the list should we show before the ellipses?
+     * The number to show of the list before the ellipses.
      * Defaults to 0 aka "infinite."
      *
      * @param limit the upper bounds on the number to show, 0 for "infinite"
