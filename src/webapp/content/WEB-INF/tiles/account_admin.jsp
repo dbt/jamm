@@ -12,8 +12,9 @@
     </tr>
   </table>
 </form>
-<html:form action="/private/change_password" focus="password">
+<html:form action="/private/change_password">
   <html:hidden property="mail"/>
+  <html:hidden property="done" value="account_admin"/>
   <table border="0">
     <tr>
       <td align="right">
