@@ -77,7 +77,7 @@ public class SiteAdminAction extends JammAction
         }
             
         siteConfigForm.setDomains(
-            (String [])domainNames.toArray(new String[0]));
+            (String []) domainNames.toArray(new String[0]));
 
         siteConfigForm.setOriginalAllowEditAliases(new String[0]);
         siteConfigForm.setOriginalAllowEditAccounts(new String[0]);
