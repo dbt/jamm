@@ -19,6 +19,9 @@
               -->
 <html:errors/>
 <html:form action="/private/update_alias">
+  <p>
+    Full Name: <html:text property="commonName" size="50"/>
+  </p>
   <html:hidden property="mail"/>
   <table width="100%" border="0">
     <tr>
