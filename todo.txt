@@ -11,8 +11,6 @@ Jamm itself:
 
     * User feedback after actions using html:messages.
 
-    * Finish backup-before-delete functionality of jammCleaner
-
     * allow virtual "home" to be configurable.
 
   Not sure when:
@@ -26,7 +24,7 @@ Jamm itself:
 
     * Have an account from one domain be a postmaster for multiple domains
 
-    * Quota editor
+    * Quota editor?
 
     NAR User Requests:
 
