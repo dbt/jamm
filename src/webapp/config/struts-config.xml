@@ -16,7 +16,9 @@
     <form-bean name="changePasswordForm"
                type="jamm.webapp.ChangePasswordForm"/>
     <form-bean name="domainAccountForm"
-               type="jamm.webapp.DomainAccountForm"/>
+               type="jamm.webapp.DomainConfigForm"/>
+    <form-bean name="domainAliasForm"
+               type="jamm.webapp.DomainConfigForm"/>
     <form-bean name="updateAliasForm"
                type="jamm.webapp.UpdateAliasForm"/>
   </form-beans>
@@ -90,6 +92,15 @@
     <action path="/private/domain_account"
             type="jamm.webapp.DomainAccountAction"
             name="domainAccountForm"
+            scope="request"
+            validate="false">
+      <forward name="domain_admin" path="/private/domain_admin.do"
+               redirect="true"/>
+    </action>
+
+    <action path="/private/domain_alias"
+            type="jamm.webapp.DomainAliasAction"
+            name="domainAliasForm"
             scope="request"
             validate="false">
       <forward name="domain_admin" path="/private/domain_admin.do"

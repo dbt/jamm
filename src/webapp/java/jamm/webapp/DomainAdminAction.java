@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 import jamm.backend.AccountInfo;
+import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
 
 public class DomainAdminAction extends JammAction
@@ -51,16 +52,43 @@ public class DomainAdminAction extends JammAction
             (String []) activeAccounts.toArray(new String[0]);
         String[] adminAccountsArray =
             (String []) adminAccounts.toArray(new String[0]);
-        DomainAccountForm daf = new DomainAccountForm();
-        daf.setOriginalActiveAccounts(activeAccountsArray);
-        daf.setActiveAccounts(activeAccountsArray);
-        daf.setOriginalAdminAccounts(adminAccountsArray);
-        daf.setAdminAccounts(adminAccountsArray);
-        request.setAttribute("domainAccountForm", daf);
+        DomainConfigForm dcf = new DomainConfigForm();
+        dcf.setOriginalActiveItems(activeAccountsArray);
+        dcf.setActiveItems(activeAccountsArray);
+        dcf.setOriginalAdminItems(adminAccountsArray);
+        dcf.setAdminItems(adminAccountsArray);
+        request.setAttribute("domainAccountForm", dcf);
 
         // Prepare aliases
         List aliases = manager.getAliases(domain);
         request.setAttribute("aliases", aliases);
+
+        List activeAliases = new ArrayList();
+        List adminAliases = new ArrayList();
+        i = aliases.iterator();
+        while (i.hasNext())
+        {
+            AliasInfo alias = (AliasInfo) i.next();
+            if (alias.isActive())
+            {
+                activeAliases.add(alias.getName());
+            }
+            if (alias.isAdministrator())
+            {
+                adminAliases.add(alias.getName());
+            }
+        }
+
+        String[] activeAliasesArray =
+            (String []) activeAliases.toArray(new String[0]);
+        String[] adminAliasesArray =
+            (String []) adminAliases.toArray(new String[0]);
+        dcf = new DomainConfigForm();
+        dcf.setOriginalActiveItems(activeAliasesArray);
+        dcf.setActiveItems(activeAliasesArray);
+        dcf.setOriginalAdminItems(adminAliasesArray);
+        dcf.setAdminItems(adminAliasesArray);
+        request.setAttribute("domainAliasForm", dcf);
 
         return (mapping.findForward("domain_admin"));
     }

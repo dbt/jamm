@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class DomainAccountAction extends Action
+public class DomainAliasAction extends Action
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
