@@ -204,11 +204,8 @@ public class AllTests
         attributes.put("homeDirectory", "/home/vmail/domains");
         attributes.put("mailbox", "domain1.test/acct1");
         // This password is "acct1pw
-        attributes.put("userPassword",
-                       "{SSHA}tk3w4vV6xghX4r7P0F1EAeA55jo53sSO");
-        element = context.createSubcontext(
-            "mail=acct1@domain1.test, jvd=domain1.test, o=hosting, dc=jamm, " +
-            "dc=test", attributes);
+        attributes.put("userPassword", LdapConstants.ACCT1_PW_HASHED);
+        element = context.createSubcontext(LdapConstants.ACCT1_DN, attributes);
         element.close();
 
         // Add acct2@domain1.test
