@@ -1,5 +1,6 @@
 package jamm.ldap;
 
+import jamm.LdapConstants;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -45,25 +46,13 @@ public class LdapFacadeTest extends TestCase
     {
         mLdap = new LdapFacade("localhost");
 
-        mLdap.simpleBind(MGR_DN, MGR_PW);
-        mLdap.close();
-
-        mLdap.simpleBind(PM1_DN, PM1_PW);
-        mLdap.close();
-
-        mLdap.simpleBind(PM2_DN, PM2_PW);
+        mLdap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
         mLdap.close();
 
         mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
         mLdap.close();
 
         mLdap.simpleBind(ACCT2_DN, ACCT2_PW);
-        mLdap.close();
-
-        mLdap.simpleBind(ACCT3_DN, ACCT3_PW);
-        mLdap.close();
-
-        mLdap.simpleBind(ACCT4_DN, ACCT4_PW);
         mLdap.close();
 
         try
@@ -104,7 +93,7 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAttribute("mailbox"));
     }
 
-    public void testSearchOneLeve()
+    public void testSearchOneLevel()
         throws NamingException
     {
         Set expectedResults;
@@ -115,7 +104,6 @@ public class LdapFacadeTest extends TestCase
         // There should only be these domains at this level
         expectedResults = new HashSet();
         expectedResults.add(DOMAIN1_DN);
-        expectedResults.add(DOMAIN2_DN);
 
         results = new HashSet();
 
@@ -142,14 +130,14 @@ public class LdapFacadeTest extends TestCase
         mLdap = new LdapFacade("localhost");
 
         expectedResults = new HashSet();
+        expectedResults.add(DOMAIN1_DN);
         expectedResults.add(ACCT1_DN);
-        expectedResults.add(ACCT3_DN);
+        expectedResults.add(ACCT2_DN);
 
         results = new HashSet();
 
         mLdap.anonymousBind();
-        mLdap.searchSubtree("o=hosting,dc=jamm,dc=test",
-                            "objectClass=jammMailAccount");
+        mLdap.searchSubtree(DOMAIN1_DN, "objectClass=*");
 
         while (mLdap.nextResult())
         {
