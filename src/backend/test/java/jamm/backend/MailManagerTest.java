@@ -126,7 +126,7 @@ public class MailManagerTest extends TestCase
 
                 expectedObjectClass = new HashSet();
                 expectedObjectClass.add("top");
-                expectedObjectClass.add("organizationalRole");
+                expectedObjectClass.add("JammPostmaster");
                 expectedObjectClass.add("JammMailAlias");
                 objectClass = mLdap.getAllResultAttributeValues("objectClass");
                 assertEquals("Checking postmaster objectClass",
