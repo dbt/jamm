@@ -403,6 +403,26 @@ public class MailManagerTest extends TestCase
                    manager.isAlias(aliasName + "@" + domain));
     }
 
+    public void testIsPostmaster()
+        throws MailManagerException
+    {
+        String domain = "is-pm.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String aliasName = "alias";
+        manager.createAlias(domain, aliasName, new String[] {"a@b.c"});
+
+        assertTrue("Checking postmaster has postmaster privileges",
+                   manager.isPostmaster("postmaster@" + domain));
+        assertTrue("Checking alias does NOT have postmaster privileges",
+                   !manager.isPostmaster(aliasName + "@" + domain));
+    }
+
     private LdapFacade mLdap;
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }

@@ -108,6 +108,42 @@ public class MailManager
         return authenticated;
     }
 
+    public boolean isPostmaster(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        boolean isPostmaster = false;
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+
+            // Get all users in this domain who have postamster
+            // privileges.  The results are full DNs.
+            String domain = domainFromMail(mail);
+            String postmasterMail = "postmaster@" + domain;
+            searchForMail(ldap, postmasterMail);
+            Set postmasters =
+                ldap.getAllResultAttributeValues("roleOccupant");
+
+            // Get DN for user in question and see if they are a
+            // postmaster.
+            searchForMail(ldap, mail);
+            String mailDn = ldap.getResultName();
+            isPostmaster = postmasters.contains(mailDn);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        return isPostmaster;
+    }
+
     public String findByMail(String mail)
         throws MailManagerException
     {
