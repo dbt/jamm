@@ -19,44 +19,68 @@
 
 package jamm.ldap;
 
+/**
+ * An enumeration of all supported password schemes.
+ */
 public final class PasswordScheme
 {
+    /** Keeps track of enumeration values. */
     private static int mCount = 0;
 
+    /** The password is not hashed at all. */
     public static final PasswordScheme CLEAR_SCHEME =
         new PasswordScheme(mCount++);
 
+    /** The Unix crypt(3) password scheme. */
     public static final PasswordScheme CRYPT_SCHEME =
         new PasswordScheme(mCount++);
 
+    /** The MD5 password scheme. */
     public static final PasswordScheme MD5_SCHEME =
         new PasswordScheme(mCount++);
 
+    /** The SHA password scheme. */
     public static final PasswordScheme SHA_SCHEME =
         new PasswordScheme(mCount++);
 
+    /** The SHA + salt password scheme. */
     public static final PasswordScheme SSHA_SCHEME =
         new PasswordScheme(mCount++);
 
+    /**
+     * The maximum value of the enumeration.
+     */
     public static final int max()
     {
         return mCount;
     }
 
+    /**
+     * Create a new enumeration instance.
+     *
+     * @param Enumeration value.
+     */
     private PasswordScheme(int value)
     {
         mValue = value;
     }
 
+    /**
+     * This instances enumeration value.
+     */
     public int value()
     {
         return mValue;
     }
 
+    /**
+     * Two schemes are considered equal if their values match.
+     */
     public boolean equals(PasswordScheme other)
     {
         return (mValue == other.mValue);
     }
 
+    /** The enumeration value of this instance. */
     private int mValue;
 }

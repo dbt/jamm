@@ -21,8 +21,19 @@ package jamm.ldap;
 
 import java.util.Random;
 
+/**
+ * Hashes a password using the SHA algorithm plus a random salt
+ * (SSHA).
+ */
 public class SaltedShaPassword extends ShaPassword
 {
+    /**
+     * Creates a hashed SHA + salt (SSHA) password in standard LDAP
+     * format.
+     *
+     * @param password Clear text password
+     * @return SSHA-hashed LDAP password
+     */
     protected String doHash(String password)
     {
         byte[] randomSalt;
@@ -34,11 +45,21 @@ public class SaltedShaPassword extends ShaPassword
         return "{SSHA}" + encodeBase64(append(digest, randomSalt));
     }
 
+    /**
+     * Not imlemented yet.
+     *
+     * @return Always returns <code>false</code>
+     */
     protected boolean doCheck(String hashedPassword, String password)
     {
         return false;
     }
 
+    /**
+     * Generates a 4 byte random salt.
+     *
+     * @return A 4 byte array of random bytes.
+     */
     private static byte[] getRandomSalt()
     {
         Random random;

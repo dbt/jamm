@@ -40,24 +40,12 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.BasicAttribute;
 
 /**
- * This class provides an easier to use interface for LDAP on top of
- * JNDI.  The JNDI interface is very generic and can be quite
- * cumbesome to use for LDAP.
+ * Provides an easier to use interface for LDAP on top of JNDI.  The
+ * JNDI interface is very generic and can be quite cumbesome to use
+ * for LDAP.
  */
-
 public class LdapFacade
 {
-    /**
-     * Create a new facade to a host using the default port.  See blah
-     * for more information.
-     *
-     * @param host Host name
-     */
-    public LdapFacade(String host)
-    {
-        this(host, 389);
-    }
-
     /**
      * Create a new facade to a host on a given port.  This does not
      * create a connection to the host, but all future interaction
@@ -75,6 +63,17 @@ public class LdapFacade
 
         mEnvironment = new Hashtable();
         initEnvironment();
+    }
+
+    /**
+     * Create a new facade to a host using the default port.  See
+     * {@link #LdapFacade(String, int)} for more information.
+     *
+     * @param host Host name
+     */
+    public LdapFacade(String host)
+    {
+        this(host, 389);
     }
 
     /**
@@ -151,6 +150,8 @@ public class LdapFacade
 
     /**
      * Returns the distinguished name that was used to bind as.
+     *
+     * @return The DN used to bind as.
      */
     public String getName()
         throws NamingException
@@ -164,7 +165,7 @@ public class LdapFacade
      *
      * @param name Attribute name
      * @return The value of the attribute
-     * @throws NamingException If something goes wrong
+     * @throws NamingException If an error occured
      */
     public String getAttribute(String name)
         throws NamingException
@@ -173,7 +174,10 @@ public class LdapFacade
     }
 
     /**
+     * Returns all values of an attribute as a <code>Set</code>.
      *
+     * @return The values of an attribute.
+     * @throws NamingException If an error occured
      */
     public Set getAllAttributeValues(String name)
         throws NamingException
@@ -208,11 +212,24 @@ public class LdapFacade
         return values;
     }
 
+    /**
+     * Sets the attributes to returned during the directory lookup.
+     * By default, all attributes are returned.
+     *
+     * @param attributes Array of attributes to return.
+     */
     public void setReturningAttributes(String[] attributes)
     {
         mControls.setReturningAttributes(attributes);
     }
 
+    /**
+     * Creates a new element.
+     *
+     * @param distinguishedName Full DN of the new element
+     * @param attributes Attributes of the new element
+     * @throws NamingException If element could not be added
+     */
     public void addElement(String distinguishedName, Attributes attributes)
         throws NamingException
     {
@@ -302,6 +319,14 @@ public class LdapFacade
                                   attributes);
     }
 
+    /**
+     * Replace a multi-valued attribute with new values.
+     *
+     * @param dn DN of element to modify
+     * @param attributeName Attribute to modify
+     * @param newValues The new values
+     * @throws NamingException If the attribute could not be modified
+     */
     public void modifyElementAttribute(String dn, String attributeName,
                                        Collection newValues)
         throws NamingException
@@ -318,6 +343,14 @@ public class LdapFacade
                                   attributes);
     }
 
+    /**
+     * Replace a multi-valued attribute with new values.
+     *
+     * @param dn DN of element to modify
+     * @param attributeName Attribute to modify
+     * @param newValues The new values
+     * @throws NamingException If the attribute could not be modified
+     */
     public void modifyElementAttribute(String dn, String attributeName,
                                        String[] newValues)
         throws NamingException
@@ -333,12 +366,22 @@ public class LdapFacade
                                   attributes);
     }
 
+    /**
+     * Deletes an element from the directory.
+     *
+     * @param distinguishedName DN to delete
+     * @throws NamingException If the element could not be deleted
+     */
     public void deleteElement(String distinguishedName)
         throws NamingException
     {
         mContext.destroySubcontext(distinguishedName);
     }
 
+    /**
+     * Prepares facade for another search.  This should be called in
+     * between searches to reset all state information.
+     */
     public void resetSearch()
     {
         mControls = new SearchControls();
@@ -348,6 +391,13 @@ public class LdapFacade
         mCurrentResultAttributes = null;
     }
 
+    /**
+     * Search one level of the directory.
+     *
+     * @param base Base DN to search from
+     * @param filter The filter to search for
+     * @throws NamingException If an error occured
+     */
     public void searchOneLevel(String base, String filter)
         throws NamingException
     {
@@ -356,6 +406,13 @@ public class LdapFacade
         mResults = mContext.search(mSearchBase, filter, mControls);
     }
 
+    /**
+     * Recursively search a subtree of the directory.
+     *
+     * @param base Base DN to search from
+     * @param filter The filter to search for
+     * @throws NamingException If an error occured
+     */
     public void searchSubtree(String base, String filter)
         throws NamingException
     {
@@ -364,6 +421,13 @@ public class LdapFacade
         mResults = mContext.search(mSearchBase, filter, mControls);
     }
 
+    /**
+     * Advances to the next result of the search, if there is one.
+     *
+     * @return <code>true</code> if there are more elements, or
+     * <code>false</code> if there are no more.
+     * @throws NamingException If an error occured
+     */
     public boolean nextResult()
         throws NamingException
     {
@@ -379,18 +443,38 @@ public class LdapFacade
         return hasMore;
     }
 
+    /**
+     * Gets the value of a single-valued attribute for the current
+     * result element.
+     *
+     * @param name Attribute name
+     * @return The value of this attribute
+     * @throws NamingException If an error occured
+     */
     public String getResultAttribute(String name)
         throws NamingException
     {
         return (String) mCurrentResultAttributes.get(name).get();
     }
 
+    /**
+     * Gets the attributes for the current result element.
+     *
+     * @return All attributes for the current result element.
+     * @throws NamingExcpetion If an error occured
+     */
     public NamingEnumeration getAllResultAttributes()
         throws NamingException
     {
         return mCurrentResultAttributes.getAll();
     }
 
+    /**
+     * Gets the name (DN) of the current result attribute.
+     *
+     * @return DN of the current result attribute.
+     * @throws NamingException If an error occured
+     */
     public String getResultName()
         throws NamingException
     {
@@ -408,7 +492,12 @@ public class LdapFacade
     }
 
     /**
+     * Gets all values of a multi-valued attribute for the current
+     * result element.
      *
+     * @param name Attribute name
+     * @return The values of this attribute
+     * @throws NamingException If an error occured
      */
     public Set getAllResultAttributeValues(String name)
         throws NamingException
@@ -443,6 +532,11 @@ public class LdapFacade
         return values;
     }
 
+    /**
+     * Releases any resources used by this facade.  This should be
+     * called on every instance to avoid resource leakage in a finally
+     * block.
+     */
     public void close()
     {
         try
@@ -461,16 +555,26 @@ public class LdapFacade
         }
     }
 
+    /** Host name to connect to. */
     private String mHost;
+    /** Port number to connect to. */
     private int mPort;
 
+    /** The environment to use for this context. */
     private Hashtable mEnvironment;
+    /** The context (connection) for this facade. */
     private DirContext mContext;
+    /** The attributes of the bound element. */
     private Attributes mAttributes;
 
+    /** Controls to use for searches. */
     private SearchControls mControls;
+    /** The results of the last search. */
     private NamingEnumeration mResults;
+    /** The element of the current search result. */
     private SearchResult mCurrentResultElement;
+    /** The attributes of the current search result. */
     private Attributes mCurrentResultAttributes;
+    /** The base of the previous search. */
     private String mSearchBase;
 }

@@ -28,8 +28,21 @@ import java.util.HashMap;
 
 import cryptix.util.mime.Base64OutputStream;
 
+/**
+ * Provides utility methods for the different LDAP password hashing
+ * schemes.
+ *
+ * @see PasswordScheme
+ */
 public abstract class LdapPassword
 {
+    /**
+     * Hashes a password using a given scheme.
+     *
+     * @param scheme Password scheme to use
+     * @param password Clear test password
+     * @return Hashed password
+     */
     public static String hash(PasswordScheme scheme, String password)
     {
         LdapPassword    method;
@@ -48,6 +61,10 @@ public abstract class LdapPassword
         return method.doHash(password);
     }
 
+    /**
+     * Initializes the scheme lookup table.  Should be called only
+     * once.
+     */
     private static void initSchemeLookup()
     {
         mSchemeLookup = new HashMap();
@@ -61,16 +78,38 @@ public abstract class LdapPassword
                           new SaltedShaPassword());
     }
 
+    /**
+     * Checks a hashed password against a clear text password.  This
+     * is not yet implemented.
+     *
+     * @return Always returns <code>false</code>
+     */
     public static boolean check(String hashedPassword, String password)
     {
         return false;
     }
 
+    /**
+     * Sets the random class to use for all future uses of random
+     * numbers.  By default, it uses
+     * <code>java.security.SecureRandom</code>, but any subclass of
+     * <code>Random</code> will work.
+     *
+     * @param randomClass Class name of the random class.
+     *
+     * @see java.util.Random
+     * @see java.security.SecureRandom
+     */
     public static void setRandomClass(String randomClass)
     {
         mRandomClass = randomClass;
     }
 
+    /**
+     * Creates a new random class using the supplied class name.
+     *
+     * @return A new instance of a random number generator.
+     */
     protected static Random createRandom()
     {
         Random  random;
@@ -95,11 +134,26 @@ public abstract class LdapPassword
         return random;
     }
 
+    /**
+     * Hashes a clear text password.  Should be overridden by
+     * subclasses for each password scheme.
+     */
     protected abstract String doHash(String password);
 
+    /**
+     * Checks a hashed password against a clear text password.  Should
+     * be overridden by subclasses for each password scheme.
+     */
     protected abstract boolean doCheck(String hashedPassword, String password);
 
-    protected String encodeBase64(byte[] clearText)
+    /**
+     * Base-64 encodes an array of bytes.
+     *
+     * @param bytes Array of bytes to encode
+     * @return Base-64 encoded representation of the bytes
+     * @throws UnsupportedOperationException If an error occured.
+     */
+    protected String encodeBase64(byte[] bytes)
     {
         ByteArrayOutputStream   baos;
         Base64OutputStream      base64;
@@ -109,7 +163,7 @@ public abstract class LdapPassword
         {
             baos = new ByteArrayOutputStream();
             base64 = new Base64OutputStream(baos);
-            base64.write(clearText, 0, clearText.length);
+            base64.write(bytes, 0, bytes.length);
             base64.close();
 
             // Must trim this string as a CR-LF is appended on the
@@ -124,6 +178,14 @@ public abstract class LdapPassword
         return encoded;
     }
 
+    /**
+     * Create a new byte array by appending two byte arrays.
+     *
+     * @param first The first byte array
+     * @param second The second byte array
+     * @return A new byte array which is the first appended by the
+     * second.
+     */
     protected final byte[] append(byte[] first, byte[] second)
     {
         byte[] appended;
@@ -135,11 +197,29 @@ public abstract class LdapPassword
         return appended;
     }
     
+    /**
+     * Creates a new byte array by appending the byte representation
+     * of a string and a byte array.
+     *
+     * @param first A string, which is converted to bytes
+     * @param second The second byte array
+     * @return A new byte array which is the first appended by the
+     * second.
+     */
     protected final byte[] append(String first, byte[] second)
     {
         return append(first.getBytes(), second);
     }
 
+    /**
+     * A lookup table from a password scheme to an instance of
+     * LdapPassword for that scheme.
+     */
     private static Map mSchemeLookup;
+
+    /**
+     * The class name of the random class.  By default, it is
+     * <code>java.security.SecureRandom</code>
+     */
     private static String mRandomClass = "java.security.SecureRandom";
 }

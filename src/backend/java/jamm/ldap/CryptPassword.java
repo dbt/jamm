@@ -23,13 +23,22 @@ import java.util.Random;
 
 import cryptix.tools.UnixCrypt;
 
+/**
+ * Hashes a password using the Unix crypt(3) algorithm.  This uses the
+ * Cryptix Cryptogrpahy Toolkit to do the algorithm, however, the salt
+ * must be done here.
+ *
+ * @see <a href="http://www.cryptix.org/">Cryptix Cryptography Toolkit</a>
+ */
 public class CryptPassword extends LdapPassword
 {
-    public CryptPassword()
-    {
-        super();
-    }
-
+    /**
+     * Crypts clear text using a given salt.
+     *
+     * @param salt Salt to use
+     * @param clearText The clear text to crypt
+     * @return Crypted clear text
+     */
     public String crypt(String salt, String clearText)
     {
         UnixCrypt   crypt;
@@ -38,6 +47,12 @@ public class CryptPassword extends LdapPassword
         return crypt.crypt(clearText);
     }
 
+    /**
+     * Creates a Unix compatible salt.  A salt is a two-character
+     * string chosen from the set [a-zA-Z0-9./].
+     *
+     * @return A random salt
+     */
     public String getRandomSalt()
     {
         char[] saltList = {
@@ -58,11 +73,23 @@ public class CryptPassword extends LdapPassword
         return new String(salt);
     }
 
+    /**
+     * Hashes a password using the Unix crypt(3) algorithm, random
+     * salt and all.
+     *
+     * @param password Password to hash
+     * @return Crypt version of password
+     */
     protected String doHash(String password)
     {
         return "{CRYPT}" + crypt(getRandomSalt(), password);
     }
 
+    /**
+     * Not implemented, always returns <code>false</code>.
+     *
+     * @return <code>false</code>
+     */
     protected boolean doCheck(String hashedPasword, String password)
     {
         return false;

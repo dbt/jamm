@@ -19,13 +19,26 @@
 
 package jamm.ldap;
 
+/**
+ * A password scheme that does does nothing.
+ */
 public class ClearPassword extends LdapPassword
 {
+    /**
+     * Returns the same value as passed in.
+     *
+     * @param password Password to hash
+     * @return The same as the original password
+     */
     protected String doHash(String password)
     {
         return password;
     }
 
+    /**
+     * Checks if the supplied password matches a hashed password.
+     * Since this is clear text, a standard string compare is done.
+     */
     protected boolean doCheck(String hashedPassword, String password)
     {
         return hashedPassword.equals(password);
