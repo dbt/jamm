@@ -29,8 +29,8 @@
                type="jamm.webapp.AddAliasForm"/>
     <form-bean name="siteConfigForm"
                type="jamm.webapp.SiteConfigForm"/>
-    <form-bean name="catchAllForm"
-               type="jamm.webapp.CatchAllForm"/>
+    <form-bean name="updateCatchAllForm"
+               type="jamm.webapp.UpdateCatchAllForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -55,6 +55,7 @@
     <forward name="alias_admin" path="/private/alias_admin.do"
              redirect="true"/>
     <forward name="change_password" path="/private/change_password.jsp"/>
+    <forward name="catch_all_admin" path="/private/catch_all_admin.do"/>
   </global-forwards>
 
 
@@ -132,6 +133,11 @@
             validate="false">
     </action>
 
+    <action path="/private/catch_all_admin"
+            type="jamm.webapp.CatchAllAdminAction">
+      <forward name="view" path="/private/catch_all_admin.jsp"/>
+    </action>
+
     <action path="/private/update_alias"
             type="jamm.webapp.UpdateAliasAction"
             name="updateAliasForm"
@@ -140,12 +146,12 @@
             input="/private/account_admin.do">
     </action>
 
-    <action path="/private/update_catchall"
-            type="jamm.webapp.CatchAllAction"
-            name="catchAllForm"
+    <action path="/private/update_catch_all"
+            type="jamm.webapp.UpdateCatchAllAction"
+            name="updateCatchAllForm"
             scope="request"
             validate="true"
-            input="/private/domain_admin.do">
+            input="/private/catch_all_admin.do">
     </action>
 
     <action path="/private/add_domain"

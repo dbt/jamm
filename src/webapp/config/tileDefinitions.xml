@@ -34,6 +34,9 @@
   <definition name="alias_admin" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/alias_admin.jsp"/>
   </definition>
+  <definition name="catch_all_admin" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/catch_all_admin.jsp"/>
+  </definition>
   <definition name="add_domain" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/add_domain.jsp"/>
   </definition>
