@@ -184,6 +184,8 @@
                             displayname="Jamm"
                             description="Java Mail Manager">
       </deploymentdescriptor>
+      <jsptaglib jspversion="1.2" destdir="build/webapp/root/WEB-INF/tld"
+                 shortname="jamm" filename="jamm.tld" />
     </webdoclet>
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />
