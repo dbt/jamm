@@ -31,9 +31,9 @@ public final class PasswordScheme
     public static final PasswordScheme CLEAR_SCHEME =
         new PasswordScheme(mCount++);
 
-    /** The Unix crypt(3) password scheme. */
-    public static final PasswordScheme CRYPT_SCHEME =
-        new PasswordScheme(mCount++);
+//    /** The Unix crypt(3) password scheme. */
+//    public static final PasswordScheme CRYPT_SCHEME =
+//        new PasswordScheme(mCount++);
 
     /** The MD5 password scheme. */
     public static final PasswordScheme MD5_SCHEME =

@@ -64,8 +64,8 @@ public abstract class LdapPassword
     private static void initSchemeLookup()
     {
         mSchemeLookup = new HashMap();
-        mSchemeLookup.put(PasswordScheme.CRYPT_SCHEME,
-                          new CryptPassword());
+//        mSchemeLookup.put(PasswordScheme.CRYPT_SCHEME,
+//                          new CryptPassword());
         mSchemeLookup.put(PasswordScheme.MD5_SCHEME,
                           new Md5Password());
         mSchemeLookup.put(PasswordScheme.SHA_SCHEME,
@@ -164,49 +164,42 @@ public abstract class LdapPassword
         ByteArrayOutputStream   baos;
         String  encoded;
 
-//        try
-//        {
-            baos = new ByteArrayOutputStream();
-            int carry = 0;
-            for(int i = 0; i < bytes.length; i++)
+        baos = new ByteArrayOutputStream();
+        int carry = 0;
+        for(int i = 0; i < bytes.length; i++)
+        {
+            int val;
+            int b = (bytes[i]) & 255;
+            switch (i % 3)
             {
-                int val;
-                int b = ((int)bytes[i]) & 255;
-                switch (i % 3)
-                {
-                    case 0:
-                        baos.write(BASE64_MAP[b / 4]);
-                        carry = b & 3;
-                        break;
-                    case 1:
-                        val = (carry << 8) + b;
-                        baos.write(BASE64_MAP[val / 16]);
-                        carry = b & 15;
-                        break;
-                    case 2:
-                        val = (carry << 8) + b;
-                        baos.write(BASE64_MAP[val / 64]);
-                        baos.write(BASE64_MAP[val & 63]);
-                        carry = 0;
-                }
-            }
-            switch (bytes.length % 3)
-            {
+                case 0:
+                    baos.write(BASE64_MAP[b / 4]);
+                    carry = b & 3;
+                    break;
                 case 1:
-                    baos.write(BASE64_MAP[carry << 4]);
-                    baos.write((int)'=');
-                    baos.write((int)'=');
+                    val = (carry << 8) + b;
+                    baos.write(BASE64_MAP[val / 16]);
+                    carry = b & 15;
                     break;
                 case 2:
-                    baos.write(BASE64_MAP[carry << 2]);
-                    baos.write((int)'=');
+                    val = (carry << 8) + b;
+                    baos.write(BASE64_MAP[val / 64]);
+                    baos.write(BASE64_MAP[val & 63]);
+                    carry = 0;
             }
-            encoded = new String(baos.toByteArray());
-//        }
-//        catch (IOException e)
-//        {
-//            throw new UnsupportedOperationException(e.toString());
-//        }
+        }
+        switch (bytes.length % 3)
+        {
+            case 1:
+                baos.write(BASE64_MAP[carry << 4]);
+                baos.write('=');
+                baos.write('=');
+                break;
+            case 2:
+                baos.write(BASE64_MAP[carry << 2]);
+                baos.write('=');
+        }
+        encoded = new String(baos.toByteArray());
         
         return encoded;
     }
