@@ -1,3 +1,19 @@
+Version 0.9.5 - 1 Aug 2003
+--------------------------
+
+* The much requested Common Name support!
+
+* Exceptions no longer bubble up to the user.  They are trapped and sent to
+  an appropriate error page.  Not all the error pages are very robust or nice
+  looking yet.
+
+* jammCleaner will not recurse into symlinks and recusively delete.  (Fix
+  for people using courier's shared folders.)
+
+* Some basic access control to keep users off pages they shouldn't be at.
+
+* Lots of misc. code cleanups.
+
 Version 0.9.4 - 24 Oct 2002
 ---------------------------
 
