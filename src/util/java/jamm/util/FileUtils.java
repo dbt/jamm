@@ -22,6 +22,8 @@ package jamm.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 /**
  * Useful filesystem utilities
  */
@@ -91,10 +93,11 @@ public class FileUtils
             // If we have an exception, we couldn't figure out if the
             // file was a symbolic link or not.  To be safe, we'll
             // return false.
-            System.out.println("Exception while figuring out symbolic link, " +
-                               "returning false");
-            System.out.println(e);
+            LOG.info("Exception while figuring out symbolic link, " +
+                      "returning false", e);
         }
         return result;
     }
+    
+    private static final Logger LOG = Logger.getLogger(FileUtils.class);
 }
