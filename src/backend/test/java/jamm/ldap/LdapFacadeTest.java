@@ -6,6 +6,8 @@ import java.util.HashSet;
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
 import javax.naming.InvalidNameException;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
 
 import junit.framework.TestCase;
 
@@ -157,6 +159,52 @@ public class LdapFacadeTest extends TestCase
         assertEquals("Checking results of subtree search, " +
                      "(objectClass=jammMailAccount)",
                      expectedResults, results);
+    }
+
+    public void testAddModifyDeleteElement()
+        throws NamingException
+    {
+        BasicAttribute  objectClass;
+        BasicAttributes attributes;
+        String  ouName;
+        String  parent;
+        String  dn;
+
+        ouName = "my_ou";
+        parent = "dc=jamm,dc=test";
+        dn = "ou=" + ouName + ",dc=jamm,dc=test";
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(MGR_DN, MGR_PW);
+        
+        // This element should not exist
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should not exist",
+                   ! mLdap.nextResult());
+
+        // Create a new element
+        attributes = new BasicAttributes();
+        objectClass = new BasicAttribute("objectClass");
+        objectClass.add("top");
+        objectClass.add("organizationalUnit");
+        attributes.put(objectClass);
+        attributes.put("ou", ouName);
+        attributes.put("description", "my description");
+        mLdap.addElement(dn, attributes);
+
+        // See if the element exists
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should exist",
+                   mLdap.nextResult());
+
+        // Delete element
+        mLdap.deleteElement(dn);
+
+        // This element should not exist
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should not exist",
+                   ! mLdap.nextResult());
     }
 
     private LdapFacade mLdap;
