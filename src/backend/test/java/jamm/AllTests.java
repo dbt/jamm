@@ -186,6 +186,7 @@ public class AllTests
         attributes.put(objectClass);
         attributes.put("jvd", "domain1.test");
         attributes.put("postfixTransport", "virtual:");
+        attributes.put("lastChange", "123456");
         attributes.put("editAliases", "TRUE");
         attributes.put("editAccounts", "TRUE");
         attributes.put("editPostmasters", "FALSE");
