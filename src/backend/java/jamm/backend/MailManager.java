@@ -1193,7 +1193,7 @@ public class MailManager
                 
                 // Count the accounts
                 ldap.resetSearch();
-                ldap.setReturningAttributes(new String[] { "mail" });
+                ldap.setReturningAttributes(new String[] { "objectClass" });
                 ldap.searchOneLevel(
                     domainDn(name),
                     "objectClass=" + ACCOUNT_OBJECT_CLASS);
@@ -1207,20 +1207,18 @@ public class MailManager
                                 
                 // Count the aliases
                 ldap.resetSearch();
-                ldap.setReturningAttributes(new String[] { "mail" });
-                ldap.searchOneLevel(
-                    domainDn(name),
-                    "(&(!(|(cn=postmaster)(cn=abuse)))(objectClass=" +
-                        ALIAS_OBJECT_CLASS + "))");
+                ldap.setReturningAttributes(new String[] { "objectClass" });
+                String aFilter =
+                     "(&(objectClass=" + ALIAS_OBJECT_CLASS +
+                     ")(!(|(mail=postmaster@" + domain + ")(mail=abuse@" +
+                     domain + ")(mail=@" + domain + "))))";
+
+                ldap.searchOneLevel(domainDn(name), aFilter);
                         
                 int aliasCount = 0;
                 while (ldap.nextResult())
                 {
-                    String mail = ldap.getResultAttribute("mail");
-                    if (mail != null && !mail.startsWith("@"))
-                    {
-                        aliasCount++;
-                    }
+                    aliasCount++;
                 }
                 domain.setAliasCount(aliasCount);
             }
