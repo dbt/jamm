@@ -106,26 +106,6 @@ public final class Globals
     }
 
     /**
-     * Returns if the Modify Password ExOp should be used or not.
-     *
-     * @return a boolean reporting to use the password exop or not.
-     */
-    public static boolean isPasswordUseExOp()
-    {
-        return mUseExOp;
-    }
-    
-    /**
-     * Sets the usage of the modify password exop.
-     *
-     * @param useExOp a boolean for using the password exop or not.
-     */
-    public static void setPasswordUseExOp(boolean useExOp)
-    {
-        mUseExOp = useExOp;
-    }
-
-    /**
      * Get the root login.
      *
      * @return a string with the root login
@@ -153,8 +133,6 @@ public final class Globals
     private static String mLdapSearchBase;
     /** The root dn */
     private static String mRootDn;
-    /** uses ExOp to modify password */
-    private static boolean mUseExOp;
     /** the root login */
     private static String mRootLogin;
 }
