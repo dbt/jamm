@@ -357,6 +357,43 @@ public class MailManager
     }
 
     /**
+     * Returns a list of all domains that are inactive present in this
+     * directory.
+     *
+     * @return A list of domains, as strings
+     * @throws MailManagerException If an error occured
+     */
+    public List getInactiveDomains()
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        List  domains = new ArrayList();
+        try
+        {
+            ldap = getLdap();
+
+            ldap.searchOneLevel(mBase,
+                                "(&(objectClass=" + DOMAIN_OBJECT_CLASS + ")" +
+                                "(accountActive=FALSE))");
+            while (ldap.nextResult())
+            {
+                domains.add(createDomainInfo(ldap));
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        Collections.sort(domains, new DomainNameComparator());
+        return domains;
+    }
+
+    /**
      *
      * @param domainName a <code>String</code> value
      * @return a <code>DomainInfo</code> value
@@ -1256,6 +1293,7 @@ public class MailManager
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
             attributes.put("lastChange", getUnixTimeString());
+            attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(catchAll), attributes);
         }
         catch (NamingException e)
@@ -1458,6 +1496,8 @@ public class MailManager
     private static final String ACCOUNT_OBJECT_CLASS = "JammMailAccount";
     /** Name of the object class used for aliases. */
     private static final String ALIAS_OBJECT_CLASS = "JammMailAlias";
+    /** Name of the object class used for domains. */
+    private static final String DOMAIN_OBJECT_CLASS = "JammVirtualDomain";
 
     /** Host name of LDAP server. */
     private String mHost;

@@ -21,6 +21,7 @@ package jamm.backend;
 
 import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.naming.NamingException;
@@ -584,6 +585,12 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("mail"));
         assertEquals("Checking catchall maildrop", "postmaster",
                      mLdap.getResultAttribute("maildrop"));
+        assertTrue("Checking for lastChange",
+                   Integer.parseInt(
+                       mLdap.getResultAttribute("lastChange")) > 0);
+        assertTrue("Checking catchall active",
+                     stringToBoolean(
+                         mLdap.getResultAttribute("accountActive")));
 
         objectClass = mLdap.getAllResultAttributeValues("objectClass");
         expectedObjectClass = new HashSet();
@@ -951,7 +958,7 @@ public class MailManagerTest extends TestCase
     public void testGetInactiveAccounts()
         throws NamingException, MailManagerException
     {
-        String domain = "test-inactive.test";
+        String domain = "test-inactive-acct.test";
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                             LdapConstants.MGR_PW);
@@ -975,6 +982,47 @@ public class MailManagerTest extends TestCase
         
     }
 
+    public void testGetInactiveDomains()
+        throws NamingException, MailManagerException
+    {
+        String domain = "test-inactive-d1.test";
+        String domain2 = "test-inactive-d2.test";
+        String domain3 = "test-inactive-d3.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+        manager.createDomain(domain2);
+        manager.createDomain(domain3);
+        DomainInfo di = manager.getDomain(domain);
+        di.setActive(false);
+        DomainInfo di3 = manager.getDomain(domain3);
+        di3.setActive(false);
+        manager.modifyDomain(di);
+        manager.modifyDomain(di3);
+
+        List domains = manager.getInactiveDomains();
+        List domainNames = new ArrayList();
+        Iterator i = domains.iterator();
+        while (i.hasNext())
+        {
+            domainNames.add(((DomainInfo) i.next()).getName());
+        }
+        assertTrue("Checking to see if domain is inactive",
+                   domainNames.contains(domain));
+        assertTrue("Checking to see i domain2 is active",
+                   !domainNames.contains(domain2));
+        assertTrue("Checking to see if domain3 is inactive",
+                   domainNames.contains(domain3));
+    }
+
+    /**
+     * Tests deleteDomain()
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
     public void testDeleteDomain()
         throws NamingException, MailManagerException
     {
