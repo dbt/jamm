@@ -39,7 +39,7 @@ public final class JammCleaner
     private static void printHelp(Options opt)
     {
         HelpFormatter hf = new HelpFormatter();
-        hf.printHelp("Usage:  JammCleaner [options]" , opt);
+        hf.printHelp("JammCleaner [options]" , opt);
     }
 
     /**
