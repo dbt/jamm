@@ -43,10 +43,29 @@ import org.apache.struts.config.ExceptionConfig;
  */
 public class JammExceptionHandler extends ExceptionHandler
 {
+    /**
+     * Logs the exception and places a String of the StackTrace into the
+     * request then calls the super class version of ExceptionHandler to do
+     * its thing.
+     * 
+     * @see org.apache.struts.action.ExceptionHandler
+     * 
+     * @param exception The exception we're handling
+     * @param exConfig The exception configuration
+     * @param mapping The action mapping
+     * @param actionForm the action form
+     * @param request The http request we're handling
+     * @param response the http response
+     * 
+     * @return an action forward
+     * 
+     * @throws ServletException a servlet exception if handling the exception
+     *         causes another
+     */
     public ActionForward execute(Exception exception, ExceptionConfig exConfig,
                                  ActionMapping mapping, ActionForm actionForm,
                                  HttpServletRequest request,
-                                 HttpServletResponse rename)
+                                 HttpServletResponse response)
         throws ServletException
     {
         LOG.error("Caught Error", exception);
@@ -59,7 +78,7 @@ public class JammExceptionHandler extends ExceptionHandler
         request.setAttribute(EXCEPTION_STACKTRACE, sw.toString());
         
         return super.execute(exception, exConfig, mapping, actionForm, request,
-                             rename);
+                             response);
     }
     
     /** Our logging facility. */

@@ -1009,6 +1009,12 @@ public class MailManagerTest extends TestCase
                    timeOrdered(startTime, domainTime, endTime));
     }
     
+    /**
+     * Tests to see if the catchall (and other special accounts) are marked
+     * incative after a domain is set to delete.
+     * 
+     * @throws MailManagerException on error
+     */
     public void testCatchAllInactiveAfterDomainSetToDelete()
         throws MailManagerException
     {
@@ -1394,6 +1400,12 @@ public class MailManagerTest extends TestCase
 
     }
     
+    /**
+     * Tests to see if we fail when trying to create an alias or account
+     * named postmaster.
+     * 
+     * @throws MailManagerException on error
+     */
     public void testDoNotCreatePostmaster()
         throws MailManagerException
     {
