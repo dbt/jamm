@@ -1,6 +1,8 @@
 package jamm.ldap;
 
 import java.util.Hashtable;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -11,13 +13,33 @@ import javax.naming.directory.SearchResult;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.Attributes;
 
+/**
+ * This class provides an easier to use interface for LDAP on top of
+ * JNDI.  The JNDI interface is very generic and can be quite
+ * cumbesome to use for LDAP.
+ */
+
 public class LdapFacade
 {
+    /**
+     * Create a new facade to a host using the default port.  See blah
+     * for more information.
+     *
+     * @param host Host name
+     */
     public LdapFacade(String host)
     {
         this(host, 389);
     }
 
+    /**
+     * Create a new facade to a host on a given port.  This does not
+     * create a connection to the host, but all future interaction
+     * will be with the host.
+     *
+     * @param host Host name
+     * @param port LDAP port
+     */
     public LdapFacade(String host, int port)
     {
         mHost = host;
@@ -26,14 +48,26 @@ public class LdapFacade
         mAttributes = null;
 
         mEnvironment = new Hashtable();
+        initEnvironment();
+    }
+
+    /**
+     * Initialize the context environment to the minimal values.  The
+     * bind must fill in the other values.
+     */
+    private void initEnvironment()
+    {
+        mEnvironment.clear();
         mEnvironment.put(Context.INITIAL_CONTEXT_FACTORY, 
                          "com.sun.jndi.ldap.LdapCtxFactory");
         mEnvironment.put(Context.PROVIDER_URL,
-                "ldap://" + mHost + ":" + mPort + "/");
+                         "ldap://" + mHost + ":" + mPort + "/");
     }
 
     /**
      * Bind anonymously.
+     *
+     * @throws NamingException If could not bind
      */
     public void anonymousBind()
         throws NamingException
@@ -44,7 +78,8 @@ public class LdapFacade
     }
 
     /**
-     * Bind with simple authentication as a DN.
+     * Bind with simple authentication as a DN.  If successful,
+     * attributes of the DN will be available.
      *
      * @param dn Distinguished name to bind as
      * @param password Password for the DN
@@ -60,6 +95,11 @@ public class LdapFacade
         mAttributes = mContext.getAttributes(dn);
     }
 
+    /**
+     * Perform the actual bind.
+     *
+     * @throws NamingException If could not bind
+     */
     private void bind()
         throws NamingException
     {
@@ -67,6 +107,9 @@ public class LdapFacade
         resetSearch();
     }
 
+    /**
+     * Returns the distinguished name that was used to bind as.
+     */
     public String getName()
         throws NamingException
     {
@@ -74,10 +117,49 @@ public class LdapFacade
             mContext.getEnvironment().get(Context.SECURITY_PRINCIPAL);
     }
 
+    /**
+     * Returns the value for a given attribute name.
+     *
+     * @param name Attribute name
+     * @return The value of the attribute
+     * @throws NamingException If something goes wrong
+     */
     public String getAttribute(String name)
         throws NamingException
     {
         return (String) mAttributes.get(name).get();
+    }
+
+    /**
+     *
+     */
+    public Set getAllAttributeValues(String name)
+        throws NamingException
+    {
+        HashSet values;
+        NamingEnumeration valueEnumeration = null;
+
+        values = new HashSet();
+        try
+        {
+            valueEnumeration = mAttributes.get(name).getAll();
+            while (valueEnumeration.hasMore())
+            {
+                String value;
+
+                value = (String) valueEnumeration.next();
+                values.add(value);
+            }
+        }
+        finally
+        {
+            if (valueEnumeration != null)
+            {
+                valueEnumeration.close();
+            }
+        }
+
+        return values;
     }
 
     public void setReturningAttributes(String[] attributes)
@@ -175,6 +257,38 @@ public class LdapFacade
         }
     }
 
+    /**
+     *
+     */
+    public Set getAllResultAttributeValues(String name)
+        throws NamingException
+    {
+        HashSet values;
+        NamingEnumeration valueEnumeration = null;
+
+        values = new HashSet();
+        try
+        {
+            valueEnumeration = mCurrentResultAttributes.get(name).getAll();
+            while (valueEnumeration.hasMore())
+            {
+                String value;
+
+                value = (String) valueEnumeration.next();
+                values.add(value);
+            }
+        }
+        finally
+        {
+            if (valueEnumeration != null)
+            {
+                valueEnumeration.close();
+            }
+        }
+
+        return values;
+    }
+
     public void close()
     {
         try
@@ -184,6 +298,7 @@ public class LdapFacade
                 resetSearch();
                 mContext.close();
                 mContext = null;
+                initEnvironment();
             }
         }
         catch (NamingException e)

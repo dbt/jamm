@@ -38,6 +38,7 @@ public class LdapFacadeTest extends TestCase
     {
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
+        assertNull("Checking name is null", mLdap.getName());
         mLdap.close();
     }
 
@@ -47,12 +48,16 @@ public class LdapFacadeTest extends TestCase
         mLdap = new LdapFacade("localhost");
 
         mLdap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
+        assertEquals("Checking manager name", LdapConstants.MGR_DN,
+                     mLdap.getName());
         mLdap.close();
 
         mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
+        assertEquals("Checking account 1 name", ACCT1_DN, mLdap.getName());
         mLdap.close();
 
         mLdap.simpleBind(ACCT2_DN, ACCT2_PW);
+        assertEquals("Checking account 2 name", ACCT2_DN, mLdap.getName());
         mLdap.close();
 
         try
@@ -78,9 +83,12 @@ public class LdapFacadeTest extends TestCase
         }
     }
 
-    public void testGetElementInfo()
+    public void testGetElementAttributes()
         throws NamingException
     {
+        Set expectedObjectClass;
+        Set objectClass;
+        
         mLdap = new LdapFacade("localhost");
 
         mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
@@ -91,6 +99,13 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAttribute("homeDirectory"));
         assertEquals("Checking mailbox", "domain1.test/acct1",
                      mLdap.getAttribute("mailbox"));
+
+        expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("JammMailAccount");
+        objectClass = mLdap.getAllAttributeValues("objectClass");
+        assertEquals("Checking multi-value objectClass", expectedObjectClass,
+                     objectClass);
     }
 
     public void testSearchOneLevel()
@@ -147,6 +162,30 @@ public class LdapFacadeTest extends TestCase
         assertEquals("Checking results of subtree search, " +
                      "(objectClass=jammMailAccount)",
                      expectedResults, results);
+    }
+
+    public void testGetResultAttributes()
+        throws NamingException
+    {
+        Set expectedObjectClass;
+        Set objectClass;
+        
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel("o=hosting,dc=jamm,dc=test",
+                             "jvd=domain1.test");
+        assertTrue("Checking for results", mLdap.nextResult());
+        assertEquals("Checking result dn", DOMAIN1_DN,
+                     mLdap.getResultName());
+        assertEquals("Checking jvd", "domain1.test",
+                     mLdap.getResultAttribute("jvd"));
+        expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("JammVirtualDomain");
+        objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        assertEquals("Checking objectClass", expectedObjectClass, objectClass);
+
+        assertTrue("Checking for no more results", !mLdap.nextResult());
     }
 
     public void testAddModifyDeleteElement()
