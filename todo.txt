@@ -2,6 +2,8 @@
 
     * User feedback after actions using html:messages.
 
+	* Filter DomainAdmin by first letter
+
   Not sure when:
 
     * Generate passwords for accounts and/or aliases
