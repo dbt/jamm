@@ -19,6 +19,8 @@
 
 package jamm.ldap;
 
+import java.io.Serializable;
+
 import javax.naming.NamingException;
 import javax.naming.SizeLimitExceededException;
 import javax.naming.ldap.ExtendedRequest;
@@ -30,8 +32,8 @@ import javax.naming.ldap.ExtendedResponse;
  *
  * @see javax.naming.ldap.ExtendedRequest
  */
-class ModifyPasswordRequest
-    implements ExtendedRequest
+public class ModifyPasswordRequest
+    implements ExtendedRequest, Serializable
 {
     /**
      * Creates a new <code>ModifyPasswordRequest</code> instance.
