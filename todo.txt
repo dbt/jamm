@@ -1,19 +1,24 @@
-
-* Get list of domains.
-
 * Investigate case-sensitivity in JNDI, LDAP, and the LdapFacade.
 
 * Implement timestamp and enabled attributes.
-
-* Delete alias.
 
 * Delete account.
 
 * Delete domain.
 
+* Add domain (site-admin web page)
+
+* Assign "postmasters"
+
+* Create/manage catch-alls (web pages)
+
 * Create more meaningful exceptions for mail manager (i.e. subclasses
   of MailManagerException).
 
-* Javadoc, javadoc, javadoc!
+* Handle exceptions better on web site
 
-* User roles when logging in.
+* Javadoc, javadoc, javadoc!  Also, javadoc
+
+* Access control so users playing with URLs can't go someplace bad
+
+* Install doc
