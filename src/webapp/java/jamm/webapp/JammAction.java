@@ -210,14 +210,8 @@ public abstract class JammAction extends Action
                                   String password)
         throws MailManagerException
     {
-        if (Globals.isPasswordUseExOp())
-        {
-            manager.changePasswordExOp(mail, password);
-        }
-        else
-        {
-            manager.changePasswordHash(mail, password);
-        }
+        manager.setUsePasswordExOp(Globals.isPasswordUseExOp());
+        manager.changePassword(mail, password);
     }
 
     /**

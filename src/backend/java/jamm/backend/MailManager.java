@@ -66,6 +66,7 @@ public class MailManager
         mBase = base;
         mBindDn = bindDn;
         mBindPassword = bindPassword;
+        mUsePasswordExOp = false;
     }
 
     /**
@@ -109,6 +110,17 @@ public class MailManager
     public MailManager(String host, int port, String base)
     {
         this(host, port, base, "", "");
+    }
+
+    /**
+     * Should his mail manager use the password extended operation.
+     * Currently defaults to false.
+     *
+     * @param usePasswordExOp boolean value
+     */
+    public void setUsePasswordExOp(boolean usePasswordExOp)
+    {
+        mUsePasswordExOp = usePasswordExOp;
     }
 
     /**
@@ -163,6 +175,25 @@ public class MailManager
     }
 
     /**
+     * Change the password for an email account or alias.
+     *
+     * @param mail Email address to change password for
+     * @param newPassword new password for this account or alias
+     */
+    public void changePassword(String mail, String newPassword)
+        throws MailManagerException
+    {
+        if (mUsePasswordExOp)
+        {
+            changePasswordExOp(mail, newPassword);
+        }
+        else
+        {
+            changePasswordHash(mail, newPassword);
+        }
+    }
+    
+    /**
      * Changes the password for an email account or alias.  This does
      * not hash or encode the password, but instead uses the
      * ModifyPassword ldap extended operation to change the password.
@@ -173,7 +204,7 @@ public class MailManager
      * @param newPassword New password for this account or alias
      * @throws MailManagerException If an error occured
      */
-    public void changePasswordExOp(String mail, String newPassword)
+    private void changePasswordExOp(String mail, String newPassword)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -220,7 +251,7 @@ public class MailManager
      * @param newPassword New password for this account or alias
      * @throws MailManagerException If an error occured
      */
-    public void changePasswordHash(String mail, String newPassword)
+    private void changePasswordHash(String mail, String newPassword)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -1056,6 +1087,7 @@ public class MailManager
     {
         LdapFacade ldap = null;
         String mail = MailAddress.addressFromParts(account, domain);
+        String maildn = mailDn(mail);
 
         try
         {
@@ -1066,12 +1098,22 @@ public class MailManager
             attributes.put("homeDirectory", "/home/vmail/domains");
             attributes.put("mail", mail);
             attributes.put("mailbox", domain + "/" + account + "/");
-            String hashedPassword =
-                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
-            attributes.put("userPassword", hashedPassword);
             attributes.put("accountActive", booleanToString(true));
             attributes.put("lastChange", getUnixTimeString());
-            ldap.addElement(mailDn(mail), attributes);
+
+            if (!mUsePasswordExOp)
+            {
+                String hashedPassword =
+                    LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
+                attributes.put("userPassword", hashedPassword);
+            }
+
+            ldap.addElement(maildn, attributes);
+
+            if (mUsePasswordExOp)
+            {
+                ldap.changePassword(maildn, password);
+            }
         }
         catch (NamingException e)
         {
@@ -1511,4 +1553,6 @@ public class MailManager
     private String mBindDn;
     /** The password of the bind element */
     private String mBindPassword;
+    /** Use the modify password ex op? */
+    private boolean mUsePasswordExOp;
 }
