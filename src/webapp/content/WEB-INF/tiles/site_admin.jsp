@@ -32,7 +32,7 @@
       </td>
       <td width="6">&nbsp;</td>
       <td width="79">
-        <html:img page="/imgs/edit_accounts.gif"
+        <html:img page="/imgs/delete_domain.gif"
                   width="79" height="23" alt="" border="0"/>
       </td>
       <td width="79">
