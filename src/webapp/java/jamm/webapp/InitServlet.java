@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import org.apache.commons.lang.StringUtils;
+
 import jamm.ldap.LdapPassword;
 import jamm.backend.MailManagerOptions;
 
@@ -75,7 +77,6 @@ public class InitServlet extends HttpServlet
             properties = new Properties();
             properties.load(new FileInputStream(path));
 
-            // todo test for and drop quotes around root_dn (common problem)
             Globals.setLdapHost(
                 getStringProperty(properties, "ldap.host", "localhost"));
             Globals.setLdapPort(
@@ -85,8 +86,14 @@ public class InitServlet extends HttpServlet
             LdapPassword.setRandomClass(
                 getStringProperty(properties, "random_class",
                                   "java.security.SecureRandom"));
-            Globals.setRootDn(
-                getStringProperty(properties, "ldap.root_dn", ""));
+            
+            // Strip out leading and trailing quotes (common problem)
+            String rootDn = getStringProperty(properties, "ldap.root_dn", "");
+            if (rootDn.startsWith("\"") && rootDn.endsWith("\""))
+            {
+                rootDn = StringUtils.substring(rootDn, 1, -1);
+            }
+            Globals.setRootDn(rootDn);
             Globals.setRootLogin(
                 getStringProperty(properties, "ldap.root_login", "root"));
             MailManagerOptions.setUsePasswordExOp(
