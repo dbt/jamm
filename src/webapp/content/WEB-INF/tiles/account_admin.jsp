@@ -17,13 +17,3 @@
     <html:submit styleClass="mbutton">Submit</html:submit>
   </p>
 </html:form>
-<%--
-  <table>
-    <tr>
-      <td align="right">Full Name</td>
-      <td><input type="text" value="Joe User"/></td>
-      <td><input type="submit" value="Change"/></td>
-    </tr>
-  </table>
-</form>
---%>
