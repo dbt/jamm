@@ -167,12 +167,13 @@ public class JoinTag extends TagSupport
 
         if (mProperty == null)
         {
-            ourList = (List) util.lookup(pageContext, mName, mScope);
+            ourList = (List) RequestUtils.lookup(pageContext, mName, mScope);
         }
         else
         {
             ourList =
-                (List) util.lookup(pageContext, mName, mProperty, mScope);
+                (List) RequestUtils.lookup(pageContext, mName, mProperty,
+                                           mScope);
         }
 
         return ourList;
