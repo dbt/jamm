@@ -302,6 +302,7 @@ public class AccountCleaner
     public static final boolean CLEAN_ALL = true;
     /** Clean only delete define for readability. */
     public static final boolean CLEAN_ONLY_DELETE = false;
-    
+
+    /** Our Logging object */
     private static final Logger LOG = Logger.getLogger(AccountCleaner.class);
 }

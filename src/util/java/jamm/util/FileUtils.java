@@ -98,6 +98,7 @@ public class FileUtils
         }
         return result;
     }
-    
+
+    /** Our logging object. */
     private static final Logger LOG = Logger.getLogger(FileUtils.class);
 }

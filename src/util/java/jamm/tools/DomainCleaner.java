@@ -88,6 +88,7 @@ public class DomainCleaner
     private List mDeadDomains;
     /** the mail manager */
     private MailManager mManager;
-    
+
+    /** Our logging object. */
     private static final Logger LOG = Logger.getLogger(DomainCleaner.class);
 }

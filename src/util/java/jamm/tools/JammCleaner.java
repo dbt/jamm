@@ -222,7 +222,6 @@ public final class JammCleaner
      * Our main method
      *
      * @param argv command line arguments
-     * @exception Exception if an error occurs
      */
     public static final void main(String argv[])
     {
@@ -271,6 +270,7 @@ public final class JammCleaner
         DomainCleaner dc = new DomainCleaner();
         dc.cleanUp();
     }
-    
+
+    /** Our logging object */
     private static final Logger LOG = Logger.getLogger(JammCleaner.class);
 }
