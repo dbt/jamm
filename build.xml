@@ -96,16 +96,20 @@
   <target name="build-webapp-java" depends="prepare"
           description="Builds all code for the web application.">
     <javac srcdir="src/webapp/java"
-       destdir="build/webapp/root/WEB-INF/classes"
-           optimize="${compile.optimize}" debug="${compile.debug}"
-       classpathref="lib.path" />
-
-    <javac srcdir="src/webapp/test/java"
-       destdir="test/webapp/classes"
-       debug="on" optimize="off">
+           destdir="build/webapp/root/WEB-INF/classes"
+           optimize="${compile.optimize}" debug="${compile.debug}">
       <classpath>
-       <pathelement location="build/webapp/root/WEB-INF/classes" />
-    <path refid="lib.path" />
+        <path refid="lib.path" />
+        <pathelement location="build/backend/classes" />
+      </classpath>
+    </javac>
+
+    <javac srcdir="src/webapp/test/java" destdir="test/webapp/classes"
+           debug="on" optimize="off">
+      <classpath>
+        <pathelement location="build/webapp/root/WEB-INF/classes" />
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
       </classpath>
     </javac>
 
@@ -122,8 +126,9 @@
                destdir="build/webapp/generated"
                packagenames="jamm.*">
       <classpath>
-        <path refid="xdoclet.path" />
+        <pathelement location="build/backend/classes" />
         <path refid="lib.path" />
+        <path refid="xdoclet.path" />
       </classpath>
 
       <deploymentdescriptor servletspec="2.3"
@@ -155,22 +160,7 @@
   </target>
   <target name="t-b" depends="test-backend" />
 
-  <target name="test-webapp" depends="build-webapp">
-    <junit printsummary="yes" fork="yes" haltonfailure="yes">
-      <classpath>
-        <pathelement location="test/webapp/classes" />
-        <pathelement location="build/webapp/root/WEB-INF/classes" />
-        <path refid="lib.path" />
-      </classpath>
-      <jvmarg value="-Dlog4j.disableOverride=${log4j.disableOverride}" />
-
-      <formatter type="plain" />
-      <test name="jamm.ldap.AllTests"
-            outfile="test/webapp/results" />
-    </junit>
-  </target>
-
-  <target name="test" depends="test-webapp" />
+  <target name="test" depends="test-backend" />
 
   <target name="dist-webapp"
       depends="build-webapp, build-webapp-webdoclet">
