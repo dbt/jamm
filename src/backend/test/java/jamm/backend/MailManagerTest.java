@@ -180,7 +180,7 @@ public class MailManagerTest extends TestCase
         aliasName = "alias";
         commonName = "commonName";
         startTime = getUnixTime();
-        manager.createAlias(domain, commonName, aliasName,
+        manager.createAlias(domain, aliasName, commonName,
                             new String[] {"postmaster"});
         endTime = getUnixTime();
 
@@ -233,8 +233,8 @@ public class MailManagerTest extends TestCase
         String commonName = "commonName";
         String aliasMail = aliasName + "@" + domain;
         manager.createDomain(domain);
-        manager.createAlias(domain, commonName,
-                            aliasName, new String[] {"mail1@abc.test"});
+        manager.createAlias(domain, aliasName,
+                            commonName, new String[] {"mail1@abc.test"});
         AliasInfo alias = manager.getAlias(aliasMail);
         alias.setMailDestinations(new String[] {"mail2@xyz.test",
                                                 "mail3@mmm.test"});
@@ -289,10 +289,13 @@ public class MailManagerTest extends TestCase
 
         String accountName = "account";
         String accountEmail = accountName + "@" + domain;
+        String commonName = "commonName";
         manager.createDomain(domain);
-        manager.createAccount(domain, accountName, accountName);
+        manager.createAccount(domain, accountName, commonName, accountName);
 
         AccountInfo account = manager.getAccount(accountEmail);
+        commonName = "unCommonName";
+        account.setCommonName(commonName);
         account.setActive(false);
         account.setAdministrator(true);
         startTime = getUnixTime();
@@ -303,6 +306,8 @@ public class MailManagerTest extends TestCase
         mLdap.anonymousBind();
         mLdap.searchSubtree(BASE, "mail=" + accountEmail);
         assertTrue("Checking for a result", mLdap.nextResult());
+        assertEquals("Checking for CommonName", commonName,
+                     mLdap.getResultAttribute("cn"));
         assertTrue("Checking to see if active is false",
                    !stringToBoolean(
                        mLdap.getResultAttribute("accountActive")));
@@ -330,8 +335,8 @@ public class MailManagerTest extends TestCase
         String aliasMail = aliasName + "@" + domain;
         String commonName = "commonName";
         manager.createDomain(domain);
-        manager.createAlias(domain, commonName,
-                            aliasName, new String[] {"mail2@xyz.test", "mail1@abc.test"});
+        manager.createAlias(domain, aliasName,
+                            commonName, new String[] {"mail2@xyz.test", "mail1@abc.test"});
 
         AliasInfo alias = manager.getAlias(aliasMail);
         List destinations = alias.getMailDestinations();
@@ -379,7 +384,7 @@ public class MailManagerTest extends TestCase
         mLdap.searchSubtree(BASE, "mail=" + aliasMail);
         assertTrue("Checking for no results", !mLdap.nextResult());
 
-        manager.createAlias(domain, "commonName", aliasName,
+        manager.createAlias(domain, aliasName, "commonName",
                             new String[] {"mail2@xyz.test", "mail1@abc.test"});
         mLdap.searchSubtree(BASE, "mail=" + aliasMail);
         assertTrue("Checking for a results", mLdap.nextResult());
@@ -415,8 +420,9 @@ public class MailManagerTest extends TestCase
 
         accountName = "account";
         accountPassword = "account1pw";
+        String commonName = "commonName";
         startTime = getUnixTime();
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, commonName, accountPassword);
         endTime = getUnixTime();
 
         email = accountName + "@" + domain;
@@ -428,6 +434,8 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking for account", mLdap.nextResult());
         assertEquals("Checking account mail", email,
                      mLdap.getResultAttribute("mail"));
+        assertEquals("Checking common name", commonName,
+                     mLdap.getResultAttribute("cn"));
         assertEquals("Checking account homeDirectory",
                      "/home/vmail/domains",
                      mLdap.getResultAttribute("homeDirectory"));
@@ -478,7 +486,7 @@ public class MailManagerTest extends TestCase
         String accountMail = accountName + "@" + domain;
 
         manager.createDomain(domain);
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, "", accountPassword);
 
         LdapFacade mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -508,7 +516,7 @@ public class MailManagerTest extends TestCase
 
         String accountName = "account";
         String accountPassword = "account1pw";
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, "", accountPassword);
 
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
@@ -551,7 +559,7 @@ public class MailManagerTest extends TestCase
 
         String accountName = "account";
         String accountPassword = "account1pw";
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, "", accountPassword);
 
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
@@ -641,7 +649,7 @@ public class MailManagerTest extends TestCase
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
 
-        manager.createAlias(domain, "commonName", accountName,
+        manager.createAlias(domain, accountName, "commonName",
                             new String[] {"mail1@abc.com", "mail2@xyz.com"});
         MailManagerOptions.setUsePasswordExOp(false);
         manager.changePassword(mail, newPassword1);
@@ -700,12 +708,12 @@ public class MailManagerTest extends TestCase
 
         String accountName = "account";
         String accountPassword = "accountpw";
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, "", accountPassword);
         assertTrue("Checking account is not an alias",
                    !manager.isAlias(accountName + "@" + domain));
 
         String aliasName = "alias";
-        manager.createAlias(domain, "commonName", aliasName,
+        manager.createAlias(domain, aliasName, "commonName",
                             new String[] {"a@b.c"});
         assertTrue("Checking alias is an alias",
                    manager.isAlias(aliasName + "@" + domain));
@@ -726,7 +734,7 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
 
         String aliasName = "alias";
-        manager.createAlias(domain, "commonName", aliasName,
+        manager.createAlias(domain, aliasName, "commonName",
                             new String[] {"a@b.c"});
 
         assertTrue("Checking postmaster has postmaster privileges",
@@ -752,9 +760,9 @@ public class MailManagerTest extends TestCase
         manager.changePassword("postmaster@" + domain, "pm");
 
         // Create some accounts
-        manager.createAccount(domain, "zzz", "zzz");
-        manager.createAccount(domain, "aaa", "aaa");
-        manager.createAccount(domain, "MMM", "MMM");
+        manager.createAccount(domain, "zzz", "zzz", "zzz");
+        manager.createAccount(domain, "aaa", "aaa", "aaa");
+        manager.createAccount(domain, "MMM", "MMM", "MMM");
 
         // Create some aliases
         manager.createAlias(domain, "zzzz", "zzzz", new String[]
@@ -769,7 +777,7 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, "xxxx", "xxxx", new String[]
             { "z@x.test", "M@x.test", "a@x.test"});
         manager.changePassword("xxxx@" + domain, "xxxx");
-        manager.createAlias(domain, "z", "", new String[]
+        manager.createAlias(domain, "", "z", new String[]
             { "z@x.test" });
 
         List accounts = manager.getAccounts(domain);
@@ -777,6 +785,8 @@ public class MailManagerTest extends TestCase
         AccountInfo account = (AccountInfo) accounts.get(0);
         assertEquals("Checking name for account[0]",
                      "aaa@" + domain, account.getName());
+        assertEquals("Checking common name for account[0]",
+                     "aaa", account.getCommonName());
         assertTrue("Checking active for account[0]",
                    account.isActive());
         assertTrue("Checking admin for account[0]",
@@ -788,6 +798,8 @@ public class MailManagerTest extends TestCase
         account = (AccountInfo) accounts.get(1);
         assertEquals("Checking name for account[1]",
                      "MMM@" + domain, account.getName());
+        assertEquals("Checking common name for account[1]",
+                     "MMM", account.getCommonName());
         assertTrue("Checking active for account[1]",
                    account.isActive());
         assertTrue("Checking admin for account[1]",
@@ -799,6 +811,8 @@ public class MailManagerTest extends TestCase
         account = (AccountInfo) accounts.get(2);
         assertEquals("Checking name for account[2]",
                      "zzz@" + domain, account.getName());
+        assertEquals("Checking common name for account[2]",
+                     "zzz", account.getCommonName());
         assertTrue("Checking active for account[2]",
                    account.isActive());
         assertTrue("Checking admin for account[2]",
@@ -940,7 +954,7 @@ public class MailManagerTest extends TestCase
         String aliasName = "pm";
         String aliasMail = aliasName + "@" + domain;
         String pmDn = "mail=" + aliasMail + "," + domainDn;
-        manager.createAlias(domain, "commonName", aliasName,
+        manager.createAlias(domain, aliasName, "commonName",
                             new String[] {"postmaster"});
         manager.addPostmaster(domain, aliasMail);
 
@@ -980,8 +994,8 @@ public class MailManagerTest extends TestCase
                             LdapConstants.MGR_PW);
 
         manager.createDomain(domain);
-        manager.createAccount(domain, "active", "active");
-        manager.createAccount(domain, "inactive", "inactive");
+        manager.createAccount(domain, "active", "", "active");
+        manager.createAccount(domain, "inactive", "", "inactive");
         String mail = "inactive@" + domain;
         AccountInfo inactiveAccount = manager.getAccount(mail);
 
@@ -1007,8 +1021,8 @@ public class MailManagerTest extends TestCase
                             LdapConstants.MGR_PW);
 
         manager.createDomain(domain);
-        manager.createAccount(domain, "delete", "delete");
-        manager.createAccount(domain, "nodelete", "nodelete");
+        manager.createAccount(domain, "delete", "", "delete");
+        manager.createAccount(domain, "nodelete", "", "nodelete");
         String mail = "delete@" + domain;
         AccountInfo deleteAccount = manager.getAccount(mail);
 
@@ -1117,7 +1131,7 @@ public class MailManagerTest extends TestCase
         assertTrue("testing to see if jvd=" + domain + " has been created",
                    mLdap.nextResult());
 
-        manager.createAlias(domain, "commonName", "yomama",
+        manager.createAlias(domain, "yomama", "commonName",
                             new String[] {"yomama"});
 
         manager.deleteDomain(domain);
@@ -1147,12 +1161,12 @@ public class MailManagerTest extends TestCase
 
         String accountName = "newvalue";
         String accountPassword = "newvaluepw";
-        manager.createAccount(domain, accountName, accountPassword);
+        manager.createAccount(domain, accountName, "", accountPassword);
 
         MailManagerOptions.setVmailHomedir(origValue);
         String accountName1 = "oldvalue";
         String accountPassword1 = "oldvaluepw";
-        manager.createAccount(domain, accountName1, accountPassword1);
+        manager.createAccount(domain, accountName1, "", accountPassword1);
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
