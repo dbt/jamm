@@ -5,6 +5,8 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
 import jamm.ldap.LdapFacade;
+import jamm.ldap.LdapPassword;
+import jamm.ldap.PasswordScheme;
 
 public class MailManager
 {
@@ -36,7 +38,7 @@ public class MailManager
             attributes.put(objectClass);
             attributes.put("jvd", domainName);
             attributes.put("postfixTransport", "virtual:");
-            String domainDn = "jvd=" + domainName + "," + mBase;
+            String domainDn = domainDn(domainName);
             ldap.addElement(domainDn, attributes);
 
             // Create the postmaster
@@ -74,6 +76,85 @@ public class MailManager
         {
             closeLdap(ldap);
         }
+    }
+
+    public void createAlias(String domain, String alias, String destination)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        BasicAttribute objectClass;
+        BasicAttributes attributes;
+        String email = alias + "@" + domain;
+        
+        try
+        {
+            ldap = new LdapFacade(mHost);
+            ldap.simpleBind(mBinddn, mBindpw);
+
+            objectClass = new BasicAttribute("objectClass");
+            objectClass.add("top");
+            objectClass.add("JammMailAlias");
+            attributes = new BasicAttributes();
+            attributes.put(objectClass);
+            attributes.put("mail", email);
+            attributes.put("maildrop", destination);
+            String dn = "mail=" + email + "," + domainDn(domain);
+            ldap.addElement(dn, attributes);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Count not create alias " + email,
+                                           e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
+    public void createAccount(String domain, String account, String password)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        BasicAttribute objectClass;
+        BasicAttributes attributes;
+        String email = account + "@" + domain;
+        String hashedPassword;
+
+        try
+        {
+            ldap = new LdapFacade(mHost);
+            ldap.simpleBind(mBinddn, mBindpw);
+
+            objectClass = new BasicAttribute("objectClass");
+            objectClass.add("top");
+            objectClass.add("JammMailAccount");
+            attributes = new BasicAttributes();
+            attributes.put(objectClass);
+            attributes.put("homeDirectory", "/home/vmail/domains");
+            attributes.put("mail", email);
+            attributes.put("mailbox", domain + "/" + account + "/");
+            hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
+                                               password);
+            attributes.put("userPassword", hashedPassword);
+            ldap.addElement("mail=" + email + "," + domainDn(domain),
+                            attributes);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Could not create account " + email,
+                                           e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+        
+    }
+
+    private String domainDn(String domain)
+    {
+        return "jvd=" + domain + "," + mBase;
     }
 
     private void closeLdap(LdapFacade ldap)
