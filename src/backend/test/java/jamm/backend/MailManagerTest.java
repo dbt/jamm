@@ -841,6 +841,8 @@ public class MailManagerTest extends TestCase
                    !di.getCanEditPostmasters());
         assertTrue("Testing active",
                    di.getActive());
+        assertTrue("Testing delete",
+                   !di.getDelete());
     }
 
     /**
