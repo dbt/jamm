@@ -1,5 +1,5 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<span class=header>DOMAIN ADMINISTRATION</span>
+<span class=header>DOMAIN ADMINISTRATION for <bean:write name="domain"/></span>
 <br />
 <html:errors/>
 <html:form action="/private/domain_account">

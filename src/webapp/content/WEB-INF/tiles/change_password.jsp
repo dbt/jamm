@@ -1,14 +1,11 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
 <bean:parameter id="mail" name="mail" value=""/>
+<span class=header>CHANGE PASSWORD for <bean:write name="mail"/></span>
 <html:errors/>
 <html:form action="/private/change_password" focus="password">
   <html:hidden property="mail"/>
   <html:hidden property="done"/>
   <table border="0">
-    <tr>
-      <td align="right"> <bean:message key="change_password.user_info"/> </td>
-      <td> <b><bean:write name="changePasswordForm" property="mail"/></b> </td>
-    </tr>
     <tr>
       <td align="right">
         <bean:message key="change_password.prompt.password"/>
