@@ -1,3 +1,4 @@
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
 <bean:parameter id="domain" name="domain"/>
 <span class=header>ADD ALIAS for domain <bean:write name="domain"/></span>

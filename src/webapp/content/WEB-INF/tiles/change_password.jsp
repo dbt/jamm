@@ -1,3 +1,4 @@
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
 <bean:parameter id="mail" name="mail" value=""/>
 <span class=header>CHANGE PASSWORD for <bean:write name="mail"/></span>
