@@ -7,7 +7,7 @@ Version 0.9.1 - 15 Jul 2002
 
 * Javadocs now build in build/doc/api
 
-* Site capabilities now honored
+* Site/domain capabilities now honored
 
 Version 0.9.0 - 13 Jun 2002
 ---------------------------
