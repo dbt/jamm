@@ -146,7 +146,7 @@ public class DomainAdminAction extends JammAction
         List accounts;
         String startsWith = request.getParameter("startsWith");
         if (StringUtils.isAlphanumeric(startsWith) &&
-            !startsWith.equals(""))
+            StringUtils.isNotEmpty(startsWith))
         {
             accounts = manager.getAccountsStartingWith(startsWith, domain);
         }
@@ -208,9 +208,19 @@ public class DomainAdminAction extends JammAction
                            String domain)
         throws MailManagerException
     {
-        // todo add startswith filter
-        List aliases = manager.getAliases(domain);
+        List aliases;
+        String startsWith = request.getParameter("startsWith");
+        if (StringUtils.isAlphanumeric(startsWith) &&
+            StringUtils.isNotEmpty(startsWith))
+        {
+            aliases = manager.getAliasesStartingWith(startsWith, domain);
+        }
+        else
+        {
+            aliases = manager.getAliases(domain);
+        }
         request.setAttribute("aliases", aliases);
+            
 
         List activeAliases = new ArrayList();
         List adminAliases = new ArrayList();
