@@ -125,6 +125,26 @@ public final class Globals
         mUseExOp = useExOp;
     }
 
+    /**
+     * Get the root login.
+     *
+     * @return a string with the root login
+     */
+    public static String getRootLogin()
+    {
+        return mRootLogin;
+    }
+
+    /**
+     * Sets the root login
+     *
+     * @param login the root login
+     */
+    public static void setRootLogin(String login)
+    {
+        mRootLogin = login;
+    }
+
     /** The ldap host */
     private static String mLdapHost;
     /** the ldap port */
@@ -135,4 +155,6 @@ public final class Globals
     private static String mRootDn;
     /** uses ExOp to modify password */
     private static boolean mUseExOp;
+    /** the root login */
+    private static String mRootLogin;
 }

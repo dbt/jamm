@@ -15,6 +15,10 @@
 #
 #jamm.ldap.root_dn =
 
+# The login of the "root" user.  The default is root
+#
+#jamm.ldap.root_dn =
+
 # The class used to generate random numbers.  The default is
 # java.security.SecureRandom.
 #

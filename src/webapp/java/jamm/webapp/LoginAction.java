@@ -80,7 +80,7 @@ public class LoginAction extends Action
                                               
         boolean isRoot = false;
         String userDn;
-        if (form.getUsername().equals("root"))
+        if (form.getUsername().equals(Globals.getRootLogin()))
         {
             userDn = Globals.getRootDn();
             isRoot = true;

@@ -86,6 +86,8 @@ public class InitServlet extends HttpServlet
                                   "java.security.SecureRandom"));
             Globals.setRootDn(
                 getStringProperty(properties, "ldap.root_dn", ""));
+            Globals.setRootLogin(
+                getStringProperty(properties, "ldap.root_login", "root"));
             Globals.setPasswordUseExOp(
                 getBooleanProperty(properties, "password.exop", true));
         }
