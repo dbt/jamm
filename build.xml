@@ -214,7 +214,7 @@
 
   <target name="dist-webapp"
       depends="build-webapp, build-webapp-webdoclet">
-    <jar jarfile="dist/${project.string}.war"
+    <jar jarfile="build/${project.string}.war"
          basedir="build/webapp/root"
          excludes="WEB-INF/jamm.properties">
       <manifest>
@@ -295,6 +295,7 @@
   </target>
 
   <target name="dist-src" depends="prepare">
+    <delete dir="build/dist-src/${project.string}"/>
     <mkdir dir="build/dist-src/${project.string}"/>
     <copy todir="build/dist-src/${project.string}">
       <fileset dir=".">
@@ -302,12 +303,39 @@
         <exclude name="test/**"/>
         <exclude name="dist/**"/>
         <exclude name="build.properties"/>
+        <exclude name="src/webapp/config/jamm.properties"/>
       </fileset>
     </copy>
     <tar tarfile="build/${project.string}.tar"
          basedir="build/dist-src"/>
-    <gzip src="build/${project.string}.tar"
-          zipfile="dist/${project.string}.tar.gz" />
+    <gzip zipfile="dist/${project.string}.tar.gz"
+          src="build/${project.string}.tar"/>
+    <!-- Make text files DOS-compatible before making zip file-->
+    <fixcrlf srcdir="build/dist-src" eol="crlf"
+             excludes="**/*.jpg,**/*.gif"/>
+    <zip zipfile="dist/${project.string}.zip"
+         basedir="build/dist-src"/>
+  </target>
+
+  <target name="dist-bin" depends="dist">
+    <delete dir="build/dist-bin/${project.string}"/>
+    <mkdir dir="build/dist-bin/${project.string}"/>
+    <copy todir="build/dist-bin/${project.string}" flatten="yes">
+      <fileset dir=".">
+        <include name="INSTALL"/>
+        <include name="README"/>
+        <include name="LICENSE"/>
+        <include name="build/${project.string}.war"/>
+      </fileset>
+    </copy>
+    <tar tarfile="build/${project.string}-bin.tar"
+         basedir="build/dist-bin"/>
+    <gzip zipfile="dist/${project.string}-bin.tar.gz"
+          src="build/${project.string}-bin.tar"/>
+    <!-- Make text files DOS-compatible before making zip file-->
+    <fixcrlf srcdir="build/dist-bin" eol="crlf" excludes="**/*.war"/>
+    <zip zipfile="dist/${project.string}-bin.zip"
+         basedir="build/dist-bin"/>
   </target>
 
   <target name="clean">
