@@ -23,3 +23,8 @@
   NAR User Requests:
 
     *  migrate between domains
+
+
+Bugs to be fixed:
+    * When a domain is set to be deleted, its catchall is still
+      active.  Must set to inactive or set delete flag.
