@@ -22,7 +22,7 @@
     <!-- Example logon forward 
      <forward   name="logon"                path="/logon.jsp"/>
      -->
-    <forward name="home" path="/home.jsp" redirect="true"/>
+    <forward name="home" path="/index.jsp" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
   </global-forwards>

@@ -21,3 +21,5 @@
   of MailManagerException).
 
 * Javadoc, javadoc, javadoc!
+
+* User roles when logging in.
