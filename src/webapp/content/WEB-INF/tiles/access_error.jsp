@@ -5,3 +5,9 @@
 </h1>
 
 <html:errors />
+
+<logic:present name="exception.stacktrace" scope="request">
+<!--
+<bean:write name="exception.stacktrace" scope="request"/>
+-->
+</logic:present>

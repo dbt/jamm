@@ -24,3 +24,8 @@
   </logic:present>
 </p>
   
+<logic:present name="exception.stacktrace" scope="request">
+<!--
+<bean:write name="exception.stacktrace" scope="request"/>
+-->
+</logic:present>
