@@ -19,12 +19,17 @@
 
 package jamm.tools;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.GnuParser;
 
@@ -64,17 +69,43 @@ public final class JammCleaner
                        "Print what would be executed, but do not execute.");
 
         opt = new Option("D", "dn", HAS_ARGS, "the dn to bind with");
-        opt.setRequired(true);
+//        opt.setRequired(true);
         opts.addOption(opt);
 
         opt = new Option("b", "base", HAS_ARGS, "base dn to search from");
-        opt.setRequired(true);
+//        opt.setRequired(true);
         opts.addOption(opt);
         opts.addOption("B", "backups", HAS_ARGS, "back up account contents " +
                        "to this directory before deleting");
         opts.addOption("?", "help", NO_ARGS, "prints help message");
 
         return opts;
+    }
+
+    private static void sanityCheck()
+    {
+        String bindDN = JammCleanerOptions.getBindDn();
+        boolean bindDNEmpty = bindDN == null || bindDN.equals("");
+
+        String base = JammCleanerOptions.getBaseDn();
+        boolean baseEmpty = base == null || base.equals("");
+
+        if (bindDNEmpty)
+        {
+            System.err.println("dn must be specified via -D or in " +
+                               "jammCleaner.properties");
+        }
+        
+        if (baseEmpty)
+        {
+            System.err.println("search base dn must be specififed ia -b or" +
+                               " in jammCleaner.properties");
+        }
+        
+        if (bindDNEmpty || baseEmpty)
+        {
+            System.exit(1);
+        }
     }
 
     /**
@@ -130,13 +161,82 @@ public final class JammCleaner
     }
     
     /**
+     * Load properties from jammCleaner.properties in the classpath.
+     * Command line options override this.
+     */
+    private static void loadProperties()
+    {
+        // todo finish making jammCleaner more cron friendly.
+        ClassLoader classLoader = JammCleaner.class.getClassLoader();
+        InputStream is =
+            classLoader.getResourceAsStream("jammCleaner.properties");
+        if (is == null)
+        {
+            return;
+        }
+        
+        Properties prop = new Properties();
+        try
+        {
+            prop.load(is);
+        }
+        catch (IOException e)
+        {
+            System.err.println(e);
+        }
+        
+        String tmp = prop.getProperty("jammCleaner.ldap.search_base");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setBaseDn(tmp);
+        }
+
+        tmp = prop.getProperty("jammCleaner.ldap.bind_dn");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setBindDn(tmp);
+        }
+        
+        tmp = prop.getProperty("jammCleaner.ldap.password");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setPassword(tmp);
+        }
+        
+        tmp = prop.getProperty("jammCleaner.assumeYes");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setAssumeYes(
+                Boolean.valueOf(tmp).booleanValue());
+        }
+        
+        tmp = prop.getProperty("jammCleaner.ldap.host");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setHost(tmp);
+        }
+        
+        tmp = prop.getProperty("jammCleaner.ldap.port");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setPort(Integer.parseInt(tmp));
+        }
+        
+        tmp = prop.getProperty("jammCleaner.backup_dir");
+        if (tmp != null)
+        {
+            JammCleanerOptions.setBackupDirectory(tmp);
+        }
+        
+    }
+    
+    /**
      * Our main method
      *
      * @param argv command line arguments
      * @exception Exception if an error occurs
      */
     public static final void main(String argv[])
-        throws Exception
     {
         Options opts = getOptions();
         CommandLine cmdl = null;
@@ -160,8 +260,18 @@ public final class JammCleaner
             printHelp(opts);
             System.exit(1);
         }
+        catch (ParseException e)
+        {
+            System.out.println("Some other command line parsing error");
+            printHelp(opts);
+            System.exit(1);
+        }
         
+        // Load properties first
+        loadProperties();
+        // Allow command line args to override properties file
         parseArgs(opts, cmdl);
+        sanityCheck();
         
         // System.out.println(JammCleanerOptions.argDump());
 
