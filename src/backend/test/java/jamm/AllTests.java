@@ -55,6 +55,7 @@ public class AllTests
         TestSetup wrapper;
 
         suite = new TestSuite();
+        suite.addTest(jamm.util.AllTests.suite());
         suite.addTest(jamm.ldap.AllTests.suite());
         suite.addTest(jamm.backend.AllTests.suite());
         
