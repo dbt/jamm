@@ -44,7 +44,11 @@ public class LdapFacade
     }
 
     /**
-     * Bind to a DN using simple authentication.
+     * Bind with simple authentication as a DN.
+     *
+     * @param dn Distinguished name to bind as
+     * @param password Password for the DN
+     * @throws NamingException If could not bind
      */
     public void simpleBind(String dn, String password)
         throws NamingException
