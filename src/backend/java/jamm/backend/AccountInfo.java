@@ -35,11 +35,14 @@ public class AccountInfo implements Serializable
      * @param administrator True if this account has administrator
      * priveleges.
      */
-    public AccountInfo(String name, boolean active, boolean administrator)
+    public AccountInfo(String name, boolean active, boolean administrator,
+                       String homeDirectory, String mailbox)
     {
         mName = name;
         mActive = active;
         mAdministrator = administrator;
+        mHomeDirectory = homeDirectory;
+        mMailbox = mailbox;
     }
 
     /**
@@ -92,10 +95,34 @@ public class AccountInfo implements Serializable
         mAdministrator = value;
     }
 
+    /**
+     * Gets the value of homeDirectory
+     *
+     * @return the value of homeDirectory
+     */
+    public String getHomeDirectory() 
+    {
+        return this.mHomeDirectory;
+    }
+
+    /**
+     * Gets the value of mailbox
+     *
+     * @return the value of mailbox
+     */
+    public String getMailbox() 
+    {
+        return this.mMailbox;
+    }
+
     /** Account name. */
     private String mName;
     /** True if this account active. */
     private boolean mActive;
     /** True if this account is an adiministrator. */
     private boolean mAdministrator;
+    /** Home Directory */
+    private String mHomeDirectory;
+    /** mailbox */
+    private String mMailbox;
 }

@@ -1102,7 +1102,10 @@ public class MailManager
         boolean isActive =
             stringToBoolean(ldap.getResultAttribute("accountActive"));
         boolean isAdmin = isPostmaster(name);
-        return new AccountInfo(name, isActive, isAdmin);
+        String homeDirectory = ldap.getResultAttribute("homeDirectory");
+        String mailbox = ldap.getResultAttribute("mailbox");
+        return new AccountInfo(name, isActive, isAdmin,
+                               homeDirectory, mailbox);
     }
 
     /**

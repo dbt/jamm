@@ -724,6 +724,10 @@ public class MailManagerTest extends TestCase
                    account.isActive());
         assertTrue("Checking admin for account[0]",
                    !account.isAdministrator());
+        assertEquals("Checking homeDirectory for account[0]",
+                     "/home/vmail/domains", account.getHomeDirectory());
+        assertEquals("Checking mailbox for account[0]",
+                     "info.test/aaa/", account.getMailbox());
         account = (AccountInfo) accounts.get(1);
         assertEquals("Checking name for account[1]",
                      "MMM@" + domain, account.getName());
@@ -731,6 +735,10 @@ public class MailManagerTest extends TestCase
                    account.isActive());
         assertTrue("Checking admin for account[1]",
                    !account.isAdministrator());
+        assertEquals("Checking homeDirectory for account[1]",
+                     "/home/vmail/domains", account.getHomeDirectory());
+        assertEquals("Checking mailbox for account[1]",
+                     "info.test/MMM/", account.getMailbox());
         account = (AccountInfo) accounts.get(2);
         assertEquals("Checking name for account[2]",
                      "zzz@" + domain, account.getName());
@@ -738,6 +746,10 @@ public class MailManagerTest extends TestCase
                    account.isActive());
         assertTrue("Checking admin for account[2]",
                    !account.isAdministrator());
+        assertEquals("Checking homeDirectory for account[2]",
+                     "/home/vmail/domains", account.getHomeDirectory());
+        assertEquals("Checking mailbox for account[2]",
+                     "info.test/zzz/", account.getMailbox());
 
         List aliases = manager.getAliases(domain);
         assertEquals("Checking number of aliases", 4, aliases.size());
