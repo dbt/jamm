@@ -131,10 +131,22 @@ public class ZipCreator
             zipName = parent + file.separator + file.getName();
         }
 
+        // Strip off the base directory
+        if (mBaseDirectory != null)
+        {
+            if (zipName.startsWith(mBaseDirectory))
+            {
+                zipName = zipName.substring(mBaseDirectory.length());
+            }
+        }
+            
         // Strip off leading '/'
         if (zipName.charAt(0) == '/')
         {
-            System.err.println("Stripping off leading '/'");
+            if (JammCleanerOptions.isVerbose())
+            {
+                System.err.println("Stripping off leading '/'");
+            }
             zipName = zipName.substring(1);
         }
 
@@ -165,7 +177,10 @@ public class ZipCreator
         ZipEntry ze = new ZipEntry(zipName);
         ze.setTime(aFile.lastModified());
 
-        System.out.println("Adding " + zipName);
+        if (JammCleanerOptions.isVerbose())
+        {
+            System.out.println("Adding " + zipName);
+        }
 
         // Don't compress really small stuff
         if (aFile.length() < 51)
@@ -271,8 +286,31 @@ public class ZipCreator
         mZos.close();
     }
 
-    /** A File object representing the zip file */
+    /**
+     * Sets the base directory to be stripped off when putting into a
+     * zip file.
+     *
+     * @param baseDirectory a string with the base dir
+     */
+    public void setBaseDirectory(String baseDirectory)
+    {
+        mBaseDirectory = baseDirectory;
+    }
+
+    /**
+     * Get the base directory.
+     *
+     * @return a string with the base dir.
+     */
+    public String getBaseDirectory()
+    {
+        return mBaseDirectory;
+    }
+
+    /** A File object representing the zip file. */
     private File mFile;
-    /** the zip output stream we're writing to */
+    /** the zip output stream we're writing to. */
     private ZipOutputStream mZos;
+    /** A base directory to be ignored. */
+    private String mBaseDirectory;
 }
