@@ -20,13 +20,9 @@
 package jamm.ldap;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Random;
-
-import java.util.Map;
 import java.util.HashMap;
-
-import cryptix.util.mime.Base64OutputStream;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Provides utility methods for the different LDAP password hashing
@@ -166,24 +162,51 @@ public abstract class LdapPassword
         throws UnsupportedOperationException
     {
         ByteArrayOutputStream   baos;
-        Base64OutputStream      base64;
         String  encoded;
 
-        try
-        {
+//        try
+//        {
             baos = new ByteArrayOutputStream();
-            base64 = new Base64OutputStream(baos);
-            base64.write(bytes, 0, bytes.length);
-            base64.close();
-
-            // Must trim this string as a CR-LF is appended on the
-            // end.
-            encoded = new String(baos.toByteArray()).trim();
-        }
-        catch (IOException e)
-        {
-            throw new UnsupportedOperationException(e.toString());
-        }
+            int carry = 0;
+            for(int i = 0; i < bytes.length; i++)
+            {
+                int val;
+                int b = ((int)bytes[i]) & 255;
+                switch (i % 3)
+                {
+                    case 0:
+                        baos.write(BASE64_MAP[b / 4]);
+                        carry = b & 3;
+                        break;
+                    case 1:
+                        val = (carry << 8) + b;
+                        baos.write(BASE64_MAP[val / 16]);
+                        carry = b & 15;
+                        break;
+                    case 2:
+                        val = (carry << 8) + b;
+                        baos.write(BASE64_MAP[val / 64]);
+                        baos.write(BASE64_MAP[val & 63]);
+                        carry = 0;
+                }
+            }
+            switch (bytes.length % 3)
+            {
+                case 1:
+                    baos.write(BASE64_MAP[carry << 4]);
+                    baos.write((int)'=');
+                    baos.write((int)'=');
+                    break;
+                case 2:
+                    baos.write(BASE64_MAP[carry << 2]);
+                    baos.write((int)'=');
+            }
+            encoded = new String(baos.toByteArray());
+//        }
+//        catch (IOException e)
+//        {
+//            throw new UnsupportedOperationException(e.toString());
+//        }
         
         return encoded;
     }
@@ -232,4 +255,11 @@ public abstract class LdapPassword
      * <code>java.security.SecureRandom</code>
      */
     private static String mRandomClass = "java.security.SecureRandom";
+    private static final byte[] BASE64_MAP = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
+        'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+        'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
+        '4', '5', '6', '7', '8', '9', '+', '/'
+    };
 }
