@@ -197,6 +197,44 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    public void testAddCatchall()
+        throws NamingException, MailManagerException
+    {
+        MailManager manager;
+        String domain = "catchalldomain.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+        Set expectedObjectClass;
+        Set objectClass;
+
+        manager = new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                                  LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        manager.addCatchall(domain, "postmaster");
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(domainDn, "mail=@" + domain);
+
+        assertTrue("Checking for catchall", mLdap.nextResult());
+        assertEquals("Checking catchall mail", "@" + domain,
+                     mLdap.getResultAttribute("mail"));
+        assertEquals("Checking catchall maildrop", "postmaster",
+                     mLdap.getResultAttribute("maildrop"));
+
+        objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("JammMailAlias");
+        assertEquals("Checking alias objectClass", expectedObjectClass,
+                     objectClass);
+        
+        assertTrue("Checking for lack of additional catchall",
+                   !mLdap.nextResult());
+
+        mLdap.close();
+    }
+
     private LdapFacade                      mLdap;
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }
