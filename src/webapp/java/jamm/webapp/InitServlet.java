@@ -138,6 +138,15 @@ public class InitServlet extends HttpServlet
         }
     }
 
+    /**
+     * Returns the request property as a boolean value
+     *
+     * @param props properites object containing the data
+     * @param property the property name to return
+     * @param defaultValue the default value to use if the property
+     *                     doesn't exist in props
+     * @return a boolean with the property's value
+     */
     private boolean getBooleanProperty(Properties props, String property,
                                        boolean defaultValue)
     {

@@ -199,6 +199,8 @@ public abstract class JammAction extends Action
      * @param manager The MailManager to call against
      * @param mail the e-mail address to change the password for
      * @param password the password to set to
+     * @exception MailManagerException if an error occurs while
+     *                                 attempting to change the password
      */
     protected void changePassword(MailManager manager, String mail,
                                   String password)
