@@ -493,6 +493,8 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, "xxxx", new String[]
             { "z@x.test", "M@x.test", "a@x.test"});
         manager.changePassword("xxxx@" + domain, "xxxx");
+        manager.createAlias(domain, "", new String[]
+            { "z@x.test" } );
 
         List accounts = manager.getAccounts(domain);
         assertEquals("Checking number of accounts", 3, accounts.size());
