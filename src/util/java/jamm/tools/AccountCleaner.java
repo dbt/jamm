@@ -69,8 +69,8 @@ public class AccountCleaner
      * cleans all accounts for this domain.
      *
      * @param domain the domain to clean
-     * @param allAccounts AccountCleaner.CLEAN_ALL or
-     *                    AccountCleaner.CLEAN_ONLY_DELETE
+     * @param cleanAllAccounts AccountCleaner.CLEAN_ALL or
+     *                         AccountCleaner.CLEAN_ONLY_DELETE
      */
     public AccountCleaner(String domain, boolean cleanAllAccounts)
     {
