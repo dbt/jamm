@@ -58,4 +58,26 @@ public class MailManagerOptionsTest extends TestCase
                      "/home/vmail/domains",
                      MailManagerOptions.getVmailHomedir());
     }
+
+    public void testSetUsePasswordExOp()
+    {
+        boolean orig = MailManagerOptions.isUsePasswordExOp();
+
+        MailManagerOptions.setUsePasswordExOp(true);
+        assertTrue("Checking isUsePasswordExOp",
+                   MailManagerOptions.isUsePasswordExOp());
+
+        MailManagerOptions.setUsePasswordExOp(false);
+        assertTrue("Checking isUsePasswordExOp",
+                   !MailManagerOptions.isUsePasswordExOp());
+
+        MailManagerOptions.setUsePasswordExOp(orig);
+    }
+
+    public void testIsUsePasswordExOp()
+    {
+        assertTrue("Checking for isUsePasswordExOp",
+                   MailManagerOptions.isUsePasswordExOp());
+    }
+        
 }

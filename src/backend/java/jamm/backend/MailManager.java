@@ -66,7 +66,6 @@ public class MailManager
         mBase = base;
         mBindDn = bindDn;
         mBindPassword = bindPassword;
-        mUsePasswordExOp = false;
     }
 
     /**
@@ -110,17 +109,6 @@ public class MailManager
     public MailManager(String host, int port, String base)
     {
         this(host, port, base, "", "");
-    }
-
-    /**
-     * Should his mail manager use the password extended operation.
-     * Currently defaults to false.
-     *
-     * @param usePasswordExOp boolean value
-     */
-    public void setUsePasswordExOp(boolean usePasswordExOp)
-    {
-        mUsePasswordExOp = usePasswordExOp;
     }
 
     /**
@@ -184,7 +172,7 @@ public class MailManager
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
     {
-        if (mUsePasswordExOp)
+        if (MailManagerOptions.isUsePasswordExOp())
         {
             changePasswordExOp(mail, newPassword);
         }
@@ -1138,7 +1126,7 @@ public class MailManager
             attributes.put("lastChange", getUnixTimeString());
             attributes.put("delete", booleanToString(false));
 
-            if (!mUsePasswordExOp)
+            if (!MailManagerOptions.isUsePasswordExOp())
             {
                 String hashedPassword =
                     LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
@@ -1147,7 +1135,7 @@ public class MailManager
 
             ldap.addElement(maildn, attributes);
 
-            if (mUsePasswordExOp)
+            if (MailManagerOptions.isUsePasswordExOp())
             {
                 ldap.changePassword(maildn, password);
             }
@@ -1626,6 +1614,4 @@ public class MailManager
     private String mBindDn;
     /** The password of the bind element */
     private String mBindPassword;
-    /** Use the modify password ex op? */
-    private boolean mUsePasswordExOp;
 }

@@ -616,7 +616,7 @@ public class MailManagerTest extends TestCase
         String postmasterMail = "postmaster@" + domain;
         String postmasterDn = "cn=postmaster," + domainDn;
         String postmasterPassword = "pm1";
-        manager.setUsePasswordExOp(true);
+        MailManagerOptions.setUsePasswordExOp(true);
         manager.changePassword(postmasterMail, postmasterPassword);
         manager.setBindEntry(postmasterDn, postmasterPassword);
         assertTrue("Checking postmatser can authenticate",
@@ -631,13 +631,13 @@ public class MailManagerTest extends TestCase
 
         manager.createAlias(domain, accountName,
                             new String[] {"mail1@abc.com", "mail2@xyz.com"});
-        manager.setUsePasswordExOp(false);
+        MailManagerOptions.setUsePasswordExOp(false);
         manager.changePassword(mail, newPassword1);
 
         manager.setBindEntry(accountDn, newPassword1);
         assertTrue("Checking authentication using new password 1",
                    manager.authenticate());
-        manager.setUsePasswordExOp(false);
+        MailManagerOptions.setUsePasswordExOp(false);
         manager.changePassword(mail, newPassword2);
         assertTrue("Checking authentication using new password 2",
                    manager.authenticate());
@@ -661,7 +661,7 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking mail", mail, mLdap.getResultAttribute("mail"));
         assertNull("Checking password field does not exist",
                    mLdap.getResultAttribute("userPassword"));
-        manager.setUsePasswordExOp(false);
+        MailManagerOptions.setUsePasswordExOp(false);
         manager.changePassword(mail, null);
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(postmasterDn, postmasterPassword);
@@ -734,7 +734,7 @@ public class MailManagerTest extends TestCase
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                             LdapConstants.MGR_PW);
         manager.createDomain(domain);
-        manager.setUsePasswordExOp(true);
+        MailManagerOptions.setUsePasswordExOp(true);
         manager.changePassword("postmaster@" + domain, "pm");
 
         // Create some accounts

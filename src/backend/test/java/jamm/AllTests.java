@@ -299,6 +299,7 @@ public class AllTests
     private static void setupMailManagerOptions()
     {
         MailManagerOptions.setVmailHomedir("/home/vmail/domains");
+        MailManagerOptions.setUsePasswordExOp(true);
     }
     
     /**

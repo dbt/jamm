@@ -31,7 +31,7 @@ public final class MailManagerOptions
      */
     public static String getVmailHomedir() 
     {
-        return MailManagerOptions.mVmailHomedir;
+        return MailManagerOptions.sVmailHomedir;
     }
 
     /**
@@ -41,9 +41,31 @@ public final class MailManagerOptions
      */
     public static void setVmailHomedir(String vmailHomedir)
     {
-        MailManagerOptions.mVmailHomedir = vmailHomedir;
+        MailManagerOptions.sVmailHomedir = vmailHomedir;
+    }
+
+    /**
+     * Gets the value of usePasswordExOp
+     *
+     * @return the value of usePasswordExOp
+     */
+    public static boolean isUsePasswordExOp() 
+    {
+        return MailManagerOptions.sUsePasswordExOp;
+    }
+
+    /**
+     * Sets the value of usePasswordExOp
+     *
+     * @param usePasswordExOp Value to assign to this.usePasswordExOp
+     */
+    public static void setUsePasswordExOp(boolean usePasswordExOp)
+    {
+        MailManagerOptions.sUsePasswordExOp = usePasswordExOp;
     }
 
     /** where does the vmail stuff live? */
-    private static String mVmailHomedir;
+    private static String sVmailHomedir;
+    /** Should the password ExOp be used? */
+    private static boolean sUsePasswordExOp;
 }
