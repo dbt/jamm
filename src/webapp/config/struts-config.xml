@@ -22,7 +22,7 @@
     <!-- Example logon forward 
      <forward   name="logon"                path="/logon.jsp"/>
      -->
-    <forward name="home" path="/index.jsp" redirect="true"/>
+    <forward name="home" path="/" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
   </global-forwards>
@@ -56,6 +56,16 @@
 
     <action path="/logout"
             type="jamm.webapp.LogoutAction"/>
+
+    <action path="/private/index"
+            type="jamm.webapp.MainMenuAction">
+      <forward name="domain_menu" path="/private/domain_menu.do"/>
+    </action>
+
+    <action path="/private/domain_menu"
+            type="jamm.webapp.DomainMenuAction">
+      <forward name="domain_menu" path="/private/domain_menu.jsp"/>
+    </action>
 
     <action path="/change_password"
             type="jamm.webapp.ChangePasswordAction"

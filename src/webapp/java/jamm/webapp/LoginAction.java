@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.RedirectingActionForward;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 
@@ -56,6 +57,6 @@ public class LoginAction extends Action
         HttpSession session = request.getSession();
         session.setAttribute("is_authenticated", "true");
         session.setAttribute("user", user);
-        return mapping.findForward("home");
+        return new RedirectingActionForward(form.getDone());
     }
 }
