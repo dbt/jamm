@@ -527,14 +527,15 @@ public class MailManager
     private Set getPostmasters(LdapFacade ldap, String domain)
         throws NamingException
     {
-        String filter = "jvd=" + domain;
+        String filter =
+            "(&(mail=postmaster@" + domain + ")(objectClass=JammPostmaster))";
 
         Set result = null;
         ldap.setReturningAttributes(new String[] { "roleOccupant" });
-        ldap.searchOneLevel(mBase, filter);
+        ldap.searchOneLevel(domainDn(domain), filter);
         if (ldap.nextResult())
         {
-            result = ldap.getAllAttributeValues("roleOccupant");
+            result = ldap.getAllResultAttributeValues("roleOccupant");
         }
         ldap.resetSearch();
         return result;
@@ -847,7 +848,8 @@ public class MailManager
       throws MailManagerException
       {
           String domain = MailAddress.hostFromAddress(mail);
-          String filter = "mail=" + mail;
+          String filter = "(&(mail=" + mail + ")(objectClass=" +
+                          ACCOUNT_OBJECT_CLASS + "))";
           List foo = getFilteredAccounts(filter, domain);
           if (foo.size() > 1)
           {
@@ -888,7 +890,8 @@ public class MailManager
         throws MailManagerException
     {
         String domain = MailAddress.hostFromAddress(mail);
-        String filter = "mail=" + mail;
+        String filter = "(&(mail=" + mail + ")(objectClass=" +
+                        ALIAS_OBJECT_CLASS + "))";
         List foo = getFilteredAliases(filter, domain);
         if (foo.size() > 1)
         {
