@@ -36,6 +36,9 @@ public class MailManagerOptionsTest extends TestCase
         super(name);
     }
 
+    /**
+     * Tests setVmailHomdir.
+     */
     public void testSetVmailHomedir()
     {
         String orig = MailManagerOptions.getVmailHomedir();
@@ -50,6 +53,9 @@ public class MailManagerOptionsTest extends TestCase
         
     }
 
+    /**
+     * tests getVmailHomedir
+     */
     public void testGetVmailHomedir()
     {
         assertEquals("Checking for vmailHomedir",
@@ -57,6 +63,9 @@ public class MailManagerOptionsTest extends TestCase
                      MailManagerOptions.getVmailHomedir());
     }
 
+    /**
+     * Tests setUsePasswordExOp
+     */
     public void testSetUsePasswordExOp()
     {
         boolean orig = MailManagerOptions.isUsePasswordExOp();
@@ -72,6 +81,9 @@ public class MailManagerOptionsTest extends TestCase
         MailManagerOptions.setUsePasswordExOp(orig);
     }
 
+    /**
+     * tests isUsePasswordExOp
+     */
     public void testIsUsePasswordExOp()
     {
         assertTrue("Checking for isUsePasswordExOp",

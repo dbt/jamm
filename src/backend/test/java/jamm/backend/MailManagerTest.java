@@ -39,6 +39,8 @@ public class MailManagerTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     * 
+     * @param name name of test
      */
     public MailManagerTest(String name)
     {
@@ -67,6 +69,9 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests creating a domain.
+     * 
+     * @throws NamingException an ldap error
+     * @throws MailManagerException on mailmanager exception
      */
     public void testCreateDomain()
         throws NamingException, MailManagerException
@@ -156,6 +161,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests creating an alias.
+     * @throws NamingException on error
+     * @throws MailManagerException on error
      */
     public void testCreateAlias()
         throws NamingException, MailManagerException
@@ -220,6 +227,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests modifying an alias.
+     * @throws NamingException on error
+     * @throws MailManagerException on error
      */
     public void testModifyAlias()
         throws NamingException, MailManagerException
@@ -342,6 +351,7 @@ public class MailManagerTest extends TestCase
     
     /**
      * Tests retrieving data for an alias.
+     * @throws MailManagerException on error
      */
     public void testGetAlias()
         throws MailManagerException
@@ -356,7 +366,8 @@ public class MailManagerTest extends TestCase
         String commonName = "commonName";
         manager.createDomain(domain);
         manager.createAlias(domain, aliasName,
-                            commonName, new String[] {"mail2@xyz.test", "mail1@abc.test"});
+                            commonName, new String[] { "mail2@xyz.test",
+                                                       "mail1@abc.test" });
 
         AliasInfo alias = manager.getAlias(aliasMail);
         List destinations = alias.getMailDestinations();
@@ -386,6 +397,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests deleting an alias.
+     * @throws NamingException on errro
+     * @throws MailManagerException on error
      */
     public void testDeleteAlias()
         throws NamingException, MailManagerException
@@ -417,6 +430,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests creating an account.
+     * @throws NamingException on error
+     * @throws MailManagerException on error
      */
     public void testCreateAccount()
         throws NamingException, MailManagerException
@@ -522,6 +537,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests authenticating a user.
+     * @throws MailManagerException on error.
      */
     public void testAuthenticate()
         throws MailManagerException
@@ -565,6 +581,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests getting DN of an email address.
+     * @throws MailManagerException on error
      */
     public void testGetDnFromMail()
         throws MailManagerException
@@ -594,6 +611,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests adding a catch-all alias.
+     * @throws MailManagerException on error
+     * @throws NamingException on error
      */
     public void testAddCatchall()
         throws NamingException, MailManagerException
@@ -641,6 +660,8 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests changing passwords.
+     * @throws NamingException on error
+     * @throws MailManagerException on error
      */
     public void testChangePassword()
         throws MailManagerException, NamingException
@@ -714,6 +735,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Testing alias detection.
+     * @throws MailManagerException on error
      */
     public void testIsAlias()
         throws MailManagerException
@@ -741,6 +763,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Testing postmaster detection.
+     * @throws MailManagerException on error
      */
     public void testIsPostmaster()
         throws MailManagerException
@@ -765,6 +788,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests getting all account and alias data.
+     * @throws MailManagerException on error
      */
     public void testGetAccountsAndAliases()
         throws MailManagerException
@@ -848,6 +872,7 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests getting all domains.
+     * @throws MailManagerException on error
      */
     public void testGetDomains()
         throws MailManagerException
@@ -882,6 +907,10 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking for domain1.test", domainFound);
     }
 
+    /**
+     * Tests getDomain
+     * @throws MailManagerException on error
+     */
     public void testGetDomain()
         throws MailManagerException
     {
@@ -1044,6 +1073,11 @@ public class MailManagerTest extends TestCase
         
     }
 
+    /**
+     * Tests getDeleteMarkedAccounts
+     * @throws NamingException on error
+     * @throws MailManagerException on error
+     */
     public void testGetDeleteMarkedAccounts()
         throws NamingException, MailManagerException
     {
@@ -1071,6 +1105,12 @@ public class MailManagerTest extends TestCase
     }
         
 
+    /**
+     * Tests getInactiveDomains.
+     * 
+     * @throws NamingException on error
+     * @throws MailManagerException on error
+     */
     public void testGetInactiveDomains()
         throws NamingException, MailManagerException
     {
@@ -1106,6 +1146,12 @@ public class MailManagerTest extends TestCase
                    domainNames.contains(domain3));
     }
 
+    /**
+     * Tests getDeleteMarkedDomains
+     * 
+     * @throws NamingException on error
+     * @throws MailManagerException on error
+     */
     public void testGetDeleteMarkedDomains()
         throws NamingException, MailManagerException
     {
@@ -1176,6 +1222,9 @@ public class MailManagerTest extends TestCase
 
     /**
      * Tests to see if MailManager pays attention to MailManagerOptions.
+     * 
+     * @throws MailManagerException on error
+     * @throws NamingException on error
      */
     public void testMailManagerOptions()
         throws MailManagerException, NamingException

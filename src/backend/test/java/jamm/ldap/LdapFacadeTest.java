@@ -44,6 +44,7 @@ public class LdapFacadeTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     * @param name test name
      */
     public LdapFacadeTest(String name)
     {
@@ -72,6 +73,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests an anonymous bind.
+     * @throws NamingException on error
      */
     public void testAnonymousBind()
         throws NamingException
@@ -84,6 +86,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests a simple bind.
+     * @throws NamingException on error
      */
     public void testSimpleBind()
         throws NamingException
@@ -144,6 +147,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests getting element attributes.
+     * @throws NamingException on error
      */
     public void testGetElementAttributes()
         throws NamingException
@@ -186,6 +190,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests searching one leve.
+     * @throws NamingException on error
      */
     public void testSearchOneLevel()
         throws NamingException
@@ -217,6 +222,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests searching a subtree.
+     * @throws NamingException on error
      */
     public void testSearchSubtree()
         throws NamingException
@@ -250,6 +256,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests getting attributes from a searched result.
+     * @throws NamingException on error
      */
     public void testGetResultAttributes()
         throws NamingException
@@ -296,6 +303,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests adding, modyfying, and deleting elements.
+     * @throws NamingException on error
      */
     public void testAddModifyDeleteElement()
         throws NamingException
@@ -362,6 +370,7 @@ public class LdapFacadeTest extends TestCase
 
     /**
      * Tests adding elements using a Map for attributes.
+     * @throws NamingException on error
      */
     public void testAddUsingMap()
         throws NamingException
@@ -411,6 +420,10 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 
+    /**
+     * Tests changePassword
+     * @throws NamingException on error
+     */
     public void testChangePassword()
         throws NamingException
     {
@@ -459,6 +472,7 @@ public class LdapFacadeTest extends TestCase
         
     /**
      * Tests modyfing a multi-value attribute.
+     * @throws NamingException on error
      */
     public void testModifyMultiValue()
         throws NamingException
@@ -524,52 +538,65 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 
+    /** ldap connection */
     private LdapFacade mLdap;
 
+    /** mgr dn to use */
     private static final String MGR_DN = "cn=Manager,dc=jamm,dc=test";
+    /** mgr password to use */
     private static final String MGR_PW = "jammtest";
 
+    /** domain1 dn to use */
     private static final String DOMAIN1_DN =
         "jvd=domain1.test,o=hosting,dc=jamm,dc=test";
 
+    /** postmaster dn */
     private static final String PM1_DN =
         "cn=postmaster,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
+    /** postmaster password */
     private static final String PM1_PW = "postmaster1pw";
 
+    /** abuse dn */
     private static final String ABUSE1_DN =
         "mail=abuse@domain1.test,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
 
-    /*
-    private static final String ACCT1_DN =
-        "mail=acct1@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
-    private static final String ACCT1_PW = "acct1pw";
-    */
-
+    /** postmaster dn */
     private static final String POSTMASTER_DN =
         "cn=postmaster,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
-        
+
+    /** alias dn */        
     private static final String ALIAS1_DN =
         "mail=alias1@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
 
+    /** acct2 dn */
     private static final String ACCT2_DN =
         "mail=acct2@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
+    /** acct2 pw */
     private static final String ACCT2_PW = "acct2pw";
 
+    /** domain dn */
     private static final String DOMAIN2_DN =
         "jvd=domain2.test,o=hosting,dc=jamm,dc=test";
 
+    /** pm2 dn */
     private static final String PM2_DN =
         "cn=postmaster,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
+    /** pm2 pw */
     private static final String PM2_PW = "postmaster2pw";
     
+    /** abuse dn */
     private static final String ABUSE2_DN =
         "mail=abuse@domain2.test,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
 
+    /** acct3 dn */
     private static final String ACCT3_DN =
         "mail=acct3@domain2.test,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
+    /** acct3 pw */
     private static final String ACCT3_PW = "acct3pw";
 
+    /** acct4 dn */
     private static final String ACCT4_DN =
         "mail=acct4@domain2.test,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
+    /** acct4 pw */
     private static final String ACCT4_PW = "acct4pw";
 }

@@ -28,6 +28,7 @@ public class ShaPasswordTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     * @param name the name
      */
     public ShaPasswordTest(String name)
     {

@@ -29,6 +29,7 @@ public class Md5PasswordTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     * @param name the name
      */
     public Md5PasswordTest(String name)
     {

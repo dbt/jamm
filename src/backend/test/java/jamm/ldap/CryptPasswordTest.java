@@ -28,6 +28,7 @@ public class CryptPasswordTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     * @param name test name
      */
     public CryptPasswordTest(String name)
     {

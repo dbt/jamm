@@ -29,6 +29,7 @@ public class AllTests
 {
     /**
      * Returns a test suite for all classes in jamm.ldap.*.
+     * @return a test
      */
     public static Test suite()
     {

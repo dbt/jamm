@@ -88,6 +88,7 @@ public class AllTests
 
     /**
      * Setup that needs to be performed only once.
+     * @throws Exception if an error occurs
      */
     private static void oneTimeSetUp()
         throws Exception
@@ -121,6 +122,8 @@ public class AllTests
      *     by self write
      *     by * read
      * </pre>
+     * 
+     * @throws Exception if an error comes up.
      */
     private static void setupLdapData()
         throws Exception
