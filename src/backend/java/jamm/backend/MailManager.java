@@ -880,6 +880,17 @@ public class MailManager
     }
 
     /**
+     * 
+     * @param string
+     * @return
+     */
+    public List getAccountsStartsWith(String string)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
      * Returns all data for the specified alias.
      *
      * @param mail Email address of an alias
@@ -934,6 +945,17 @@ public class MailManager
         }
 
         return aliases;
+    }
+
+    /**
+     * 
+     * @param string
+     * @return
+     */
+    public List getAliasesStartsWith(String string)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
