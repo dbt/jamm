@@ -30,3 +30,8 @@
 # The default is true
 #
 #jamm.password.exop = true
+
+# The directory on the server where the virtual accounts store their
+# data.  Defaults to /home/vmail/domains
+#
+#jamm.vmail.homedir = /home/vmail/domains

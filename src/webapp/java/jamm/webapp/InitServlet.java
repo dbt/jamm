@@ -17,10 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package jamm.webapp;
-
-import jamm.ldap.LdapPassword;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,6 +26,9 @@ import java.util.Properties;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+
+import jamm.ldap.LdapPassword;
+import jamm.backend.MailManagerOptions;
 
 /**
  * Performs all necessary one-time initializations for the web
@@ -90,6 +90,9 @@ public class InitServlet extends HttpServlet
                 getStringProperty(properties, "ldap.root_login", "root"));
             Globals.setPasswordUseExOp(
                 getBooleanProperty(properties, "password.exop", true));
+            MailManagerOptions.setVmailHomedir(
+                getStringProperty(properties, "vmail.homedir",
+                                  "/home/vmail/domains"));
         }
         catch (IOException e)
         {
