@@ -20,6 +20,7 @@
 package jamm.webapp;
 
 import jamm.backend.MailManager;
+import jamm.backend.AliasInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,15 +59,41 @@ public class CatchAllAction extends JammAction
         CatchAllForm form = (CatchAllForm) actionForm;
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        // String done = form.getDomain();
-        
    
+        String domain = form.getDomain();
+        String catchAll = "@" + domain;
+        String destination = form.getDestination();
+
         MailManager manager =
             new MailManager(Globals.getLdapHost(),
                             Globals.getLdapPort(),
                             Globals.getLdapSearchBase(),
                             user.getDn(),
                             user.getPassword());
+
+        AliasInfo ai = manager.getAlias(catchAll);
+        boolean catchAllOn = form.isCatchAllOn();
+
+        if (catchAllOn)
+        {
+            if (ai == null)
+            {
+                manager.addCatchall(domain, destination);
+            }
+            else
+            {
+                String destArray[] = { destination };
+                ai.setDestinations(destArray);
+                manager.modifyAlias(ai);
+            }
+        }
+        else
+        {
+            if (ai != null)
+            {
+                manager.deleteAlias(catchAll);
+            }
+        }
 
         return findForward(mapping, "domain_admin", request);
     }
