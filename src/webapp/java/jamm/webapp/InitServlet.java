@@ -88,7 +88,7 @@ public class InitServlet extends HttpServlet
                 getStringProperty(properties, "ldap.root_dn", ""));
             Globals.setRootLogin(
                 getStringProperty(properties, "ldap.root_login", "root"));
-            Globals.setPasswordUseExOp(
+            MailManagerOptions.setUsePasswordExOp(
                 getBooleanProperty(properties, "password.exop", true));
             MailManagerOptions.setVmailHomedir(
                 getStringProperty(properties, "vmail.homedir",
