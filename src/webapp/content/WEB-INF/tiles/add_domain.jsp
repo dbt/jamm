@@ -1,8 +1,5 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<h1 align="center">
-  Add Domain
-</h1>
-
+<span class=header>ADD DOMAIN</span>
 <html:errors/>
 <html:form action="/private/add_domain" focus="domain">
   <table border="0">
@@ -33,16 +30,18 @@
       </td>
     </tr>
     <tr>
-      <td align="right"><b><bean:message key="add_domain.note"/></b></td>
+      <td align="right" valign="top">
+        <b><bean:message key="add_domain.note"/></b>
+      </td>
       <td> <bean:message key="add_domain.note.content"/> </td>
     </tr>
     <tr>
       <td><br></td>
       <td>
-        <html:submit>
+        <html:submit styleClass="mbutton">
           <bean:message key="add_domain.button.submit"/>
         </html:submit>
-        <html:cancel>
+        <html:cancel styleClass="button">
           <bean:message key="button.cancel"/>
         </html:cancel>
       </td>

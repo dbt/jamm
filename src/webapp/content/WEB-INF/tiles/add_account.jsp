@@ -1,9 +1,7 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<h1 align="center">
-  Add Account
-</h1>
-
 <bean:parameter id="domain" name="domain"/>
+<span class=header>ADD ACCOUNT for domain <bean:write name="domain"/></span>
+<br />
 <html:errors/>
 <html:form action="/private/add_account" focus="name">
   <html:hidden property="domain"/>
@@ -35,10 +33,10 @@
     <tr>
       <td><br></td>
       <td>
-        <html:submit>
+        <html:submit styleClass="mbutton">
           <bean:message key="add_account.button.submit"/>
         </html:submit>
-        <html:cancel>
+        <html:cancel styleClass="button">
           <bean:message key="button.cancel"/>
         </html:cancel>
       </td>

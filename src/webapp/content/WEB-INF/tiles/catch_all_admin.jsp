@@ -1,11 +1,13 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<span class=header>CATCH-ALL ADMIN for <bean:write name="domain"/></span>
+<span class=header>
+  CATCH-ALL ADMIN for domain <bean:write name="domain"/>
+</span>
 <html:errors/>
 <html:form action="/private/update_catch_all">
   <html:hidden property="domain"/>
   <table border="0">
     <tr>
-      <td align="right">
+      <td align="right" valign="top">
         <bean:message key="catch_all_admin.status"/>:
       </td>
       <td>
