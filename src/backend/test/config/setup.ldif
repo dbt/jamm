@@ -1,3 +1,4 @@
+########################################################################
 #
 # Use this data to run the JUnit tests
 #
@@ -14,6 +15,7 @@
 # access to * by * read
 # ----- slapd.conf -----
 #
+########################################################################
 
 dn: dc=jamm, dc=test
 objectClass: top
@@ -28,18 +30,94 @@ objectClass: top
 objectClass: organization
 o: hosting
 
-dn: virtualDomain=example1.test, o=hosting, dc=jamm, dc=test
+########################################################################
+#
+# domain1.test
+#
+########################################################################
+
+dn: jvd=domain1.test, o=hosting, dc=jamm, dc=test
 objectClass: top
 objectClass: JammVirtualDomain
-virtualDomain: example1.test
+jvd: domain1.test
 postfixTransport: virtual:
 
-dn: cn=postmaster, virtualDomain=example1.test, o=hosting, dc=jamm, dc=test
+dn: cn=postmaster, jvd=domain1.test, o=hosting, dc=jamm, dc=test
 objectClass: top
 objectClass: organizationalRole
 objectClass: JammMailAlias
-cn: postname
+cn: postmaster
 mail: postmaster@domain1.test
 maildrop: postmaster
 # postmaster1pw
-userPassword: {SSHA}rGijgEm68OUSmpgS9eM+7Z4xoBcMvKG/
+userPassword: {SSHA}3DxkSrWha1PMajV8Gh8b6HTbbntmxrSw
+roleOccupant: cn=postmaster, jvd=domain1.test, o=hosting, dc=jamm, dc=test
+
+dn: mail=abuse@domain1.test, jvd=domain1.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: JammMailAlias
+mail: abuse@domain1.test
+maildrop: abuse
+
+dn: mail=acct1@domain1.test, jvd=domain1.test, o=hosting, dc=jamm, dc=test
+objectclass: top
+objectclass: jammMailAccount
+mail: acct1@domain1.test
+homeDirectory: /home/vmail/domains
+mailbox: domain1.test/acct1
+# acct1pw
+userPassword: {SSHA}tk3w4vV6xghX4r7P0F1EAeA55jo53sSO
+
+dn: mail=acct2@domain1.test, jvd=domain1.test, o=hosting, dc=jamm, dc=test
+objectclass: top
+objectclass: jammMailAlias
+mail: acct2@domain1.test
+maildrop: acct2
+# acct2pw
+userPassword: {SSHA}z0pxwHQV6nvrFLMW07ZgOqjoFRPWzoPk
+
+########################################################################
+#
+# domain2.test
+#
+########################################################################
+
+dn: jvd=domain2.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: JammVirtualDomain
+jvd: domain2.test
+postfixTransport: virtual:
+
+dn: cn=postmaster, jvd=domain2.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: organizationalRole
+objectClass: JammMailAlias
+cn: postmaster
+mail: postmaster@domain2.test
+maildrop: postmaster
+# postmaster2pw
+userPassword: {SSHA}FwIQOV4pppYkAVifgvqpjMIZQOdfTGPi
+roleOccupant: cn=postmaster, jvd=domain2.test, o=hosting, dc=jamm, dc=test
+
+dn: mail=abuse@domain2.test, jvd=domain2.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: JammMailAlias
+mail: abuse@domain2.test
+maildrop: abuse
+
+dn: mail=acct3@domain2.test, jvd=domain2.test, o=hosting, dc=jamm, dc=test
+objectclass: top
+objectclass: jammMailAccount
+mail: acct1@domain2.test
+homeDirectory: /home/vmail/domains
+mailbox: domain2.test/acct3
+# acct3pw
+userPassword: {SSHA}ljpnn8l9NTkOwk2CW7SBIAF7MLcJXsdp
+
+dn: mail=acct4@domain2.test, jvd=domain2.test, o=hosting, dc=jamm, dc=test
+objectclass: top
+objectclass: jammMailAlias
+mail: acct2@domain2.test
+maildrop: acct2
+# acct4pw
+userPassword: {SSHA}TlxB+GrCWsA8sC5l5w8uyyYWU+dNjAFf
