@@ -25,7 +25,7 @@ public class ChangePasswordAction extends Action
    
         if (isCancelled(request))
         {
-            return mapping.findForward("home");
+            return mapping.findForward("user_home");
         }
         
         MailManager manager =
