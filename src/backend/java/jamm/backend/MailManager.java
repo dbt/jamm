@@ -545,10 +545,11 @@ public class MailManager
                                         booleanToString(
                                             domain.getCanEditPostmasters()));
             ldap.modifyElementAttribute(domaindn, "accountActive",
-                                        booleanToString(
-                                            domain.getActive()));
+                                        booleanToString(domain.getActive()));
             ldap.modifyElementAttribute(domaindn, "lastChange",
                                         getUnixTimeString());
+            ldap.modifyElementAttribute(domaindn, "delete",
+                                        booleanToString(domain.getDelete()));
 
             // We should recursively set stuff inactive if inactive.  If
             // active, set abuse and postmaster to be active.
@@ -701,11 +702,10 @@ public class MailManager
                            new String[] {"top", "JammVirtualDomain"});
             attributes.put("jvd", domain);
             attributes.put("postfixTransport", "virtual:");
-            attributes.put("editAliases", "TRUE");
             attributes.put("editAccounts", "TRUE");
             attributes.put("editPostmasters", "TRUE");
-            attributes.put("editCatchalls", "TRUE");
             attributes.put("accountActive", "TRUE");
+            attributes.put("delete", "FALSE");
             attributes.put("lastChange", getUnixTimeString());
             String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
@@ -720,6 +720,7 @@ public class MailManager
                            MailAddress.addressFromParts("postmaster", domain));
             attributes.put("maildrop", "postmaster");
             attributes.put("accountActive", "TRUE");
+            attributes.put("lastChange", getUnixTimeString());
             String dn = "cn=postmaster," + domainDn;
             attributes.put("roleOccupant", dn);
             ldap.addElement(dn, attributes);
@@ -1101,6 +1102,7 @@ public class MailManager
             attributes.put("mailbox", domain + "/" + account + "/");
             attributes.put("accountActive", booleanToString(true));
             attributes.put("lastChange", getUnixTimeString());
+            attributes.put("delete", booleanToString(false));
 
             if (!mUsePasswordExOp)
             {

@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.15 2002-10-14 21:43:18 ark-sf Exp $
+#$Id: jamm.schema,v 1.16 2002-10-15 21:12:35 ark-sf Exp $
 #
 # OID prefix: 1.3.6.1.4.1.12461
 #
@@ -77,7 +77,7 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.13 NAME 'editCatchAlls'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
-attributetype ( 1.3.6.1.4.1.12461.1.1.14 NAME 'markedForDeletion'
+attributetype ( 1.3.6.1.4.1.12461.1.1.14 NAME 'delete'
 	DESC 'A boolean telling whether this item is marked for deletion'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
@@ -88,9 +88,10 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.14 NAME 'markedForDeletion'
 
 objectclass ( 1.3.6.1.4.1.12461.1.2.1 NAME 'JammMailAccount' SUP top AUXILIARY
 	DESC 'Mail account objects'
-	MUST ( mail $ homeDirectory $ mailbox $ accountActive $ lastChange )
+	MUST ( mail $ homeDirectory $ mailbox $ accountActive $ lastChange $
+               delete )
         MAY ( uidNumber $ gidNumber $ uid $ cn $ description $ quota $
-		userPassword $ clearPassword $ markedForDeletion ) )
+              userPassword $ clearPassword ) )
 
 objectclass ( 1.3.6.1.4.1.12461.1.2.2 NAME 'JammMailAlias' SUP top AUXILIARY
 	DESC 'Mail aliasing/forwarding entry'
@@ -99,7 +100,6 @@ objectclass ( 1.3.6.1.4.1.12461.1.2.2 NAME 'JammMailAlias' SUP top AUXILIARY
 
 objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain' SUP top STRUCTURAL
 	DESC 'Virtual Domain entry to be used with postfix transport maps'
-	MUST ( jvd $ accountActive $ lastChange )
-	MAY ( postfixTransport $ description $
-                editAliases $ editAccounts $ editPostmasters $ 
-                editCatchalls $ markedForDeletion ) )
+	MUST ( jvd $ accountActive $ lastChange $ delete $ editAccounts $ 
+               editPostmasters )
+	MAY ( postfixTransport $ description  ) )

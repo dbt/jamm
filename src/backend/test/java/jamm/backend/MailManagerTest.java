@@ -92,21 +92,15 @@ public class MailManagerTest extends TestCase
         assertTrue("testing to see if jvd=" + domain + " has been created",
                    mLdap.nextResult());
 
-        assertEquals("Checking editAliases",
-                     "TRUE",
-                     mLdap.getResultAttribute("editAliases"));
         assertEquals("Checking editAccounts",
                      "TRUE",
                      mLdap.getResultAttribute("editAccounts"));
         assertEquals("Checking editPostmasters",
                      "TRUE",
                      mLdap.getResultAttribute("editPostmasters"));
-        assertEquals("Checking editCatchalls",
-                     "TRUE",
-                     mLdap.getResultAttribute("editCatchalls"));
         assertEquals("Checking accountActive",
                      "TRUE",
-                     mLdap.getResultAttribute("editCatchalls"));
+                     mLdap.getResultAttribute("accountActive"));
 
         long domainTime =
             Long.parseLong(mLdap.getResultAttribute("lastChange"));

@@ -187,10 +187,10 @@ public class AllTests
         attributes.put("jvd", "domain1.test");
         attributes.put("postfixTransport", "virtual:");
         attributes.put("lastChange", "123456");
-        attributes.put("editAliases", "TRUE");
         attributes.put("editAccounts", "TRUE");
         attributes.put("editPostmasters", "FALSE");
-        attributes.put("editCatchalls", "FALSE");
+        attributes.put("accountActive", "TRUE");
+        attributes.put("delete", "FALSE");
         element = context.createSubcontext(
             "jvd=domain1.test, o=hosting, dc=jamm, dc=test", attributes);
         element.close();
@@ -203,7 +203,10 @@ public class AllTests
         attributes.put(objectClass);
         attributes.put("mail", "acct1@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
+        attributes.put("accountActive", "TRUE");
+        attributes.put("lastChange", "123456");
         attributes.put("mailbox", "domain1.test/acct1");
+        attributes.put("delete", "FALSE");
         // This password is "acct1pw
         attributes.put("userPassword", LdapConstants.ACCT1_PW_HASHED);
         element = context.createSubcontext(LdapConstants.ACCT1_DN, attributes);
@@ -218,6 +221,9 @@ public class AllTests
         attributes.put("mail", "acct2@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
         attributes.put("mailbox", "domain1.test/acct2");
+        attributes.put("accountActive", "TRUE");
+        attributes.put("lastChange", "123456");
+        attributes.put("delete", "FALSE");
         // This password is "acct2pw
         attributes.put("userPassword",
                        "{SSHA}z0pxwHQV6nvrFLMW07ZgOqjoFRPWzoPk");
