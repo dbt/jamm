@@ -21,12 +21,13 @@ package jamm.backend;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * A bean that represents domain information.
  */
 public class DomainInfo implements Serializable
 {
-
     /**
      * Creates a new <code>DomainInfo</code> instance with specified data.
      *
@@ -39,7 +40,8 @@ public class DomainInfo implements Serializable
      */
     public DomainInfo(String name, boolean canEditAccounts,
                       boolean canEditPostmasters, boolean active,
-                      boolean delete, int lastChange)
+                      boolean delete, int aliasCount, int accountCount,
+                      int lastChange)
     {
         mName = name;
         mCanEditAccounts = canEditAccounts;
@@ -47,66 +49,17 @@ public class DomainInfo implements Serializable
         mActive = active;
         mLastChange = lastChange;
         mDelete = delete;
+        mAliasCount = aliasCount;
+        mAccountCount = accountCount;
     }
 
     /**
-     * Gets the value of name
-     *
-     * @return the value of name
+     * 
+     * @return
      */
-    public String getName()
+    public int getAccountCount()
     {
-        return this.mName;
-    }
-
-    /**
-     * Sets the value of name
-     *
-     * @param argName Value to assign to this.name
-     */
-    public void setName(String argName)
-    {
-        this.mName = argName;
-    }
-
-    /**
-     * Gets the value of canEditAccounts
-     *
-     * @return the value of canEditAccounts
-     */
-    public boolean getCanEditAccounts()
-    {
-        return this.mCanEditAccounts;
-    }
-
-    /**
-     * Sets the value of canEditAccounts
-     *
-     * @param argCanEditAccounts Value to assign to this.canEditAccounts
-     */
-    public void setCanEditAccounts(boolean argCanEditAccounts)
-    {
-        this.mCanEditAccounts = argCanEditAccounts;
-    }
-
-    /**
-     * Gets the value of canEditPostmasters
-     *
-     * @return the value of canEditPostmasters
-     */
-    public boolean getCanEditPostmasters()
-    {
-        return this.mCanEditPostmasters;
-    }
-
-    /**
-     * Sets the value of canEditPostmasters
-     *
-     * @param argCanEditPostmasters Value to assign to this.canEditPostmasters
-     */
-    public void setCanEditPostmasters(boolean argCanEditPostmasters)
-    {
-        this.mCanEditPostmasters = argCanEditPostmasters;
+        return mAccountCount;
     }
 
     /**
@@ -120,13 +73,42 @@ public class DomainInfo implements Serializable
     }
 
     /**
-     * Set domain active or not.
-     *
-     * @param active true if active, false if not.
+     * 
+     * @return
      */
-    public void setActive(boolean active)
+    public int getAliasCount()
     {
-        mActive = active;
+        return mAliasCount;
+    }
+
+    /**
+     * Gets the value of canEditAccounts
+     *
+     * @return the value of canEditAccounts
+     */
+    public boolean getCanEditAccounts()
+    {
+        return this.mCanEditAccounts;
+    }
+
+    /**
+     * Gets the value of canEditPostmasters
+     *
+     * @return the value of canEditPostmasters
+     */
+    public boolean getCanEditPostmasters()
+    {
+        return this.mCanEditPostmasters;
+    }
+
+    /**
+     * Is this domain marked for deletion?
+     *
+     * @return boolean value
+     */
+    public boolean getDelete()
+    {
+        return mDelete;
     }
 
     /**
@@ -140,6 +122,46 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * Gets the value of name
+     *
+     * @return the value of name
+     */
+    public String getName()
+    {
+        return this.mName;
+    }
+
+    /**
+     * Set domain active or not.
+     *
+     * @param active true if active, false if not.
+     */
+    public void setActive(boolean active)
+    {
+        mActive = active;
+    }
+
+    /**
+     * Sets the value of canEditAccounts
+     *
+     * @param argCanEditAccounts Value to assign to this.canEditAccounts
+     */
+    public void setCanEditAccounts(boolean argCanEditAccounts)
+    {
+        this.mCanEditAccounts = argCanEditAccounts;
+    }
+
+    /**
+     * Sets the value of canEditPostmasters
+     *
+     * @param argCanEditPostmasters Value to assign to this.canEditPostmasters
+     */
+    public void setCanEditPostmasters(boolean argCanEditPostmasters)
+    {
+        this.mCanEditPostmasters = argCanEditPostmasters;
+    }
+
+    /**
      * Set whether this domain should be marked for deletion.
      *
      * @param delete boolean value
@@ -150,34 +172,56 @@ public class DomainInfo implements Serializable
     }
 
     /**
-     * Is this domain marked for deletion?
+     * Sets the value of name
      *
-     * @return boolean value
+     * @param argName Value to assign to this.name
      */
-    public boolean getDelete()
+    public void setName(String argName)
     {
-        return mDelete;
+        this.mName = argName;
     }
 
-    /** The domain name */
-    private String mName;
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return new ToStringBuilder(this)
+            .append("name", mName)
+            .append("active", mActive)
+            .append("canEditAccounts", mCanEditAccounts)
+            .append("canEditPostmasters", mCanEditPostmasters)
+            .append("delete", mDelete)
+            .append("lastChange", mLastChange)
+            .append("aliasCount", mAliasCount)
+            .append("accountCount", mAccountCount)
+            .toString();
+    }
+
+    /** Account count */
+    private int mAccountCount;
+    /** is this domain active? */
+    private boolean mActive;
+    /** Alias count */
+    private int mAliasCount;
     /** Can domain admin edit accounts */
     private boolean mCanEditAccounts;
     /** Can domain admin edit postmasters */
     private boolean mCanEditPostmasters;
-    /** is this domain active? */
-    private boolean mActive;
-    /** time of last change */
-    private int mLastChange;
     /** True if this domain should be deleted. */
     private boolean mDelete;
+    /** time of last change */
+    private int mLastChange;
+    /** The domain name */
+    private String mName;
 
     /** Static final for helping make setActive more readable */
     public static final boolean ACTIVE = true;
-    /** Static final for helping make setActive more readable */
-    public static final boolean NOT_ACTIVE = false;
     /** Static final for helping make setDelete more readable */
     public static final boolean DELETE = true;
     /** Static final for helping make setDelete more readable */
     public static final boolean NO_DELETE = false;
+    /** Static final for helping make setActive more readable */
+    public static final boolean NOT_ACTIVE = false;
+
 }
