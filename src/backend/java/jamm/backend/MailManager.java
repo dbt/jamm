@@ -192,6 +192,10 @@ public class MailManager
             throw new MailManagerException("Adding " + mail + " as postmaster",
                                            e);
         }
+        finally
+        {
+            closeLdap(ldap);
+        }
     }
 
     /**
@@ -850,6 +854,11 @@ public class MailManager
               // todo bitch about more than one domain here.
           }
           
+          if (foo.size() == 0)
+          {
+              return null;
+          }
+          
           return (AccountInfo) foo.get(0);
       }
     
@@ -1056,6 +1065,11 @@ public class MailManager
         if (foo.size() > 1)
         {
             // todo Bitch about more than one domain here.
+        }
+        
+        if (foo.size() == 0)
+        {
+            return null;
         }
 
         return (DomainInfo) foo.get(0);
@@ -1424,6 +1438,10 @@ public class MailManager
         {
             throw new MailManagerException("lookup up postmaster " + mail, e);
         }
+        finally
+        {
+            closeLdap(ldap);
+        }
 
         return result;
     }
@@ -1689,6 +1707,10 @@ public class MailManager
         {
             throw new MailManagerException("Removing " + mail +
                                            " as postmaster", e);
+        }
+        finally
+        {
+            closeLdap(ldap);
         }
     }
 
