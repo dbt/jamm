@@ -35,12 +35,12 @@ import org.apache.struts.util.RequestUtils;
  *
  * @jsp:tag name="join"
  */
-public class ListAbbrevTag extends TagSupport
+public class JoinTag extends TagSupport
 {
     /**
-     * Creates a new <code>ListAbbrevTag</code> instance.
+     * Creates a new <code>JoinTag</code> instance.
      */
-    public ListAbbrevTag()
+    public JoinTag()
     {
         super();
         mLimit = Integer.MAX_VALUE;
