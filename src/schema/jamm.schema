@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.17 2002-12-05 22:42:55 ark-sf Exp $
+#$Id: jamm.schema,v 1.18 2002-12-06 00:01:23 ark-sf Exp $
 #
 # OID prefix: 1.3.6.1.4.1.12461
 #
@@ -106,3 +106,8 @@ objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain'
 	MUST ( jvd $ accountActive $ lastChange $ delete $ editAccounts $ 
                editPostmasters )
 	MAY ( postfixTransport $ description  ) )
+
+objectClass ( 1.3.6.1.4.1.12461.1.2.4 NAME 'JammPostmaster'
+	SUP top AUXILIARY
+	DESC 'Added to a JammMailAlias to create a postmaster entry'
+	MUST roleOccupant )
