@@ -22,9 +22,8 @@ public class MailAddressTest extends TestCase
                      "realtors.org",
                      MailAddress.hostFromAddress(mUserAtHost));
 
-        assertEquals("testing with user address only",
-                     null,
-                     MailAddress.hostFromAddress(mUserOnly));
+        assertNull("testing with user address only",
+                   MailAddress.hostFromAddress(mUserOnly));
     }
 
     public void testUserFromAddress()
