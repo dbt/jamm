@@ -29,6 +29,8 @@ import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
 import jamm.backend.AccountInfo;
 import jamm.backend.DomainInfo;
+import jamm.util.UserQueries;
+import jamm.util.FileUtils;
 
 /**
  * The account cleaner object
@@ -45,7 +47,7 @@ public class AccountCleaner
                                    JammCleanerOptions.getBindDn(),
                                    JammCleanerOptions.getPassword());
 
-        deadAccounts = new ArrayList();
+        mDeadAccounts = new ArrayList();
         mCutOffTime = 5;
     }
 
@@ -82,8 +84,10 @@ public class AccountCleaner
             while (d.hasNext())
             {
                 DomainInfo domain = (DomainInfo) d.next();
-                doDomain(domain.getName());
+                loadAccountListForDomain(domain.getName());
             }
+
+            nukeAccounts();
         }
         catch (MailManagerException e)
         {
@@ -92,45 +96,73 @@ public class AccountCleaner
     }
 
     /**
-     * Remove the domain and its contents
+     * actually does the nuking
+     */
+    private void nukeAccounts()
+    {
+        Iterator a = mDeadAccounts.iterator();
+
+        while (a.hasNext())
+        {
+            AccountInfo account = (AccountInfo) a.next();
+            if (FileUtils.recursiveDelete(
+                    new File(account.getFullPathToMailbox())))
+            {
+                if (JammCleanerOptions.isVerbose())
+                {
+                    System.out.println(account.getName() +
+                                       " successfully deleted");
+                }
+            }
+            else
+            {
+                System.out.println("Error: " + account.getName() +
+                                   " not deleted");
+            }
+        }
+    }
+
+    /**
+     * Loads the list of accounts to nuke.
      *
      * @param domain the domain to work on
      * @exception MailManagerException if an error occurs
      */
-    private void doDomain(String domain)
+    private void loadAccountListForDomain(String domain)
         throws MailManagerException
     {
         boolean verbose = JammCleanerOptions.isVerbose();
+
         List inactiveAccts = mManager.getInactiveAccounts(domain);
         Iterator a = inactiveAccts.iterator();
+        
         int currentUnixTime = (int) (System.currentTimeMillis() / 1000);
+
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
             int timeDelta = currentUnixTime - account.getLastChange();
-            if (verbose)
-            {
-                System.out.println(account.getName() +
-                                   " has been inactive for " + timeDelta);
-            }
             if (timeDelta > mCutOffTime)
             {
-                String mailDir = account.getFullPathToMailbox();
-                if (verbose)
+                if (JammCleanerOptions.isAssumeYes())
                 {
-                    System.out.println("Mailbox is " + mailDir);
+                    if (verbose)
+                    {
+                        System.out.println(account.getName() +
+                                           "marked for deletion");
+                    }
+                    mDeadAccounts.add(account);
                 }
-                File mailDirFile = new File(mailDir);
-
-                File[] dude = mailDirFile.listFiles();
-
-                System.out.println("There are " + dude.length + "files");
-                for (int i = 0 ; i < dude.length; i++)
+                else
                 {
-                    System.out.println(dude[i].getName());
+                    StringBuffer sb = new StringBuffer(account.getName());
+                    sb.append(" has been inactive over the cutoff time.\n");
+                    sb.append("Would you like to remove its data?");
+                    if (UserQueries.askYesNo(sb.toString()))
+                    {
+                        mDeadAccounts.add(account);
+                    }
                 }
-                // Nuke files
-                // Nuke ldap account
             }
             else
             {
@@ -149,5 +181,5 @@ public class AccountCleaner
     /** Our mail manager */
     private MailManager mManager;
     /** the accounts to remove */
-    private List deadAccounts;
+    private List mDeadAccounts;
 }
