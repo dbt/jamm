@@ -66,11 +66,11 @@ public class DomainAliasAction extends JammAction
         DomainConfigForm form = (DomainConfigForm) actionForm;
         User user = getUser(request);
 
-        manager = getMailManager(user);
+        MailManager manager = getMailManager(user);
         DomainInfo domainInfo = manager.getDomain(form.getDomain());
         boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
         
-        aliasInfos = new HashMap();
+        HashMap aliasInfos = new HashMap();
 
         System.out.println("====================================" +
                            "====================================");
@@ -78,18 +78,18 @@ public class DomainAliasAction extends JammAction
         Iterator j;
 
         j = form.getUncheckedActiveItems().iterator();
-        modifyActive(false, j);
+        modifyActive(manager, aliasInfos, false, j);
 
         j = form.getCheckedActiveItems().iterator();
-        modifyActive(true, j);
+        modifyActive(manager, aliasInfos, true, j);
 
         if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
         {
             j = form.getUncheckedAdminItems().iterator();
-            modifyAdministrator(false, j);
+            modifyAdministrator(manager, aliasInfos, false, j);
 
             j = form.getCheckedAdminItems().iterator();
-            modifyAdministrator(true, j);
+            modifyAdministrator(manager, aliasInfos, true, j);
         }
 
         // We'll modify first and then delete.  We probably should not
@@ -116,11 +116,14 @@ public class DomainAliasAction extends JammAction
      * aliasInfo isn't containted in there, it looks it up in mail
      * manager.
      *
+     * @param manager The mail manager to use
+     * @param aliasInfos the alias info cache
      * @param alias the e-mail address of the alias to get
      * @return an AliasInfo object for alias
      * @exception MailManagerException if an error occurs
      */
-    private AliasInfo getAlias(String alias)
+    private AliasInfo getAlias(MailManager manager, HashMap aliasInfos,
+                               String alias)
         throws MailManagerException
     {
         AliasInfo ai = (AliasInfo) aliasInfos.get(alias);
@@ -135,17 +138,20 @@ public class DomainAliasAction extends JammAction
     /**
      * Modifies the active flag on the alias.
      *
+     * @param manager The mail manager to use
+     * @param aliasInfos the alias info cache
      * @param setTo boolean value to set active to
      * @param i an iterator of AliasInfo objects to change.
      * @exception MailManagerException if an error occurs
      */
-    private void modifyActive(boolean setTo, Iterator i)
+    private void modifyActive(MailManager manager, HashMap aliasInfos,
+                              boolean setTo, Iterator i)
         throws MailManagerException
     {
         while (i.hasNext())
         {
             String alias = (String) i.next();
-            AliasInfo ai = getAlias(alias);
+            AliasInfo ai = getAlias(manager, aliasInfos, alias);
             ai.setActive(setTo);
         }
     }
@@ -153,23 +159,21 @@ public class DomainAliasAction extends JammAction
     /**
      * Modifies the administrator flag on the alias.
      *
+     * @param manager the mail manager to use
+     * @param aliasInfos the alias info cache
      * @param setTo boolean value to set adminitrator to
      * @param i an iterator of AliasInfo objects to change.
      * @exception MailManagerException if an error occurs
      */
-    private void modifyAdministrator(boolean setTo, Iterator i)
+    private void modifyAdministrator(MailManager manager, HashMap aliasInfos,
+                                     boolean setTo, Iterator i)
         throws MailManagerException
     {
         while (i.hasNext())
         {
             String alias = (String) i.next();
-            AliasInfo ai = getAlias(alias);
+            AliasInfo ai = getAlias(manager, aliasInfos, alias);
             ai.setAdministrator(setTo);
         }
     }
-
-    /** A cache of AliasInfo objects */
-    private HashMap aliasInfos;
-    /** The mail manager */
-    private MailManager manager;
 }

@@ -22,6 +22,7 @@ package jamm.webapp;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,14 +66,15 @@ public class DomainAccountAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
+        int modifiedItems = 0;
         DomainConfigForm form = (DomainConfigForm) actionForm;
         User user = getUser(request);
 
-        manager = getMailManager(user);
+        MailManager manager = getMailManager(user);
         DomainInfo domainInfo = manager.getDomain(form.getDomain());
         boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
         
-        accountInfos = new HashMap();
+        HashMap accountInfos = new HashMap();
         
         System.out.println("====================================" +
                            "====================================");
@@ -81,23 +83,32 @@ public class DomainAccountAction extends JammAction
                            Arrays.asList(form.getItemsToDelete()));
 
         Iterator i;
+        Set s;
 
         if (domainInfo.getCanEditAccounts() || userIsSiteAdmin)
         {
-            i = form.getUncheckedActiveItems().iterator();
-            modifyActive(false, i);
+            s = form.getUncheckedActiveItems();
+            modifiedItems += s.size();
+            i = s.iterator();
+            modifyActive(manager, accountInfos, false, i);
 
-            i = form.getCheckedActiveItems().iterator();
-            modifyActive(true, i);
+            s = form.getCheckedActiveItems();
+            modifiedItems += s.size();
+            i = s.iterator();
+            modifyActive(manager, accountInfos, true, i);
         }
 
         if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
         {
-            i = form.getUncheckedAdminItems().iterator();
-            modifyAdministrator(false, i);
+            s = form.getUncheckedAdminItems();
+            modifiedItems += s.size();
+            i = s.iterator();
+            modifyAdministrator(manager, accountInfos, false, i);
 
-            i = form.getCheckedAdminItems().iterator();
-            modifyAdministrator(true, i);
+            s = form.getCheckedAdminItems();
+            modifiedItems += s.size();
+            i = s.iterator();
+            modifyAdministrator(manager, accountInfos, true, i);
         }
 
         i = accountInfos.values().iterator();
@@ -107,6 +118,12 @@ public class DomainAccountAction extends JammAction
             manager.modifyAccount(ai);
         }
 
+        /*  Am starting to put in user feedback.
+        if (modifiedItems > 0)
+        {
+            ActionMessages am = new ActionMessage();
+            am.
+        */  
 
         return findForward(mapping, "domain_admin", request);
     }
@@ -116,11 +133,14 @@ public class DomainAccountAction extends JammAction
      * accountInfo isn't containted in there, it looks it up in mail
      * manager.
      *
+     * @param manager The mail manager to use
+     * @param accountInfos the account info cache
      * @param account The mail address of the account
      * @return an AccountInfo object
      * @exception MailManagerException if an error occurs
      */
-    private AccountInfo getAccount(String account)
+    private AccountInfo getAccount(MailManager manager, HashMap accountInfos,
+                                   String account)
         throws MailManagerException
     {
         AccountInfo ai = (AccountInfo) accountInfos.get(account);
@@ -135,17 +155,20 @@ public class DomainAccountAction extends JammAction
     /**
      * Modifies the active flag on the account.
      *
+     * @param manager The mail manager to use
+     * @param accountInfos the account info cache
      * @param setTo boolean value to set to
      * @param i an iterator filled with AccountInfo
      * @exception MailManagerException if an error occurs
      */
-    private void modifyActive(boolean setTo, Iterator i)
+    private void modifyActive(MailManager manager, HashMap accountInfos,
+                              boolean setTo, Iterator i)
         throws MailManagerException
     {
         while (i.hasNext())
         {
             String account = (String) i.next();
-            AccountInfo ai = getAccount(account);
+            AccountInfo ai = getAccount(manager, accountInfos, account);
             ai.setActive(setTo);
         }
     }
@@ -153,23 +176,21 @@ public class DomainAccountAction extends JammAction
     /**
      * Modifies the administrator flag on the account.
      *
+     * @param manager The mail manager to use
+     * @param accountInfos the account info cache
      * @param setTo boolean value to set to
      * @param i an iterator filled with AccountInfo
      * @exception MailManagerException if an error occurs
      */
-    private void modifyAdministrator(boolean setTo, Iterator i)
+    private void modifyAdministrator(MailManager manager, HashMap accountInfos,
+                                     boolean setTo, Iterator i)
         throws MailManagerException
     {
         while (i.hasNext())
         {
             String account = (String) i.next();
-            AccountInfo ai = getAccount(account);
+            AccountInfo ai = getAccount(manager, accountInfos, account);
             ai.setAdministrator(setTo);
         }
     }
-
-    /** The account info object */
-    private HashMap accountInfos;
-    /** The mail manager object */
-    private MailManager manager;
 }
