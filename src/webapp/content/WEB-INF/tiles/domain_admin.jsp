@@ -80,8 +80,12 @@ Catch-All:
           &nbsp;<html:link page="/private/account_admin.do"
                            paramId="mail"
                            paramName="account" paramProperty="name">
-            <bean:write name="account" property="name"/><br>
+            <bean:write name="account" property="name"/>
           </html:link>
+          <logic:notEmpty name="account" property="commonName">
+            &nbsp;"<bean:write name="account" property="commonName"/>"
+          </logic:notEmpty>
+          <br/>
         </td>
         <td align="left" width="6" bgcolor="#FFFFFF">
           <html:img page='/imgs/sm_arrow.gif' width="6" height="9"
@@ -177,6 +181,9 @@ Catch-All:
                            paramName="alias" paramProperty="name">
             <bean:write name="alias" property="name"/>
           </html:link>
+          <logic:notEmpty name="alias" property="commonName">
+            &nbsp;"<bean:write name="alias" property="commonName"/>"
+          </logic:notEmpty>
           <div class=destinations>&nbsp;Destinations:
             <jamm:join limit="3" name="alias" property="mailDestinations"/>
           </div>
