@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project default="build" basedir=".">
+<project default="build" basedir="." name="Jamm">
 
   <!-- set global properties for this build -->
   <property name="project.name" value="jamm"/>
@@ -27,20 +27,6 @@
     <pathelement location="${xdoclet.xdoclet.jar}"/>
     <pathelement location="${xjavadoc.jar}"/>
   </path>
-
-<!--   <taskdef name="webdoclet" classname="xdoclet.web.WebDocletTask"> -->
-<!--   <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask"> -->
-<!--     <classpath> -->
-<!--       <path refid="xdoclet.path" /> -->
-<!--     </classpath> -->
-<!--   </taskdef> -->
-
-  <taskdef name="checkstyle"
-           classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
-    <classpath>
-      <pathelement path="${checkstyle.jar}" />
-    </classpath>
-  </taskdef>
 
   <target name="build-properties-check">
     <condition property="build.properties.uptodate">
@@ -288,6 +274,12 @@
   <target name="dist" depends="dist-webapp, dist-util" />
 
   <target name="checkstyle">
+    <taskdef name="checkstyle"
+             classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
+      <classpath>
+        <pathelement path="${checkstyle.jar}" />
+      </classpath>
+    </taskdef>
     <checkstyle properties="checkstyle.properties">
       <fileset dir="src/webapp/java" includes="**/*.java" />
     </checkstyle>
