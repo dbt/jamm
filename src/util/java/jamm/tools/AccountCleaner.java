@@ -153,7 +153,18 @@ public class AccountCleaner
             else
             {
                 File file = new File(account.getFullPathToMailbox());
-                boolean successful = FileUtils.recursiveDelete(file);
+                boolean successful = false;
+                if (file.exists())
+                {
+                    successful = FileUtils.recursiveDelete(file);
+                }
+                else
+                {
+                    System.out.println("No filesystem data for " +
+                                       account.getName() +
+                                       " exists.  Removing from LDAP anyway.");
+                    successful = true;
+                }
 
                 if (successful)
                 {
