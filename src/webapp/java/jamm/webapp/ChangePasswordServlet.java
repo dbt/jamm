@@ -80,9 +80,8 @@ public class ChangePasswordServlet extends HttpServlet
 
             hashedPassword =
                 LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword1);
-            modifiedAttributes =
-                new BasicAttributes("userPassword", hashedPassword);
-            ldap.replaceModifiedAttributes(modifiedAttributes);
+            ldap.modifyElementAttribute(ldap.getName(), "userPassword",
+                                        hashedPassword);
 
             response.sendRedirect("success.jsp");
         }

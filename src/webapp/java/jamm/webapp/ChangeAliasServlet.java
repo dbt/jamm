@@ -63,9 +63,7 @@ public class ChangeAliasServlet extends HttpServlet
                 return;
             }
 
-            modifiedAttributes =
-                new BasicAttributes("maildrop", newAlias);
-            ldap.replaceModifiedAttributes(modifiedAttributes);
+            ldap.modifyElementAttribute(ldap.getName(), "maildrop", newAlias);
 
             response.sendRedirect("success.jsp");
         }
