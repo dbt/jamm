@@ -354,7 +354,7 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
 
         String postmasterMail = "postmaster@" + domain;
-        String postmasterDn = "cn=postmaster," +domainDn;
+        String postmasterDn = "cn=postmaster," + domainDn;
         String postmasterPassword = "pm1";
         manager.changePassword(postmasterMail, postmasterPassword);
         manager.setBindEntry(postmasterDn, postmasterPassword);
