@@ -136,8 +136,9 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * Sets the account count for this domain.
      * 
-     * @param i
+     * @param accountCount a count of accounts
      */
     public void setAccountCount(int accountCount)
     {
@@ -155,8 +156,9 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * Sets the alias count for this domain.
      * 
-     * @param aliasCount
+     * @param aliasCount a count of aliases
      */
     public void setAliasCount(int aliasCount)
     {
