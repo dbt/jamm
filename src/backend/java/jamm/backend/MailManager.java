@@ -355,6 +355,52 @@ public class MailManager
         return destinations;
     }
 
+    public List getAliases(String domain)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        List aliases = new ArrayList();
+
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+            String domainDn = domainDn(domain);
+            ldap.searchOneLevel(domainDn, "objectClass=JammMailAlias");
+
+            while (ldap.nextResult())
+            {
+                String name = ldap.getResultAttribute("mail");
+                // Skip "special" accounts
+                if (name.startsWith("postmaster@") ||
+                    name.startsWith("abuse@"))
+                {
+                    continue;
+                }
+
+                Set destinations =
+                    ldap.getAllResultAttributeValues("maildrop");
+                boolean isActive = true;
+                boolean isAdmin = false;
+                AliasInfo alias =
+                    new AliasInfo(name, new ArrayList(destinations), isActive,
+                                  isAdmin);
+                aliases.add(alias);
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        Collections.sort(aliases, new AliasNameComparator());
+        return aliases;
+    }
+
     public void createAccount(String domain, String account, String password)
         throws MailManagerException
     {

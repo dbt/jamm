@@ -444,9 +444,25 @@ public class MailManagerTest extends TestCase
                             LdapConstants.MGR_PW);
         manager.createDomain(domain);
         manager.changePassword("postmaster@" + domain, "pm");
+
+        // Create some accounts
         manager.createAccount(domain, "zzz", "zzz");
         manager.createAccount(domain, "aaa", "aaa");
         manager.createAccount(domain, "MMM", "MMM");
+
+        // Create some aliases
+        manager.createAlias(domain, "zzzz", new String[]
+            { "z@z.test", "M@z.test", "a@z.test"});
+        manager.changePassword("zzzz@" + domain, "zzzz");
+        manager.createAlias(domain, "MMMM", new String[]
+            { "z@M.test", "M@M.test", "a@cMtest"});
+        manager.changePassword("MMMM@" + domain, "MMMM");
+        manager.createAlias(domain, "aaaa", new String[]
+            { "z@a.test", "M@a.test", "a@a.test"});
+        manager.changePassword("aaaa@" + domain, "aaaa");
+        manager.createAlias(domain, "xxxx", new String[]
+            { "z@x.test", "M@x.test", "a@x.test"});
+        manager.changePassword("xxxx@" + domain, "xxxx");
 
         List accounts = manager.getAccounts(domain);
         assertEquals("Checking number of accounts", 3, accounts.size());
@@ -459,6 +475,9 @@ public class MailManagerTest extends TestCase
         account = (AccountInfo) accounts.get(2);
         assertEquals("Checking name for account[2]",
                      "zzz@" + domain, account.getName());
+
+        List aliases = manager.getAliases(domain);
+        assertEquals("Checking number of aliases", 4, aliases.size());
     }
 
     private LdapFacade mLdap;
