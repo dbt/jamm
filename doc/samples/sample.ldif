@@ -12,47 +12,79 @@ description: The root user
 
 # A virtual domain named info.test
 dn: jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
 objectClass: JammVirtualDomain
-jvd: info.test
+editAccounts: TRUE
 postfixTransport: virtual:
+lastChange: 1044310841
+editPostmasters: TRUE
+jvd: info.test
+delete: FALSE
+accountActive: TRUE
 
 # The postmaster entry for info.test.  Also assigns "postmaster" duty to
 # keith@info.test.  Mail will be delivered to "postmaster" of the server box
 dn: cn=postmaster,jvd=info.test,o=hosting,dc=example,dc=com
-objectClass: organizationalRole
+objectClass: top
+objectClass: JammPostmaster
 objectClass: JammMailAlias
-cn: postmaster
 mail: postmaster@info.test
-maildrop: postmaster
 roleOccupant: cn=postmaster,jvd=info.test,o=hosting,dc=example,dc=com
-roleOccupant: mail=keith@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+lastChange: 1044310841
+maildrop: postmaster
+accountActive: TRUE
+cn: postmaster
+
+# The abuse entry for info.test.  Mail for it is delivered to
+# postmaster of the server box.
+dn: mail=abuse@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
+objectClass: JammMailAlias
+mail: abuse@info.test
+lastChange: 1044310841
+maildrop: postmaster
+accountActive: TRUE
 
 # An alias account.  This redirects mail for mark@info.test to
 # mal@otherdomain.test and markl@pager.test
 dn: mail=mark@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
 objectClass: JammMailAlias
 mail: mark@info.test
+lastChange: 1044310899
 maildrop: mal@otherdomain.test
 maildrop: markl@pager.test
+accountActive: TRUE
 
 # This alias redirects mail for aubrey@info.test to the local user aubrey
 dn: mail=aubrey@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
 objectClass: JammMailAlias
 mail: aubrey@info.test
+lastChange: 1044310927
 maildrop: aubrey
+accountActive: TRUE
 
 # This is a virtual account.  Its pretty straight forward
 dn: mail=dave@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
 objectClass: JammMailAccount
 mail: dave@info.test
+lastChange: 1044310961
 homeDirectory: /home/vmail/domains
 mailbox: info.test/dave/
-cn: Dave Dribin
+delete: FALSE
+accountActive: TRUE
+userPassword:: e1NNRDV9SG0wWVVncDRuUHpTTE01dkFTRlJ5elFpN3dnPQ==
 
 # Another virtual account.  Pretty straight forward
 dn: mail=keith@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: top
 objectClass: JammMailAccount
 mail: keith@info.test
+lastChange: 1044310978
 homeDirectory: /home/vmail/domains
 mailbox: info.test/keith/
-cn: Keith Garner
+delete: FALSE
+accountActive: TRUE
+userPassword:: e1NNRDV9clAzR1JRd2IxZGRacitpQnVNMUhVZjJ0UnZRPQ==
