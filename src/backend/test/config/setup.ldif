@@ -27,3 +27,19 @@ dn: o=hosting, dc=jamm, dc=test
 objectClass: top
 objectClass: organization
 o: hosting
+
+dn: virtualDomain=example1.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: JammVirtualDomain
+virtualDomain: example1.test
+postfixTransport: virtual:
+
+dn: cn=postmaster, virtualDomain=example1.test, o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: organizationalRole
+objectClass: JammMailAlias
+cn: postname
+mail: postmaster@domain1.test
+maildrop: postmaster
+# postmaster1pw
+userPassword: {SSHA}rGijgEm68OUSmpgS9eM+7Z4xoBcMvKG/
