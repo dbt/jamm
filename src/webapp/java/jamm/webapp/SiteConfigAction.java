@@ -20,6 +20,7 @@
 package jamm.webapp;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,24 +64,24 @@ public class SiteConfigAction extends JammAction
         HashMap domainInfos = new HashMap();
 
         Iterator i = form.getUncheckedEditAliases().iterator();
-        modifyCapability(EDIT_ALIASES, manager, domainInfos, i, false);
+        modifyCapability(EDIT_ALIASES, false, manager, domainInfos, i);
         i = form.getCheckedEditAliases().iterator();
-        modifyCapability(EDIT_ALIASES, manager, domainInfos, i, true);
+        modifyCapability(EDIT_ALIASES, true, manager, domainInfos, i);
                                    
         i = form.getUncheckedEditAccounts().iterator();
-        modifyCapability(EDIT_ACCOUNTS, manager, domainInfos, i, false);
+        modifyCapability(EDIT_ACCOUNTS, false, manager, domainInfos, i);
         i = form.getCheckedEditAccounts().iterator();
-        modifyCapability(EDIT_ACCOUNTS, manager, domainInfos, i, true);
+        modifyCapability(EDIT_ACCOUNTS, true, manager, domainInfos, i);
 
         i = form.getUncheckedEditPostmasters().iterator();
-        modifyCapability(EDIT_POSTMASTERS, manager, domainInfos, i, false);
+        modifyCapability(EDIT_POSTMASTERS, false, manager, domainInfos, i);
         i = form.getCheckedEditPostmasters().iterator();
-        modifyCapability(EDIT_POSTMASTERS, manager, domainInfos, i, true);
+        modifyCapability(EDIT_POSTMASTERS, true, manager, domainInfos, i);
 
         i = form.getUncheckedEditCatchalls().iterator();
-        modifyCapability(EDIT_CATCHALLS, manager, domainInfos, i, false);
+        modifyCapability(EDIT_CATCHALLS, false, manager, domainInfos, i);
         i = form.getCheckedEditCatchalls().iterator();
-        modifyCapability(EDIT_CATCHALLS, manager, domainInfos, i, true);
+        modifyCapability(EDIT_CATCHALLS, true, manager, domainInfos, i);
 
         i = domainInfos.values().iterator();
         while (i.hasNext())
@@ -93,18 +94,23 @@ public class SiteConfigAction extends JammAction
     }
 
     /**
-     * Worker class that modifies the domain info
+     * Worker method that modifies the DomainInfo objects setting the
+     * capability to the value passed in.  Iterator is an iterator of
+     * strings of domain names, domainInfos is a HashMap of the
+     * domains we've edited, and manager is where to get the
+     * DomainInfo of domains we haven't touched yet.
      *
-     * @param capability an <code>int</code> value
-     * @param manager a <code>MailManager</code> value
-     * @param domainInfos a <code>HashMap</code> value
-     * @param i an <code>Iterator</code> value
-     * @param value a <code>boolean</code> value
+     * @param capability one of the EDIT_* variables defined in this class.
+     * @param setTo what to set the capability to
+     * @param manager a MailManager
+     * @param domainInfos Map of DomainInfo objects
+     * @param i iterator containing strings of domain names
+     *
      * @exception Exception if an error occurs
      */
-    private void modifyCapability(int capability, MailManager manager,
-                                  HashMap domainInfos, Iterator i,
-                                  boolean value)
+    private void modifyCapability(int capability, boolean setTo,
+                                  MailManager manager, Map domainInfos,
+                                  Iterator i)
         throws Exception
     {
         while (i.hasNext())
@@ -120,19 +126,19 @@ public class SiteConfigAction extends JammAction
             switch(capability)
             {
                 case EDIT_ALIASES:
-                    di.setCanEditAliases(value);
+                    di.setCanEditAliases(setTo);
                     break;
 
                 case EDIT_ACCOUNTS:
-                    di.setCanEditAccounts(value);
+                    di.setCanEditAccounts(setTo);
                     break;
 
                 case EDIT_POSTMASTERS:
-                    di.setCanEditPostmasters(value);
+                    di.setCanEditPostmasters(setTo);
                     break;
 
                 case EDIT_CATCHALLS:
-                    di.setCanEditCatchalls(value);
+                    di.setCanEditCatchalls(setTo);
                     break;
 
                 default:
