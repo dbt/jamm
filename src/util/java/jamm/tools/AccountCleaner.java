@@ -34,9 +34,9 @@ import jamm.util.FileUtils;
 
 /**
  * The account cleaner object.  To nuke all accounts for a domain,
- * create with a specified domain and set cut off time to be 0.
+ * set the CleanAll property.
  */
-public class AccountCleaner extends AbstractCleaner
+public class AccountCleaner
 {
     /**
      * Creates a new <code>AccountCleaner</code> instance.
@@ -44,14 +44,7 @@ public class AccountCleaner extends AbstractCleaner
      */
     public AccountCleaner()
     {
-        mManager = new MailManager(JammCleanerOptions.getHost(),
-                                   JammCleanerOptions.getBaseDn(),
-                                   JammCleanerOptions.getBindDn(),
-                                   JammCleanerOptions.getPassword());
-
-        mDeadAccounts = new ArrayList();
-        setCutOffTime(5);
-        mDomain = null;
+        this(null);
     }
 
     /**
@@ -68,8 +61,41 @@ public class AccountCleaner extends AbstractCleaner
                                    JammCleanerOptions.getPassword());
 
         mDeadAccounts = new ArrayList();
-        setCutOffTime(5);
         mDomain = domain;
+    }
+
+    /**
+     * Creates a new <code>AccountCleaner</code> instance.  That
+     * cleans all accounts for this domain.
+     *
+     * @param domain the domain to clean
+     * @param allAccounts AccountCleaner.CLEAN_ALL or
+     *                    AccountCleaner.CLEAN_ONLY_DELETE
+     */
+    public AccountCleaner(String domain, boolean cleanAllAccounts)
+    {
+        this(domain);
+        mCleanAllAccounts = cleanAllAccounts;
+    }
+
+    /**
+     * Should we clean all accounts regardless of marking?
+     *
+     * @param cleanAllAccounts boolean value
+     */
+    public void setCleanAll(boolean cleanAllAccounts)
+    {
+        mCleanAllAccounts = cleanAllAccounts;
+    }
+
+    /**
+     * Get value of marked for cleaning.
+     *
+     * @return boolean value
+     */
+    public boolean isCleanAll()
+    {
+        return mCleanAllAccounts;
     }
     
 
@@ -168,45 +194,38 @@ public class AccountCleaner extends AbstractCleaner
     {
         boolean verbose = JammCleanerOptions.isVerbose();
 
-        List inactiveAccts = mManager.getInactiveAccounts(domain);
-        Iterator a = inactiveAccts.iterator();
-        
-        int currentUnixTime = (int) (System.currentTimeMillis() / 1000);
-        long cutOffTime = getCutOffTime();
+        List deleteAccts;
 
+        if (mCleanAllAccounts)
+        {
+            deleteAccts = mManager.getAccounts(domain);
+        }
+        else
+        {
+            deleteAccts = mManager.getDeleteMarkedAccounts(domain);
+        }
+
+        Iterator a = deleteAccts.iterator();
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
-            int timeDelta = currentUnixTime - account.getLastChange();
-            if (timeDelta > cutOffTime)
-            {
-                if (JammCleanerOptions.isAssumeYes())
-                {
-                    if (verbose)
-                    {
-                        System.out.println(account.getName() +
-                                           "marked for deletion");
-                    }
-                    mDeadAccounts.add(account);
-                }
-                else
-                {
-                    StringBuffer sb = new StringBuffer(account.getName());
-                    sb.append(" has been inactive over the cutoff time.\n");
-                    sb.append("Would you like to remove its data?");
-                    if (UserQueries.askYesNo(sb.toString()))
-                    {
-                        mDeadAccounts.add(account);
-                    }
-                }
-            }
-            else
+            if (JammCleanerOptions.isAssumeYes())
             {
                 if (verbose)
                 {
-                    System.out.print(account.getName());
-                    System.out.println(" hasn't been inactive long enough.  " +
-                                       "Ignoring....");
+                    System.out.println(account.getName() +
+                                       " is marked for deletion.");
+                }
+                mDeadAccounts.add(account);
+            }
+            else
+            {
+                StringBuffer sb = new StringBuffer(account.getName());
+                sb.append(" is marked for deletion.\n");
+                sb.append("Would you like to remove its data?");
+                if (UserQueries.askYesNo(sb.toString()))
+                {
+                    mDeadAccounts.add(account);
                 }
             }
         }
@@ -218,4 +237,11 @@ public class AccountCleaner extends AbstractCleaner
     private List mDeadAccounts;
     /** domain name to clean */
     private String mDomain;
+    /** should we clean up all accounts? */
+    private boolean mCleanAllAccounts;
+
+    /** Clean all accounts define for readability. */
+    public static final boolean CLEAN_ALL = true;
+    /** Clean only delete define for readability. */
+    public static final boolean CLEAN_ONLY_DELETE = false;
 }

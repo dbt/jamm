@@ -30,7 +30,7 @@ import jamm.backend.DomainInfo;
 /**
  * Cleans up domains
  */
-public class DomainCleaner extends AbstractCleaner
+public class DomainCleaner
 {
     /**
      * Creates a new <code>DomainCleander</code> instance.
@@ -43,7 +43,6 @@ public class DomainCleaner extends AbstractCleaner
                                    JammCleanerOptions.getPassword());
 
         mDeadDomains = new ArrayList();
-        setCutOffTime(5);
     }
 
     /**
@@ -51,26 +50,22 @@ public class DomainCleaner extends AbstractCleaner
      */
     public void cleanUp()
     {
-        long cutOffTime = getCutOffTime();
         int currentUnixTime = (int) (System.currentTimeMillis() / 1000);
         try
         {
-            List domains = mManager.getInactiveDomains();
+            List domains = mManager.getDeleteMarkedDomains();
             Iterator i = domains.iterator();
             while (i.hasNext())
             {
                 DomainInfo domain = (DomainInfo) i.next();
-                int timeDelta = currentUnixTime - domain.getLastChange();
-                if (timeDelta > cutOffTime)
-                {
-                    AccountCleaner ac = new AccountCleaner(domain.getName());
-                    ac.setCutOffTime(0);
-                    ac.cleanUp();
+                AccountCleaner ac =
+                    new AccountCleaner(domain.getName(),
+                                       AccountCleaner.CLEAN_ALL);
+                ac.cleanUp();
 
-                    // We assume all the accounts were cleaned up,
-                    // so we just nuke the domain
-                    mManager.deleteDomain(domain.getName());
-                }
+                // We assume all the accounts were cleaned up,
+                // so we just nuke the domain
+                mManager.deleteDomain(domain.getName());
             }
         }
         catch (MailManagerException e)
