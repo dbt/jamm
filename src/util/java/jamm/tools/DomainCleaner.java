@@ -51,7 +51,6 @@ public class DomainCleaner
      */
     public void cleanUp()
     {
-        int currentUnixTime = (int) (System.currentTimeMillis() / 1000);
         try
         {
             List domains = mManager.getDeleteMarkedDomains();

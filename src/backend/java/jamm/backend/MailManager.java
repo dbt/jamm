@@ -497,7 +497,7 @@ public class MailManager
      * @throws MailManagerException If there is a problem looking up postmaster
      */
     private AccountInfo createAccountInfo(LdapFacade ldap, Set postmasters)
-        throws NamingException, MailManagerException
+        throws NamingException
     {
         String dn = ldap.getResultName();
         boolean isAdmin = postmasters.contains(dn);
@@ -631,7 +631,7 @@ public class MailManager
      * @throws MailManagerException If their is a problem looking up postmaster
      */
     private AliasInfo createAliasInfo(LdapFacade ldap, Set postmasters)
-        throws NamingException, MailManagerException
+        throws NamingException
     {
         String name = ldap.getResultAttribute("mail");
         String commonName = ldap.getResultAttribute("cn");
@@ -789,7 +789,6 @@ public class MailManager
     {
         LdapFacade ldap = null;
         String domainDn = domainDn(domain);
-        String pmdn = "cn=postmaster," + domainDn;
         List children = new ArrayList();
 
         try
@@ -1166,7 +1165,6 @@ public class MailManager
             ldap.searchOneLevel(mBase, filter);
             while (ldap.nextResult())
             {
-                String dn = ldap.getResultName();
                 String name = ldap.getResultAttribute("jvd");
                 boolean canEditAccounts = stringToBoolean(
                     ldap.getResultAttribute("editAccounts"));

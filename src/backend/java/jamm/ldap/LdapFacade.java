@@ -202,10 +202,8 @@ public class LdapFacade
             byte[] byteArray = (byte[]) value;
             return new String(byteArray);
         }
-        else
-        {
-            return (String) value;
-        }
+
+        return (String) value;
     }
 
     /**
@@ -506,7 +504,6 @@ public class LdapFacade
      * @throws NamingException If an error occured
      */
     public NamingEnumeration getAllResultAttributes()
-        throws NamingException
     {
         return mCurrentResultAttributes.getAll();
     }
@@ -518,7 +515,6 @@ public class LdapFacade
      * @throws NamingException If an error occured
      */
     public String getResultName()
-        throws NamingException
     {
         String relativeDn;
 
@@ -527,10 +523,7 @@ public class LdapFacade
         {
             return mSearchBase;
         }
-        else
-        {
-            return  relativeDn + "," + mSearchBase;
-        }
+        return  relativeDn + "," + mSearchBase;
     }
 
     /**

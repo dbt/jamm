@@ -152,7 +152,7 @@ public class SetCharacterEncodingFilter implements Filter
      * @param filterConfig The filter configuration object
      * @throws ServletException if a servlet error occurs
      */
-    public void init(FilterConfig filterConfig) throws ServletException
+    public void init(FilterConfig filterConfig)
     {
         this.mFilterConfig = filterConfig;
         this.mEncoding = filterConfig.getInitParameter("encoding");

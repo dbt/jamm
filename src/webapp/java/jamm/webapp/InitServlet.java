@@ -138,10 +138,8 @@ public class InitServlet extends HttpServlet
         {
             return Integer.parseInt(value);
         }
-        else
-        {
-            return defaultValue;
-        }
+
+        return defaultValue;
     }
 
     /**
@@ -165,9 +163,7 @@ public class InitServlet extends HttpServlet
         {
             return defaultValue;
         }
-        else
-        {
-            return Boolean.valueOf(value).booleanValue();
-        }
+
+        return Boolean.valueOf(value).booleanValue();
     }
 }

@@ -204,7 +204,6 @@ public class AccountCleaner
      */
     private void cleanUpAccounts()
     {
-        boolean archive = JammCleanerOptions.shouldBackup();
         Iterator a = mDeadAccounts.iterator();
 
         while (a.hasNext())

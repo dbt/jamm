@@ -47,7 +47,7 @@ public class JammTilesRequestProcessor extends TilesRequestProcessor
     protected boolean processRoles(HttpServletRequest request,
                                    HttpServletResponse response,
                                    ActionMapping mapping)
-        throws IOException, ServletException
+        throws IOException
     {
         // Get roles.  If roles aren't defined, we assume its good for
         // all.

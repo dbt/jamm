@@ -523,16 +523,16 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
         manager.createAccount(domain, accountName, "", accountPassword);
 
-        LdapFacade mLdap = new LdapFacade("localhost");
-        mLdap.anonymousBind();
-        mLdap.searchOneLevel(domainDn, "mail=" + accountMail);
-        assertTrue("Checking for account", mLdap.nextResult());
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.anonymousBind();
+        ldap.searchOneLevel(domainDn, "mail=" + accountMail);
+        assertTrue("Checking for account", ldap.nextResult());
 
         manager.deleteAccount(accountMail);
-        mLdap.searchOneLevel(domainDn, "mail=" + accountMail);
+        ldap.searchOneLevel(domainDn, "mail=" + accountMail);
         assertTrue("Checking for non-existance of account",
-                   !mLdap.nextResult());
-        mLdap.close();
+                   !ldap.nextResult());
+        ldap.close();
     }
 
     /**
@@ -741,7 +741,6 @@ public class MailManagerTest extends TestCase
         throws MailManagerException
     {
         String domain = "is-alias.test";
-        String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
@@ -769,7 +768,6 @@ public class MailManagerTest extends TestCase
         throws MailManagerException
     {
         String domain = "is-pm.test";
-        String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
@@ -794,7 +792,6 @@ public class MailManagerTest extends TestCase
         throws MailManagerException
     {
         String domain = "info.test";
-        String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
@@ -1065,7 +1062,7 @@ public class MailManagerTest extends TestCase
      * @exception MailManagerException if an error occurs
      */
     public void testGetInactiveAccounts()
-        throws NamingException, MailManagerException
+        throws MailManagerException
     {
         String domain = "test-inactive-acct.test";
         MailManager manager =
@@ -1097,7 +1094,7 @@ public class MailManagerTest extends TestCase
      * @throws MailManagerException on error
      */
     public void testGetDeleteMarkedAccounts()
-        throws NamingException, MailManagerException
+        throws MailManagerException
     {
         String domain = "test-delete-acct.test";
         MailManager manager =
@@ -1130,7 +1127,7 @@ public class MailManagerTest extends TestCase
      * @throws MailManagerException on error
      */
     public void testGetInactiveDomains()
-        throws NamingException, MailManagerException
+        throws MailManagerException
     {
         String domain = "test-inactive-d1.test";
         String domain2 = "test-inactive-d2.test";
@@ -1171,7 +1168,7 @@ public class MailManagerTest extends TestCase
      * @throws MailManagerException on error
      */
     public void testGetDeleteMarkedDomains()
-        throws NamingException, MailManagerException
+        throws MailManagerException
     {
         String domain = "test-delete-d1.test";
         String domain2 = "test-delete-d2.test";
@@ -1292,7 +1289,6 @@ public class MailManagerTest extends TestCase
         throws MailManagerException
     {
         String domain = "alphabet.test";
-        String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,

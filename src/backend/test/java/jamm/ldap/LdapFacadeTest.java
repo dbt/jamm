@@ -311,11 +311,9 @@ public class LdapFacadeTest extends TestCase
         BasicAttribute  objectClass;
         BasicAttributes attributes;
         String  ouName;
-        String  parent;
         String  dn;
 
         ouName = "my_ou";
-        parent = "dc=jamm,dc=test";
         dn = "ou=" + ouName + ",dc=jamm,dc=test";
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(MGR_DN, MGR_PW);
@@ -376,7 +374,6 @@ public class LdapFacadeTest extends TestCase
         throws NamingException
     {
         String ouName = "ou_map";
-        String parent = "dc=jamm,dc=test";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(MGR_DN, MGR_PW);
@@ -428,7 +425,6 @@ public class LdapFacadeTest extends TestCase
         throws NamingException
     {
         String ouName = "change_password";
-        String parent = "dc=jamm,dc=test";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(MGR_DN, MGR_PW);
@@ -478,7 +474,6 @@ public class LdapFacadeTest extends TestCase
         throws NamingException
     {
         String ouName = "mod_multi";
-        String parent = "dc=jamm,dc=test";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(MGR_DN, MGR_PW);

@@ -118,23 +118,19 @@ public class AccountAdminAction extends JammAction
             request.setAttribute("alias", alias);
             return (mapping.findForward("alias_admin"));
         }
-        else
-        {
-            breadCrumb = new BreadCrumb(
-                getAccountAdminForward(mapping, mail).getPath(),
-                "Account Admin");
-            breadCrumbs.add(breadCrumb);
-            request.setAttribute("breadCrumbs", breadCrumbs);
-
-            Map passwordParameters = new HashMap();
-            passwordParameters.put("mail", mail);
-            passwordParameters.put("done", "account_admin");
-            request.setAttribute("passwordParameters", passwordParameters);
-            
-            AccountInfo account = manager.getAccount(mail);
-            request.setAttribute("account", account);
-
-            return (mapping.findForward("view"));
-        }
+        breadCrumb = new BreadCrumb(
+            getAccountAdminForward(mapping, mail).getPath(), "Account Admin");
+        breadCrumbs.add(breadCrumb);
+        request.setAttribute("breadCrumbs", breadCrumbs);
+        
+        Map passwordParameters = new HashMap();
+        passwordParameters.put("mail", mail);
+        passwordParameters.put("done", "account_admin");
+        request.setAttribute("passwordParameters", passwordParameters);
+        
+        AccountInfo account = manager.getAccount(mail);
+        request.setAttribute("account", account);
+        
+        return (mapping.findForward("view"));
     }
 }

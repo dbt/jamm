@@ -205,10 +205,8 @@ public abstract class JammAction extends Action
             }
             return new ActionForward(path.toString(), forward.getRedirect());
         }
-        else
-        {
-            return forward;
-        }
+        
+        return forward;
     }
 
     /**

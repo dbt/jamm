@@ -43,7 +43,6 @@ public class CryptPasswordTest extends TestCase
         CryptPassword   crypt;
         String hash;
         String ldapHash;
-        String password;
 
         crypt = new CryptPassword();
         hash = crypt.crypt("cl", "test");

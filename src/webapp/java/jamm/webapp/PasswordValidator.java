@@ -48,12 +48,10 @@ public class PasswordValidator
         {
             return validatePassword(password, errors);
         }
-        else
-        {
-            errors.add("password",
-                       new ActionError("password.error.do_not_match"));
-            return false;
-        }
+
+        errors.add("password",
+                   new ActionError("password.error.do_not_match"));
+        return false;
     }
 
     /**
@@ -77,10 +75,8 @@ public class PasswordValidator
                        new ActionError("password.error.too_short"));
             return false;
         }
-        else
-        {
-            return true;
-        }
+
+        return true;
     }
 
     /** Minimum length that a password should be. */

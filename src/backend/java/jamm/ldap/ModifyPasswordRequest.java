@@ -159,7 +159,6 @@ public class ModifyPasswordRequest
     public ExtendedResponse createExtendedResponse(String id,
                                                    byte[] berValue,
                                                    int offset, int length)
-        throws NamingException
     {
         return null;
     }

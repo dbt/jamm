@@ -49,7 +49,6 @@ public class AuthenticationFilter implements Filter
      * @exception ServletException if an error occurs
      */
     public void init(FilterConfig config)
-        throws ServletException
     {
         mConfig = config;
     }

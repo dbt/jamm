@@ -163,7 +163,6 @@ public class JoinTag extends TagSupport
         throws JspException
     {
         List ourList = null;
-        RequestUtils util = new RequestUtils();
 
         if (mProperty == null)
         {
