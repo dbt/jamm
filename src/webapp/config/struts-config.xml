@@ -11,8 +11,8 @@
     <form-bean      name="logonForm"
                     type="org.apache.struts.example.LogonForm"/>
      -->
-    <form-bean name="logonForm"
-               type="simple.LogonForm"/>
+    <form-bean name="loginForm"
+               type="jamm.webapp.LoginForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -20,7 +20,8 @@
     <!-- Example logon forward 
      <forward   name="logon"                path="/logon.jsp"/>
      -->
-    <forward name="home" path="/" redirect="true"/>
+    <forward name="home" path="/home.jsp" redirect="true"/>
+    <forward name="login" path="/login.jsp"/>
     <forward name="logoff" path="/logoff.do"/>
   </global-forwards>
 
@@ -42,8 +43,16 @@
       <forward name="success"              path="/index.jsp"/>
     </action>
     -->
-
     
+    <action path="/login"
+            type="jamm.webapp.LoginAction"
+            name="loginForm"
+            scope="request"
+            validate="false"
+            input="/login.jsp">
+    </action>
+
+
     <!-- This will reload tileDefinitions.xml -->
     <action path="/admin/reload-tiles"
             type="org.apache.struts.tiles.actions.ReloadDefinitionsAction" />

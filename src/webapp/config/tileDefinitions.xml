@@ -10,4 +10,7 @@
   <definition name="home" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/home.jsp"/>
   </definition>
+  <definition name="login" extends="mainLayout">
+    <put name="body" value="/WEB-INF/tiles/login.jsp"/>
+  </definition>
 </component-definitions>
