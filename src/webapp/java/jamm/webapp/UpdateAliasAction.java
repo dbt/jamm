@@ -17,7 +17,7 @@ import org.apache.struts.action.ActionError;
 
 import jamm.backend.MailManager;
 
-public class UpdateAliasAction extends Action
+public class UpdateAliasAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -26,10 +26,7 @@ public class UpdateAliasAction extends Action
         throws Exception
     {
         UpdateAliasForm form = (UpdateAliasForm) actionForm;
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        String mail = user.getUsername();
-        
+        User user = getUser(request);
         MailManager manager =
             new MailManager(Globals.getLdapHost(),
                             Globals.getLdapPort(),
@@ -37,6 +34,7 @@ public class UpdateAliasAction extends Action
                             user.getDn(),
                             user.getPassword());
 
+        String mail = form.getMail();
         String[] destinations = manager.getAliasDestinations(mail);
         
         Set newDestinations = new HashSet(Arrays.asList(destinations));
@@ -58,6 +56,15 @@ public class UpdateAliasAction extends Action
         }
 
         manager.modifyAlias(mail, newDestinations);
-        return (mapping.findForward("account_admin"));
+
+        // Get the forward, and then create a new forward with the mail
+        // tacked onto it.
+        ActionForward adminForward = mapping.findForward("account_admin");
+        StringBuffer pathWithMail = new StringBuffer(adminForward.getPath());
+        pathWithMail.append("?mail=").append(mail);
+        ActionForward forwardWithMail =
+            new ActionForward(pathWithMail.toString(),
+                              adminForward.getRedirect());
+        return (forwardWithMail);
     }
 }
