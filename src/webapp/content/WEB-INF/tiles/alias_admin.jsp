@@ -16,6 +16,7 @@
 <html:errors/>
 
 <html:form action="/private/update_alias">
+  <html:hidden property="mail"/>
   <table width="85%" border="1" cellspacing="0">
     <tr>
       <th>Destination</th>
