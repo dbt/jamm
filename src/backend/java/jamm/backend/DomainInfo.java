@@ -34,17 +34,19 @@ public class DomainInfo implements Serializable
      * @param canEditAccounts a <code>boolean</code> value
      * @param canEditPostmasters a <code>boolean</code> value
      * @param active is domain active
+     * @param delete is this marked for deletion
      * @param lastChange time of last change in unix time.
      */
     public DomainInfo(String name, boolean canEditAccounts,
                       boolean canEditPostmasters, boolean active,
-                      int lastChange)
+                      boolean delete, int lastChange)
     {
         mName = name;
         mCanEditAccounts = canEditAccounts;
         mCanEditPostmasters = canEditPostmasters;
         mActive = active;
         mLastChange = lastChange;
+        mDelete = delete;
     }
 
     /**
@@ -167,7 +169,15 @@ public class DomainInfo implements Serializable
     private boolean mActive;
     /** time of last change */
     private int mLastChange;
-    /* True if this domain should be deleted. */
+    /** True if this domain should be deleted. */
     private boolean mDelete;
 
+    /** Static final for helping make setActive more readable */
+    public static final boolean ACTIVE = true;
+    /** Static final for helping make setActive more readable */
+    public static final boolean NOT_ACTIVE = false;
+    /** Static final for helping make setDelete more readable */
+    public static final boolean DELETE = true;
+    /** Static final for helping make setDelete more readable */
+    public static final boolean NO_DELETE = false;
 }
