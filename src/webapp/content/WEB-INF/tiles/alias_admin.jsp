@@ -1,7 +1,6 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<span class=header>ALIAS ADMINISTRATION</span>
+<span class=header>ALIAS ADMINISTRATION for <bean:write name="mail"/></span>
 <br />
-<span class=title><bean:write name="mail"/></span>
 <html:link forward="change_password" paramId="mail"
            name="passwordParameters">
   Change Password
@@ -59,6 +58,6 @@
     <html:textarea rows="6" cols="35" property="added"/>
   </p>
   <p>
-    <html:submit styleClass="button">Update Destinations</html:submit>
+    <html:submit styleClass="mbutton">Update Destinations</html:submit>
   </p>
 </html:form>
