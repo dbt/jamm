@@ -183,7 +183,7 @@ public class LdapFacade
      *
      * @param attribute Attribute to convert
      * @return The string represtentation of the attribute
-     * @throws NamingExceptin If an error occured
+     * @throws NamingException If an error occured
      * @see String#String(byte[])
      */
     private String attributeToString(Attribute attribute)
