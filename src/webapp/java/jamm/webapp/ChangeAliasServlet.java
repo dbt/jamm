@@ -55,7 +55,7 @@ public class ChangeAliasServlet extends HttpServlet
                 return;
             }
 
-            ldap = authenticate(user, oldPassword);
+            ldap = authenticate(user, password);
                 
             if (ldap == null)
             {
