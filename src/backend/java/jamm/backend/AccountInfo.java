@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+n */
 
 package jamm.backend;
 
@@ -36,9 +36,10 @@ public class AccountInfo implements Serializable
      * priveleges.
      * @param homeDirectory The home directory of the accounts
      * @param mailbox The mailbox within the home directory
+     * @param lastChange time of last change
      */
     public AccountInfo(String name, boolean active, boolean administrator,
-                       String homeDirectory, String mailbox)
+                       String homeDirectory, String mailbox, int lastChange)
     {
         mName = name;
         mActive = active;
@@ -117,6 +118,16 @@ public class AccountInfo implements Serializable
         return this.mMailbox;
     }
 
+    /**
+     * Gets the value of lastChange in unix time
+     *
+     * @return the value of lastChange in unix time
+     */
+    public int getLastChange()
+    {
+        return this.lastChange;
+    }
+
     /** Account name. */
     private String mName;
     /** True if this account active. */
@@ -127,4 +138,6 @@ public class AccountInfo implements Serializable
     private String mHomeDirectory;
     /** mailbox */
     private String mMailbox;
+    /** time of last change */
+    private int lastChange;
 }
