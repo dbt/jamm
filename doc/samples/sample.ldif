@@ -1,0 +1,58 @@
+# The base level of our hosting tree
+dn: o=hosting,dc=example,dc=com
+objectClass: organization
+o: hosting
+description: mail.example.com hosting root
+
+# Our superuser account used when managing ldap
+dn: cn=Manager,o=hosting,dc=example,dc=com
+objectClass: organizationalRole
+cn: Manager
+description: The root user
+
+# A virtual domain named info.test
+dn: jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: JammVirtualDomain
+jvd: info.test
+postfixTransport: virtual:
+
+# The postmaster entry for info.test.  Also assigns "postmaster" duty to
+# keith@info.test.  Mail will be delivered to "postmaster" of the server box
+dn: cn=postmaster,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: organizationalRole
+objectClass: JammMailAlias
+cn: postmaster
+mail: postmaster@info.test
+maildrop: postmaster
+roleOccupant: cn=postmaster,jvd=info.test,o=hosting,dc=example,dc=com
+roleOccupant: mail=keith@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+
+# An alias account.  This redirects mail for mark@info.test to
+# mal@otherdomain.test and markl@pager.test
+dn: mail=mark@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: JammMailAlias
+mail: mark@info.test
+maildrop: mal@otherdomain.test
+maildrop: markl@pager.test
+
+# This alias redirects mail for aubrey@info.test to the local user aubrey
+dn: mail=aubrey@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: JammMailAlias
+mail: aubrey@info.test
+maildrop: aubrey
+
+# This is a virtual account.  Its pretty straight forward
+dn: mail=dave@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: JammMailAccount
+mail: dave@info.test
+homeDirectory: /home/vmail/domains
+mailbox: info.test/dave/
+cn: Dave Dribin
+
+# Another virtual account.  Pretty straight forward
+dn: mail=keith@info.test,jvd=info.test,o=hosting,dc=example,dc=com
+objectClass: JammMailAccount
+mail: keith@info.test
+homeDirectory: /home/vmail/domains
+mailbox: info.test/keith/
+cn: Keith Garner
