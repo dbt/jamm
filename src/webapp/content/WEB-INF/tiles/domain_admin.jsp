@@ -21,22 +21,23 @@
       <th>Admin</th>
     </tr>
 
-    <logic:iterate indexId="i" id="account" name="accounts">
+    <logic:iterate indexId="i" id="account" name="accounts"
+                   type="jamm.backend.AccountInfo">
       <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
-        <td><bean:write name="account"/></td>
+        <td><bean:write name="account" property="name"/></td>
         <td align="center">
           <html:multibox property="accountsToDelete">
-            <bean:write name="account"/>
+            <bean:write name="account" property="name"/>
           </html:multibox>
         </td>
         <td align="center">
           <html:multibox property="activeAccounts">
-            <bean:write name="account"/>
+            <bean:write name="account" property="name"/>
           </html:multibox>
         </td>
         <td align="center">
           <html:multibox property="adminAccounts">
-            <bean:write name="account"/>
+            <bean:write name="account" property="name"/>
           </html:multibox>
         </td>
       </jamm:tr>
@@ -61,7 +62,7 @@
   </tr>
   <logic:iterate indexId="i" id="alias" name="aliases">
     <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
-      <td><bean:write name="alias" property="alias"/></td>
+      <td><bean:write name="alias" property="name"/></td>
       <td>
         <logic:iterate id="destination" name="alias"
                        property="destinations">

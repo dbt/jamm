@@ -2,6 +2,7 @@ package jamm.webapp;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +12,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class DomainAdminAction extends Action
+import jamm.backend.MailManager;
+import jamm.backend.AccountInfo;
+import jamm.backend.AliasInfo;
+
+public class DomainAdminAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -19,38 +24,65 @@ public class DomainAdminAction extends Action
                                  HttpServletResponse response)
         throws Exception
     {
-        request.setAttribute("domainName", "example.com");
-        
-        List accounts = new ArrayList();
-        for (int i = 1; i <= 6; i++)
-        {
-            accounts.add("account" + i);
-        }
+        User user  = getUser(request);
+        MailManager manager = getMailManager(user);
+        String domain = domainFromMail(user.getUsername());
+        request.setAttribute("domainName", domain);
+
+        List accounts = manager.getAccounts(domain);
         request.setAttribute("accounts", accounts);
 
-        List aliases = new ArrayList();
-        for (int i = 1; i <= 7; i++)
+        List activeAccounts = new ArrayList();
+        List adminAccounts = new ArrayList();
+        Iterator i = accounts.iterator();
+        while (i.hasNext())
         {
-            AliasDetails alias = new AliasDetails("alias" + i);
-            for (int j = 1; j <= 3; j++)
+            AccountInfo account = (AccountInfo) i.next();
+            if (account.isActive())
             {
-                alias.addDestination("user" + j + "@example.com");
+                activeAccounts.add(account.getName());
             }
+            if (account.isAdministrator())
+            {
+                adminAccounts.add(account.getName());
+            }
+        }
 
+        String[] activeAccountsArray =
+            (String []) activeAccounts.toArray(new String[0]);
+        String[] adminAccountsArray =
+            (String []) adminAccounts.toArray(new String[0]);
+        DomainAccountForm daf = new DomainAccountForm();
+        daf.setOriginalActiveAccounts(activeAccountsArray);
+        daf.setActiveAccounts(activeAccountsArray);
+        daf.setOriginalAdminAccounts(adminAccountsArray);
+        daf.setAdminAccounts(adminAccountsArray);
+        request.setAttribute("domainAccountForm", daf);
+
+        // Prepare aliases
+        List aliases = new ArrayList();
+        for (int x = 1; x <= 6; x++)
+        {
+            List destinations = new ArrayList();
+            for (int j = 1; j <= 2; j++)
+            {
+                destinations.add("user" + j + "@example.com");
+            }
+            boolean active = false;
+            boolean admin = false;
+            
+            AliasInfo alias= new AliasInfo("alias" + x, destinations, active,
+                                           admin);
             aliases.add(alias);
         }
         request.setAttribute("aliases", aliases);
 
-        String[] activeAccounts = new String[] {"account2", "account5"};
-        String[] adminAccounts = new String[] {"account1", "account4",
-                                               "account6"};
-        DomainAccountForm daf = new DomainAccountForm();
-        daf.setOriginalActiveAccounts(activeAccounts);
-        daf.setActiveAccounts(activeAccounts);
-        daf.setOriginalAdminAccounts(adminAccounts);
-        daf.setAdminAccounts(adminAccounts);
-        request.setAttribute("domainAccountForm", daf);
-
         return (mapping.findForward("domain_admin"));
+    }
+
+    private final String domainFromMail(String mail)
+    {
+        int domainIndex = mail.indexOf("@");
+        return mail.substring(domainIndex + 1);
     }
 }
