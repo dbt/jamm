@@ -34,7 +34,7 @@ public class AuthenticationFilter implements Filter
                          FilterChain chain)
         throws IOException, ServletException
     {
-        if (request instanceof HttpServletRequest)
+        if (servletRequest instanceof HttpServletRequest)
         {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response =
