@@ -1,12 +1,12 @@
 UPGRADING FROM 0.9.2 OR BEFORE TO 0.9.4 or later
 ------------------------------------------------
 
-Due to a schema change that first appeared in version 0.9.3, you'll
-need to update your existing LDAP data.  Unfortunately, there is no
-easy way to do this.  Many attributes that were in MAY have become
-MUST items, some attributes have been removed, and some entries are in
-an entirely new objectClass.  Basically, things that Jamm depends on
-being there have now been moved into MUST.
+Due to a schema change that appeared in versions 0.9.3 and 0.9.4,
+you'll need to update your existing LDAP data.  Unfortunately, there
+is no easy way to do this.  Many attributes that were in MAY have
+become MUST items, some attributes have been removed, and some entries
+are in an entirely new objectClass.  Basically, things that Jamm
+depends on being there have now been moved into MUST.
 
 The following are the steps I followed to update my LDAP server:
 
@@ -31,8 +31,8 @@ The following are the steps I followed to update my LDAP server:
 
    Also included in the distribution is a Perl script named
    updateLdif.pl. It'll take your current LDIF and produce a new LDIF
-   file that is hopefully up to date with the new fields.  It requires
-   the Net::LDAP and Set::Scalar Perl modules.
+   file that is up to date with the new fields as per above.  It
+   requires the Net::LDAP and Set::Scalar Perl modules.
 
 	./updateLdif.pl dump.ldif fixed-dump.ldif
 
