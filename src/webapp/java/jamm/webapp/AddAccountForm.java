@@ -133,7 +133,7 @@ public class AddAccountForm extends ValidatorForm
      * @param name The name of the account.
      * 
      * @struts.validator type="required"
-     * @struts.validator-args arg0key="add_account.prompt.common_name"
+     * @struts.validator-args arg0key="add_account.prompt.account_name"
      */
     public void setName(String name)
     {
@@ -144,6 +144,14 @@ public class AddAccountForm extends ValidatorForm
      * Sets the password stored in this bean to the string passed in.
      *
      * @param password The intended password.
+     * 
+     * @struts.validator type="required,minlength,identical"
+     * @struts.validator-args arg0key="add_account.prompt.password"
+     *                        arg1key="${var:minlength}"
+     *                        arg1name="minlength"
+     *                        arg1resource="false"
+     * @struts.validator-var name="secondProperty" value="retypedPassword"
+     * @struts.validator-var name="minlength" value="5"
      */
     public void setPassword(String password)
     {
