@@ -70,7 +70,7 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditAliases
      */
-    public boolean isCanEditAliases() {
+    public boolean getCanEditAliases() {
         return this.mCanEditAliases;
     }
 
@@ -88,7 +88,7 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditAccounts
      */
-    public boolean isCanEditAccounts() {
+    public boolean getCanEditAccounts() {
         return this.mCanEditAccounts;
     }
 
@@ -106,7 +106,7 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditPostmasters
      */
-    public boolean isCanEditPostmasters() {
+    public boolean getCanEditPostmasters() {
         return this.mCanEditPostmasters;
     }
 
@@ -124,7 +124,7 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditCatchalls
      */
-    public boolean isCanEditCatchalls() {
+    public boolean getCanEditCatchalls() {
         return this.mCanEditCatchalls;
     }
 
