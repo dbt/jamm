@@ -19,14 +19,15 @@
 
 package jamm.tools;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-
+import jamm.backend.DomainInfo;
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
-import jamm.backend.DomainInfo;
-import jamm.util.UserQueries;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 /**
  * Cleans up domains
@@ -58,44 +59,28 @@ public class DomainCleaner
             while (i.hasNext())
             {
                 DomainInfo domain = (DomainInfo) i.next();
-                boolean cleanUp = false;
 
-                cleanUp = JammCleanerOptions.isAssumeYes();
-
-                if (!cleanUp)
-                {
-                    StringBuffer sb = new StringBuffer(domain.getName());
-                    sb.append(" is marked for deletion.\n");
-                    sb.append("Would you like to remove its data?");
-                    cleanUp = UserQueries.askYesNo(sb.toString());
-                }
-
-                if (cleanUp)
-                {
-                    AccountCleaner ac =
-                        new AccountCleaner(domain.getName(),
-                                           AccountCleaner.CLEAN_ALL);
-                    ac.cleanUp();
-
-                    // We assume all the accounts were cleaned up,
-                    // so we just nuke the domain
-                    if (JammCleanerOptions.isVerbose() ||
+                AccountCleaner ac =
+                    new AccountCleaner(domain.getName(),
+                                       AccountCleaner.CLEAN_ALL);
+                ac.cleanUp();
+                
+                // We assume all the accounts were cleaned up,
+                // so we just nuke the domain
+                if (JammCleanerOptions.isVerbose() ||
                         JammCleanerOptions.isNonDestructive())
-                    {
-                        System.out.println(
-                            "Removing domain " + domain.getName());
-                    }
-                    if (!JammCleanerOptions.isNonDestructive())
-                    {
-                        mManager.deleteDomain(domain.getName());
-                    }
+                {
+                    LOG.info("Removing domain " + domain.getName());
+                }
+                if (!JammCleanerOptions.isNonDestructive())
+                {
+                    mManager.deleteDomain(domain.getName());
                 }
             }
         }
         catch (MailManagerException e)
         {
-            System.out.println("Problem purging domains: " + e);
-            e.printStackTrace();
+            LOG.error("Problem purging domains: ", e);
         }
     }
 
@@ -103,4 +88,6 @@ public class DomainCleaner
     private List mDeadDomains;
     /** the mail manager */
     private MailManager mManager;
+    
+    private static final Logger LOG = Logger.getLogger(DomainCleaner.class);
 }

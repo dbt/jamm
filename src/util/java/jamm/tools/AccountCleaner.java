@@ -19,20 +19,20 @@
 
 package jamm.tools;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
+import jamm.backend.AccountInfo;
+import jamm.backend.DomainInfo;
+import jamm.backend.MailManager;
+import jamm.backend.MailManagerException;
+import jamm.util.FileUtils;
+import jamm.util.ZipCreator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import jamm.backend.MailManager;
-import jamm.backend.MailManagerException;
-import jamm.backend.AccountInfo;
-import jamm.backend.DomainInfo;
-import jamm.util.UserQueries;
-import jamm.util.FileUtils;
-import jamm.util.ZipCreator;
+import org.apache.log4j.Logger;
 
 /**
  * The account cleaner object.  To nuke all accounts for a domain,
@@ -127,17 +127,12 @@ public class AccountCleaner
                 DomainInfo domain = (DomainInfo) d.next();
                 loadAccountListForDomain(domain.getName());
             }
-            if (JammCleanerOptions.isVerbose())
-            {
-                System.out.println();
-            }
 
             cleanUpAccounts();
         }
         catch (MailManagerException e)
         {
-            System.err.println("Problem purging accounts: " + e.toString());
-            e.printStackTrace();
+            LOG.error("Problem purging accounts: ", e);
         }
     }
 
@@ -152,8 +147,7 @@ public class AccountCleaner
 
         if (nondestruct)
         {
-            System.out.println(account.getName() +
-                               " successfully deleted");
+            LOG.info(account.getName() + " successfully deleted");
         }
         else
         {
@@ -165,9 +159,8 @@ public class AccountCleaner
             }
             else
             {
-                System.out.println("No filesystem data for " +
-                                   account.getName() +
-                                   " exists.  Removing from LDAP anyway.");
+                LOG.info("No filesystem data for " + account.getName() +
+                         " exists.  Removing from LDAP anyway.");
                 successful = true;
             }
 
@@ -181,20 +174,18 @@ public class AccountCleaner
                 }
                 catch (MailManagerException e)
                 {
-                    System.out.println("Error: " + account.getName() +
-                                       "not deleted: " + e.toString());
+                    LOG.error("Error: " + account.getName() +
+                              "not deleted: ", e);
                 }
                     
                 if (ldapsuccess && JammCleanerOptions.isVerbose())
                 {
-                    System.out.println(account.getName() +
-                                       " successfully deleted");
+                    LOG.info(account.getName() + " successfully deleted");
                 }
             }
             else
             {
-                System.out.println("Error: " + account.getName() +
-                                   " not deleted");
+                LOG.error("Error: " + account.getName() + " not deleted");
             }
         }
     }
@@ -211,21 +202,18 @@ public class AccountCleaner
             AccountInfo account = (AccountInfo) a.next();
             try
             {
-                if (JammCleanerOptions.shouldBackup())
+                if (JammCleanerOptions.shouldBackup() &&
+                    !JammCleanerOptions.isNonDestructive())
                 {
                     archiveAccount(account);
                 }
 
                 deleteAccount(account);
 
-                if (JammCleanerOptions.isVerbose())
-                {
-                    System.out.println();
-                }
             }
             catch (IOException e)
             {
-                System.out.println("Archiving problem: " + e);
+                LOG.error("Archiving problem: ", e);
             }
         }
     }
@@ -256,25 +244,11 @@ public class AccountCleaner
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
-            if (JammCleanerOptions.isAssumeYes())
+            if (verbose)
             {
-                if (verbose)
-                {
-                    System.out.println(account.getName() +
-                                       " is marked for deletion.");
-                }
-                mDeadAccounts.add(account);
+                LOG.info(account.getName() + " is marked for deletion.");
             }
-            else
-            {
-                StringBuffer sb = new StringBuffer(account.getName());
-                sb.append(" is marked for deletion.\n");
-                sb.append("Would you like to remove its data?");
-                if (UserQueries.askYesNo(sb.toString()))
-                {
-                    mDeadAccounts.add(account);
-                }
-            }
+            mDeadAccounts.add(account);
         }
     }
 
@@ -305,7 +279,7 @@ public class AccountCleaner
             StringBuffer output = new StringBuffer();
             output.append("Backuping up ").append(account.getName());
             output.append(" to ").append(sb.toString());
-            System.out.println(output);
+            LOG.info(output);
         }
 
         ZipCreator zc = new ZipCreator(sb.toString());
@@ -328,4 +302,6 @@ public class AccountCleaner
     public static final boolean CLEAN_ALL = true;
     /** Clean only delete define for readability. */
     public static final boolean CLEAN_ONLY_DELETE = false;
+    
+    private static final Logger LOG = Logger.getLogger(AccountCleaner.class);
 }
