@@ -65,11 +65,33 @@
     <mkdir dir="build/webapp/root/WEB-INF/lib" />
     <mkdir dir="build/webapp/root/WEB-INF/tld" />
 
+    <mkdir dir="build/util/classes" />
+
     <mkdir dir="test" />
     <mkdir dir="test/backend/classes" />
     <mkdir dir="test/webapp/classes" />
 
     <mkdir dir="dist" />
+  </target>
+
+  <target name="build-util" depends="prepare"
+          description="Builds all code for the util parts">
+    <depend srcDir="src/util/java" destDir="build/util/classes"
+            cache="build/util/depcache" closure="yes">
+      <classpath>
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
+      </classpath>
+    </depend>
+    <javac srcdir="src/util/java"
+           destdir="build/util/classes"
+           optimize="${compile.optimize}" debug="${compile.debug}"
+           deprecation="${compile.deprecation}">
+      <classpath>
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
+      </classpath>
+    </javac>
   </target>
 
   <target name="build-backend" depends="prepare"
@@ -201,7 +223,7 @@
 
   <target name="build-webapp" depends="build-webapp-java" />
 
-  <target name="build" depends="build-webapp, build-backend" />
+  <target name="build" depends="build-webapp, build-backend, build-util" />
 
   <target name="test-backend" depends="build-backend">
     <junit printsummary="yes" fork="yes" haltonfailure="yes">
@@ -249,6 +271,9 @@
                 javadocScope="nothing">
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
+    <checkstyle properties="checkstyle.properties">
+      <fileset dir="src/util/java" includes="**/*.java" />
+    </checkstyle>
   </target>
   <target name="cs" depends="checkstyle" />
 
@@ -272,6 +297,7 @@
         <pathelement location="src/backend/java" />
         <pathelement location="src/backend/test/java" />
         <pathelement location="src/webapp/java" />
+        <pathelement location="src/util/java" />
       </sourcepath>
       <classpath>
         <path refid="lib.path" />
