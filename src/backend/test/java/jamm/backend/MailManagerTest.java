@@ -983,6 +983,33 @@ public class MailManagerTest extends TestCase
         
     }
 
+    public void testGetDeleteMarkedAccounts()
+        throws NamingException, MailManagerException
+    {
+        String domain = "test-delete-acct.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+        manager.createAccount(domain, "delete", "delete");
+        manager.createAccount(domain, "nodelete", "nodelete");
+        String mail = "delete@" + domain;
+        AccountInfo deleteAccount = manager.getAccount(mail);
+
+        deleteAccount.setDelete(true);
+        manager.modifyAccount(deleteAccount);
+
+        List accounts = manager.getDeleteMarkedAccounts(domain);
+        assertTrue("Checking to see if only one is returned",
+                   (accounts.size() == 1));
+
+        AccountInfo newAccount = (AccountInfo) accounts.get(0);
+        assertTrue("Checking to see if inactive account is returned",
+                   newAccount.getName().equals(deleteAccount.getName()));
+    }
+        
+
     public void testGetInactiveDomains()
         throws NamingException, MailManagerException
     {
@@ -1015,6 +1042,41 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking to see i domain2 is active",
                    !domainNames.contains(domain2));
         assertTrue("Checking to see if domain3 is inactive",
+                   domainNames.contains(domain3));
+    }
+
+    public void testGetDeleteMarkedDomains()
+        throws NamingException, MailManagerException
+    {
+        String domain = "test-delete-d1.test";
+        String domain2 = "test-delete-d2.test";
+        String domain3 = "test-delete-d3.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+        manager.createDomain(domain2);
+        manager.createDomain(domain3);
+        DomainInfo di = manager.getDomain(domain);
+        di.setDelete(true);
+        DomainInfo di3 = manager.getDomain(domain3);
+        di3.setDelete(true);
+        manager.modifyDomain(di);
+        manager.modifyDomain(di3);
+
+        List domains = manager.getDeleteMarkedDomains();
+        List domainNames = new ArrayList();
+        Iterator i = domains.iterator();
+        while (i.hasNext())
+        {
+            domainNames.add(((DomainInfo) i.next()).getName());
+        }
+        assertTrue("Checking to see if domain is marked for deletion",
+                   domainNames.contains(domain));
+        assertTrue("Checking to see i domain2 is not marked for deletion",
+                   !domainNames.contains(domain2));
+        assertTrue("Checking to see if domain3 is marked for deletion",
                    domainNames.contains(domain3));
     }
 

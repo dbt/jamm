@@ -398,15 +398,32 @@ public class MailManager
     public List getInactiveDomains()
         throws MailManagerException
     {
+        String filter = "(&(objectClass=" + DOMAIN_OBJECT_CLASS + ")" +
+            "(accountActive=FALSE))";
+
+        return getFilteredDomains(filter);
+    }
+
+    public List getDeleteMarkedDomains()
+        throws MailManagerException
+    {
+        String filter = "(&(objectClass=" + DOMAIN_OBJECT_CLASS + ")" +
+            "(delete=FALSE))";
+
+        return getFilteredDomains(filter);
+    }
+
+    private List getFilteredDomains(String filter)
+        throws MailManagerException
+    {
         LdapFacade ldap = null;
         List  domains = new ArrayList();
         try
         {
             ldap = getLdap();
 
-            ldap.searchOneLevel(mBase,
-                                "(&(objectClass=" + DOMAIN_OBJECT_CLASS + ")" +
-                                "(accountActive=FALSE))");
+            ldap.searchOneLevel(mBase, filter);
+            
             while (ldap.nextResult())
             {
                 domains.add(createDomainInfo(ldap));
@@ -1226,10 +1243,45 @@ public class MailManager
      * {@link AccountInfo} objects.
      *
      * @param domain Domain name
-     * @return List of {@link AccountInfo} objects
+     * @return {@link List} of {@link AccountInfo} objects
      * @throws MailManagerException If an error occured
      */
     public List getInactiveAccounts(String domain)
+        throws MailManagerException
+    {
+        String filter = "(&(objectClass=" + ACCOUNT_OBJECT_CLASS +
+            ")(accountActive=FALSE))";
+
+        return getFilteredAccounts(filter, domain);
+    }
+
+    /**
+     * Returns all accounts for the specified domain as a list of
+     * {@link AccountInfo} objects.
+     *
+     * @param domain domain name
+     * @return {@link List} list of {@link AccountInfo}
+     * @exception MailManagerException if an error occurs
+     */
+    public List getDeleteMarkedAccounts(String domain)
+        throws MailManagerException
+    {
+        String filter = "(&(objectClass=" + ACCOUNT_OBJECT_CLASS +
+            ")(delete=TRUE))";
+
+        return getFilteredAccounts(filter, domain);
+    }
+
+    /**
+     * Searches one level below a domain given a filter defining some
+     * constraints.
+     *
+     * @param filter the filter to use
+     * @param domain the domain to check
+     * @return {@link List} of {@link AccountInfo} objects.
+     * @exception MailManagerException if an error occurs
+     */
+    private List getFilteredAccounts(String filter, String domain)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -1239,9 +1291,7 @@ public class MailManager
         {
             ldap = getLdap();
             String domainDn = domainDn(domain);
-            String searchString = "(&(objectClass=" + ACCOUNT_OBJECT_CLASS +
-                ")(accountActive=FALSE))";
-            ldap.searchOneLevel(domainDn, searchString);
+            ldap.searchOneLevel(domainDn, filter);
 
             while (ldap.nextResult())
             {
@@ -1262,7 +1312,7 @@ public class MailManager
         Collections.sort(accounts, new AccountNameComparator());
         return accounts;
     }
-
+        
     /**
      * Returns a single AccountInfo for a given e-mail address.
      *
