@@ -32,9 +32,9 @@
   </form-beans>
 
   <global-exceptions>
-<!--     <exception type="jamm.backend.MailManagerException" -->
-<!--                key="general.error.body" -->
-<!--                path="/private/general_error.jsp"/> -->
+    <exception type="jamm.backend.MailManagerException"
+               key="general.error.body"
+               path="/private/general_error.jsp"/>
     <exception type="jamm.backend.MailManagerCommunicationException"
                key="communication.error.body"
                path="/communication_error.jsp"/>
