@@ -10,7 +10,8 @@
         </html:link>
       </li>
       <li>
-        <html:link page="/private/change_password.jsp">
+        <html:link page="/private/change_password.jsp" paramId="mail"
+                   paramName="user" paramProperty="username">
           <bean:message key="home.change_password"/>
         </html:link>
       </li>

@@ -2,6 +2,9 @@
 <bean:parameter id="done" name="done" value="/"/>
 <html:errors/>
 <html:form action="/change_password" focus="password1">
+  <bean:message key="change_password.user_info"/>
+  <b><bean:write name="changePasswordForm" property="mail"/></b>
+  <html:hidden property="mail"/>
   <table border="0">
     <tr>
       <th align="right">

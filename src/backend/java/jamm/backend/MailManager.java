@@ -44,7 +44,7 @@ public class MailManager
         mBindPassword = bindPassword;
     }
 
-    public void changePassword(String newPassword)
+    public void changePassword(String mail, String newPassword)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -54,11 +54,25 @@ public class MailManager
             ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
             
-            String hashedPassword =
-                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
-            ldap.modifyElementAttribute(ldap.getName(), "userPassword",
-                                        hashedPassword);
-            mBindPassword = newPassword;
+            ldap.searchSubtree(mBase, "mail=" + mail);
+
+            if (ldap.nextResult())
+            {
+                String foundDn = ldap.getResultName();
+                String hashedPassword =
+                    LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
+                ldap.modifyElementAttribute(foundDn, "userPassword",
+                                            hashedPassword);
+
+                if (foundDn.equals(mBindDn))
+                {
+                    mBindPassword = newPassword;
+                }
+            }
+            else
+            {
+                throw new MailManagerException("mail not found: " + mail);
+            }
         }
         catch (NamingException e)
         {

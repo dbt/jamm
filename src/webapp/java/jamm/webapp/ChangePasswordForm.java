@@ -16,6 +16,27 @@ import org.apache.struts.action.ActionError;
 public class ChangePasswordForm extends ActionForm
 {
     /**
+     * Sets the mail address of the user to change the password for.
+     *
+     * @param The mail address.
+     */
+    public void setMail(String mail)
+    {
+        mMail = mail;
+    }
+
+    /**
+     * Returns the mail address of the user to change the password
+     * for.
+     *
+     * @return The mail address.
+     */
+    public String getMail()
+    {
+        return mMail;
+    }
+
+    /**
      * Sets the first password.
      *
      * @param password1 The first password.
@@ -61,6 +82,7 @@ public class ChangePasswordForm extends ActionForm
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
         clearPasswords();
+        mMail = request.getParameter("mail");
     }
 
     /**
@@ -103,6 +125,9 @@ public class ChangePasswordForm extends ActionForm
         mPassword2 = null;
     }
 
+    /** The mail address. */
+    private String mMail;
+    
     /** The first password. */
     private String mPassword1;
 

@@ -328,22 +328,28 @@ public class MailManagerTest extends TestCase
 
         String accountName = "account";
         String originalPassword = "account1pw";
-        String newPassword = "changed pw";
+        String newPassword1 = "changed pw";
+        String newPassword2 = "another pw";
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
 
         manager.createAccount(domain, accountName, originalPassword);
-        manager.setBindEntry(accountDn, originalPassword);
-        assertTrue("Checking authentication using original password",
+        manager.changePassword(mail, newPassword1);
+
+        manager.setBindEntry(accountDn, newPassword1);
+        assertTrue("Checking authentication using new password 1",
                    manager.authenticate());
-        manager.changePassword(newPassword);
-        assertTrue("Checking authentication using new password",
+        manager.changePassword(mail, newPassword2);
+        assertTrue("Checking authentication using new password 2",
                    manager.authenticate());
         manager.setBindEntry(accountDn, originalPassword);
         assertTrue("Checking non-authentication using original password",
                    !manager.authenticate());
-        manager.setBindEntry(accountDn, newPassword);
-        assertTrue("Double checking new password",
+        manager.setBindEntry(accountDn, newPassword1);
+        assertTrue("Checking non-authentication using new password 1",
+                   !manager.authenticate());
+        manager.setBindEntry(accountDn, newPassword2);
+        assertTrue("Double checking new password 2",
                    manager.authenticate());
     }
 
