@@ -746,7 +746,7 @@ public class MailManager
             // Create the postmaster
             attributes.clear();
             attributes.put("objectClass",
-                           new String[] {"top", "jammPostmaster",
+                           new String[] {"top", "JammPostmaster",
                                          ALIAS_OBJECT_CLASS});
             attributes.put("cn", "postmaster");
             attributes.put("mail",
