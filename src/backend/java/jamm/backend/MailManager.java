@@ -404,6 +404,12 @@ public class MailManager
         return getFilteredDomains(filter);
     }
 
+    /**
+     * Returns a List of domains that are marked for deletion.
+     *
+     * @return a List object containing DomainInfo objects
+     * @exception MailManagerException if an error occurs
+     */
     public List getDeleteMarkedDomains()
         throws MailManagerException
     {
@@ -413,11 +419,19 @@ public class MailManager
         return getFilteredDomains(filter);
     }
 
+    /**
+     * Helper functions that takes a filter and returns a List of
+     * DomainInfo objects based on the filter.
+     *
+     * @param filter A string defining an ldap filter
+     * @return a List of DomainInfo objects.
+     * @exception MailManagerException if an error occurs
+     */
     private List getFilteredDomains(String filter)
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        List  domains = new ArrayList();
+        List domains = new ArrayList();
         try
         {
             ldap = getLdap();
