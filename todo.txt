@@ -1,0 +1,18 @@
+
+* Get list of domains.
+
+* Get list of all aliases in a domain.
+
+* Get list of all accounts in a domain.
+
+* Investigate case-sensitivity in JNDI, LDAP, and the LdapFacade.
+
+* Implement timestamp and enabled attributes.
+
+* Delete alias.
+
+* Delete account.
+
+* Delete domain.
+
+* Aliases with multiple destinations.
