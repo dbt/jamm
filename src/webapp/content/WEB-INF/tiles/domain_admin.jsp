@@ -47,6 +47,10 @@ Catch-All:
       <td width="6">&nbsp;</td>
 
       <logic:equal name="canEditAccounts" value="true">
+        <td align=middle width=79>
+          <html:img page='/imgs/delete_account.gif'
+                    alt='Delete Account' width='79' height='23'/>
+        </td>
         <td align=middle width=81>
           <html:img page='/imgs/account_is_active.gif'
                     alt='Account is active' width='79'
@@ -80,6 +84,11 @@ Catch-All:
         </td>
         <logic:equal name="canEditAccounts" value="true">
           <td align="center" width="79" class="multibox">
+            <html:multibox property="itemsToDelete" onclick="Toggle(this)">
+              <bean:write name="account" property="name"/>
+            </html:multibox>
+          </td>
+          <td align="center" width="79" class="multibox">  
             <html:multibox property="activeItems">
               <bean:write name="account" property="name"/>
             </html:multibox>
@@ -95,7 +104,9 @@ Catch-All:
       </tr>
     </logic:iterate>
   </table>
-  <table width="100%" border="0" cellspacing="0" cellpadding="4"><tr><td>
+  <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <tr>
+      <td>
         <tr>
           <td align=right>
             <logic:equal name="canEditAccounts" value="true">
@@ -107,6 +118,8 @@ Catch-All:
             </logic:equal>
           </td>
         </tr>
+      </td>
+    </tr>
   </table>
 </html:form>
 
