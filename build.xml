@@ -219,6 +219,7 @@
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
   </target>
+  <target name="cs" depends="checkstyle" />
 
   <target name="prepare-doc" depends="prepare">
     <mkdir dir="doc" />
