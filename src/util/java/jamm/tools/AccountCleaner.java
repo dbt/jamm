@@ -100,12 +100,13 @@ public class AccountCleaner
      */
     private void nukeAccounts()
     {
+        boolean debug = JammCleanerOptions.isDebug();
         Iterator a = mDeadAccounts.iterator();
 
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
-            if (FileUtils.recursiveDelete(
+            if (!debug && FileUtils.recursiveDelete(
                     new File(account.getFullPathToMailbox())))
             {
                 if (JammCleanerOptions.isVerbose())
@@ -116,8 +117,16 @@ public class AccountCleaner
             }
             else
             {
-                System.out.println("Error: " + account.getName() +
-                                   " not deleted");
+                if (debug)
+                {
+                    System.out.println(account.getName() +
+                                       " successfully deleted");
+                }
+                else
+                {
+                    System.out.println("Error: " + account.getName() +
+                                       " not deleted");
+                }
             }
         }
     }

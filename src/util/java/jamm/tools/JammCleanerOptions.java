@@ -165,6 +165,26 @@ public final class JammCleanerOptions
     }
 
     /**
+     * Returns the value of debug
+     *
+     * @return true or false
+     */
+    public static boolean isDebug()
+    {
+        return JammCleanerOptions.mDebug;
+    }
+
+    /**
+     * sets the value of debug
+     *
+     * @param debug value to assign to debug
+     */
+    public static void setDebug(boolean debug)
+    {
+        JammCleanerOptions.mDebug = debug;
+    }
+
+    /**
      * Dump out the args for debugging purposes
      *
      * @return a string with the args
@@ -196,4 +216,6 @@ public final class JammCleanerOptions
     private static int mPort = 389;
     /** Base DN */
     private static String mBaseDn;
+    /** debug */
+    private static boolean mDebug;
 }
