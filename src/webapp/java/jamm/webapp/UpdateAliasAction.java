@@ -45,7 +45,7 @@ public class UpdateAliasAction extends JammAction
         if (newDestinations.size() == 0)
         {
             errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("alias_update.error.non_zero_aliases"));
+                       new ActionError("alias.error.non_zero_aliases"));
         }
 
         if (!errors.empty())

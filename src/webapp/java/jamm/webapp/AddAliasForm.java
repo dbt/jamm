@@ -114,7 +114,7 @@ public class AddAliasForm extends ActionForm
         if (mAddresses.size() == 0)
         {
             errors.add("destinations",
-                       new ActionError("add_alias.error.non_zero_aliases"));
+                       new ActionError("alias.error.non_zero_aliases"));
         }
 
         if (!isPasswordEmpty())
