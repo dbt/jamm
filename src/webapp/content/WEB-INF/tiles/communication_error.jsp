@@ -8,3 +8,10 @@
                footer="communication.error.footer" id="error">
   <bean:write name="error"/>
 </html:messages>
+
+<br/>
+<logic:present name="exception.stacktrace" scope="request">
+<!--
+<bean:write name="exception.stacktrace" scope="request"/>
+-->
+</logic:present>
