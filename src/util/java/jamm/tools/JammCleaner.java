@@ -62,6 +62,8 @@ public final class JammCleaner
                        IS_REQUIRED);
         opts.addOption('b', "base", HAS_ARGS, "base dn to search from",
                        IS_REQUIRED);
+        opts.addOption('B', "backups", HAS_ARGS, "back up account contents " +
+                       "to this directory before deleting");
         opts.addOption('?', "help", NO_ARGS, "prints help message");
 
         return opts;
@@ -112,6 +114,10 @@ public final class JammCleaner
         if (cmd.hasOption('n'))
         {
             JammCleanerOptions.setNonDestructive(true);
+        }
+        if (cmd.hasOption('B'))
+        {
+            JammCleanerOptions.setBackupDirectory(cmd.getOptionValue('B'));
         }
     }
     

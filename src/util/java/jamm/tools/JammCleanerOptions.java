@@ -185,6 +185,36 @@ public final class JammCleanerOptions
     }
 
     /**
+     * Sets the directory to back up account information into.
+     *
+     * @param backupDirectory a string
+     */
+    public static void setBackupDirectory(String backupDirectory)
+    {
+        mBackupDirectory = backupDirectory;
+    }
+
+    /**
+     * Get the directory to back up account information into.
+     *
+     * @return a string
+     */
+    public static String getBackupDirectory()
+    {
+        return mBackupDirectory;
+    }
+
+    /**
+     * Should we backup account information.
+     *
+     * @return true when backupDirectory is set.  False if null.
+     */
+    public static boolean shouldBackup()
+    {
+        return (mBackupDirectory != null);
+    }
+
+    /**
      * Dump out the args for debugging purposes
      *
      * @return a string with the args
@@ -215,7 +245,9 @@ public final class JammCleanerOptions
     /** The port to connect using */
     private static int mPort = 389;
     /** Base DN */
-    private static String mBaseDn;
+    private static String mBaseDn = null;
     /** non destructive */
-    private static boolean mNonDestructive;
+    private static boolean mNonDestructive = false;
+    /** What is the backup directory */
+    private static String mBackupDirectory = null;
 }
