@@ -19,6 +19,9 @@
 
 package jamm.webapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,6 +29,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+import jamm.backend.MailAddress;
 import jamm.backend.MailManager;
 
 /**
@@ -68,9 +72,56 @@ public class AddAccountAction extends JammAction
         User user = getUser(request);
         MailManager manager = getMailManager(user);
 
+        makeBreadCrumbs(mapping, request, form.getDomain(), user);
+
+        String mail = MailAddress.addressFromParts(form.getName(),
+                                                   form.getDomain());
+        request.setAttribute("mail", mail);
+        request.setAttribute("accountDomain", form.getDomain());
+
         manager.createAccount(form.getDomain(), form.getName(),
                               form.getCommonName(), form.getPassword());
 
         return findForward(mapping, "domain_admin", request);
     }
+    /**
+     * Create a trail of bread crumbs to find our way back.
+     * 
+     * @param mapping ActionMapping
+     * @param request HTTP Request
+     * @param domain the domain we're creating an alias for
+     * @param user the user creating the alias
+     */
+    private void makeBreadCrumbs(ActionMapping mapping,
+                                 HttpServletRequest request, String domain,
+                                 User user)
+    {
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            breadCrumb =
+                new BreadCrumb(
+                    findForward(mapping, "site_admin", request).getPath(),
+                    "Site Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            breadCrumb =
+                new BreadCrumb(
+                    getDomainAdminForward(mapping, domain).getPath(),
+                    "Domain Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        String forward = getAddAccountForward(mapping, domain).getPath();
+        breadCrumb = new BreadCrumb(forward, "Add Account");
+        breadCrumbs.add(breadCrumb);
+        
+        request.setAttribute("breadCrumbs", breadCrumbs);
+    }
+
 }
