@@ -28,3 +28,8 @@ Bugs to be fixed:
 Bugs Fixed:
     * When a domain is set to be deleted, its catchall is still
       active.  Must set to inactive or set delete flag.
+
+    * Postmaster account and alias can be created by users.
+      Really hoses shit up.
+      Question: Should postmaster dn be "mail=" instead of "cn="?  Special
+                case code wouldn't be needed then.
