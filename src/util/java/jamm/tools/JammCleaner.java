@@ -19,6 +19,11 @@
 
 package jamm.tools;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+
 /**
  * This is the application that cleans up after jamm.
  */
@@ -26,203 +31,79 @@ public final class JammCleaner
 {
     /**
      * Print out the help message
+     *
+     * @param opt the options for this application
      */
-    private static void printHelp()
+    private static void printHelp(Options opt)
     {
-        System.out.println("Usage:  JammCleaner -b <dn> -D <dn> " +
-                           "[other options]");
-        System.out.println("    -v    act verbosely");
-        System.out.println("    -y    assume \"yes\" for all questions");
-        System.out.println("    -h    ldap host   (default: localhost)");
-        System.out.println("    -p    ldap port   (default: 389)");
-        System.out.println("    -w    password to connect to LDAP with");
-        System.out.println("    -D    the DN to bind with");
-        System.out.println("    -b    base dn to search from");
+        HelpFormatter hf = new HelpFormatter();
+        hf.printHelp("Usage:  JammCleaner [options]" , opt);
     }
 
     /**
-     * Parse the arguements that were passed in on the command line.
+     * Loads up the options object
      *
-     * @param argv The array of arguments
+     * @return a loaded Options object
      */
-    private static void parseArgs(String argv[])
+    private static Options getOptions()
     {
-        for (int i = 0; i < argv.length; i++)
+        Options opts = new Options();
+        opts.addOption('v', "verbose", NO_ARGS, "verbose");
+        opts.addOption('y', "yes", NO_ARGS, "Assume yes for all questions");
+        opts.addOption('h', HAS_ARGS, "ldap host  (default: localhost)");
+        opts.addOption('p', HAS_ARGS, "ldap port  (default: 389");
+        opts.addOption('w', "password", HAS_ARGS,
+                       "password to connect to LDAP with");
+        opts.addOption('D', "dn", HAS_ARGS, "the dn to bind with",
+                       IS_REQUIRED);
+        opts.addOption('b', "base", HAS_ARGS, "base dn to search from",
+                       IS_REQUIRED);
+        opts.addOption('?', "help", NO_ARGS, "prints help message");
+
+        return opts;
+    }
+
+    /**
+     * Parse the command line and do what is needed.
+     *
+     * @param opts The options
+     * @param cmd the command line/parsed options
+     */
+    private static void parseArgs(Options opts, CommandLine cmd)
+    {
+        if (cmd.hasOption('?'))
         {
-            if (argv[i].startsWith("-"))
-            {
-                if (argv[i].equals("--help"))
-                {
-                    printHelp();
-                    System.exit(1);
-                }
-                
-                switch (argv[i].charAt(1))
-                {
-                    case 'v':
-                        JammCleanerOptions.setVerbose(true);
-                        break;
-
-                    case 'y':
-                        JammCleanerOptions.setAssumeYes(true);
-                        break;
-
-                    case 'h':
-                        if (argv[i].length() > 2)
-                        {
-                            JammCleanerOptions.setHost(argv[i].substring(2));
-                        }
-                        else
-                        {
-                            String nextArg = null;
-                            try
-                            {
-                                nextArg = argv[i + 1];
-                            }
-                            catch (ArrayIndexOutOfBoundsException e)
-                            {
-                                // We could run out of arguments
-                            }
-                            if ((nextArg != null) &&
-                                (!nextArg.startsWith("-")))
-                            {
-                                JammCleanerOptions.setHost(nextArg);
-                                i++;
-                            }
-                            else
-                            {
-                                System.err.println("-h must have an argument");
-                                System.exit(1);
-                            }
-                        }
-                        break;
-                        
-                    case 'p':
-                        if (argv[i].length() > 2)
-                        {
-                            JammCleanerOptions.setPort(
-                                Integer.parseInt(argv[i].substring(2)));
-                        }
-                        else
-                        {
-                            String nextArg = null;
-                            try
-                            {
-                                nextArg = argv[i + 1];
-                            }
-                            catch (ArrayIndexOutOfBoundsException e)
-                            {
-                                // We could run out of arguments
-                            }
-                            if ((nextArg != null &&
-                                 (!nextArg.startsWith("-"))))
-                            {
-                                JammCleanerOptions.setPort(
-                                    Integer.parseInt(nextArg));
-                                i++;
-                            }
-                            else
-                            {
-                                System.err.println("-p must have an argument");
-                                System.exit(1);
-                            }
-                        }
-                        break;
-
-                    // Followed convention from OpenLDAP tools
-                    case 'w':
-                        if (argv[i].length() > 2)
-                        {
-                            JammCleanerOptions.setPassword(
-                                argv[i].substring(2));
-                        }
-                        else
-                        {
-                            String nextArg = null;
-                            try
-                            {
-                                nextArg = argv[i + 1];
-                            }
-                            catch (ArrayIndexOutOfBoundsException e)
-                            {
-                                // Hmm
-                            }
-                            if ((nextArg != null) &&
-                                (!nextArg.startsWith("-")))
-                            {
-                                JammCleanerOptions.setPassword(nextArg);
-                                i++;
-                            }
-                            else
-                            {
-                                System.err.println("-w must have an argument");
-                                System.exit(1);
-                            }
-                        }
-                        break;
-
-                    // Followed convention from OpenLDAP tools
-                    case 'D':
-                        if (argv[i].length() > 2)
-                        {
-                            JammCleanerOptions.setRootDn(argv[i].substring(2));
-                        }
-                        else
-                        {
-                            String nextArg = null;
-                            try
-                            {
-                                nextArg = argv[i + 1];
-                            }
-                            catch (ArrayIndexOutOfBoundsException e)
-                            {
-                                // Hmm
-                            }
-                            if ((nextArg != null) &&
-                                (!nextArg.startsWith("-")))
-                            {
-                                JammCleanerOptions.setRootDn(nextArg);
-                                i++;
-                            }
-                            else
-                            {
-                                System.err.println("-D must have an argument");
-                                System.exit(1);
-                            }
-                        }
-                        break;
-
-                    case 'b':
-                        if (argv[i].length() > 2)
-                        {
-                            JammCleanerOptions.setBaseDn(argv[i].substring(2));
-                        }
-                        else
-                        {
-                            String nextArg = null;
-                            try
-                            {
-                                nextArg = argv[i + 1];
-                            }
-                            catch (ArrayIndexOutOfBoundsException e)
-                            {
-                                // Hmm
-                            }
-                            if ((nextArg != null) &&
-                                (!nextArg.startsWith("-")))
-                            {
-                                JammCleanerOptions.setBaseDn(nextArg);
-                                i++;
-                            }
-                            else
-                            {
-                                System.err.println("-b must have an argument");
-                                System.exit(1);
-                            }
-                        }
-                        break;
-                }
-            }
+            printHelp(opts);
+            System.exit(0);
+        }
+        if (cmd.hasOption('v'))
+        {
+            JammCleanerOptions.setVerbose(true);
+        }
+        if (cmd.hasOption('y'))
+        {
+            JammCleanerOptions.setAssumeYes(true);
+        }
+        if (cmd.hasOption('h'))
+        {
+            JammCleanerOptions.setHost(cmd.getOptionValue('h', "localhost"));
+        }
+        if (cmd.hasOption('p'))
+        {
+            String value = cmd.getOptionValue('p', "389");
+            JammCleanerOptions.setPort(Integer.parseInt(value));
+        }
+        if (cmd.hasOption('w'))
+        {
+            JammCleanerOptions.setPassword(cmd.getOptionValue('w'));
+        }
+        if (cmd.hasOption('D'))
+        {
+            JammCleanerOptions.setBindDn(cmd.getOptionValue('D'));
+        }
+        if (cmd.hasOption('b'))
+        {
+            JammCleanerOptions.setBaseDn(cmd.getOptionValue('b'));
         }
     }
     
@@ -232,8 +113,24 @@ public final class JammCleaner
      * @param argv the array of args
      */
     public static final void main(String argv[])
+        throws Exception
     {
-        parseArgs(argv);
+        Options opts = getOptions();
+        CommandLine cmdl = opts.parse(argv);
+        parseArgs(opts, cmdl);
+        
         System.out.println(JammCleanerOptions.argDump());
+
+        //AccountCleaner ac = new AccountCleaner();
+        //ac.cleanUp();
     }
+
+    /** static define for addOption */
+    private static final boolean NO_ARGS = false;
+    /** static define for addOption */
+    private static final boolean HAS_ARGS = true;
+    /** static define for addOption */
+    private static final boolean IS_REQUIRED = true;
+    /** static define for addOption */
+    private static final boolean NOT_REQUIRED = false;
 }
