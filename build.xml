@@ -13,7 +13,8 @@
   <path id="lib.path">
     <pathelement path="${servlet.jar}" />
     <pathelement path="${cryptix.jar}" />
-    <pathelement path="${struts.lib}/struts.jar" />
+    <fileset dir="${struts.lib}" includes="*.jar"/>
+    <fileset dir="${jaxp.lib}" includes="*.jar"/>
   </path>
 
   <path id="xdoclet.path">
