@@ -48,6 +48,7 @@ public class AliasInfo implements Serializable
         mDestinations = destinations;
         mActive = active;
         mAdministrator = administrator;
+        mCommonName = commonName;
     }
     /**
      * @return

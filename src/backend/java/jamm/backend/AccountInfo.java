@@ -49,6 +49,7 @@ public class AccountInfo implements Serializable
         mHomeDirectory = homeDirectory;
         mMailbox = mailbox;
         mDelete = delete;
+        mCommonName = commonName;
     }
 
     /**
