@@ -315,7 +315,7 @@ public class MailManager
             closeLdap(ldap);
         }
 
-        // Collections.sort(domains, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(domains, new DomainNameComparator());
         return domains;
     }
 
