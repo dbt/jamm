@@ -261,27 +261,24 @@
   <target name="dist" depends="dist-webapp, dist-util" />
 
   <target name="checkstyle">
-    <taskdef name="checkstyle"
-             classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
-      <classpath>
-        <pathelement path="${checkstyle.jar}" />
-      </classpath>
-    </taskdef>
-    <checkstyle properties="checkstyle.properties">
+    <taskdef resource="checkstyletask.properties"
+             classpath="${checkstyle.jar}"/>
+    <checkstyle config="src/tools/default_checks.xml">
       <fileset dir="src/webapp/java" includes="**/*.java" />
+      <formatter type="plain"/>
     </checkstyle>
-    <checkstyle properties="checkstyle.properties">
+    <checkstyle config="src/tools/default_checks.xml">
       <property key="javadocScope" value="nothing"/>
       <fileset dir="src/webapp/test/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle properties="checkstyle.properties">
+    <checkstyle config="src/tools/default_checks.xml">
       <fileset dir="src/backend/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle properties="checkstyle.properties">
+    <checkstyle config="src/tools/default_checks.xml">
       <property key="javadocScope" value="nothing"/>
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
-    <checkstyle properties="checkstyle.properties">
+    <checkstyle config="src/tools/default_checks.xml">
       <fileset dir="src/util/java" includes="**/*.java" />
     </checkstyle>
   </target>
@@ -313,6 +310,13 @@
         <path refid="lib.path" />
         <pathelement location="${ant.home}/lib/junit.jar" />
       </classpath>
+      <tag name="web.servlet" scope="all" description="Servlet"/>
+      <tag name="web.filter" scope="all" description="Filter"/>
+      <tag name="web.filter-mapping" scope="all" description="Filter Mapping"/>
+      <tag name="jsp.attribute" scope="all" description="JSP Tag Attribute"/>
+      <tag name="jsp.tag" scope="all" description="JSP Tag"/>
+      <tag name="struts.form" scope="all" description="Struts Form"/>
+      <tag name="struts.action" scope="all" description="Struts Action"/>
     </javadoc>
   </target>
 
