@@ -39,11 +39,11 @@ public class ChangePasswordForm extends ActionForm
     /**
      * Sets the first password.
      *
-     * @param password1 The first password.
+     * @param password The first password.
      */
-    public void setPassword1(String password1)
+    public void setPassword(String password)
     {
-        mPassword1 = password1;
+        mPassword = password;
     }
 
     /**
@@ -51,19 +51,19 @@ public class ChangePasswordForm extends ActionForm
      *
      * @return The first password.
      */
-    public String getPassword1()
+    public String getPassword()
     {
-        return mPassword1;
+        return mPassword;
     }
 
     /**
      * Sets the second password.
      *
-     * @param password2 The second password.
+     * @param retypedPassword The second password.
      */
-    public void setPassword2(String password2)
+    public void setRetypedPassword(String retypedPassword)
     {
-        mPassword2 = password2;
+        mRetypedPassword = retypedPassword;
     }
 
     /**
@@ -71,9 +71,9 @@ public class ChangePasswordForm extends ActionForm
      *
      * @return The second password.
      */
-    public String getPassword2()
+    public String getRetypedPassword()
     {
-        return mPassword2;
+        return mRetypedPassword;
     }
 
     /**
@@ -86,10 +86,6 @@ public class ChangePasswordForm extends ActionForm
     }
 
     /**
-     * Both passwords must match and must pass certain "bad password"
-     * smoke tests.  For now, only the length of the password is
-     * considered, but more elaborate tests such as dictionary tests
-     * could be performed.
      *
      * @param mapping The action mapping.
      * @param request The servlet request.
@@ -99,17 +95,9 @@ public class ChangePasswordForm extends ActionForm
                                  HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
-        if ((mPassword1 != null) && (!mPassword1.equals(mPassword2)))
+        if (!PasswordValidator.validatePassword(mPassword, mRetypedPassword,
+                                                errors))
         {
-            errors.add("password1",
-                       new ActionError("change_password.error.no_match"));
-            clearPasswords();
-        }
-        else if ((mPassword1 == null) ||
-                 (mPassword1.length() < MINIMUM_LENGTH))
-        {
-            errors.add("password1",
-                       new ActionError("change_password.error.too_short"));
             clearPasswords();
         }
 
@@ -121,19 +109,16 @@ public class ChangePasswordForm extends ActionForm
      */
     private void clearPasswords()
     {
-        mPassword1 = null;
-        mPassword2 = null;
+        mPassword = null;
+        mRetypedPassword = null;
     }
 
     /** The mail address. */
     private String mMail;
     
     /** The first password. */
-    private String mPassword1;
+    private String mPassword;
 
     /** The second password. */
-    private String mPassword2;
-
-    /** The minimum length of the password. */
-    private static final int MINIMUM_LENGTH = 5;
+    private String mRetypedPassword;
 }

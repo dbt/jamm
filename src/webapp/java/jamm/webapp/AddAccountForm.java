@@ -57,10 +57,7 @@ public class AddAccountForm extends ActionForm
     }
 
     /**
-     * Both passwords must match and must pass certain "bad password"
-     * smoke tests.  For now, only the length of the password is
-     * considered, but more elaborate tests such as dictionary tests
-     * could be performed.
+     * Validates the password.
      *
      * @param mapping The action mapping.
      * @param request The servlet request.
@@ -70,17 +67,9 @@ public class AddAccountForm extends ActionForm
                                  HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
-        if ((mPassword != null) && (!mPassword.equals(mRetypedPassword)))
+        if (!PasswordValidator.validatePassword(mPassword, mRetypedPassword,
+                                                errors))
         {
-            errors.add("password",
-                       new ActionError("change_password.error.no_match"));
-            clearPasswords();
-        }
-        else if ((mPassword == null) ||
-                 (mPassword.length() < MINIMUM_LENGTH))
-        {
-            errors.add("password",
-                       new ActionError("change_password.error.too_short"));
             clearPasswords();
         }
 
@@ -93,9 +82,6 @@ public class AddAccountForm extends ActionForm
         mRetypedPassword = null;
     }
     
-    /** The minimum length of the password. */
-    private static final int MINIMUM_LENGTH = 5;
-
     private String mDomain;
     private String mName;
     private String mPassword;

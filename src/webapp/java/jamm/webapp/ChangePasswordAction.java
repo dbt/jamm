@@ -35,13 +35,13 @@ public class ChangePasswordAction extends Action
                             user.getDn(),
                             user.getPassword());
 
-        manager.changePassword(form.getMail(), form.getPassword1());
+        manager.changePassword(form.getMail(), form.getPassword());
 
         // Update user object stored in session with the new password,
         // if we changed our own password.
         if (form.getMail().equals(user.getUsername()))
         {
-            user.setPassword(form.getPassword1());
+            user.setPassword(form.getPassword());
         }
         
         return mapping.findForward("user_home");

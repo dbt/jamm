@@ -5,6 +5,10 @@ import org.apache.struts.action.ActionErrors;
 
 public class PasswordValidator
 {
+    /**
+     * The same as validatePassword(String, ActionErrors), except that
+     * the two passwords must match before checking the validity.
+     */
     public static boolean validatePassword(String password,
                                            String retypedPassword,
                                            ActionErrors errors)
@@ -21,6 +25,12 @@ public class PasswordValidator
         }
     }
 
+    /**
+     * Both passwords must match and must pass certain "bad password"
+     * smoke tests.  For now, only the length of the password is
+     * considered, but more elaborate tests such as dictionary tests
+     * could be performed.
+     */
     public static boolean validatePassword(String password,
                                            ActionErrors errors)
     {
