@@ -31,7 +31,7 @@ public class LoginAction extends Action
                                               Globals.getLdapPort(),
                                               Globals.getLdapSearchBase());
                                               
-        String userDn = manager.findByMail(form.getUsername());
+        String userDn = manager.getDnFromMail(form.getUsername());
         if (userDn == null)
         {
             errors.add(ActionErrors.GLOBAL_ERROR,
