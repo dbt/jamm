@@ -1,5 +1,5 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<bean:parameter id="done" name="done" value="/private/"/>
+<bean:parameter id="done" name="done" value="/"/>
 <html:errors/>
 <html:form action="/login" focus="username">
   <html:hidden property="done" value="<%= done %>"/>

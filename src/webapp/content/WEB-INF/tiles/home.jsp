@@ -21,6 +21,6 @@
 
 <logic:notPresent name="user">
   <p>
-    <html:link forward="login"><bean:message key="home.login"/></html:link>
+    <html:link forward="user_home"><bean:message key="home.login"/></html:link>
   </p>
 </logic:notPresent>

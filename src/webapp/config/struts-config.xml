@@ -23,6 +23,7 @@
      <forward   name="logon"                path="/logon.jsp"/>
      -->
     <forward name="home" path="/" redirect="true"/>
+    <forward name="user_home" path="/private/" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
   </global-forwards>
