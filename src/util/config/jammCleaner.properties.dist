@@ -1,0 +1,27 @@
+# The ldap host to connect to.  Defaults to localhost
+#
+# jammCleaner.ldap.host = 
+
+# The port to connec to.  Defaults to 389
+#
+# jammCleaner.ldap.port = 
+
+# The DN to bind to ldap with.  No default.
+#
+# jammCleaner.ldap.bind_dn = 
+
+# The password to bind with.  No default.
+#
+# jammCleaner.ldap.password = 
+
+# The search base to start at.  No default.
+#
+# jammCleaner.ldap.search_base = 
+
+# Should we assume yes anytime we'd ask a question.  Defaults to false.
+#
+# jammCleaner.assume_yes = 
+
+# Backup directory to backup account info to.  No backups if not defined.
+#
+# jammCleaner.backup_dir = 
