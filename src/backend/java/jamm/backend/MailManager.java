@@ -179,6 +179,7 @@ public class MailManager
      *
      * @param mail Email address to change password for
      * @param newPassword new password for this account or alias
+     * @exception MailManagerException if an error occurs
      */
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
