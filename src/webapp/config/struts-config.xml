@@ -29,6 +29,8 @@
                type="jamm.webapp.AddAliasForm"/>
     <form-bean name="siteConfigForm"
                type="jamm.webapp.SiteConfigForm"/>
+    <form-bean name="catchAllForm"
+               type="jamm.webapp.CatchAllForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -135,6 +137,14 @@
             scope="request"
             validate="true"
             input="/private/account_admin.do">
+    </action>
+
+    <action path="/private/update_catchall"
+            type="jamm.webapp.CatchAllAction"
+            name="catchAllForm"
+            scope="request"
+            validate="false"
+            input="/private/domain_admin.do">
     </action>
 
     <action path="/private/add_domain"

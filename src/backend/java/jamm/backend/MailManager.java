@@ -677,6 +677,10 @@ public class MailManager
             searchForMail(ldap, mail);
             alias = createAliasInfo(ldap);
         }
+        catch (MailNotFoundException e)
+        {
+            return null;
+        }
         catch (NamingException e)
         {
             throw new MailManagerException(e);
