@@ -54,6 +54,24 @@ public class DomainInfo implements Serializable
         mAliasCount = aliasCount;
         mAccountCount = accountCount;
     }
+    
+    /**
+     * Creates a new <code>DomainInfo</code> instance with specified data.
+     *
+     * @param name a <code>String</code> value
+     * @param canEditAccounts a <code>boolean</code> value
+     * @param canEditPostmasters a <code>boolean</code> value
+     * @param active is domain active
+     * @param delete is this marked for deletion
+     * @param lastChange time of last change in unix time.
+     */
+    public DomainInfo(String name, boolean canEditAccounts,
+                      boolean canEditPostmasters, boolean active,
+                      boolean delete, int lastChange)
+    {
+        this(name, canEditAccounts, canEditPostmasters, active, delete,
+             0, 0, lastChange);
+    }
 
     /**
      * Returns the number of accounts in this domain.
