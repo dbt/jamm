@@ -227,8 +227,7 @@
   <target name="dist" depends="dist-webapp" />
 
   <target name="checkstyle">
-    <checkstyle properties="checkstyle.properties"
-                javadocScope="nothing">
+    <checkstyle properties="checkstyle.properties">
       <fileset dir="src/webapp/java" includes="**/*.java" />
     </checkstyle>
     <checkstyle properties="checkstyle.properties"
