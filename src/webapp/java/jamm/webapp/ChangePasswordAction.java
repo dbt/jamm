@@ -78,7 +78,7 @@ public class ChangePasswordAction extends JammAction
         String password;
         if (form.wasClearClicked())
         {
-            password = "";
+            password = null;
         }
         else
         {
