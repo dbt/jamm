@@ -224,7 +224,15 @@ public class MailManager
         try
         {
             ldap = getLdap();
-            authenticated = true;
+            String active = ldap.getAttribute("accountActive");
+            if (active == null)
+            {
+                authenticated = false;
+            }
+            else
+            {
+                authenticated = Boolean.valueOf(active).booleanValue();
+            }
         }
         catch (AuthenticationException e)
         {
