@@ -1111,6 +1111,49 @@ public class MailManagerTest extends TestCase
 
         mLdap.close();
     }
+
+    /**
+     * Tests to see if MailManager pays attention to MailManagerOptions.
+     */
+    public void testMailManagerOptions()
+        throws MailManagerException, NamingException
+    {
+        String origValue = MailManagerOptions.getVmailHomedir();
+        String newValue = "/new/mailmanager/value";
+        MailManagerOptions.setVmailHomedir(newValue);
+
+        String domain="mmoptions.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String accountName = "newvalue";
+        String accountPassword = "newvaluepw";
+        manager.createAccount(domain, accountName, accountPassword);
+
+        MailManagerOptions.setVmailHomedir(origValue);
+        String accountName1 = "oldvalue";
+        String accountPassword1 = "oldvaluepw";
+        manager.createAccount(domain, accountName1, accountPassword1);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(domainDn, "mail=" + accountName + "@" + domain);
+        assertTrue("Checking for account", mLdap.nextResult());
+        assertEquals("Checking account homeDirectory",
+                     newValue,
+                     mLdap.getResultAttribute("homeDirectory"));
+
+        mLdap.searchOneLevel(domainDn, "mail=" + accountName1 + "@" + domain);
+        assertTrue("Checking for account", mLdap.nextResult());
+        assertEquals("Checking account homeDirectory",
+                     origValue,
+                     mLdap.getResultAttribute("homeDirectory"));
+        mLdap.close();
+    }
+
     
     /**
      * Creates a boolean representation of the string passed in,
