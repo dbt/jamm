@@ -7,10 +7,6 @@
 
   <!-- ========== Form Bean Definitions =================================== -->
   <form-beans>
-    <!-- Example logon form bean 
-    <form-bean      name="logonForm"
-                    type="org.apache.struts.example.LogonForm"/>
-     -->
     <form-bean name="loginForm"
                type="jamm.webapp.LoginForm"/>
     <form-bean name="changePasswordForm"
@@ -35,9 +31,6 @@
 
   <!-- ========== Global Forward Definitions ============================== -->
   <global-forwards>
-    <!-- Example logon forward 
-     <forward   name="logon"                path="/logon.jsp"/>
-     -->
     <forward name="home" path="/" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
@@ -62,22 +55,6 @@
 
   <!-- ========== Action Mapping Definitions ============================== -->
   <action-mappings>
-    <!-- Example logon action 
-    <action    path="/logon"
-               type="org.apache.struts.example.LogonAction"
-               name="logonForm"
-              scope="request"
-              input="/logon.jsp">
-    </action>
-    -->
-
-    <!-- Example logoff action 
-    <action    path="/logoff"
-               type="org.apache.struts.example.LogoffAction">
-      <forward name="success"              path="/index.jsp"/>
-    </action>
-    -->
-    
     <action path="/login"
             type="jamm.webapp.LoginAction"
             name="loginForm"
