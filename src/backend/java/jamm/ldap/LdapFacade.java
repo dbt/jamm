@@ -21,7 +21,6 @@ package jamm.ldap;
 
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Collection;
@@ -38,6 +37,8 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.BasicAttribute;
+
+import jamm.util.CaseInsensitiveStringSet;
 
 /**
  * Provides an easier to use interface for LDAP on top of JNDI.  The
@@ -175,19 +176,25 @@ public class LdapFacade
     }
 
     /**
-     * Returns all values of an attribute as a <code>Set</code>.
+     * Returns all values of an attribute as a <code>Set</code>.  The
+     * returned set is actually a
+     * <code>CaseInsensitiveStringSet</code>.  Normally this will not
+     * matter, but it will become apparent if comparing the whole set
+     * to, say, a <code>HashSet</code> of normal <code>String</code>
+     * objects.
      *
      * @param name An attribute name
      * @return The values of an attribute
      * @throws NamingException If an error occured
+     * @see CaseInsensitiveStringSet
      */
     public Set getAllAttributeValues(String name)
         throws NamingException
     {
-        HashSet values;
+        Set values;
         NamingEnumeration valueEnumeration = null;
 
-        values = new HashSet();
+        values = new CaseInsensitiveStringSet();
         try
         {
             Attribute attribute = mAttributes.get(name);
@@ -495,19 +502,24 @@ public class LdapFacade
 
     /**
      * Gets all values of a multi-valued attribute for the current
-     * result element.
+     * result element.  The returned set is actually a
+     * <code>CaseInsensitiveStringSet</code>.  Normally this will not
+     * matter, but it will become apparent if comparing the whole set
+     * to, say, a <code>HashSet</code> of normal <code>String</code>
+     * objects.
      *
      * @param name Attribute name
      * @return The values of this attribute
      * @throws NamingException If an error occured
+     * @see CaseInsensitiveStringSet
      */
     public Set getAllResultAttributeValues(String name)
         throws NamingException
     {
-        HashSet values;
+        Set values;
         NamingEnumeration valueEnumeration = null;
 
-        values = new HashSet();
+        values = new CaseInsensitiveStringSet();
         try
         {
             Attribute attribute = mCurrentResultAttributes.get(name);
