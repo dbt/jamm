@@ -352,18 +352,17 @@ public class MailManager
         throws NamingException
     {
         String name = ldap.getResultAttribute("jvd");
-        boolean canEditAliases = string2Boolean(
+        boolean canEditAliases = stringToBoolean(
             ldap.getResultAttribute("editAliases"));
-        boolean canEditAccounts = string2Boolean(
+        boolean canEditAccounts = stringToBoolean(
             ldap.getResultAttribute("editAccounts"));
-        boolean canEditPostmasters = string2Boolean(
+        boolean canEditPostmasters = stringToBoolean(
             ldap.getResultAttribute("editPostmasters"));
-        boolean canEditCatchalls = string2Boolean(
+        boolean canEditCatchalls = stringToBoolean(
             ldap.getResultAttribute("editCatchalls"));
         return new DomainInfo(name, canEditAliases, canEditAccounts,
                               canEditPostmasters, canEditCatchalls);
     }
-        
 
     /**
      * Returns true if string passed in is "true", ignoring case.
@@ -372,9 +371,57 @@ public class MailManager
      * @param string a <code>String</code> value
      * @return a <code>boolean</code> value
      */
-    private boolean string2Boolean(String string)
+    private boolean stringToBoolean(String string)
     {
         return Boolean.valueOf(string).booleanValue();
+    }
+
+    /**
+     * Returns a string in uppercase of TRUE or FALSE
+     *
+     * @param bool a <code>boolean</code> value
+     * @return a <code>String</code> value
+     */
+    private String booleanToString(boolean bool)
+    {
+        return String.valueOf(bool).toUpperCase();
+    }
+
+    /**
+     * Modifies the domain's capabilities out of the DomainInfo object.
+     *
+     * @param domain a <code>DomainInfo</code> value
+     * @exception MailManagerException if an error occurs
+     */
+    public void modifyDomain(DomainInfo domain)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String domaindn = domainDn(domain.getName());
+        try
+        {
+            ldap = getLdap();
+            ldap.modifyElementAttribute(domaindn, "editAliases",
+                                        booleanToString(
+                                            domain.getCanEditAliases()));
+            ldap.modifyElementAttribute(domaindn, "editAccounts",
+                                        booleanToString(
+                                            domain.getCanEditAccounts()));
+            ldap.modifyElementAttribute(domaindn, "editPostmasters",
+                                        booleanToString(
+                                            domain.getCanEditPostmasters()));
+            ldap.modifyElementAttribute(domaindn, "editCatchalls",
+                                        booleanToString(
+                                            domain.getCanEditCatchalls()));
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(domain.getName(), e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
     }
 
     /**

@@ -648,6 +648,47 @@ public class MailManagerTest extends TestCase
                    !di.getCanEditCatchalls());
     }
 
+    /**
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
+    public void testModifyDomain()
+        throws NamingException, MailManagerException
+    {
+        String domain = "modify-domain.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+
+        DomainInfo di = manager.getDomain(domain);
+        di.setCanEditAliases(false);
+        di.setCanEditAccounts(false);
+
+        manager.modifyDomain(di);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(BASE, "jvd=" + domain);
+        assertTrue("Checking for result", mLdap.nextResult());
+
+        assertTrue("Checking editAliases",
+                   !stringToBoolean(mLdap.getResultAttribute("editAliases")));
+        assertTrue("Checking editAccounts",
+                   !stringToBoolean(mLdap.getResultAttribute("editAccounts")));
+        assertTrue("Checking editPostmasters",
+                   stringToBoolean(
+                       mLdap.getResultAttribute("editPostmasters")));
+        assertTrue("Checking editCatchalls",
+                   stringToBoolean(mLdap.getResultAttribute("editCatchalls")));
+    }
+
+    private boolean stringToBoolean(String string)
+    {
+        return Boolean.valueOf(string).booleanValue();
+    }
 
     /** The LDAP facade used for most tests. */
     private LdapFacade mLdap;

@@ -19,6 +19,10 @@
 
 package jamm.webapp;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +31,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
+import jamm.backend.DomainInfo;
 
 /**
  *
@@ -58,10 +63,97 @@ public class SiteConfigAction extends JammAction
 
         System.out.println("====================================" +
                            "====================================");
-        
-        System.out.println("Don't Allow Alias: " +
-                           form.getAllowEditAliases());
-                           
-        return mapping.findForward("site_admin");
+
+        System.out.println("AllowEditAliases: " +
+                           Arrays.asList(form.getAllowEditAliases()));
+        System.out.println("Unchecked editAliases: " +
+                           form.getUncheckedEditAliases());
+        System.out.println("Checked editAliases: " +
+                           form.getCheckedEditAliases());
+
+        HashMap domainInfos = new HashMap();
+
+        Iterator i = form.getUncheckedEditAliases().iterator();
+        modifyCapability(EDIT_ALIASES, manager, domainInfos, i, false);
+        i = form.getCheckedEditAliases().iterator();
+        modifyCapability(EDIT_ALIASES, manager, domainInfos, i, true);
+                                   
+        i = form.getUncheckedEditAccounts().iterator();
+        modifyCapability(EDIT_ACCOUNTS, manager, domainInfos, i, false);
+        i = form.getCheckedEditAccounts().iterator();
+        modifyCapability(EDIT_ACCOUNTS, manager, domainInfos, i, true);
+
+        i = form.getUncheckedEditPostmasters().iterator();
+        modifyCapability(EDIT_POSTMASTERS, manager, domainInfos, i, false);
+        i = form.getCheckedEditPostmasters().iterator();
+        modifyCapability(EDIT_POSTMASTERS, manager, domainInfos, i, true);
+
+        i = form.getUncheckedEditCatchalls().iterator();
+        modifyCapability(EDIT_CATCHALLS, manager, domainInfos, i, false);
+        i = form.getCheckedEditCatchalls().iterator();
+        modifyCapability(EDIT_CATCHALLS, manager, domainInfos, i, true);
+
+        i = domainInfos.values().iterator();
+        while (i.hasNext())
+        {
+            DomainInfo di = (DomainInfo) i.next();
+            manager.modifyDomain(di);
+        }
+
+        return mapping.findForward("user_home");
     }
+
+    /**
+     * Worker class that modifies the domain info
+     *
+     * @param capability an <code>int</code> value
+     * @param manager a <code>MailManager</code> value
+     * @param domainInfos a <code>HashMap</code> value
+     * @param i an <code>Iterator</code> value
+     * @param value a <code>boolean</code> value
+     * @exception Exception if an error occurs
+     */
+    private void modifyCapability(int capability, MailManager manager,
+                                  HashMap domainInfos, Iterator i,
+                                  boolean value)
+        throws Exception
+    {
+        while (i.hasNext())
+        {
+            String domain = (String) i.next();
+            DomainInfo di = (DomainInfo) domainInfos.get(domain);
+            if (di == null)
+            {
+                di = manager.getDomain(domain);
+                domainInfos.put(domain, di);
+            }
+
+            switch(capability)
+            {
+                case EDIT_ALIASES:
+                    di.setCanEditAliases(value);
+                    break;
+
+                case EDIT_ACCOUNTS:
+                    di.setCanEditAccounts(value);
+                    break;
+
+                case EDIT_POSTMASTERS:
+                    di.setCanEditPostmasters(value);
+                    break;
+
+                case EDIT_CATCHALLS:
+                    di.setCanEditCatchalls(value);
+                    break;
+
+                default:
+                    throw new Exception("The should never be here");
+            }
+        }
+    }
+
+    private static final int EDIT_ALIASES = 0;
+    private static final int EDIT_ACCOUNTS = 1;
+    private static final int EDIT_POSTMASTERS = 2;
+    private static final int EDIT_CATCHALLS = 3;
 }
