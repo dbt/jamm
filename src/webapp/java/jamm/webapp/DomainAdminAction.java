@@ -40,7 +40,7 @@ import jamm.backend.MailAddress;
 /**
  * Loads data via Mail Manager needed for the domain administration
  * page.  It puts the following into the request's attributes after
- * seeding them from the MailManager: domainName, accounts,
+ * seeding them from the MailManager: domain, accounts,
  * domainAccountForm (a DomainConfigForm), aliases, and
  * domainAliasForm (a DomainConfigForm).  It then forwards to the
  * domain_admin page.
@@ -86,7 +86,7 @@ public class DomainAdminAction extends JammAction
             return mapping.findForward("general_error");
         }
         
-        request.setAttribute("domainName", domain);
+        request.setAttribute("domain", domain);
 
         List accounts = manager.getAccounts(domain);
         request.setAttribute("accounts", accounts);
@@ -116,6 +116,7 @@ public class DomainAdminAction extends JammAction
         dcf.setActiveItems(activeAccountsArray);
         dcf.setOriginalAdminItems(adminAccountsArray);
         dcf.setAdminItems(adminAccountsArray);
+        dcf.setDomain(domain);
         request.setAttribute("domainAccountForm", dcf);
 
         // Prepare aliases
@@ -147,6 +148,7 @@ public class DomainAdminAction extends JammAction
         dcf.setActiveItems(activeAliasesArray);
         dcf.setOriginalAdminItems(adminAliasesArray);
         dcf.setAdminItems(adminAliasesArray);
+        dcf.setDomain(domain);
         request.setAttribute("domainAliasForm", dcf);
 
         return (mapping.findForward("domain_admin"));
