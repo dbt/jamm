@@ -5,12 +5,13 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class DomainAliasAction extends Action
+import jamm.backend.MailManager;
+
+public class DomainAliasAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -19,6 +20,8 @@ public class DomainAliasAction extends Action
         throws Exception
     {
         DomainConfigForm form = (DomainConfigForm) actionForm;
+        User user = getUser(request);
+        MailManager manager = getMailManager(user);
 
         System.out.println("====================================" +
                            "====================================");
@@ -34,6 +37,12 @@ public class DomainAliasAction extends Action
                            form.getUncheckedAdminItems());
         System.out.println("Checked admin: " +
                            form.getCheckedAdminItems());
+
+        String[] deletions = form.getItemsToDelete();
+        for (int i = 0; i < deletions.length; i++)
+        {
+            manager.deleteAlias(deletions[i]);
+        }
 
         return mapping.findForward("domain_admin");
     }

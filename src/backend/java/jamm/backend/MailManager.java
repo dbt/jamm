@@ -409,6 +409,26 @@ public class MailManager
         return new AliasInfo(name, destinations, isActive, isAdmin);
     }
 
+    public void deleteAlias(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        try
+        {
+            ldap = getLdap();
+            searchForMail(ldap, mail);
+            ldap.deleteElement(ldap.getResultName());
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(mail, e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
     public void createAccount(String domain, String account, String password)
         throws MailManagerException
     {

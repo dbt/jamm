@@ -194,6 +194,34 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking destination", "mail2@xyz.test", destination);
     }
 
+    public void testDeleteAlias()
+        throws NamingException, MailManagerException
+    {
+        String domain = "del-alias.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        String aliasName = "alias";
+        String aliasMail = aliasName + "@" + domain;
+        manager.createDomain(domain);
+        
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + aliasMail);
+        assertTrue("Checking for no results", !mLdap.nextResult());
+
+        manager.createAlias(domain, aliasName,
+                            new String[] {"mail2@xyz.test", "mail1@abc.test"});
+        mLdap.searchSubtree(BASE, "mail=" + aliasMail);
+        assertTrue("Checking for a results", mLdap.nextResult());
+        assertTrue("Checking for no more results", !mLdap.nextResult());
+
+        manager.deleteAlias(aliasMail);
+        mLdap.searchSubtree(BASE, "mail=" + aliasMail);
+        assertTrue("Checking alias is deleted", !mLdap.nextResult());
+    }
+
     public void testCreateAccount()
         throws NamingException, MailManagerException
     {
