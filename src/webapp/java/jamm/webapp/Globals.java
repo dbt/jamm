@@ -19,8 +19,6 @@
 
 package jamm.webapp;
 
-import java.text.MessageFormat;
-
 /**
  * Bean to make certain objects globally accessable for ease of
  * access.
