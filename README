@@ -1,7 +1,7 @@
 The Java Mail Manager (Jamm) is a package for managing virtual mail
 aliases and accounts. It has multiple levels of access from user to
 domain administrator to site administrator. Jamm comes with an LDAP
-schema that it follows. Unlike simliar projects, Jamm only modifies
+schema that it follows. Unlike similar projects, Jamm only modifies
 what is in LDAP and leaves some of the "aftermath" file cleanup to the
 administrator and/or helper scripts.
 
@@ -35,7 +35,7 @@ Usage:  JammCleaner [options]
  -y,--yes            Assume yes for all questions
 
 JammCleaner can be run out of cron or run manually.  It is designed to
-be run as the vmail user, it does not need root privledges to get its
+be run as the vmail user, it does not need root privileges to get its
 job done.
 
 If the -y flag is passed, it will assume yes to all questions it would
