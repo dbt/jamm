@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.10 2002-07-30 15:51:24 ark-sf Exp $
+#$Id: jamm.schema,v 1.11 2002-09-03 15:09:35 ark-sf Exp $
 # We depend on courier.schema
 #
 # OID prefix: 1.3.6.1.4.1.12461
@@ -12,7 +12,7 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.1 NAME 'postfixTransport'
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{20} SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.12461.1.1.2 NAME 'accountActive'
-	DESC 'A boolean telling weather an account is active or not'
+	DESC 'A boolean telling whether an account is active or not'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
@@ -59,22 +59,22 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.9 NAME 'mailsource'
 # Back to more of Jamm specific attributes
 
 attributetype ( 1.3.6.1.4.1.12461.1.1.10 NAME 'editAliases'
-	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	DESC 'A boolean telling whether a domain manager can edit Aliases'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.12461.1.1.11 NAME 'editAccounts'
-	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	DESC 'A boolean telling whether a domain manager can edit Accounts'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.12461.1.1.12 NAME 'editPostmasters'
-	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	DESC 'A boolean telling whether a domain manager can edit Postmasters'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.12461.1.1.13 NAME 'editCatchAlls'
-	DESC 'A boolean telling weather a domain manager can edit Aliases'
+	DESC 'A boolean telling whether a domain manager can edit CatchAlls'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 
