@@ -152,6 +152,41 @@ public class MailManager
         
     }
 
+    public void addCatchall(String domain, String destination)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        BasicAttribute objectClass;
+        BasicAttributes attributes;
+        String catchAll = "@" + domain;
+
+        try
+        {
+            ldap = new LdapFacade(mHost);
+            ldap.simpleBind(mBinddn, mBindpw);
+
+            objectClass = new BasicAttribute("objectClass");
+            objectClass.add("top");
+            objectClass.add("JammMailAlias");
+            attributes = new BasicAttributes();
+            attributes.put(objectClass);
+            attributes.put("mail", catchAll);
+            attributes.put("maildrop", destination);
+            String dn = "mail=" + catchAll + "," + domainDn(domain);
+            ldap.addElement(dn, attributes);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Could not create catchall @" +
+                                           domain, e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+            
+
     private String domainDn(String domain)
     {
         return "jvd=" + domain + "," + mBase;
