@@ -19,7 +19,6 @@
 
 package jamm.ldap;
 
-import jamm.LdapConstants;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,6 +32,9 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
 import junit.framework.TestCase;
+
+import jamm.LdapConstants;
+import jamm.util.CaseInsensitiveStringSet;
 
 /**
  * Unit test for the {@link LdapFacade} class.
@@ -140,13 +142,19 @@ public class LdapFacadeTest extends TestCase
         assertEquals("Checking mailbox", "domain1.test/acct1",
                      mLdap.getAttribute("mailbox"));
 
-        Set expectedObjectClass = new HashSet();
+        Set expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAccount");
 
         Set objectClass = mLdap.getAllAttributeValues("objectClass");
         assertEquals("Checking multi-value objectClass", expectedObjectClass,
                      objectClass);
+
+        assertTrue("Checking lower case object class",
+                   objectClass.contains("jammMailAccount"));
+        assertTrue("Checking upper case object class",
+                   objectClass.contains("JammMailAccount"));
+
         Set noAttribute = mLdap.getAllAttributeValues("noAttribute");
         assertEquals("Checking noAttribute has no values",
                      Collections.EMPTY_SET, noAttribute);
@@ -235,6 +243,11 @@ public class LdapFacadeTest extends TestCase
         expectedObjectClass.add("JammVirtualDomain");
         Set objectClass = mLdap.getAllResultAttributeValues("objectClass");
         assertEquals("Checking objectClass", expectedObjectClass, objectClass);
+
+        assertTrue("Checking lower case object class",
+                   objectClass.contains("jammVirtualDomain"));
+        assertTrue("Checking upper case object class",
+                   objectClass.contains("JammVirtualDomain"));
 
         Set expectedDescription = Collections.EMPTY_SET;
         Set description = mLdap.getAllResultAttributeValues("description");
