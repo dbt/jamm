@@ -151,5 +151,7 @@ public final class JammCleaner
 
         AccountCleaner ac = new AccountCleaner();
         ac.cleanUp();
+        DomainCleaner dc = new DomainCleaner();
+        dc.cleanUp();
     }
 }
