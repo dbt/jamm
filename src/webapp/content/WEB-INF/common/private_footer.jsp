@@ -1,2 +1,6 @@
-<hr>
-<p>Footer</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
