@@ -75,6 +75,7 @@ public class InitServlet extends HttpServlet
             properties = new Properties();
             properties.load(new FileInputStream(path));
 
+            // todo test for and drop quotes around root_dn (common problem)
             Globals.setLdapHost(
                 getStringProperty(properties, "ldap.host", "localhost"));
             Globals.setLdapPort(
