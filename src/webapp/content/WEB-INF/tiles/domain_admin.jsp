@@ -138,6 +138,12 @@
               <bean:message key="domain_admin.link.add_alias"/>
             </html:link>
           </td>
+          <td>
+            <html:link forward="change_password" paramId="mail"
+                       name="postmasterPasswordParameters">
+              <bean:message key="domain_admin.link.change_postmaster_pw"/>
+            </html:link>
+          </td>
           <td align="center">
             <html:form action="/private/update_catchall">
               <html:hidden property="domain"/>
