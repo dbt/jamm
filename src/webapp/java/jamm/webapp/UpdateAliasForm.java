@@ -62,7 +62,7 @@ public class UpdateAliasForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        mMail = request.getParameter("mail");
+        mMail = (String) request.getAttribute("mail");
         mDeleted = new String[0];
         mAdded = "";
     }
