@@ -28,6 +28,9 @@
         <html:submit>
           <bean:message key="change_password.button.submit"/>
         </html:submit>
+        <html:cancel>
+          <bean:message key="change_password.button.cancel"/>
+        </html:cancel>
       </td>
     </tr>
   </table>

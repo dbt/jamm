@@ -30,6 +30,11 @@ public class ChangePasswordAction extends Action
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
    
+        if (isCancelled(request))
+        {
+            return mapping.findForward("home");
+        }
+        
         MailManager manager =
             new MailManager(Globals.getLdapHost(),
                             Globals.getLdapPort(),
