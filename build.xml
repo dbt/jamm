@@ -279,9 +279,12 @@
              author="true"
              version="true"
              use="true"
-             windowtitle="JAMM Docs"
+             windowtitle="Jamm API"
              private="yes"
-             doctitle="JAva Mail Manager">
+             doctitle="Jamm API">
+      <link offline="true"
+            href="http://java.sun.com/j2se/1.3/docs/api/"
+            packageListLoc="${javadoc.1.3.local}"/>
       <sourcepath>
         <pathelement location="src/backend/java" />
         <pathelement location="src/backend/test/java" />
