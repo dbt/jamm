@@ -183,19 +183,16 @@ public class MailManager
             searchForMail(ldap, mail);
 
             String foundDn = ldap.getResultName();
-            String hashedPassword;
+
             if (newPassword != null)
             {
-                hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
-                                                   newPassword);
+                ldap.changePassword(foundDn, newPassword);
             }
             else
             {
-                hashedPassword = null;
+                ldap.modifyElementAttribute(foundDn, "userPassword",
+                                            newPassword);
             }
-
-            ldap.modifyElementAttribute(foundDn, "userPassword",
-                                        hashedPassword);
 
             if (foundDn.equals(mBindDn))
             {
