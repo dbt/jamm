@@ -7,44 +7,42 @@ easy way to do this.  Many attributes that were in MAY have become
 MUST items, some attributes have been removed.  Basically, things that
 Jamm depends on being there have now been moved into MUST.
 
-The following are the steps I followed to update my ldap server:
+The following are the steps I followed to update my LDAP server:
 
-1) Dump the current database
+1) Dump the current database to an LDIF.  It's important to do this as
+   manager so that all attributes get saved.
 
    ldapsearch -b "o=hosting,dc=kgarner,dc=com" \
-       -D "cn=Manager,o=hosting,dc=kgarner,dc=com" -W -x > ldap.dump
+       -D "cn=Manager,o=hosting,dc=kgarner,dc=com" -W -x > dump.ldif
 
-2) Edit the ldap.dump file
+2) Edit the dump.ldif file.
 
    To update your data, do the following:
 
 	o For each JammVirtualDomain entry: remove editCatchAlls and
 	editAliases, and add delete, and make sure lastChange has a
-	value
+	value.
 
 	o For each JammMailAccount entry: add delete and make sure
-	lastChange has a value
+	lastChange has a value.
 
 	o The JammMailAlias entries should be okay.
 
-   Also included in the distribution is a perl script named
-   updateLdif.pl. It'll take your current ldif and produce a new ldif
+   Also included in the distribution is a Perl script named
+   updateLdif.pl. It'll take your current LDIF and produce a new LDIF
    file that is hopefully up to date with the new fields.  It requires
-   the Net::LDAP and Set::Scalar perl modules.
+   the Net::LDAP and Set::Scalar Perl modules.
 
-	./updateLdif.pl ldap.dump fixed.ldap
+	./updateLdif.pl dump.ldif fixed-dump.ldif
 
-3) shut down slapd
+3) Shut down slapd.
 
-4) Backup and remove your original database files
+4) Backup and remove your original database files.
 
-5) copy new schema file into place for the ldap server
+5) Copy new schema file into place for the LDAP server.
 
-6) Restart slapd
+6) Restart slapd.
 
-7) load the cleaned up data into ldap
+7) Load the cleaned up data into LDAP.
 
-   ldapadd -D "cn=Manager,o=hosting,dc=kgarner,dc=com" -W -x -f fixed.ldap
-
-
-
+   ldapadd -D "cn=Manager,o=hosting,dc=kgarner,dc=com" -W -x -f fixed-dump.ldif
