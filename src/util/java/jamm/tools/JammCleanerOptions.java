@@ -169,9 +169,9 @@ public final class JammCleanerOptions
      *
      * @return true or false
      */
-    public static boolean isDebug()
+    public static boolean isNonDestructive()
     {
-        return JammCleanerOptions.mDebug;
+        return JammCleanerOptions.mNonDestructive;
     }
 
     /**
@@ -179,9 +179,9 @@ public final class JammCleanerOptions
      *
      * @param debug value to assign to debug
      */
-    public static void setDebug(boolean debug)
+    public static void setNonDestructive(boolean nonDestructive)
     {
-        JammCleanerOptions.mDebug = debug;
+        JammCleanerOptions.mNonDestructive = nonDestructive;
     }
 
     /**
@@ -216,6 +216,6 @@ public final class JammCleanerOptions
     private static int mPort = 389;
     /** Base DN */
     private static String mBaseDn;
-    /** debug */
-    private static boolean mDebug;
+    /** non destructive */
+    private static boolean mNonDestructive;
 }

@@ -54,7 +54,8 @@ public final class JammCleaner
         opts.addOption('p', HAS_ARGS, "ldap port  (default: 389");
         opts.addOption('w', "password", HAS_ARGS,
                        "password to connect to LDAP with");
-        opts.addOption('d', "debug", NO_ARGS, "debug mode (non-destructive)");
+        opts.addOption('n', "no-execute", NO_ARGS,
+                       "Print would be executed, but do not execute.");
         opts.addOption('D', "dn", HAS_ARGS, "the dn to bind with",
                        IS_REQUIRED);
         opts.addOption('b', "base", HAS_ARGS, "base dn to search from",
@@ -106,9 +107,9 @@ public final class JammCleaner
         {
             JammCleanerOptions.setBaseDn(cmd.getOptionValue('b'));
         }
-        if (cmd.hasOption('d'))
+        if (cmd.hasOption('n'))
         {
-            JammCleanerOptions.setDebug(true);
+            JammCleanerOptions.setNonDestructive(true);
         }
     }
     
