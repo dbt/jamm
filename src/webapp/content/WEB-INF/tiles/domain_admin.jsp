@@ -159,29 +159,13 @@ Catch-All:
             <bean:write name="alias" property="name"/>
           </html:link>
           <div class=destinations>&nbsp;Destinations:
-            <%
-            // FIX ME: Put this in a custom tag
-
-            jamm.backend.AliasInfo dd_alias = (jamm.backend.AliasInfo) alias;
-            java.util.List dd_destinations = dd_alias.getMailDestinations();
-            for (int dd_j = 0; dd_j < dd_destinations.size(); dd_j++) {
-            if (dd_j == 3)
-            {
-            out.println(", ...");
-            }
-            else if (dd_j > 3)
-            {
-            }
-            else if (dd_j == 0)
-            {
-            out.print(dd_destinations.get(dd_j));
-            }
-            else
-            {
-            out.print(", " + dd_destinations.get(dd_j));
-            }
-            }
-            %>
+            <!--
+            FIXME:  Needs to be fixed to name= property=
+                    Will have to look at struts tags as example on how
+                    to do it.
+            -->
+            <jamm:list-abbrev limit="3"
+                              list="<%=alias.getMailDestinations()%>"/>
           </div>
         </td>
         <td align="left" width="6" bgcolor="#FFFFFF">
