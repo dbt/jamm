@@ -61,7 +61,7 @@ public class AddDomainAction extends JammAction
     {
         if (isCancelled(request))
         {
-            return mapping.findForward("user_home");
+            return mapping.findForward("site_admin");
         }
 
         AddDomainForm form = (AddDomainForm) actionForm;
@@ -76,6 +76,6 @@ public class AddDomainAction extends JammAction
             manager.changePassword(mail, form.getPassword());
         }
 
-        return mapping.findForward("user_home");
+        return mapping.findForward("site_admin");
     }
 }
