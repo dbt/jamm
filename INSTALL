@@ -26,10 +26,43 @@ Building instructions
     * Ant version 1.4.1
       http://jakarta.apache.org/ant/
 
-  Once all that is installed you can build the war file by typing:
+  Once all that is installed, you need to create a local
+  build.properties file to tell ant the location of the various
+  libraries.  To do this, copy src/build.properties to the top level
+  directory and uncomment and edit the lines for each library.
+
+  Once that is done, you can build the war file by typing:
 
     # ant dist
+
+  The war file will be created in the dist directory.
 
   If you need to clean it up
 
     # ant clean
+
+
+Installing Jamm
+---------------
+
+  OpenLDAP
+  --------
+
+  Put jamm.schema in your schema directory and make sure that its
+  included in the slapd.conf.  Then create an ldif file to lay down
+  the basic structure of the top level and the Manager.  Use ldapadd
+  to add them to LDAP, and you should be ready to start using JAMM.
+
+  The web parts
+  -------------
+  To install Jamm, unwar the file in your webapp directory in an
+  appropriately named directory or other appropriate place for your
+  serlet container.  Do not simply just drop the war file there as you
+  need to do some configuration first.
+
+  Once its unwared, go into the WEB-INF directory.  Copy
+  jamm.properties.dist to jamm.properties and edit it so it has that
+  it matches the configuration for your site.
+
+  At this point you should be good to go.  You may need to restart your
+  servlet container, check with your server documentation.

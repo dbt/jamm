@@ -7,11 +7,16 @@ administrator.
 
 Look at INSTALL for build and install instructions.
 
-Important Files
----------------
+Other Important Files
+---------------------
 
 * src/schema/jamm.schema
 
   This is the LDAP schema that Jamm expects to follow.  For an example
   of a LDIF file following this schema, look at
   doc/samples/sample.ldif
+
+Contact Us
+----------
+Dave Dribin (dave@dribin.org)
+Keith Garner (kgarner@kgarner.com)
