@@ -25,36 +25,36 @@ import javax.naming.NamingException;
 public class ChangePasswordServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request,
-			  HttpServletResponse response)
-	throws ServletException
+                          HttpServletResponse response)
+        throws ServletException
     {
-	String user;
-	String oldPassword;
-	String newPassword1;
-	String newPassword2;
-	String hashedPassword;
+        String user;
+        String oldPassword;
+        String newPassword1;
+        String newPassword2;
+        String hashedPassword;
         LdapFacade ldap;
-	HttpSession session;
+        HttpSession session;
 
         ldap = null;
-	try
+        try
         {
-	    session = request.getSession();
-	    user = request.getParameter("user");
-	    oldPassword = request.getParameter("old_password");
-	    newPassword1 = request.getParameter("new_password_1");
-	    newPassword2 = request.getParameter("new_password_2");
+            session = request.getSession();
+            user = request.getParameter("user");
+            oldPassword = request.getParameter("old_password");
+            newPassword1 = request.getParameter("new_password_1");
+            newPassword2 = request.getParameter("new_password_2");
 
-	    if (user.equals("") ||
-		oldPassword.equals("") ||
-		newPassword1.equals("") ||
-		newPassword2.equals(""))
+            if (user.equals("") ||
+                oldPassword.equals("") ||
+                newPassword1.equals("") ||
+                newPassword2.equals(""))
             {
-		session.setAttribute("error",
-				     "Please fill in all fields");
-		response.sendRedirect("error.jsp");
+                session.setAttribute("error",
+                                     "Please fill in all fields");
+                response.sendRedirect("error.jsp");
                 return;
-	    }
+            }
 
             ldap = authenticate(user, oldPassword);
                 
@@ -80,16 +80,16 @@ public class ChangePasswordServlet extends HttpServlet
             ldap.modifyAttribute("userPassword", hashedPassword);
             ldap.replaceModifiedAttributes();
 
-	    response.sendRedirect("success.jsp");
-	}
-	catch (IOException e)
+            response.sendRedirect("success.jsp");
+        }
+        catch (IOException e)
         {
-	    throw new ServletException(e);
-	}
-	catch (NamingException e)
+            throw new ServletException(e);
+        }
+        catch (NamingException e)
         {
-	    throw new ServletException(e);
-	}
+            throw new ServletException(e);
+        }
         finally
         {
             closeLdap(ldap);
@@ -124,7 +124,7 @@ public class ChangePasswordServlet extends HttpServlet
             closeLdap(ldap);
             ldap = null;
         }
-	
+        
         return ldap;
     }
     
