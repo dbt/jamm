@@ -38,6 +38,7 @@
   <html:submit>
     Submit Changes
   </html:submit>
+  <html:reset>Reset</html:reset>
 </html:form>
 
 <br/>
