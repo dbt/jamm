@@ -1,3 +1,5 @@
+Jamm itself:
+
 * Investigate case-sensitivity in JNDI, LDAP, and the LdapFacade.
 
 * Implement timestamp and enabled attributes.
@@ -7,6 +9,8 @@
 * Delete domain.
 
 * Assign "postmasters"
+
+* Change/delete assign postmaster@domain's password
 
 * Create/manage catch-alls (web pages)
 
@@ -20,3 +24,10 @@
 * Access control so users playing with URLs can't go someplace bad
 
 * Install doc
+
+
+Jamm related items:
+
+  Webpage:
+
+    * screen shots
