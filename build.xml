@@ -4,7 +4,7 @@
 
   <!-- set global properties for this build -->
   <property name="project.name" value="jamm"/>
-  <property name="project.version" value="0.9.2"/>
+  <property name="project.version" value="0.9.3"/>
   <property name="project.string"
             value="${project.name}-${project.version}" />
 
@@ -77,7 +77,7 @@
     <mkdir dir="dist" />
   </target>
 
-  <target name="build-util" depends="prepare"
+  <target name="build-util" depends="prepare, build-backend"
           description="Builds all code for the util parts">
     <depend srcDir="src/util/java" destDir="build/util/classes"
             cache="build/util/depcache" closure="yes">
@@ -95,6 +95,19 @@
         <path refid="lib.path" />
       </classpath>
     </javac>
+    <jar jarfile="build/util/dist/lib/${project.string}-util.jar"
+         basedir="build/util/classes">
+      <manifest>
+        <attribute name="Main-Class" value="jamm.tools.JammCleaner"/>
+      </manifest>
+    </jar>
+    <copy todir="build/util/dist/lib"
+          file="build/backend/${project.name}-backend.jar" />
+    <copy todir="build/util/dist/lib"
+          file="${cli.jar}" />
+    <copy todir="build/util/dist/bin"
+          file="src/util/shell/jammCleaner" />
+    <chmod file="build/util/dist/bin/jammCleaner" perm="555" />
   </target>
 
   <target name="build-backend" depends="prepare"
@@ -255,21 +268,9 @@
 
   <target name="dist-util"
           depends="build-util, build-backend">
-    <jar jarfile="build/util/dist/lib/${project.string}-util.jar"
-         basedir="build/util/classes">
-      <manifest>
-        <attribute name="Main-Class" value="jamm.tools.JammCleaner"/>
-      </manifest>
-    </jar>
-    <copy todir="build/util/dist/lib"
-          file="build/backend/${project.name}-backend.jar" />
-    <copy todir="build/util/dist/lib"
-          file="${cli.jar}" />
-    <copy todir="build/util/dist/bin"
-          file="src/util/shell/jammCleaner" />
-    <chmod file="build/util/dist/bin/jammCleaner" perm="555" />
+    <tar tarfile="build/jammUtils-${project.version}.tar.gz" basedir="build/util/dist"
+         compression="gzip" />
   </target>
-        
     
   <target name="dist" depends="dist-webapp, dist-util" />
 
@@ -358,6 +359,7 @@
         <include name="src/schema/jamm.schema"/>
         <include name="doc/samples/sample.ldif"/>
         <include name="build/${project.string}.war"/>
+        <include name="build/jammUtils-${project.version}.tar.gz"/>
       </fileset>
     </copy>
     <tar tarfile="build/${project.string}-bin.tar"
