@@ -283,15 +283,15 @@
     <checkstyle properties="checkstyle.properties">
       <fileset dir="src/webapp/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle properties="checkstyle.properties"
-                javadocScope="nothing">
+    <checkstyle properties="checkstyle.properties">
+      <property key="javadocScope" value="nothing"/>
       <fileset dir="src/webapp/test/java" includes="**/*.java" />
     </checkstyle>
     <checkstyle properties="checkstyle.properties">
       <fileset dir="src/backend/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle properties="checkstyle.properties"
-                javadocScope="nothing">
+    <checkstyle properties="checkstyle.properties">
+      <property key="javadocScope" value="nothing"/>
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
     <checkstyle properties="checkstyle.properties">
