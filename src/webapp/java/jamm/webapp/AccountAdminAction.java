@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+import jamm.backend.AccountInfo;
 import jamm.backend.MailManager;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
@@ -71,9 +72,6 @@ public class AccountAdminAction extends JammAction
             mail = user.getUsername();
         }
 
-        Map extraInfo = new HashMap();
-        extraInfo.put("mail", mail);
-        
         ChangePasswordForm cpf = new ChangePasswordForm();
         cpf.setMail(mail);
         request.setAttribute("changePasswordForm", cpf);
@@ -128,6 +126,9 @@ public class AccountAdminAction extends JammAction
             passwordParameters.put("mail", mail);
             passwordParameters.put("done", "account_admin");
             request.setAttribute("passwordParameters", passwordParameters);
+            
+            AccountInfo account = manager.getAccount(mail);
+            request.setAttribute("account", account);
 
             return (mapping.findForward("view"));
         }
