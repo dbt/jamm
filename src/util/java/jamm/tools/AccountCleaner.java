@@ -127,6 +127,10 @@ public class AccountCleaner
                 DomainInfo domain = (DomainInfo) d.next();
                 loadAccountListForDomain(domain.getName());
             }
+            if (JammCleanerOptions.isVerbose())
+            {
+                System.out.println();
+            }
 
             cleanUpAccounts();
         }
@@ -208,8 +212,17 @@ public class AccountCleaner
             AccountInfo account = (AccountInfo) a.next();
             try
             {
-                archiveAccount(account);
+                if (JammCleanerOptions.shouldBackup())
+                {
+                    archiveAccount(account);
+                }
+
                 deleteAccount(account);
+
+                if (JammCleanerOptions.isVerbose())
+                {
+                    System.out.println();
+                }
             }
             catch (IOException e)
             {
@@ -288,7 +301,13 @@ public class AccountCleaner
         sb = new StringBuffer(backupDir);
         sb.append(File.separatorChar).append(email).append(".zip");
 
-        System.out.println("Warez: " + sb.toString() + "\n");
+        if (JammCleanerOptions.isVerbose())
+        {
+            StringBuffer output = new StringBuffer();
+            output.append("Backuping up ").append(account.getName());
+            output.append(" to ").append(sb.toString());
+            System.out.println(output);
+        }
 
         ZipCreator zc = new ZipCreator(sb.toString());
         zc.open();
