@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Collection;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -250,6 +251,14 @@ public class MailManager
         {
             closeLdap(ldap);
         }
+    }
+
+    public void createAlias(String domain, String alias,
+                            Collection destinations)
+        throws MailManagerException
+    {
+        createAlias(domain, alias,
+                    (String []) destinations.toArray(new String[0]));
     }
 
     public void createAlias(String domain, String alias, String[] destinations)

@@ -23,6 +23,8 @@
                type="jamm.webapp.UpdateAliasForm"/>
     <form-bean name="addAccountForm"
                type="jamm.webapp.AddAccountForm"/>
+    <form-bean name="addAliasForm"
+               type="jamm.webapp.AddAliasForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -127,6 +129,16 @@
             scope="request"
             validate="true"
             input="/private/add_account.jsp">
+      <forward name="success" path="/private/domain_admin.do"
+               redirect="true"/>
+    </action>
+
+    <action path="/private/add_alias"
+            type="jamm.webapp.AddAliasAction"
+            name="addAliasForm"
+            scope="request"
+            validate="true"
+            input="/private/add_alias.jsp">
       <forward name="success" path="/private/domain_admin.do"
                redirect="true"/>
     </action>
