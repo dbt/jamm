@@ -172,7 +172,38 @@ public class LdapFacade
     public String getAttribute(String name)
         throws NamingException
     {
-        return (String) mAttributes.get(name).get();
+        return attributeToString(mAttributes.get(name));
+    }
+
+    /**
+     * Converts a single-valued attribute to a string.  If attribute
+     * is <code>null</code> then <code>null</code> is returned.  If
+     * the attribute is a byte array, the string representation of the
+     * byte array is returned.
+     *
+     * @param attribute Attribute to convert
+     * @return The string represtentation of the attribute
+     * @throws NamingExceptin If an error occured
+     * @see String#String(byte[])
+     */
+    private String attributeToString(Attribute attribute)
+        throws NamingException
+    {
+        if (attribute == null)
+        {
+            return null;
+        }
+
+        Object value = attribute.get();
+        if (value instanceof byte[])
+        {
+            byte[] byteArray = (byte[]) value;
+            return new String(byteArray);
+        }
+        else
+        {
+            return (String) value;
+        }
     }
 
     /**
@@ -463,13 +494,7 @@ public class LdapFacade
     public String getResultAttribute(String name)
         throws NamingException
     {
-        Attribute attribute = mCurrentResultAttributes.get(name);
-        if (attribute == null)
-        {
-            return null;
-        }
-        
-        return (String) attribute.get();
+        return attributeToString(mCurrentResultAttributes.get(name));
     }
 
     /**

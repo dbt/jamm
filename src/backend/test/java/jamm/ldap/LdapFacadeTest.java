@@ -95,8 +95,9 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getName());
         mLdap.close();
 
-        mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
-        assertEquals("Checking account 1 name", ACCT1_DN, mLdap.getName());
+        mLdap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
+        assertEquals("Checking account 1 name", LdapConstants.ACCT1_DN,
+                     mLdap.getName());
         mLdap.close();
 
         mLdap.simpleBind(ACCT2_DN, ACCT2_PW);
@@ -106,7 +107,7 @@ public class LdapFacadeTest extends TestCase
         try
         {
             // Try with invalid password
-            mLdap.simpleBind(ACCT1_DN, "badpw");
+            mLdap.simpleBind(LdapConstants.ACCT1_DN, "badpw");
             fail("Should have thrown AuthenticationException");
         }
         catch (AuthenticationException e)
@@ -132,7 +133,7 @@ public class LdapFacadeTest extends TestCase
         try
         {
             // Try with invalid DN
-            mLdap.simpleBind("baddn", ACCT1_PW);
+            mLdap.simpleBind("baddn", LdapConstants.ACCT1_PW);
             fail("Should have thrown InvalidNameException");
         }
         catch (InvalidNameException e)
@@ -149,14 +150,21 @@ public class LdapFacadeTest extends TestCase
     {
         mLdap = new LdapFacade("localhost");
 
-        mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
-        assertEquals("Checking account1 DN", ACCT1_DN, mLdap.getName());
+        mLdap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
+        assertEquals("Checking account1 DN", LdapConstants.ACCT1_DN,
+                     mLdap.getName());
         assertEquals("Checking mail", "acct1@domain1.test",
                      mLdap.getAttribute("mail"));
         assertEquals("Checking homeDirectory", "/home/vmail/domains",
                      mLdap.getAttribute("homeDirectory"));
         assertEquals("Checking mailbox", "domain1.test/acct1",
                      mLdap.getAttribute("mailbox"));
+        assertNull("Checking description",
+                   mLdap.getAttribute("description"));
+        // The password is stored as a binary object, so this test
+        // ensures that the facade converts it to a string.
+        assertEquals("Checking password", LdapConstants.ACCT1_PW_HASHED,
+                     mLdap.getAttribute("userPassword"));
 
         Set expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
@@ -220,7 +228,7 @@ public class LdapFacadeTest extends TestCase
 
         expectedResults = new HashSet();
         expectedResults.add(DOMAIN1_DN);
-        expectedResults.add(ACCT1_DN);
+        expectedResults.add(LdapConstants.ACCT1_DN);
         expectedResults.add(ACCT2_DN);
 
         results = new HashSet();
@@ -245,32 +253,42 @@ public class LdapFacadeTest extends TestCase
         throws NamingException
     {
         mLdap = new LdapFacade("localhost");
-        mLdap.anonymousBind();
-        mLdap.searchOneLevel("o=hosting,dc=jamm,dc=test",
-                             "jvd=domain1.test");
-        assertTrue("Checking for results", mLdap.nextResult());
-        assertEquals("Checking result dn", DOMAIN1_DN,
-                     mLdap.getResultName());
-        assertEquals("Checking jvd", "domain1.test",
-                     mLdap.getResultAttribute("jvd"));
-        assertNull("Checking description",
-                   mLdap.getResultAttribute("description"));
 
-        Set expectedObjectClass = new HashSet();
+        mLdap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
+        mLdap.searchSubtree("o=hosting,dc=jamm,dc=test",
+                            "mail=acct1@domain1.test");
+        assertTrue("Checking for results", mLdap.nextResult());
+        assertEquals("Checking account1 DN", LdapConstants.ACCT1_DN,
+                     mLdap.getResultName());
+        assertEquals("Checking mail", "acct1@domain1.test",
+                     mLdap.getResultAttribute("mail"));
+        assertEquals("Checking homeDirectory", "/home/vmail/domains",
+                     mLdap.getResultAttribute("homeDirectory"));
+        assertEquals("Checking mailbox", "domain1.test/acct1",
+                     mLdap.getResultAttribute("mailbox"));
+        assertNull("Checking description",
+                   mLdap.getAttribute("description"));
+        // The password is stored as a binary object, so this test
+        // ensures that the facade converts it to a string.
+        assertEquals("Checking password", LdapConstants.ACCT1_PW_HASHED,
+                     mLdap.getResultAttribute("userPassword"));
+
+        Set expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
-        expectedObjectClass.add("JammVirtualDomain");
+        expectedObjectClass.add("JammMailAccount");
+
         Set objectClass = mLdap.getAllResultAttributeValues("objectClass");
-        assertEquals("Checking objectClass", expectedObjectClass, objectClass);
+        assertEquals("Checking multi-value objectClass", expectedObjectClass,
+                     objectClass);
 
         assertTrue("Checking lower case object class",
-                   objectClass.contains("jammVirtualDomain"));
+                   objectClass.contains("jammMailAccount"));
         assertTrue("Checking upper case object class",
-                   objectClass.contains("JammVirtualDomain"));
+                   objectClass.contains("JammMailAccount"));
 
-        Set expectedDescription = Collections.EMPTY_SET;
         Set description = mLdap.getAllResultAttributeValues("description");
-        assertEquals("Checking description", expectedDescription, description);
-
+        assertEquals("Checking description has no values",
+                     Collections.EMPTY_SET, description);
         assertTrue("Checking for no more results", !mLdap.nextResult());
     }
 
@@ -473,9 +491,11 @@ public class LdapFacadeTest extends TestCase
     private static final String ABUSE1_DN =
         "mail=abuse@domain1.test,jvd=domain2.test,o=hosting,dc=jamm,dc=test";
 
+    /*
     private static final String ACCT1_DN =
         "mail=acct1@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
     private static final String ACCT1_PW = "acct1pw";
+    */
 
     private static final String ACCT2_DN =
         "mail=acct2@domain1.test,jvd=domain1.test,o=hosting,dc=jamm,dc=test";
