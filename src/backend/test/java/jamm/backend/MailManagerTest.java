@@ -86,6 +86,20 @@ public class MailManagerTest extends TestCase
         assertTrue("jvd=" + domain + " hasn't been created",
                    mLdap.nextResult());
 
+        assertEquals("Checking editAliases",
+                     "TRUE",
+                     mLdap.getResultAttribute("editAliases"));
+        assertEquals("Checking editAccounts",
+                     "TRUE",
+                     mLdap.getResultAttribute("editAccounts"));
+        assertEquals("Checking editPostmasters",
+                     "TRUE",
+                     mLdap.getResultAttribute("editPostmasters"));
+        assertEquals("Checking editCatchalls",
+                     "TRUE",
+                     mLdap.getResultAttribute("editCatchalls"));
+
+
         mLdap.searchOneLevel(domainDn, "objectClass=*");
         int counter = 0;
         while (mLdap.nextResult())
@@ -602,10 +616,38 @@ public class MailManagerTest extends TestCase
             if (di.getName().equals("domain1.test"))
             {
                 domainFound = true;
+                assertTrue("Testing editAliases",
+                           di.getCanEditAliases());
+                assertTrue("Testing editAccounts",
+                           di.getCanEditAccounts());
+                assertTrue("Testing editPostmasters",
+                           di.getCanEditPostmasters());
+                assertTrue("Testing editCatchalls",
+                           !di.getCanEditCatchalls());
             }
         }
         assertTrue("Checking for domain1.test", domainFound);
     }
+
+    public void testGetDomain()
+        throws MailManagerException
+    {
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        DomainInfo di = manager.getDomain("domain1.test");
+
+        assertTrue("Testing editAliases",
+                   di.getCanEditAliases());
+        assertTrue("Testing editAccounts",
+                   di.getCanEditAccounts());
+        assertTrue("Testing editPostmasters",
+                   di.getCanEditPostmasters());
+        assertTrue("Testing editCatchalls",
+                   !di.getCanEditCatchalls());
+    }
+
 
     /** The LDAP facade used for most tests. */
     private LdapFacade mLdap;

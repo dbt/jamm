@@ -292,18 +292,7 @@ public class MailManager
             ldap.searchOneLevel(mBase, "jvd=*");
             while (ldap.nextResult())
             {
-                String name = ldap.getResultAttribute("jvd");
-                boolean canEditAliases = true;
-                boolean canEditAccounts = true;
-                boolean canEditPostmasters = false;
-                boolean canEditCatchalls = false;
-
-                DomainInfo domainInfo =
-                    new DomainInfo(name, canEditAliases, canEditAccounts,
-                                   canEditPostmasters, canEditCatchalls);
-                                                       
-            
-                domains.add(domainInfo);
+                domains.add(createDomainInfo(ldap));
             }
         }
         catch (NamingException e)
@@ -317,6 +306,75 @@ public class MailManager
 
         Collections.sort(domains, new DomainNameComparator());
         return domains;
+    }
+
+    /**
+     *
+     * @param domainName a <code>String</code> value
+     * @return a <code>DomainInfo</code> value
+     * @exception MailManagerException if an error occurs
+     */
+    public DomainInfo getDomain(String domainName)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        DomainInfo domainInfo = null;
+        try
+        {
+            ldap = getLdap();
+
+            ldap.searchOneLevel(mBase, "jvd=" + domainName);
+            ldap.nextResult();
+
+            domainInfo = createDomainInfo(ldap);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+        
+        return domainInfo;
+    }
+
+    /**
+     * Creates a DomainInfo object assuming the ldapfacade points at
+     * an appropriate object.
+     *
+     * @param ldap a <code>LdapFacade</code> value
+     * @return a <code>DomainInfo</code> value
+     * @exception NamingException if an error occurs
+     */
+    private DomainInfo createDomainInfo(LdapFacade ldap)
+        throws NamingException
+    {
+        String name = ldap.getResultAttribute("jvd");
+        boolean canEditAliases = string2Boolean(
+            ldap.getResultAttribute("editAliases"));
+        boolean canEditAccounts = string2Boolean(
+            ldap.getResultAttribute("editAccounts"));
+        boolean canEditPostmasters = string2Boolean(
+            ldap.getResultAttribute("editPostmasters"));
+        boolean canEditCatchalls = string2Boolean(
+            ldap.getResultAttribute("editCatchalls"));
+        return new DomainInfo(name, canEditAliases, canEditAccounts,
+                              canEditPostmasters, canEditCatchalls);
+    }
+        
+
+    /**
+     * Returns true if string passed in is "true", ignoring case.
+     * False otherwise.
+     *
+     * @param string a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
+    private boolean string2Boolean(String string)
+    {
+        return Boolean.valueOf(string).booleanValue();
     }
 
     /**
@@ -401,6 +459,10 @@ public class MailManager
                            new String[] {"top", "JammVirtualDomain"});
             attributes.put("jvd", domain);
             attributes.put("postfixTransport", "virtual:");
+            attributes.put("editAliases", "TRUE");
+            attributes.put("editAccounts", "TRUE");
+            attributes.put("editPostmasters", "TRUE");
+            attributes.put("editCatchalls", "TRUE");
             String domainDn = domainDn(domain);
             ldap.addElement(domainDn, attributes);
 
