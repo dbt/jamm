@@ -26,7 +26,11 @@ public class DomainAdminAction extends JammAction
     {
         User user  = getUser(request);
         MailManager manager = getMailManager(user);
-        String domain = MailAddress.hostFromAddress(user.getUsername());
+        String domain = request.getParameter("domain");
+        if (domain == null)
+        {
+            domain = MailAddress.hostFromAddress(user.getUsername());
+        }
         request.setAttribute("domainName", domain);
 
         List accounts = manager.getAccounts(domain);

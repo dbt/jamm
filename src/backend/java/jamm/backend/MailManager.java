@@ -165,6 +165,34 @@ public class MailManager
         return isPostmaster;
     }
 
+    public List getDomains()
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        List  domains = new ArrayList();
+        try
+        {
+            ldap = getLdap();
+
+            ldap.searchOneLevel(mBase, "jvd=*");
+            while (ldap.nextResult())
+            {
+                domains.add(ldap.getResultAttribute("jvd"));
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        Collections.sort(domains, String.CASE_INSENSITIVE_ORDER);
+        return domains;
+    }
+
     public String getDnFromMail(String mail)
         throws MailManagerException
     {

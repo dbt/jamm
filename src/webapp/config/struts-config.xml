@@ -74,6 +74,12 @@
             type="jamm.webapp.MainMenuAction">
       <forward name="account_admin" path="/private/account_admin.do"/>
       <forward name="domain_admin" path="/private/domain_admin.do"/>
+      <forward name="site_admin" path="/private/site_admin.do"/>
+    </action>
+
+    <action path="/private/site_admin"
+            type="jamm.webapp.SiteAdminAction">
+      <forward name="site_admin" path="/private/site_admin.jsp"/>
     </action>
 
     <action path="/private/domain_admin"

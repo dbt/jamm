@@ -31,7 +31,18 @@ public class LoginAction extends Action
                                               Globals.getLdapPort(),
                                               Globals.getLdapSearchBase());
                                               
-        String userDn = manager.getDnFromMail(form.getUsername());
+        boolean isRoot = false;
+        String userDn;
+        if (form.getUsername().equals("root"))
+        {
+            userDn = Globals.getRootDn();
+            isRoot = true;
+        }
+        else
+        {
+            userDn = manager.getDnFromMail(form.getUsername());
+        }
+        
         if (userDn == null)
         {
             errors.add(ActionErrors.GLOBAL_ERROR,
@@ -56,7 +67,12 @@ public class LoginAction extends Action
         }
 
         Set roles = new HashSet();
-        if (manager.isPostmaster(form.getUsername()))
+        if (isRoot)
+        {
+            roles.add(User.SITE_ADMIN_ROLE);
+            roles.add(User.DOMAIN_ADMIN_ROLE);
+        }
+        else if (manager.isPostmaster(form.getUsername()))
         {
             roles.add(User.DOMAIN_ADMIN_ROLE);
         }

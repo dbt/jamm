@@ -15,6 +15,10 @@
 #
 #jamm.ldap.query_filter = (&(mail={0})(paidup=true))
 
+# The DN of the "root" user
+#
+#jamm.ldap.root_dn =
+
 # The class used to generate random numbers.  The default is
 # java.security.SecureRandom.
 #

@@ -46,8 +46,19 @@ public final class Globals
         return mLdapQueryFormat.format(args);
     }
 
+    public static String getRootDn()
+    {
+        return mRootDn;
+    }
+
+    public static void setRootDn(String rootDn)
+    {
+        mRootDn = rootDn;
+    }
+
     private static String mLdapHost;
     private static int mLdapPort;
     private static String mLdapSearchBase;
     private static MessageFormat mLdapQueryFormat;
+    private static String mRootDn;
 }

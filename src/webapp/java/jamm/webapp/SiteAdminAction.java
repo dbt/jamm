@@ -1,5 +1,7 @@
 package jamm.webapp;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,7 +9,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class MainMenuAction extends JammAction
+import jamm.backend.MailManager;
+
+public class SiteAdminAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -16,17 +20,9 @@ public class MainMenuAction extends JammAction
         throws Exception
     {
         User user = getUser(request);
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
-        {
-            return (mapping.findForward("site_admin"));
-        }
-        else if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
-        {
-            return (mapping.findForward("domain_admin"));
-        }
-        else
-        {
-            return (mapping.findForward("account_admin"));
-        }
+        MailManager manager = getMailManager(user);
+        List domains = manager.getDomains();
+        request.setAttribute("domains", domains);
+        return (mapping.findForward("site_admin"));
     }
 }

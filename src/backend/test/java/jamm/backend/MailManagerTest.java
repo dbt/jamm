@@ -510,6 +510,17 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking number of aliases", 4, aliases.size());
     }
 
+    public void testGetDomains()
+        throws MailManagerException
+    {
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        List domains = manager.getDomains();
+        assertTrue("Checking for domain1.test",
+                     domains.contains("domain1.test"));
+    }
+
     private LdapFacade mLdap;
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }

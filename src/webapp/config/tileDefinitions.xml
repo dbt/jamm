@@ -22,6 +22,9 @@
     <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
   </definition>
 
+  <definition name="site_admin" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/site_admin.jsp"/>
+  </definition>
   <definition name="domain_admin" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/domain_admin.jsp"/>
   </definition>

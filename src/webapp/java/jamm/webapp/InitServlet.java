@@ -49,6 +49,8 @@ public class InitServlet extends HttpServlet
             LdapPassword.setRandomClass(
                 getStringProperty(properties, "random_class",
                                   "java.security.SecureRandom"));
+            Globals.setRootDn(
+                getStringProperty(properties, "ldap.root_dn", ""));
         }
         catch (IOException e)
         {
