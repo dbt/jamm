@@ -1,6 +1,6 @@
 /*
  * Jamm
- * Copyright (C) 2002 Dave Dribin and Keith Garner
+ * Copyright (C) 2004 Dave Dribin and Keith Garner
  *  
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/*
+ * Portions Copyright (C) 2004 Dave Terrell
  */
 
 package jamm.ldap;
@@ -166,7 +170,7 @@ public abstract class LdapPassword
 
         baos = new ByteArrayOutputStream();
         int carry = 0;
-        for(int i = 0; i < bytes.length; i++)
+        for (int i = 0; i < bytes.length; i++)
         {
             int val;
             int b = (bytes[i]) & 255;
@@ -248,6 +252,8 @@ public abstract class LdapPassword
      * <code>java.security.SecureRandom</code>
      */
     private static String mRandomClass = "java.security.SecureRandom";
+
+    /** The map to use for Base64 encoding. */
     private static final byte[] BASE64_MAP = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
