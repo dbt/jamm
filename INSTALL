@@ -33,13 +33,13 @@ Building instructions
 
   Once that is done, you can build the war file by typing:
 
-    # ant dist
+    % ant dist
 
   The war file will be created in the dist directory.
 
   If you need to clean it up
 
-    # ant clean
+    % ant clean
 
 
 Installing Jamm
@@ -55,12 +55,11 @@ Installing Jamm
 
   The web parts
   -------------
-  To install Jamm, unwar the file in your webapp directory in an
-  appropriately named directory or other appropriate place for your
-  serlet container.  Do not simply just drop the war file there as you
+  To install Jamm, unjar the war file in the directory you would like
+  to deploy to.  Do not simply just drop the war file there as you
   need to do some configuration first.
 
-  Once its unwared, go into the WEB-INF directory.  Copy
+  Once its unjared, go into the WEB-INF directory.  Copy
   jamm.properties.dist to jamm.properties and edit it so it has that
   it matches the configuration for your site.
 
