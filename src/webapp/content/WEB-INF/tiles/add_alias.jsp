@@ -15,6 +15,14 @@
     </tr>
     <tr>
       <td align="right">
+        <bean:message key="add_alias.prompt.common_name"/>
+      </td>
+      <td align="left">
+        <html:text property="commonName" size="30"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="right">
         <bean:message key="add_alias.prompt.destinations"/>
       </td>
       <td align="left">

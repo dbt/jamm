@@ -6,21 +6,10 @@
   Change Password
 </html:link>
 
-              <!--
-              <form>
-                <table>
-                  <tr>
-                    <td align="right">Full Name</td>
-                    <td><input type="text" value="Joe User"/></td>
-                    <td><input type="submit" value="Change"/></td>
-                  </tr>
-                </table>
-              </form>
-              -->
 <html:errors/>
 <html:form action="/private/update_alias">
   <p>
-    Full Name: <html:text property="commonName" size="50"/>
+    Full Name: <html:text property="commonName" name="alias" size="50"/>
   </p>
   <html:hidden property="mail"/>
   <table width="100%" border="0">
