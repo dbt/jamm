@@ -21,8 +21,6 @@ package jamm.backend;
 
 import junit.framework.TestCase;
 
-import jamm.backend.MailManagerOptions;
-
 /**
  * Unit test for the {@link MailManagerOptions} class.
  */
