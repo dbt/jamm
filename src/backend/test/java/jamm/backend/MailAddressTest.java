@@ -28,6 +28,8 @@ public class MailAddressTest extends TestCase
 {
     /**
      * Standard JUnit constructor.
+     *
+     * @param name
      */
     public MailAddressTest(String name)
     {
