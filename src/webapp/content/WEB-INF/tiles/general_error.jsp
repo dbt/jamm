@@ -3,4 +3,4 @@
     JAMM General Error Page
 </h1>
 
-<html:errors bundle="ktgtest"/>
+<html:errors />
