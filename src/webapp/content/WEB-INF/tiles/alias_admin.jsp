@@ -37,16 +37,16 @@
           </tr>
           <tr>
             <th align="left">Destination</th>
-            <td align=middle width=79>
+            <td align="right" width=79>
               <html:img page='/imgs/delete_alias.gif'
                         alt='Delete Alias'
                         width='79' height='23'/>
             </td>
           </tr>
-          <tr>
-            <td bgcolor="#FFFFFF" colspan=2>
-              <html:form action="/private/update_alias">
-  <html:hidden property="mail"/>
+          <html:form action="/private/update_alias">
+            <tr>
+              <td bgcolor="#FFFFFF" colspan=2>
+                <html:hidden property="mail"/>
 
                 <table width="100%" border="0" cellspacing="1" cellpadding="0">
                   <logic:iterate indexId="i" id="destination" name="alias"
@@ -70,17 +70,20 @@
                     </tr>
                   </logic:iterate>
                 </table>
-  <p>
-    List email addresses to add as destinations:
-  </p>
-  <p>
-    <html:textarea rows="6" cols="35" property="added"/>
-  </p>
-  <p>
-    <html:submit styleClass="button">Update Destinations</html:submit>
-  </p>
-</html:form>
-
+                <p>
+                  List email addresses to add as destinations:
+                </p>
+                <p>
+                  <html:textarea rows="6" cols="35" property="added"/>
+                </p>
+                <p>
+                  <html:submit styleClass="button">Update Destinations</html:submit>
+                </p>
+              </td>
+            </tr>
+          </html:form>
+        </tbody>
+      </table>
     </td>
   </tr>
 </table>
