@@ -52,11 +52,22 @@ a:hover {
   color:#FF6600;
   text-decoration: underline;
 }
+
+input.mbutton {
+  cursor: hand; 
+  background-color: #E4ECF6; 
+  text-align: center;
+  font-family: verdana, arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+}
+
 input.button {
   cursor: hand; 
   background-color: #E4ECF6; 
   text-align: center;
   font-family: verdana, arial, sans-serif;
-  font-size:11px;
-  font-weight:bold;
+  font-size: 11px;
+  font-weight: normal;
 }
+
