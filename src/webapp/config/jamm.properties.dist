@@ -19,3 +19,10 @@
 # java.security.SecureRandom.
 #
 #jamm.random_class = java.util.Random
+
+# Should jamm use the Modify Password Extended Operation to set the
+# users's password?  If true, it will.  If false, jamm itself will
+# generate an SSHA hash and set the userPassword attribute to it.
+# The default is true
+#
+#jamm.password.exop = true
