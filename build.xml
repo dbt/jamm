@@ -141,7 +141,7 @@
       <jvmarg value="-Dlog4j.disableOverride=${log4j.disableOverride}" />
 
       <formatter type="plain" />
-      <test name="jamm.backend.AllTests"
+      <test name="jamm.AllTests"
             outfile="test/backend/results" />
     </junit>
   </target>
