@@ -181,7 +181,10 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("mail"));
         assertEquals("Checking alias maildrop", "postmaster",
                      mLdap.getResultAttribute("maildrop"));
+        assertTrue("Checking for alias active",
+                   stringToBoolean(mLdap.getResultAttribute("accountActive")));
         assertTrue("Checking for no more aliases", !mLdap.nextResult());
+
 
         expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");
@@ -212,6 +215,8 @@ public class MailManagerTest extends TestCase
         AliasInfo alias = manager.getAlias(aliasMail);
         alias.setDestinations(new String[] {"mail2@xyz.test",
                                             "mail3@mmm.test"});
+        alias.setActive(false);
+        alias.setAdministrator(true);
         manager.modifyAlias(alias);
 
         mLdap = new LdapFacade("localhost");
@@ -223,8 +228,49 @@ public class MailManagerTest extends TestCase
         expectedMaildrops.add("mail3@mmm.test");
         assertEquals("Checking alias mail", expectedMaildrops,
                      mLdap.getAllResultAttributeValues("maildrop"));
+        assertTrue("Checking not active",
+                   !stringToBoolean(
+                       mLdap.getResultAttribute("accountActive")));
+
+        assertTrue("Checking is postmaster",
+                   manager.isPostmaster(domain, aliasMail));
     }
 
+    /**
+     * Tests modifying an account
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
+    public void testModifyAccount()
+        throws NamingException, MailManagerException
+    {
+        String domain = "modify-account.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        String accountName = "account";
+        String accountEmail = accountName + "@" + domain;
+        manager.createDomain(domain);
+        manager.createAccount(domain, accountName, accountName);
+
+        AccountInfo account = manager.getAccount(accountEmail);
+        account.setActive(false);
+        account.setAdministrator(true);
+        manager.modifyAccount(account);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + accountEmail);
+        assertTrue("Checking for a result", mLdap.nextResult());
+        assertTrue("Checking to see if active is false",
+                   !stringToBoolean(
+                       mLdap.getResultAttribute("accountActive")));
+        assertTrue("Checking to see if postmaster",
+                   manager.isPostmaster(domain, accountEmail));
+    }
+    
     /**
      * Tests retrieving data for an alias.
      */
@@ -250,6 +296,17 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking destination", "mail1@abc.test", destination);
         destination = (String) destinations.get(1);
         assertEquals("Checking destination", "mail2@xyz.test", destination);
+
+        assertTrue("Checking for active",
+                   alias.isActive());
+        assertTrue("Checking for postmaster",
+                   !alias.isAdministrator());
+
+        alias.setActive(false);
+        manager.modifyAlias(alias);
+        alias = manager.getAlias(aliasMail);
+        assertTrue("Checking for nonactive",
+                   !alias.isActive());
 
         // Test for alias that doesn't exist.  Make sure null is returned
         alias = manager.getAlias("noalias@" + domain);
@@ -590,12 +647,24 @@ public class MailManagerTest extends TestCase
         AccountInfo account = (AccountInfo) accounts.get(0);
         assertEquals("Checking name for account[0]",
                      "aaa@" + domain, account.getName());
+        assertTrue("Checking active for account[0]",
+                   account.isActive());
+        assertTrue("Checking admin for account[0]",
+                   !account.isAdministrator());
         account = (AccountInfo) accounts.get(1);
         assertEquals("Checking name for account[1]",
                      "MMM@" + domain, account.getName());
+        assertTrue("Checking active for account[1]",
+                   account.isActive());
+        assertTrue("Checking admin for account[1]",
+                   !account.isAdministrator());
         account = (AccountInfo) accounts.get(2);
         assertEquals("Checking name for account[2]",
                      "zzz@" + domain, account.getName());
+        assertTrue("Checking active for account[2]",
+                   account.isActive());
+        assertTrue("Checking admin for account[2]",
+                   !account.isAdministrator());
 
         List aliases = manager.getAliases(domain);
         assertEquals("Checking number of aliases", 4, aliases.size());
@@ -678,6 +747,51 @@ public class MailManagerTest extends TestCase
                        mLdap.getResultAttribute("editPostmasters")));
     }
 
+    /**
+     * Tests the adding and removing of domain admin/postmaster power
+     * to users identified by their e-mail address.
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
+    public void testAddRemovePostmaster()
+        throws NamingException, MailManagerException
+    {
+        String domain = "add-postmaster.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+        String domainDn = "jvd=" + domain + "," + BASE;
+            
+        String aliasName = "pm";
+        String aliasMail = aliasName + "@" + domain;
+        String pmDn = "mail=" + aliasMail + "," + domainDn;
+        manager.createAlias(domain, aliasName, new String[] {"postmaster"});
+        manager.addPostmaster(domain, aliasMail);
+
+        String postMail = "postmaster@" + domain;
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + postMail);
+        mLdap.nextResult();
+
+        Set roleOccupants = mLdap.getAllResultAttributeValues("roleOccupant");
+        assertTrue("Checking for pm as roleOccupant",
+                   roleOccupants.contains(pmDn));
+
+
+        manager.removePostmaster(domain, aliasMail);
+        mLdap.searchSubtree(BASE, "mail=" + postMail);
+        mLdap.nextResult();
+
+        roleOccupants = mLdap.getAllResultAttributeValues("roleOccupant");
+        assertTrue("Checking for pm not as roleOccupant",
+                   !roleOccupants.contains(pmDn));
+    }
+    
     private boolean stringToBoolean(String string)
     {
         return Boolean.valueOf(string).booleanValue();
