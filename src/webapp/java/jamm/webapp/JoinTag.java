@@ -33,7 +33,7 @@ import org.apache.struts.util.RequestUtils;
 /**
  * Abbreviates a list and ends it with ellipses.
  *
- * @jsp:tag name="join"
+ * @jsp.tag name="join"
  */
 public class JoinTag extends TagSupport
 {
@@ -58,7 +58,7 @@ public class JoinTag extends TagSupport
      *
      * @param limit the upper bounds on the number to show, 0 for "infinite"
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="The upper limit of items to show"
      */
     public void setLimit(int limit)
@@ -79,7 +79,7 @@ public class JoinTag extends TagSupport
      *
      * @param name the name of the bean
      *
-     * @jsp:attribute required="true" rtexprvalue="false"
+     * @jsp.attribute required="true" rtexprvalue="false"
      *                description="name of bean"
      */
     public void setName(String name)
@@ -92,7 +92,7 @@ public class JoinTag extends TagSupport
      *
      * @param property the name of the property
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="name of property"
      */
     public void setProperty(String property)
@@ -105,7 +105,7 @@ public class JoinTag extends TagSupport
      *
      * @param separator the separator
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="what is our separator"
      */
     public void setSeparator(String separator)
@@ -118,7 +118,7 @@ public class JoinTag extends TagSupport
      *
      * @param scope the scope to look in
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="scope to locate bean in"
      */
     public void setScope(String scope)
@@ -131,7 +131,7 @@ public class JoinTag extends TagSupport
      *
      * @param ellipsis the ellipsis
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="what should the ellipsis be"
      */
     public void setEllipsis(String ellipsis)
@@ -144,7 +144,7 @@ public class JoinTag extends TagSupport
      *
      * @param noEllipsis true or false
      *
-     * @jsp:attribute required="false" rtexprvalue="false"
+     * @jsp.attribute required="false" rtexprvalue="false"
      *                description="do not show ellipsis"
      */
     public void setNoEllipsis(boolean noEllipsis)
