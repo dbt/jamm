@@ -68,6 +68,7 @@ public class LdapFacadeTest extends TestCase
         {
             // Try with invalid password
             mLdap.simpleBind(MGR_DN, "badpw");
+            fail("Should have thrown AuthenticationException");
         }
         catch (AuthenticationException e)
         {
@@ -78,6 +79,7 @@ public class LdapFacadeTest extends TestCase
         {
             // Try with invalid DN
             mLdap.simpleBind("baddn", MGR_PW);
+            fail("Should have thrown InvalidNameException");
         }
         catch (InvalidNameException e)
         {
