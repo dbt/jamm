@@ -44,6 +44,8 @@
     <forward name="add_account" path="/private/add_account.jsp"/>
     <forward name="add_alias" path="/private/add_alias.jsp"/>
     <forward name="general_error" path="/private/general_error.jsp"/>
+    <forward name="site_admin" path="/private/site_admin.do"
+             redirect="true"/>
     <forward name="domain_admin" path="/private/domain_admin.do"
              redirect="true"/>
     <forward name="account_admin" path="/private/account_admin.do"
@@ -91,17 +93,17 @@
 
     <action path="/private/site_admin"
             type="jamm.webapp.SiteAdminAction">
-      <forward name="site_admin" path="/private/site_admin.jsp"/>
+      <forward name="view" path="/private/site_admin.jsp"/>
     </action>
 
     <action path="/private/domain_admin"
             type="jamm.webapp.DomainAdminAction">
-      <forward name="domain_admin" path="/private/domain_admin.jsp"/>
+      <forward name="view" path="/private/domain_admin.jsp"/>
     </action>
 
     <action path="/private/account_admin"
             type="jamm.webapp.AccountAdminAction">
-      <forward name="account_admin" path="/private/account_admin.jsp"/>
+      <forward name="view" path="/private/account_admin.jsp"/>
       <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
@@ -118,8 +120,6 @@
             name="domainAccountForm"
             scope="request"
             validate="false">
-      <forward name="domain_admin" path="/private/domain_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/domain_alias"
@@ -127,8 +127,6 @@
             name="domainAliasForm"
             scope="request"
             validate="false">
-      <forward name="domain_admin" path="/private/domain_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/update_alias"
@@ -137,8 +135,6 @@
             scope="request"
             validate="true"
             input="/private/account_admin.do">
-      <forward name="account_admin" path="/private/account_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/add_domain"
@@ -147,8 +143,6 @@
             scope="request"
             validate="true"
             input="/private/add_domain.jsp">
-      <forward name="success" path="/private/site_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/add_account"
@@ -157,8 +151,6 @@
             scope="request"
             validate="true"
             input="/private/add_account.jsp">
-      <forward name="success" path="/private/domain_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/add_alias"
@@ -167,8 +159,6 @@
             scope="request"
             validate="true"
             input="/private/add_alias.jsp">
-      <forward name="success" path="/private/domain_admin.do"
-               redirect="true"/>
     </action>
 
     <action path="/private/site_config"
