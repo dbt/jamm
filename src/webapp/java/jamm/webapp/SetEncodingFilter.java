@@ -37,16 +37,28 @@ import javax.servlet.ServletResponse;
  */
 public class SetEncodingFilter implements Filter
 {
-    /* (non-Javadoc)
+    /**
+     * Inits the filter.
+     * 
+     * @param filterConfig the filter configuration
      * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
-    public void init(FilterConfig filterConfig) throws ServletException
+    public void init(FilterConfig filterConfig)
     {
         mEncoding = filterConfig.getInitParameter("encoding");
     }
 
-    /* (non-Javadoc)
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+    /**
+     * @param request servlet request
+     * @param response servlet response
+     * @param chain the current chain of filters we're in.
+     * 
+     * @throws IOException when IO when the chain of filters has an IO issue
+     * @throws ServletException on servlet error
+     * 
+     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+     *                                    javax.servlet.ServletResponse,
+     *                                    javax.servlet.FilterChain)
      */
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain)
@@ -60,7 +72,9 @@ public class SetEncodingFilter implements Filter
         chain.doFilter(request, response);
     }
 
-    /* (non-Javadoc)
+    /**
+     * Cleans up resources this filter is using.
+     * 
      * @see javax.servlet.Filter#destroy()
      */
     public void destroy()
@@ -68,5 +82,6 @@ public class SetEncodingFilter implements Filter
         mEncoding = null;
     }
     
+    /** Encoding to hard code to. */
     private String mEncoding;
 }
