@@ -41,9 +41,7 @@ public class ChangePasswordAction extends Action
         // if we changed our own password.
         if (form.getMail().equals(user.getUsername()))
         {
-            User newUser = new User(user.getUsername(), user.getDn(),
-                                    form.getPassword1());
-            session.setAttribute("user", newUser);
+            user.setPassword(form.getPassword1());
         }
         
         return mapping.findForward("home");
