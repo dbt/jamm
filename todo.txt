@@ -23,3 +23,8 @@ Jamm itself:
 
 * Generate passwords for accounts and/or aliases
   Port diceware to Java?
+
+
+NAR User Requests:
+
+* migrate between domains
