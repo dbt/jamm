@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -88,9 +89,6 @@ public class LdapFacadeTest extends TestCase
     public void testGetElementAttributes()
         throws NamingException
     {
-        Set expectedObjectClass;
-        Set objectClass;
-        
         mLdap = new LdapFacade("localhost");
 
         mLdap.simpleBind(ACCT1_DN, ACCT1_PW);
@@ -102,12 +100,16 @@ public class LdapFacadeTest extends TestCase
         assertEquals("Checking mailbox", "domain1.test/acct1",
                      mLdap.getAttribute("mailbox"));
 
-        expectedObjectClass = new HashSet();
+        Set expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAccount");
-        objectClass = mLdap.getAllAttributeValues("objectClass");
+
+        Set objectClass = mLdap.getAllAttributeValues("objectClass");
         assertEquals("Checking multi-value objectClass", expectedObjectClass,
                      objectClass);
+        Set noAttribute = mLdap.getAllAttributeValues("noAttribute");
+        assertEquals("Checking noAttribute has no values",
+                     Collections.EMPTY_SET, noAttribute);
     }
 
     public void testSearchOneLevel()
@@ -169,9 +171,6 @@ public class LdapFacadeTest extends TestCase
     public void testGetResultAttributes()
         throws NamingException
     {
-        Set expectedObjectClass;
-        Set objectClass;
-        
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
         mLdap.searchOneLevel("o=hosting,dc=jamm,dc=test",
@@ -181,11 +180,16 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getResultName());
         assertEquals("Checking jvd", "domain1.test",
                      mLdap.getResultAttribute("jvd"));
-        expectedObjectClass = new HashSet();
+
+        Set expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammVirtualDomain");
-        objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        Set objectClass = mLdap.getAllResultAttributeValues("objectClass");
         assertEquals("Checking objectClass", expectedObjectClass, objectClass);
+
+        Set expectedDescription = Collections.EMPTY_SET;
+        Set description = mLdap.getAllResultAttributeValues("description");
+        assertEquals("Checking description", expectedDescription, description);
 
         assertTrue("Checking for no more results", !mLdap.nextResult());
     }
@@ -298,6 +302,70 @@ public class LdapFacadeTest extends TestCase
         expectedTelephoneNumbers.add("555-1234");
         expectedTelephoneNumbers.add("555-6789");
         assertEquals("Checking telephoneNumber", expectedTelephoneNumbers,
+                     mLdap.getAllResultAttributeValues("telephoneNumber"));
+    }
+
+    public void testModifyMultiValue()
+        throws NamingException
+    {
+        String ouName = "mod_multi";
+        String parent = "dc=jamm,dc=test";
+        String dn = "ou=" + ouName + ",dc=jamm,dc=test";
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(MGR_DN, MGR_PW);
+        
+        // This element should not exist
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should not exist",
+                   !mLdap.nextResult());
+
+        // Create a new element
+        Map attributes = new HashMap();
+        attributes.put("objectClass", new String[] { "top",
+                                                     "organizationalUnit"});
+        Set telephoneNumbers = new HashSet();
+        telephoneNumbers.add("555-1234");
+        telephoneNumbers.add("555-6789");
+        attributes.put("telephoneNumber", telephoneNumbers);
+        attributes.put("ou", ouName);
+        attributes.put("description", "my description");
+        mLdap.addElement(dn, attributes);
+
+        // Modify using Map
+        telephoneNumbers.clear();
+        telephoneNumbers.add("555-0666");
+        telephoneNumbers.add("555-2222");
+        telephoneNumbers.add("555-6759");
+        mLdap.modifyElementAttribute(dn, "telephoneNumber", telephoneNumbers);
+
+        // See if the element exists and check the values
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should exist",
+                   mLdap.nextResult());
+
+        Set expectedTelephoneNumbers = new HashSet();
+        expectedTelephoneNumbers.add("555-0666");
+        expectedTelephoneNumbers.add("555-2222");
+        expectedTelephoneNumbers.add("555-6759");
+        assertEquals("Checking telephoneNumber after Map modify",
+                     expectedTelephoneNumbers,
+                     mLdap.getAllResultAttributeValues("telephoneNumber"));
+
+        // Modify using String[]
+        mLdap.modifyElementAttribute(dn, "telephoneNumber",
+                                     new String[] {"555-1111"});
+
+        // Check the values
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should exist",
+                   mLdap.nextResult());
+
+        expectedTelephoneNumbers.clear();
+        expectedTelephoneNumbers.add("555-1111");
+        assertEquals("Checking telephoneNumber after String[] modify",
+                     expectedTelephoneNumbers,
                      mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -14,6 +15,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 import javax.naming.directory.SearchControls;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.BasicAttribute;
@@ -163,13 +165,17 @@ public class LdapFacade
         values = new HashSet();
         try
         {
-            valueEnumeration = mAttributes.get(name).getAll();
-            while (valueEnumeration.hasMore())
+            Attribute attribute = mAttributes.get(name);
+            if (attribute != null)
             {
-                String value;
+                valueEnumeration = attribute.getAll();
+                while (valueEnumeration.hasMore())
+                {
+                    String value;
 
-                value = (String) valueEnumeration.next();
-                values.add(value);
+                    value = (String) valueEnumeration.next();
+                    values.add(value);
+                }
             }
         }
         finally
@@ -277,6 +283,37 @@ public class LdapFacade
                                   attributes);
     }
 
+    public void modifyElementAttribute(String dn, String attributeName,
+                                       Collection newValues)
+        throws NamingException
+    {
+        BasicAttributes attributes = new BasicAttributes();
+        BasicAttribute attribute = new BasicAttribute(attributeName);
+        Iterator i = newValues.iterator();
+        while (i.hasNext())
+        {
+            attribute.add(i.next());
+        }
+        attributes.put(attribute);
+        mContext.modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE,
+                                  attributes);
+    }
+
+    public void modifyElementAttribute(String dn, String attributeName,
+                                       String[] newValues)
+        throws NamingException
+    {
+        BasicAttributes attributes = new BasicAttributes();
+        BasicAttribute attribute = new BasicAttribute(attributeName);
+        for (int i = 0; i < newValues.length; i++)
+        {
+            attribute.add(newValues[i]);
+        }
+        attributes.put(attribute);
+        mContext.modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE,
+                                  attributes);
+    }
+
     public void deleteElement(String distinguishedName)
         throws NamingException
     {
@@ -363,13 +400,17 @@ public class LdapFacade
         values = new HashSet();
         try
         {
-            valueEnumeration = mCurrentResultAttributes.get(name).getAll();
-            while (valueEnumeration.hasMore())
+            Attribute attribute = mCurrentResultAttributes.get(name);
+            if (attribute != null)
             {
-                String value;
+                valueEnumeration = attribute.getAll();
+                while (valueEnumeration.hasMore())
+                {
+                    String value;
 
-                value = (String) valueEnumeration.next();
-                values.add(value);
+                    value = (String) valueEnumeration.next();
+                    values.add(value);
+                }
             }
         }
         finally
