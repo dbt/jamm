@@ -24,6 +24,11 @@ public class LoginAction extends Action
                                  HttpServletResponse response)
         throws Exception
     {
+        if (isCancelled(request))
+        {
+            return mapping.findForward("home");
+        }
+        
         ActionErrors errors = new ActionErrors();
         LoginForm form = (LoginForm) actionForm;
    

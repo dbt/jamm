@@ -26,6 +26,9 @@
         <html:submit>
           <bean:message key="login.button.submit"/>
         </html:submit>
+        <html:cancel>
+          <bean:message key="login.button.cancel"/>
+        </html:cancel>
       </td>
     </tr>
   </table>
