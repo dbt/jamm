@@ -18,7 +18,10 @@
  */
 package jamm.webapp;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 /**
  * @author kgarner
@@ -58,6 +61,22 @@ public class UpdateAccountForm extends ActionForm
     public void setMail(String string)
     {
         mMail = string;
+    }
+
+    /**
+     * Resets the form to the default value.  It gets the value for
+     * mail from the http request, sets added to an empty string, and
+     * deleted to a zero length array.
+     *
+     * @param mapping an <code>ActionMapping</code> used to select
+     *                this instance
+     * @param request a <code>HttpServletRequest</code> that is being
+     *                processed
+     */
+    public void reset(ActionMapping mapping, HttpServletRequest request)
+    {
+        mMail = (String) request.getAttribute("mail");
+        mCommonName = "";
     }
 
     private String mCommonName;
