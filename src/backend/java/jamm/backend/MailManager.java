@@ -576,8 +576,8 @@ public class MailManager
         return mailDn.toString();
     }
 
-    private final String ACCOUNT_OBJECT_CLASS = "JammMailAccount";
-    private final String ALIAS_OBJECT_CLASS = "JammMailAlias";
+    private static final String ACCOUNT_OBJECT_CLASS = "JammMailAccount";
+    private static final String ALIAS_OBJECT_CLASS = "JammMailAlias";
 
     private String mHost;
     private int mPort;

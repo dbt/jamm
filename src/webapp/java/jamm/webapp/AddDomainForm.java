@@ -1,14 +1,9 @@
 package jamm.webapp;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
 public class AddDomainForm extends ActionForm
