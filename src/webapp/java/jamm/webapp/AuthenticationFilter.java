@@ -69,6 +69,7 @@ public class AuthenticationFilter implements Filter
      * @param servletRequest the request we're filtering.
      * @param servletResponse the response of the servlet transaction
      * @param chain the filter chain
+     */
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain chain)
