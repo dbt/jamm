@@ -21,6 +21,8 @@
                type="jamm.webapp.DomainConfigForm"/>
     <form-bean name="updateAliasForm"
                type="jamm.webapp.UpdateAliasForm"/>
+    <form-bean name="addDomainForm"
+               type="jamm.webapp.AddDomainForm"/>
     <form-bean name="addAccountForm"
                type="jamm.webapp.AddAccountForm"/>
     <form-bean name="addAliasForm"
@@ -36,6 +38,7 @@
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
     <forward name="user_home" path="/private/" redirect="true"/>
+    <forward name="add_domain" path="/private/add_domain.jsp"/>
     <forward name="add_account" path="/private/add_account.jsp"/>
     <forward name="add_alias" path="/private/add_alias.jsp"/>
   </global-forwards>
@@ -126,6 +129,16 @@
             validate="true"
             input="/private/account_admin.do">
       <forward name="account_admin" path="/private/account_admin.do"
+               redirect="true"/>
+    </action>
+
+    <action path="/private/add_domain"
+            type="jamm.webapp.AddDomainAction"
+            name="addDomainForm"
+            scope="request"
+            validate="true"
+            input="/private/add_domain.jsp">
+      <forward name="success" path="/private/site_admin.do"
                redirect="true"/>
     </action>
 

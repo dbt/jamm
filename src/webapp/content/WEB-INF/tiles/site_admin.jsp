@@ -13,3 +13,5 @@
     </li>
   </logic:iterate>
 </ul>
+
+<html:link forward="add_domain">Add Domain</html:link>
