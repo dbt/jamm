@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.9 2002-06-05 15:46:41 ddribin Exp $
+#$Id: jamm.schema,v 1.10 2002-07-30 15:51:24 ark-sf Exp $
 # We depend on courier.schema
 #
 # OID prefix: 1.3.6.1.4.1.12461
@@ -94,7 +94,7 @@ objectclass ( 1.3.6.1.4.1.12461.1.2.2 NAME 'JammMailAlias' SUP top AUXILIARY
         MAY ( mailsource $ cn $ description $ userPassword $ accountActive $
 		lastChange ) )
 
-objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain' SUP top AUXILIARY
+objectclass ( 1.3.6.1.4.1.12461.1.2.3 NAME 'JammVirtualDomain' SUP top STRUCTURAL
 	DESC 'Virtual Domain entry to be used with postfix transport maps'
 	MUST ( jvd )
 	MAY ( postfixTransport $ description $ accountActive $ lastChange $
