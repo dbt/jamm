@@ -807,12 +807,13 @@ public class MailManagerTest extends TestCase
         manager.createAccount(domain, "zzz", "zzz", "zzz");
         manager.createAccount(domain, "aaa", "aaa", "aaa");
         manager.createAccount(domain, "MMM", "MMM", "MMM");
+        manager.addPostmaster(domain, "MMM@" + domain);
 
         // Create some aliases
         manager.createAlias(domain, "zzzz", "zzzz", new String[]
             { "z@z.test", "M@z.test", "a@z.test"});
         manager.changePassword("zzzz@" + domain, "zzzz");
-        manager.addPostmaster(domain, "zzz@" + domain);
+        manager.addPostmaster(domain, "zzzz@" + domain);
         manager.createAlias(domain, "MMMM", "MMMM", new String[]
             { "z@M.test", "M@M.test", "a@cMtest"});
         manager.changePassword("MMMM@" + domain, "MMMM");
@@ -848,7 +849,7 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking active for account[1]",
                    account.isActive());
         assertTrue("Checking admin for account[1]",
-                   !account.isAdministrator());
+                   account.isAdministrator());
         assertEquals("Checking homeDirectory for account[1]",
                      "/home/vmail/domains", account.getHomeDirectory());
         assertEquals("Checking mailbox for account[1]",
@@ -861,7 +862,7 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking active for account[2]",
                    account.isActive());
         assertTrue("Checking admin for account[2]",
-                   account.isAdministrator());
+                   !account.isAdministrator());
         assertEquals("Checking homeDirectory for account[2]",
                      "/home/vmail/domains", account.getHomeDirectory());
         assertEquals("Checking mailbox for account[2]",
@@ -869,6 +870,22 @@ public class MailManagerTest extends TestCase
 
         List aliases = manager.getAliases(domain);
         assertEquals("Checking number of aliases", 4, aliases.size());
+
+        AliasInfo alias = (AliasInfo) aliases.get(1);
+        assertEquals ("Checking name for alias[1]", "MMMM@" + domain,
+                      alias.getName());
+        assertEquals("Checking common name for alias[1]", "MMMM",
+                     alias.getCommonName());
+        assertTrue("Checking is Postmaster for alias[1]",
+                   alias.isAdministrator());
+        
+        alias = (AliasInfo) aliases.get(3);
+        assertEquals ("Checking name for alias[3]", "zzzz@" + domain,
+                      alias.getName());
+        assertEquals("Checking common name for alias[3]", "zzzz",
+                     alias.getCommonName());
+        assertTrue("Checking is Postmaster for alias[3]",
+                   alias.isAdministrator());
     }
 
     /**
