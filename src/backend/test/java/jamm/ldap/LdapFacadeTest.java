@@ -237,6 +237,8 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getResultName());
         assertEquals("Checking jvd", "domain1.test",
                      mLdap.getResultAttribute("jvd"));
+        assertNull("Checking description",
+                   mLdap.getResultAttribute("description"));
 
         Set expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");

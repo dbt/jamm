@@ -463,7 +463,13 @@ public class LdapFacade
     public String getResultAttribute(String name)
         throws NamingException
     {
-        return (String) mCurrentResultAttributes.get(name).get();
+        Attribute attribute = mCurrentResultAttributes.get(name);
+        if (attribute == null)
+        {
+            return null;
+        }
+        
+        return (String) attribute.get();
     }
 
     /**
