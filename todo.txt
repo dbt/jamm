@@ -11,6 +11,8 @@ Jamm itself:
 
     * User feedback after actions using html:messages.
 
+    * Finish backup-before-delete funcationality of jammCleaner
+
   Not sure when:
 
     * Generate passwords for accounts and/or aliases
