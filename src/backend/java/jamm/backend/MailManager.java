@@ -433,6 +433,12 @@ public class MailManager
         String mail = MailAddress.addressFromParts(account, domain);
         String maildn = mailDn(mail);
 
+        if (account.equalsIgnoreCase("postmaster"))
+        {
+            throw new AccountExistsException("Could not create account: " +
+                "hidden alias postmaster already exists.");
+        }
+
         try
         {
             ldap = getLdap();
@@ -580,6 +586,12 @@ public class MailManager
     {
         LdapFacade ldap = null;
         String mail = MailAddress.addressFromParts(alias, domain);
+        
+        if (alias.equalsIgnoreCase("postmaster"))
+        {
+            throw new AccountExistsException("Could not create alias: " +
+                "hidden alias postmaster already exists.");
+        }
         
         try
         {
