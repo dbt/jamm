@@ -97,6 +97,28 @@ public class ChangePasswordForm extends ActionForm
     }
 
     /**
+     * The logical name of the page to forward to after the action is
+     * done.
+     *
+     * @param done Logical forward name
+     */
+    public void setDone(String done)
+    {
+        mDone = done;
+    }
+
+    /**
+     * Returns the logical name of the page to forward to after the
+     * action is done.
+     *
+     * @return Logical forward name.
+     */
+    public String getDone()
+    {
+        return mDone;
+    }
+
+    /**
      * Clears out both passwords and sets the Mail to the parameter
      * passed in via the request.
      *
@@ -107,6 +129,7 @@ public class ChangePasswordForm extends ActionForm
     {
         clearPasswords();
         mMail = request.getParameter("mail");
+        mDone = request.getParameter("done");
     }
 
     /**
@@ -149,4 +172,7 @@ public class ChangePasswordForm extends ActionForm
 
     /** The second password. */
     private String mRetypedPassword;
+
+    /** The name of the page to forward to when done with the action. */
+    private String mDone;
 }
