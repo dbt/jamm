@@ -1,10 +1,12 @@
+
   <global-exceptions>
     <exception type="jamm.backend.MailManagerException"
                key="general.error.body"
                path="/private/general_error.jsp"/>
     <exception type="jamm.backend.MailManagerCommunicationException"
                key="communication.error.body"
-               path="/communication_error.jsp"/>
+               path="/communication_error.jsp"
+               handler="jamm.webapp.JammExceptionHandler"/>
     <exception type="jamm.backend.AccountExistsException"
                key="account_exists.error.body"
                path="/private/account_exists_error.jsp"/>
