@@ -1446,10 +1446,11 @@ public class MailManager
         {
             ldap = getLdap();
             String commonName = account.getCommonName();
-            if (commonName != null && !commonName.equals(""))
+            if (commonName != null && commonName.equals(""))
             {
-                ldap.modifyElementAttribute(dn, "cn", commonName);
+                account.setCommonName(null);
             }
+            ldap.modifyElementAttribute(dn, "cn", account.getCommonName());
             ldap.modifyElementAttribute(dn, "accountActive",
                                         booleanToString(account.isActive()));
             if (isPostmaster(domain, mail))
@@ -1504,6 +1505,11 @@ public class MailManager
         try
         {
             ldap = getLdap();
+            String commonName = alias.getCommonName();
+            if (commonName != null && commonName.equals(""))
+            {
+                alias.setCommonName(null);
+            }
             ldap.modifyElementAttribute(dn, "cn", alias.getCommonName());
             ldap.modifyElementAttribute(dn, "maildrop",
                                         alias.getMailDestinations());
