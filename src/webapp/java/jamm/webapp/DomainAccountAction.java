@@ -33,6 +33,7 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
 import jamm.backend.AccountInfo;
+import jamm.backend.DomainInfo;
 
 /**
  * It should call MailManager to perform the assigned actions on
@@ -68,6 +69,9 @@ public class DomainAccountAction extends JammAction
         User user = getUser(request);
 
         manager = getMailManager(user);
+        DomainInfo domainInfo = manager.getDomain(form.getDomain());
+        boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
+        
         accountInfos = new HashMap();
         
         System.out.println("====================================" +
@@ -75,19 +79,26 @@ public class DomainAccountAction extends JammAction
         
         System.out.println("Delete: " +
                            Arrays.asList(form.getItemsToDelete()));
-        
-        Iterator i = form.getUncheckedActiveItems().iterator();
-        modifyActive(false, i);
 
-        i = form.getCheckedActiveItems().iterator();
-        modifyActive(true, i);
+        Iterator i;
 
-        i = form.getUncheckedAdminItems().iterator();
-        modifyAdministrator(false, i);
+        if (domainInfo.getCanEditAccounts() || userIsSiteAdmin)
+        {
+            i = form.getUncheckedActiveItems().iterator();
+            modifyActive(false, i);
 
-        i = form.getCheckedAdminItems().iterator();
-        modifyAdministrator(true, i);
+            i = form.getCheckedActiveItems().iterator();
+            modifyActive(true, i);
+        }
 
+        if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
+        {
+            i = form.getUncheckedAdminItems().iterator();
+            modifyAdministrator(false, i);
+
+            i = form.getCheckedAdminItems().iterator();
+            modifyAdministrator(true, i);
+        }
 
         i = accountInfos.values().iterator();
         while (i.hasNext())

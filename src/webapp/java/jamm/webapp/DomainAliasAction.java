@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
 import jamm.backend.AliasInfo;
+import jamm.backend.DomainInfo;
 
 /**
  * Calls MailManager to perform the assigned actions on aliases in a
@@ -66,23 +67,30 @@ public class DomainAliasAction extends JammAction
         User user = getUser(request);
 
         manager = getMailManager(user);
+        DomainInfo domainInfo = manager.getDomain(form.getDomain());
+        boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
+        
         aliasInfos = new HashMap();
 
         System.out.println("====================================" +
                            "====================================");
 
-        Iterator j = form.getUncheckedActiveItems().iterator();
+        Iterator j;
+
+        j = form.getUncheckedActiveItems().iterator();
         modifyActive(false, j);
 
         j = form.getCheckedActiveItems().iterator();
         modifyActive(true, j);
 
-        j = form.getUncheckedAdminItems().iterator();
-        modifyAdministrator(false, j);
+        if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
+        {
+            j = form.getUncheckedAdminItems().iterator();
+            modifyAdministrator(false, j);
 
-        j = form.getCheckedAdminItems().iterator();
-        modifyAdministrator(true, j);
-
+            j = form.getCheckedAdminItems().iterator();
+            modifyAdministrator(true, j);
+        }
 
         // We'll modify first and then delete.  We probably should not
         // modify anything marked for deletion, to save some cycles,

@@ -38,6 +38,7 @@ import jamm.backend.MailManager;
 import jamm.backend.AccountInfo;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
+import jamm.backend.DomainInfo;
 
 /**
  * Loads data via Mail Manager needed for the domain administration
@@ -191,6 +192,19 @@ public class DomainAdminAction extends JammAction
         }
         caf.setDomain(domain);
         request.setAttribute("catchAllForm", caf);
+
+
+        // Help the jsp page deceide how to render.
+        DomainInfo domainInfo = manager.getDomain(domain);
+        boolean userIsSiteAdmin = user.isUserInRole(User.SITE_ADMIN_ROLE);
+
+        RenderDomainInfo renderDomain = new RenderDomainInfo();
+        renderDomain.setCanEditAccounts(
+            domainInfo.getCanEditAccounts() || userIsSiteAdmin);
+        renderDomain.setCanEditPostmasters(
+            domainInfo.getCanEditPostmasters() || userIsSiteAdmin);
+        
+        request.setAttribute("domainInfo", renderDomain);
 
         return (mapping.findForward("view"));
     }
