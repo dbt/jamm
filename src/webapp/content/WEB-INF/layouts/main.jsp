@@ -5,7 +5,7 @@
     <html:base/>
   </head>
 
-  <body>
+  <body bgcolor="#FFFFFF">
     <tiles:insert attribute="header"/>
     <tiles:insert attribute="body"/>
     <tiles:insert attribute="footer"/>

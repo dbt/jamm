@@ -4,7 +4,7 @@
     <title></title>
   </head>
 
-  <body>
+  <body bgcolor="#FFFFFF">
     <h1 align="center">Admin Menu <bean:write name="domainName"/></h1>
 
     <table width="80%" border="1" cellspacing="0" cellpadding="3"
