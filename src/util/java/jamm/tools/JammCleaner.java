@@ -22,6 +22,8 @@ package jamm.tools;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.MissingOptionException;
+import org.apache.commons.cli.MissingArgumentException;
 
 /**
  * This is the application that cleans up after jamm.
@@ -51,7 +53,7 @@ public final class JammCleaner
         opts.addOption('v', "verbose", NO_ARGS, "verbose");
         opts.addOption('y', "yes", NO_ARGS, "Assume yes for all questions");
         opts.addOption('h', HAS_ARGS, "ldap host  (default: localhost)");
-        opts.addOption('p', HAS_ARGS, "ldap port  (default: 389");
+        opts.addOption('p', HAS_ARGS, "ldap port  (default: 389)");
         opts.addOption('w', "password", HAS_ARGS,
                        "password to connect to LDAP with");
         opts.addOption('n', "no-execute", NO_ARGS,
@@ -123,10 +125,29 @@ public final class JammCleaner
         throws Exception
     {
         Options opts = getOptions();
-        CommandLine cmdl = opts.parse(argv);
+        CommandLine cmdl = null;
+        try
+        {
+            cmdl = opts.parse(argv);
+        }
+        catch (MissingOptionException e)
+        {
+            System.out.println("Missing required options.");
+            // System.out.println(e.toString());
+            printHelp(opts);
+            System.exit(1);
+        }
+        catch (MissingArgumentException e)
+        {
+            System.out.println("Missing required Arguments.");
+            // System.out.println(e.toString());
+            printHelp(opts);
+            System.exit(1);
+        }
+        
         parseArgs(opts, cmdl);
         
-        System.out.println(JammCleanerOptions.argDump());
+        // System.out.println(JammCleanerOptions.argDump());
 
         AccountCleaner ac = new AccountCleaner();
         ac.cleanUp();
