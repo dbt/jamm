@@ -65,23 +65,23 @@ public final class JammCleanerOptions
     }
 
     /**
-     * Gets the value of rootDn
+     * Gets the value of bindDn
      *
-     * @return the value of rootDn
+     * @return the value of bindDn
      */
-    public static String getRootDn() 
+    public static String getBindDn() 
     {
-        return JammCleanerOptions.mRootDn;
+        return JammCleanerOptions.mBindDn;
     }
 
     /**
-     * Sets the value of rootDn
+     * Sets the value of bindDn
      *
-     * @param rootDn Value to assign to this.rootDn
+     * @param bindDn Value to assign to this.bindDn
      */
-    public static void setRootDn(String rootDn)
+    public static void setBindDn(String bindDn)
     {
-        JammCleanerOptions.mRootDn = rootDn;
+        JammCleanerOptions.mBindDn = bindDn;
     }
 
     /**
@@ -176,7 +176,7 @@ public final class JammCleanerOptions
         sb.append("assume yes: ").append(mAssumeYes).append("\n");
         sb.append("host: ").append(mHost).append("\n");
         sb.append("port: ").append(mPort).append("\n");
-        sb.append("root dn: ").append(mRootDn).append("\n");
+        sb.append("bind dn: ").append(mBindDn).append("\n");
         sb.append("base dn: ").append(mBaseDn).append("\n");
 
         return sb.toString();
@@ -187,7 +187,7 @@ public final class JammCleanerOptions
     /** assume yes to questions */
     private static boolean mAssumeYes = false;
     /** what's the DN to connect as */
-    private static String mRootDn = null;
+    private static String mBindDn = null;
     /** The password to use */
     private static String mPassword = null;
     /** The host to connect to */
