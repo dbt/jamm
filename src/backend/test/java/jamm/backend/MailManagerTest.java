@@ -219,6 +219,36 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    public void testAuthenticate()
+        throws MailManagerException
+    {
+        String domain = "authenticatedomain.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String accountName = "account";
+        String accountPassword = "account1pw";
+        manager.createAccount(domain, accountName, accountPassword);
+
+        String mail = accountName + "@" + domain;
+        String accountDn = "mail=" + mail + "," + domainDn;
+
+        // Create a manager against the new account
+        manager = new MailManager("localhost", BASE, accountDn,
+                                  accountPassword);
+        assertTrue("Checking authentication of " + accountDn,
+                   manager.authenticate());
+
+        manager = new MailManager("localhost", BASE, accountDn,
+                                  "bad password");
+        assertTrue("Checking non-authentication of " + accountDn,
+                   !manager.authenticate());
+    }
+
     public void testAddCatchall()
         throws NamingException, MailManagerException
     {

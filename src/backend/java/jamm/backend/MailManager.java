@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.naming.NamingException;
+import javax.naming.AuthenticationException;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
@@ -17,6 +18,34 @@ public class MailManager
         mBase = base;
         mBindDn = binddn;
         mBindPassword = bindpw;
+    }
+
+    public boolean authenticate()
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        boolean authenticated = false;
+        
+        ldap = new LdapFacade(mHost);
+        try
+        {
+            ldap.simpleBind(mBindDn, mBindPassword);
+            authenticated = true;
+        }
+        catch (AuthenticationException e)
+        {
+            authenticated = false;
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Could not bind", e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        return authenticated;
     }
 
     public void createDomain(String domain)
