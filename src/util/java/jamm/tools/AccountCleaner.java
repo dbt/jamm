@@ -33,12 +33,14 @@ import jamm.util.UserQueries;
 import jamm.util.FileUtils;
 
 /**
- * The account cleaner object
+ * The account cleaner object.  To nuke all accounts for a domain,
+ * create with a specified domain and set cut off time to be 0.
  */
 public class AccountCleaner
 {
     /**
      * Creates a new <code>AccountCleaner</code> instance.
+     * This instance cleans all domains.
      */
     public AccountCleaner()
     {
@@ -49,8 +51,27 @@ public class AccountCleaner
 
         mDeadAccounts = new ArrayList();
         mCutOffTime = 5;
+        mDomain = null;
     }
 
+    /**
+     * Creates a new <code>AccountCleaner</code> instance.  This
+     * instance only cleans the domain specified.
+     *
+     * @param domain the domain to clean.
+     */
+    public AccountCleaner(String domain)
+    {
+        mManager = new MailManager(JammCleanerOptions.getHost(),
+                                   JammCleanerOptions.getBaseDn(),
+                                   JammCleanerOptions.getBindDn(),
+                                   JammCleanerOptions.getPassword());
+
+        mDeadAccounts = new ArrayList();
+        mCutOffTime = 5;
+        mDomain = domain;
+    }
+    
     /**
      * How long should an account be inactive before we nuke it.
      *
@@ -78,9 +99,19 @@ public class AccountCleaner
     {
         try
         {
-            List domains = mManager.getDomains();
-            Iterator d = domains.iterator();
+            List domains;
 
+            if (mDomain == null)
+            {
+                domains = mManager.getDomains();
+            }
+            else
+            {
+                domains = new ArrayList();
+                domains.add(mDomain);
+            }
+            
+            Iterator d = domains.iterator();
             while (d.hasNext())
             {
                 DomainInfo domain = (DomainInfo) d.next();
@@ -205,4 +236,6 @@ public class AccountCleaner
     private MailManager mManager;
     /** the accounts to remove */
     private List mDeadAccounts;
+    /** domain name to clean */
+    private String mDomain;
 }
