@@ -21,6 +21,8 @@ package jamm.webapp;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -87,6 +89,13 @@ public class DomainAdminAction extends JammAction
         }
         
         request.setAttribute("domain", domain);
+
+        Map postmasterPasswordParameters = new HashMap();
+        postmasterPasswordParameters.put(
+            "mail", MailAddress.addressFromParts("postmaster", domain));
+        postmasterPasswordParameters.put("done", "domain_admin");
+        request.setAttribute("postmasterPasswordParameters",
+                             postmasterPasswordParameters);
 
         // Create the bread crumbs
         List breadCrumbs = new ArrayList();
