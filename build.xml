@@ -54,17 +54,36 @@
 
   <target name="prepare" depends="build-properties-up-to-date">
     <mkdir dir="build" />
+    <mkdir dir="build/backend/classes" />
     <mkdir dir="build/webapp/root" />
     <mkdir dir="build/webapp/root/WEB-INF" />
     <mkdir dir="build/webapp/root/WEB-INF/classes" />
     <mkdir dir="build/webapp/root/WEB-INF/lib" />
 
     <mkdir dir="test" />
-    <mkdir dir="test/webapp" />
+    <mkdir dir="test/backend/classes" />
     <mkdir dir="test/webapp/classes" />
 
     <mkdir dir="dist" />
   </target>
+
+  <target name="build-backend" depends="prepare"
+          description="Builds all code for the backend.">
+    <javac srcdir="src/backend/java"
+	   destdir="build/backend/classes"
+           optimize="${compile.optimize}" debug="${compile.debug}"
+	   classpathref="lib.path" />
+
+    <javac srcdir="src/backend/test/java"
+	   destdir="test/backend/classes"
+	   debug="on" optimize="off">
+      <classpath>
+       <pathelement location="build/backend/classes" />
+	<path refid="lib.path" />
+      </classpath>
+    </javac>
+  </target>
+  <target name="b-b" depends="build-backend" />
 
   <target name="build-webapp-java" depends="prepare"
           description="Builds all code for the web application.">
@@ -110,7 +129,23 @@
 
   <target name="build-webapp" depends="build-webapp-java" />
 
-  <target name="build" depends="build-webapp" />
+  <target name="build" depends="build-webapp, build-backend" />
+
+  <target name="test-backend" depends="build-backend">
+    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+      <classpath>
+        <pathelement location="test/backend/classes" />
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
+      </classpath>
+      <jvmarg value="-Dlog4j.disableOverride=${log4j.disableOverride}" />
+
+      <formatter type="plain" />
+      <test name="jamm.backend.AllTests"
+            outfile="test/backend/results" />
+    </junit>
+  </target>
+  <target name="t-b" depends="test-backend" />
 
   <target name="test-webapp" depends="build-webapp">
     <junit printsummary="yes" fork="yes" haltonfailure="yes">
@@ -133,7 +168,11 @@
 	  depends="build-webapp, build-webapp-webdoclet">
     <jar jarfile="dist/${project.string}.war"
 	 basedir="build/webapp/root"
-	 excludes="WEB-INF/jamm.properties"/>
+	 excludes="WEB-INF/jamm.properties">
+      <manifest>
+        <attribute name="Main-Class" value="dude" />
+      </manifest>
+    </jar>
   </target>
     
   <target name="dist" depends="dist-webapp" />

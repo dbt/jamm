@@ -1,0 +1,29 @@
+#
+# Use this data to run the JUnit tests
+#
+#
+# Add this to the end of your slapd.conf to create a separate database
+# for Jamm testing:
+#
+# ----- slap.conf -----
+# database      ldbm
+# suffix        "dc=jamm,dc=test"
+# rootdn        "cn=Manager,dc=jamm,dc=test"
+# rootpw        jammtest
+# directory     /var/lib/ldap/jamm
+# access to * by * read
+# ----- slapd.conf -----
+#
+
+dn: dc=jamm, dc=test
+objectClass: top
+
+dn: cn=Manager, dc=jamm, dc=test
+objectClass: top
+objectClass: organizationalRole
+cn: Manager
+
+dn: o=hosting, dc=jamm, dc=test
+objectClass: top
+objectClass: organization
+o: hosting
