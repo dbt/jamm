@@ -365,13 +365,32 @@ public class MailManager
 
     /**
      * Returns true if string passed in is "true", ignoring case.
-     * False otherwise.
+     * False otherwise.  If the string is null, it returns true.
      *
      * @param string a <code>String</code> value
      * @return a <code>boolean</code> value
      */
     private boolean stringToBoolean(String string)
     {
+        return stringToBoolean(string, true);
+    }
+
+    /**
+     * Returns true if string passed in is "true", ignoring case.
+     * Returns the default if the string is null.  False in all other
+     * cases.
+     *
+     * @param string a string representing a boolean
+     * @param defaultValue the default boolean value to return
+     * @return a boolean value
+     */
+    private boolean stringToBoolean(String string, boolean defaultValue)
+    {
+        if (string == null)
+        {
+            return defaultValue;
+        }
+
         return Boolean.valueOf(string).booleanValue();
     }
 
