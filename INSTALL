@@ -33,7 +33,7 @@ Building instructions
     * Jakarta Commons CLI
       This isn't fully released yet, so the nightly version Jamm is
       written against is available through our project area on sourceforge.
-      http://prdownloads.sourceforge.net/jamm/jakarta-commons-cli.tar.gz?download
+    http://prdownloads.sourceforge.net/jamm/jakarta-commons-cli.tar.gz?download
 
   JUnit must be installed into the ${ANT_HOME}/lib/ directory.
 
@@ -64,8 +64,10 @@ Installing Jamm
   the basic structure of the top level and the Manager.  Use ldapadd
   to add them to LDAP, and you should be ready to start using JAMM.
 
+
   The web parts
   -------------
+
   To install Jamm, unjar the war file in the directory you would like
   to deploy to.  Do not simply just drop the war file there as you
   need to do some configuration first.
@@ -74,5 +76,14 @@ Installing Jamm
   jamm.properties.dist to jamm.properties and edit it so it has that
   it matches the configuration for your site.
 
-  At this point you should be good to go.  You may need to restart your
-  servlet container, check with your server documentation.
+  At this point you should be good to go.  You may need to restart
+  your servlet container, check with your server documentation.
+
+
+  Filesystem cleaner
+  ------------------
+
+  cd into the vmail user's home directory and untar the
+  jammUtils-0.9.3 distribution.  This will drop a shell-script into
+  the bin directory and a few jars in the lib directory.  jammCleaner
+  is now ready to be run as the vmail user manually or out of cron.

@@ -3,9 +3,12 @@ aliases and accounts. It has multiple levels of access from user to
 domain administrator to site administrator. Jamm comes with an LDAP
 schema that it follows. Unlike simliar projects, Jamm only modifies
 what is in LDAP and leaves some of the "aftermath" file cleanup to the
-administrator.
+administrator and/or helper scripts.
 
 Look at INSTALL for build and install instructions.
+
+Please also read UPGRADE if you are upgrading Jamm from 0.9.2 or
+earlier.
 
 Other Important Files
 ---------------------
@@ -15,6 +18,37 @@ Other Important Files
   This is the LDAP schema that Jamm expects to follow.  For an example
   of a LDIF file following this schema, look at
   doc/samples/sample.ldif
+
+
+How to use jammCleaner
+----------------------
+Usage:  JammCleaner [options]
+ -?,--help           prints help message
+ -B,--backups arg    back up account contents to this directory before deleting
+ -D,--dn arg         the dn to bind with
+ -b,--base arg       base dn to search from
+ -h arg              ldap host  (default: localhost)
+ -n,--no-execute     Print would be executed, but do not execute.
+ -p arg              ldap port  (default: 389)
+ -v,--verbose        verbose
+ -w,--password arg   password to connect to LDAP with
+ -y,--yes            Assume yes for all questions
+
+JammCleaner can be run out of cron or run manually.  It is designed to
+be run as the vmail user, it does not need root privledges to get its
+job done.
+
+If the -y flag is passed, it will assume yes to all questions it would
+normally ask the user.  This flag is to be used for along with cron.
+Without the -y flag, jammCleaner will ask before removing any files
+and removing the entry from ldap.
+
+A typical invocation for running in cron would look like:
+  # jammCleaner -b "o=hosting,dc=kgarner,dc=com" \
+     -D "cn=Manager,dc=kgarner,dc=com" -w managerpassword -y 
+
+Please note, that in jamm 0.9.3 the -B option is not yet implemented.
+
 
 Contact Us
 ----------
