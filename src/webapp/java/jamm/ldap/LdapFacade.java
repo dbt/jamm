@@ -61,8 +61,8 @@ public class LdapFacade
         throws NamingException
     {
         mContext = new InitialDirContext(mEnvironment);
-        searchReset();
-        modifyReset();
+        resetSearch();
+        resetModify();
     }
 
     public String getName()
@@ -83,12 +83,16 @@ public class LdapFacade
         mControls.setReturningAttributes(attributes);
     }
 
-    public void modifyReset()
+    public void resetModify()
     {
         mModifyAttributes = new BasicAttributes();
     }
 
-    public void addModifyAttribute(String name, String value)
+    /**
+     * Sets an attribute to be modified.  This will not take effect
+     * until replaceModifiedAttributes() is called.
+     */
+    public void modifyAttribute(String name, String value)
         throws NamingException
     {
         mModifyAttributes.put(name, value);
@@ -102,7 +106,7 @@ public class LdapFacade
     }
         
 
-    public void searchReset()
+    public void resetSearch()
     {
         mControls = new SearchControls();
         mSearchBase = "";
@@ -160,7 +164,7 @@ public class LdapFacade
         {
             if (mContext != null)
             {
-                searchReset();
+                resetSearch();
                 mContext.close();
                 mContext = null;
             }
