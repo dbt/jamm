@@ -281,10 +281,10 @@ public class MailManagerTest extends TestCase
                    !manager.authenticate());
     }
 
-    public void testFindByMail()
+    public void testGetDnFromMail()
         throws MailManagerException
     {
-        String domain = "find-by-mail-domain.test";
+        String domain = "dn-from-mail.test";
         String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
@@ -299,11 +299,11 @@ public class MailManagerTest extends TestCase
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
 
-        String foundDn = manager.findByMail(mail);
+        String foundDn = manager.getDnFromMail(mail);
         assertEquals("Checking found DN", accountDn, foundDn);
 
         String unknownMail = "no_account@" + domain;
-        foundDn = manager.findByMail(unknownMail);
+        foundDn = manager.getDnFromMail(unknownMail);
         assertNull("Checking DN not found for " + unknownMail, foundDn);
     }
 
@@ -363,7 +363,6 @@ public class MailManagerTest extends TestCase
         manager.setBindEntry(postmasterDn, postmasterPassword);
         assertTrue("Checking postmatser can authenticate",
                    manager.authenticate());
-        manager.setBindEntry(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
 
         String accountName = "account";
         String originalPassword = "account1pw";
