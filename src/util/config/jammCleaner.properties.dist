@@ -18,10 +18,6 @@
 #
 # jammCleaner.ldap.search_base = 
 
-# Should we assume yes anytime we'd ask a question.  Defaults to false.
-#
-# jammCleaner.assume_yes = 
-
 # Backup directory to backup account info to.  No backups if not defined.
 #
 # jammCleaner.backup_dir = 
