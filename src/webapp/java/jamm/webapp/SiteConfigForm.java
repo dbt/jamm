@@ -34,7 +34,7 @@ import org.apache.struts.action.ActionMapping;
  *
  * @see jamm.webapp.SiteConfigAction
  */
-public class SiteConfigForm extends ActionForm
+public class SiteConfigForm extends JammForm
 {
     /**
      * Returns the domains.
@@ -99,13 +99,23 @@ public class SiteConfigForm extends ActionForm
     }
 
     /**
-     * Returns the newly checked domains that allow domain editing.
+     * Returns the newly checked edit alias items from the form.
      *
-     * @return a <code>Set</code> value
+     * @return a Set of the newly checked edit alias items.
      */
     public Set getCheckedEditAliases()
     {
         return getDifference(mAllowEditAliases, mOriginalAllowEditAliases);
+    }
+
+    /**
+     * Returns the newly unchecked edit alias items from the form.
+     *
+     * @return a Set of the newly unchecked edit alias items.
+     */
+    public Set getUncheckedEditAliases()
+    {
+        return getDifference(mOriginalAllowEditAliases, mAllowEditAliases);
     }
 
     /**
@@ -148,6 +158,26 @@ public class SiteConfigForm extends ActionForm
         String[] originalAllowEditAccounts)
     {
         this.mOriginalAllowEditAccounts = originalAllowEditAccounts;
+    }
+
+    /**
+     * Returns the newly checked edit accounts items from the form.
+     *
+     * @return a Set of the newly checked edit accounts items.
+     */
+    public Set getCheckedEditAccounts()
+    {
+        return getDifference(mAllowEditAccounts, mOriginalAllowEditAccounts);
+    }
+
+    /**
+     * Returns the newly unchecked edit account items from the form.
+     *
+     * @return a Set of the newly unchecked edit account items.
+     */
+    public Set getUncheckedEditAccounts()
+    {
+        return getDifference(mOriginalAllowEditAccounts, mAllowEditAccounts);
     }
 
     /**
@@ -194,6 +224,28 @@ public class SiteConfigForm extends ActionForm
     }
 
     /**
+     * Returns the newly checked edit Postmasters items from the form.
+     *
+     * @return a Set of the newly checked edit postmasters items.
+     */
+    public Set getCheckedEditPostmasters()
+    {
+        return getDifference(mAllowEditPostmasters,
+                             mOriginalAllowEditPostmasters);
+    }
+
+    /**
+     * Returns the newly unchecked edit account items from the form.
+     *
+     * @return a Set of the newly unchecked edit account items.
+     */
+    public Set getUncheckedEditPostmasters()
+    {
+        return getDifference(mOriginalAllowEditPostmasters,
+                             mAllowEditPostmasters);
+    }
+
+    /**
      * Gets the value of allowEditCatchalls
      *
      * @return the value of allowEditCatchalls
@@ -236,19 +288,25 @@ public class SiteConfigForm extends ActionForm
     }
 
     /**
-     * Returns the items in list1 that are not in list 2.
+     * Returns the newly checked edit Catchalls items from the form.
      *
-     * @param list1 a String array
-     * @param list2 a String array
-     *
-     * @return a Set of the items in list1 not in list2
+     * @return a Set of the newly checked edit catchalls items.
      */
-    private Set getDifference(String[] list1, String[] list2)
+    public Set getCheckedEditCatchalls()
     {
-        Set set1 = new HashSet(Arrays.asList(list1));
-        Set set2 = new HashSet(Arrays.asList(list2));
-        set1.removeAll(set2);
-        return set1;
+        return getDifference(mAllowEditCatchalls,
+                             mOriginalAllowEditCatchalls);
+    }
+
+    /**
+     * Returns the newly unchecked edit account items from the form.
+     *
+     * @return a Set of the newly unchecked edit account items.
+     */
+    public Set getUncheckedEditCatchalls()
+    {
+        return getDifference(mOriginalAllowEditCatchalls,
+                             mAllowEditCatchalls);
     }
 
     /**
