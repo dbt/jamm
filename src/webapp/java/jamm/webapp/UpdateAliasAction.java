@@ -19,6 +19,8 @@
 
 package jamm.webapp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -32,6 +34,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 
+import jamm.backend.MailAddress;
 import jamm.backend.MailManager;
 import jamm.backend.AliasInfo;
 
@@ -91,9 +94,47 @@ public class UpdateAliasAction extends JammAction
             return new ActionForward(mapping.getInput());
         }
 
+        request.setAttribute("breakCrumbs",
+                             makeBreadCrumbs(mapping, request, mail, user));
+
         alias.setMailDestinations(newDestinations);
         manager.modifyAlias(alias);
 
         return findForward(mapping, "account_admin", request);
+    }
+
+    private List makeBreadCrumbs(ActionMapping mapping,
+                                 HttpServletRequest request, String mail,
+                                 User user)
+    {
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            breadCrumb =
+                new BreadCrumb(
+                    findForward(mapping, "site_admin", request).getPath(),
+                    "Site Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            String domain = MailAddress.hostFromAddress(mail);
+            breadCrumb =
+                new BreadCrumb(
+                    getDomainAdminForward(mapping, domain).getPath(),
+                    "Domain Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        breadCrumb =
+            new BreadCrumb(
+                getAccountAdminForward(mapping, mail).getPath(),
+                "Alias Admin");
+        breadCrumbs.add(breadCrumb);
+        
+        return breadCrumbs;
     }
 }
