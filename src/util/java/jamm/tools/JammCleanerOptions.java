@@ -177,7 +177,7 @@ public final class JammCleanerOptions
     /**
      * sets the value of debug
      *
-     * @param debug value to assign to debug
+     * @param nonDestructive value to assign to debug
      */
     public static void setNonDestructive(boolean nonDestructive)
     {
