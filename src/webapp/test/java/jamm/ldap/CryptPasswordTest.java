@@ -17,6 +17,7 @@ public class CryptPasswordTest extends TestCase
         String password;
 
         crypt = new CryptPassword();
+        crypt.setRandomClass("java.util.Random");
         hash = crypt.crypt("cl", "test");
         assertEquals("Checking hash of \"test\"", "clKAOxsMt8tC6", hash);
 

@@ -1,0 +1,73 @@
+#
+# Use this data to run the JUnit tests
+#
+#
+# Add this to the end of your slapd.conf to create a separate database
+# for Jamm testing:
+#
+# ----- slap.conf -----
+# database      ldbm
+# suffix        "dc=jamm,dc=local"
+# rootdn        "cn=Manager,dc=jamm,dc=local"
+# rootpw        jammtest
+# directory     /usr/local/encap/openldap-2.0.21/var/jamm-ldbm
+# access to * by * read
+# ----- slapd.conf -----
+#
+
+dn: dc=jamm, dc=local
+objectclass: top
+
+dn: cn=Manager, dc=jamm, dc=local
+objectclass: top
+objectclass: organizationalRole
+cn: Manager
+
+dn: ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: organizationalUnit
+ou: email
+
+dn: ou=domain1.net, ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: organizationalUnit
+ou: domain1.net
+
+dn: cn=Manager, ou=domain1.net, ou=email, dc=jamm, dc=local
+objectclass: person
+sn: Manager
+cn: Manager
+
+dn: mail=acct1@domain1.net, ou=domain1.net, ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: courierMailAccount
+mail: acct1@domain1.net
+homeDirectory: /home/vmail/domains
+uidNumber: 101
+gidNumber: 101
+mailbox: domain1.net/acct1
+
+dn: mail=acct2@domain1.net, ou=domain1.net, ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: courierMailAlias
+mail: acct2@domain1.net
+maildrop: acct2
+
+dn: ou=domain2.com, ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: organizationalUnit
+ou: domain2.com
+
+dn: cn=Manager, ou=domain2.com, ou=email, dc=jamm, dc=local
+objectclass: person
+sn: Manager
+cn: Manager
+
+dn: mail=acct3@domain2.com, ou=domain2.com, ou=email, dc=jamm, dc=local
+objectclass: top
+objectclass: courierMailAccount
+mail: acct3@domain2.com
+homeDirectory: /home/vmail/domains
+uidNumber: 101
+gidNumber: 101
+mailbox: domain2.com/acct3

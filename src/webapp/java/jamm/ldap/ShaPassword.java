@@ -31,10 +31,7 @@ public class ShaPassword extends LdapPassword
 
     protected String doHash(String password)
     {
-        byte[] digest;
-
-        digest = sha(password);
-        return "{SHA}" + encodeBase64(digest);
+        return "{SHA}" + encodeBase64(sha(password));
     }
 
     protected boolean doCheck(String hashedpassword, String password)

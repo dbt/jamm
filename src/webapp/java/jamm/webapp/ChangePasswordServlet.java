@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
 
 
 /**
@@ -35,6 +37,7 @@ public class ChangePasswordServlet extends HttpServlet
         String hashedPassword;
         LdapFacade ldap;
         HttpSession session;
+        Attributes modifiedAttributes;
 
         ldap = null;
         try
@@ -77,8 +80,9 @@ public class ChangePasswordServlet extends HttpServlet
 
             hashedPassword =
                 LdapPassword.hash(LdapPassword.SSHA_SCHEME, newPassword1);
-            ldap.modifyAttribute("userPassword", hashedPassword);
-            ldap.replaceModifiedAttributes();
+            modifiedAttributes =
+                new BasicAttributes("userPassword", hashedPassword);
+            ldap.replaceModifiedAttributes(modifiedAttributes);
 
             response.sendRedirect("success.jsp");
         }
@@ -108,7 +112,7 @@ public class ChangePasswordServlet extends HttpServlet
             ldap.anonymousBind();
             ldap.searchSubtree(Globals.getLdapSearchBase(),
                                Globals.getLdapQueryFilter(user));
-            if (! ldap.hasMoreResults())
+            if (! ldap.nextResult())
             {
                 ldap.close();
                 ldap = null;

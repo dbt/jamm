@@ -21,7 +21,7 @@ public class MailManager
             ldap.anonymousBind();
             ldap.searchSubtree("ou=email,dc=dribin,dc=net",
                                "uidNumber=101");
-            while (ldap.hasMoreResults())
+            while (ldap.nextResult())
             {
                 System.out.println(ldap.getResultName());
                 // System.out.println(ldap.getAttribute("mail"));

@@ -13,6 +13,7 @@ public class AllTests
         suite.addTestSuite(CryptPasswordTest.class);
         suite.addTestSuite(Md5PasswordTest.class);
         suite.addTestSuite(ShaPasswordTest.class);
+        suite.addTestSuite(LdapFacadeTest.class);
         return suite;
     }
 }

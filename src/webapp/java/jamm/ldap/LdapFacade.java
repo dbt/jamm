@@ -62,7 +62,6 @@ public class LdapFacade
     {
         mContext = new InitialDirContext(mEnvironment);
         resetSearch();
-        resetModify();
     }
 
     public String getName()
@@ -83,28 +82,27 @@ public class LdapFacade
         mControls.setReturningAttributes(attributes);
     }
 
-    public void resetModify()
-    {
-        mModifyAttributes = new BasicAttributes();
-    }
-
-    /**
-     * Sets an attribute to be modified.  This will not take effect
-     * until replaceModifiedAttributes() is called.
-     */
-    public void modifyAttribute(String name, String value)
-        throws NamingException
-    {
-        mModifyAttributes.put(name, value);
-    }
-
-    public void replaceModifiedAttributes()
+    public void replaceModifiedAttributes(Attributes attributes)
         throws NamingException
     {
         mContext.modifyAttributes(getName(), DirContext.REPLACE_ATTRIBUTE,
-                                  mModifyAttributes);
+                                  attributes);
     }
-        
+
+    public void addElement(String distinguishedName, Attributes attributes)
+        throws NamingException
+    {
+        DirContext subcontext;
+
+        subcontext = mContext.createSubcontext(distinguishedName, attributes);
+        subcontext.close();
+    }
+
+    public void deleteElement(String distinguishedName)
+        throws NamingException
+    {
+        mContext.destroySubcontext(distinguishedName);
+    }
 
     public void resetSearch()
     {
@@ -131,7 +129,7 @@ public class LdapFacade
         mResults = mContext.search(mSearchBase, filter, mControls);
     }
 
-    public boolean hasMoreResults()
+    public boolean nextResult()
         throws NamingException
     {
         boolean hasMore;
@@ -152,10 +150,22 @@ public class LdapFacade
         return (String) mCurrentResultAttributes.get(name).get();
     }
 
+    public NamingEnumeration getAllResultAttributes()
+        throws NamingException
+    {
+        return mCurrentResultAttributes.getAll();
+    }
+
     public String getResultName()
         throws NamingException
     {
-        return mCurrentResultElement.getName() + "," + mSearchBase;
+        String relativeDn;
+
+        relativeDn = mCurrentResultElement.getName();
+        if (relativeDn.equals(""))
+            return mSearchBase;
+        else
+            return  relativeDn + "," + mSearchBase;
     }
 
     public void close()
@@ -181,8 +191,6 @@ public class LdapFacade
     private Hashtable mEnvironment;
     private DirContext mContext;
     private Attributes mAttributes;
-
-    private Attributes mModifyAttributes;
 
     private SearchControls mControls;
     private NamingEnumeration mResults;

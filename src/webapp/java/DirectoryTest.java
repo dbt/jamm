@@ -1,43 +1,26 @@
 
-import java.util.Hashtable;
-import java.util.Random;
+import jamm.ldap.LdapFacade;
 
-import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.Attributes;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.SearchResult;
-import javax.naming.directory.SearchControls;
-
-import cryptix.tools.UnixCrypt;
 
 public class DirectoryTest
 {
     public static void main(String argv[])
     {
-	try {
-	    String name = "mail=elvis@dribin.net";
-	    Hashtable env = new Hashtable();
-	
-	    env.put(Context.INITIAL_CONTEXT_FACTORY,
-		    "com.sun.jndi.ldap.LdapCtxFactory");
-	    env.put(Context.PROVIDER_URL,
-		    "ldap://localhost:389/ou=accounts,dc=dribin,dc=net");
+        LdapFacade ldap;
 
-	    env.put(Context.SECURITY_AUTHENTICATION, "simple");
-	    env.put(Context.SECURITY_PRINCIPAL,
-		    "cn=Manager, dc=dribin, dc=net");
-		    // "uid=elvis, ou=accounts, dc=dribin, dc=net");
-	    env.put(Context.SECURITY_CREDENTIALS, argv[0]);
+        ldap = null;
+        try
+        {
+            ldap = new LdapFacade("localhost");
 
-	    DirContext ctx = new InitialDirContext(env);
-	
-	    Attributes attrs = new BasicAttributes(true);
+            ldap.simpleBind("cn=Manager, dc=dribin, dc=net", argv[0]);
+
+            Attributes attrs = new BasicAttributes(true);
 
             // attrs.put("dn", "uid=afx,ou=accounts,dc=dribin,dc=net");
 
@@ -57,58 +40,43 @@ public class DirectoryTest
             attrs.put("mail", "afx@dribin.net");
             attrs.put("maildrop", "dave@dribin.net");
 
-//             DirContext afx = ctx.createSubcontext(
-//                 "uid=afx,ou=dribin.net", attrs);
-//             afx.close();
+            ldap.addElement(
+                "mail=afx@dribin.net,ou=dribin.net,ou=email,dc=dribin,dc=net",
+                attrs);
 
-            SearchControls ctls = new SearchControls();
-            ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            ctls.setReturningAttributes(new String[0]);
-            String filter = "mail=*@dribin.net";
-            
-            NamingEnumeration answer = ctx.search("", filter, ctls);
-            printSearchEnumeration(answer);
+            ldap.searchSubtree("ou=email,dc=dribin,dc=net",
+                               "mail=*@dribin.net");
 
-            ctx.close();
-	}
-	catch (NamingException e) {
-	    e.printStackTrace();
-	}
+            while (ldap.nextResult())
+            {
+                System.out.println("dn: " + ldap.getResultName());
+                printAttributes(ldap.getAllResultAttributes());
+                System.out.println();
+            }
+
+            ldap.deleteElement(
+                "mail=afx@dribin.net,ou=dribin.net,ou=email,dc=dribin,dc=net");
+        }
+        catch (NamingException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (ldap != null)
+                ldap.close();
+        }
     }
 
-    public static void printSearchEnumeration(NamingEnumeration enum) {
-	try {
-	    while (enum.hasMore()) {
-		SearchResult sr = (SearchResult)enum.next();
-		System.out.println(">>>" + sr.getName());
-		printAttrs(sr.getAttributes());
-	    }
-	} catch (NamingException e) {
-	    e.printStackTrace();
-	}
+    private static void printAttributes(NamingEnumeration attributes)
+        throws NamingException
+    {
+        Attribute attribute;
+        
+        while (attributes.hasMore())
+        {
+            attribute = (Attribute) attributes.next();
+            System.out.println(attribute);
+        }
     }
-
-    public static void printAttrs(Attributes attrs) {
-	if (attrs == null) {
-	    System.out.println("No attributes");
-	} else {
-	    /* Print each attribute */
-	    try {
-		for (NamingEnumeration ae = attrs.getAll();
-		     ae.hasMore();) {
-		    Attribute attr = (Attribute)ae.next();
-		    System.out.println("attribute: " + attr.getID());
-
-		    /* print each value */
-		    for (NamingEnumeration e = attr.getAll();
-			 e.hasMore();
-			 System.out.println("value: " + e.next()))
-			;
-		}
-	    } catch (NamingException e) {
-		e.printStackTrace();
-	    }
-	}
-    }
-
 }

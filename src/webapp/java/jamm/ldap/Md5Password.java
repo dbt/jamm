@@ -26,10 +26,7 @@ public class Md5Password extends LdapPassword
 
     protected String doHash(String password)
     {
-        byte[] digest;
-
-        digest = md5(password);
-        return "{MD5}" + encodeBase64(digest);
+        return "{MD5}" + encodeBase64(md5(password));
     }
 
     protected boolean doCheck(String hashedpassword, String password)
