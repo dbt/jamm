@@ -113,11 +113,6 @@ public class SiteAdminAction extends JammAction
         siteConfigForm.setDomains(
             (String []) domainNames.toArray(new String[0]));
 
-        String[] editAliasesArray =
-            (String []) allowEditAliases.toArray(new String[0]);
-        siteConfigForm.setOriginalAllowEditAliases(editAliasesArray);
-        siteConfigForm.setAllowEditAliases(editAliasesArray);
-
         String[] editAccountsArray =
             (String []) allowEditAccounts.toArray(new String[0]);
         siteConfigForm.setAllowEditAccounts(editAccountsArray);
@@ -127,11 +122,6 @@ public class SiteAdminAction extends JammAction
             (String []) allowEditPostmasters.toArray(new String[0]);
         siteConfigForm.setAllowEditPostmasters(editPostmastersArray);
         siteConfigForm.setOriginalAllowEditPostmasters(editPostmastersArray);
-
-        String[] editCatchallArray =
-            (String []) allowEditCatchalls.toArray(new String[0]);
-        siteConfigForm.setAllowEditCatchalls(editCatchallArray);
-        siteConfigForm.setOriginalAllowEditCatchalls(editCatchallArray);
 
         request.setAttribute("siteConfigForm", siteConfigForm);
 

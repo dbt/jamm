@@ -6,11 +6,6 @@
 <html:form action="/private/site_config">
   
   <logic:iterate id="domain" name="siteConfigForm"
-                 property="originalAllowEditAliases" type="String">
-    <html:hidden property="originalAllowEditAliases" value="<%=domain%>"/>
-  </logic:iterate>
-
-  <logic:iterate id="domain" name="siteConfigForm"
                  property="originalAllowEditAccounts" type="String">
     <html:hidden property="originalAllowEditAccounts" value="<%=domain%>"/>
   </logic:iterate>
@@ -19,19 +14,12 @@
                  property="originalAllowEditPostmasters" type="String">
     <html:hidden property="originalAllowEditPostmasters" value="<%=domain%>"/>
   </logic:iterate>
-  
-  <logic:iterate id="domain" name="siteConfigForm"
-                 property="originalAllowEditCatchalls" type="String">
-    <html:hidden property="originalAllowEditCatchalls" value="<%=domain%>"/>
-  </logic:iterate>
-  
-  <table width="80%" border="1" cellspacing="0" cellpadding="3" align="center">
+
+  <table width="50%" border="1" cellspacing="0" cellpadding="3" align="center">
     <tr>
       <th> <bean:message key="site_admin.header.domains" /> </th>
-      <th> <bean:message key="site_admin.header.edit_aliases" /> </th>
       <th> <bean:message key="site_admin.header.edit_accounts" /> </th>
       <th> <bean:message key="site_admin.header.appoint_postmasters" /> </th>
-      <th> <bean:message key="site_admin_header.edit_catchall" /> </th>
     </tr>
 
     <logic:iterate indexId="i" id="domain" name="domains"
@@ -44,22 +32,12 @@
           </html:link>
         </td>
         <td align="center">
-          <html:multibox property="allowEditAliases">
-            <bean:write name="domain" property="name"/>
-          </html:multibox>
-        </td>
-        <td align="center">
           <html:multibox property="allowEditAccounts">
             <bean:write name="domain" property="name"/>
           </html:multibox>
         </td>
         <td align="center">
           <html:multibox property="allowEditPostmasters">
-            <bean:write name="domain" property="name"/>
-          </html:multibox>
-        </td>
-        <td align="center">
-          <html:multibox property="allowEditCatchalls">
             <bean:write name="domain" property="name"/>
           </html:multibox>
         </td>

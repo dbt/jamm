@@ -63,12 +63,7 @@ public class SiteConfigAction extends JammAction
 
         HashMap domainInfos = new HashMap();
 
-        Iterator i = form.getUncheckedEditAliases().iterator();
-        modifyCapability(EDIT_ALIASES, false, manager, domainInfos, i);
-        i = form.getCheckedEditAliases().iterator();
-        modifyCapability(EDIT_ALIASES, true, manager, domainInfos, i);
-                                   
-        i = form.getUncheckedEditAccounts().iterator();
+        Iterator i = form.getUncheckedEditAccounts().iterator();
         modifyCapability(EDIT_ACCOUNTS, false, manager, domainInfos, i);
         i = form.getCheckedEditAccounts().iterator();
         modifyCapability(EDIT_ACCOUNTS, true, manager, domainInfos, i);
@@ -77,11 +72,6 @@ public class SiteConfigAction extends JammAction
         modifyCapability(EDIT_POSTMASTERS, false, manager, domainInfos, i);
         i = form.getCheckedEditPostmasters().iterator();
         modifyCapability(EDIT_POSTMASTERS, true, manager, domainInfos, i);
-
-        i = form.getUncheckedEditCatchalls().iterator();
-        modifyCapability(EDIT_CATCHALLS, false, manager, domainInfos, i);
-        i = form.getCheckedEditCatchalls().iterator();
-        modifyCapability(EDIT_CATCHALLS, true, manager, domainInfos, i);
 
         i = domainInfos.values().iterator();
         while (i.hasNext())
@@ -125,10 +115,6 @@ public class SiteConfigAction extends JammAction
 
             switch(capability)
             {
-                case EDIT_ALIASES:
-                    di.setCanEditAliases(setTo);
-                    break;
-
                 case EDIT_ACCOUNTS:
                     di.setCanEditAccounts(setTo);
                     break;
@@ -137,22 +123,14 @@ public class SiteConfigAction extends JammAction
                     di.setCanEditPostmasters(setTo);
                     break;
 
-                case EDIT_CATCHALLS:
-                    di.setCanEditCatchalls(setTo);
-                    break;
-
                 default:
                     throw new Exception("The should never be here");
             }
         }
     }
 
-    /** a final meaning "call setCanEditAliases" */
-    private static final int EDIT_ALIASES = 0;
     /** a final meaning "call setCanEditAccounts" */
     private static final int EDIT_ACCOUNTS = 1;
     /** a final meaning "call setCanEditPostmasters" */
     private static final int EDIT_POSTMASTERS = 2;
-    /** a final meaning "call setCanEditCatchalls" */
-    private static final int EDIT_CATCHALLS = 3;
 }

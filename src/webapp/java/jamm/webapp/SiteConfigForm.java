@@ -54,68 +54,6 @@ public class SiteConfigForm extends JammForm
     }
     
     /**
-     * Sets the domains that allow aliases editing.
-     *
-     * @param allowEditAliases a <code>String</code> array with the domains
-     *                    that allow alias editing
-     */
-    public void setAllowEditAliases(String[] allowEditAliases)
-    {
-        mAllowEditAliases = allowEditAliases;
-    }
-
-    /**
-     * Returns the domains that allow alias editing.
-     *
-     * @return a <code>String</code> array with the domains that allow
-     *         alias editing
-     */
-    public String[] getAllowEditAliases()
-    {
-        return mAllowEditAliases;
-    }
-
-    /**
-     * The original domains that allowed alias editing
-     *
-     * @param originalAllowEditAliases a <code>String</code> array with domains
-     */
-    public void setOriginalAllowEditAliases(String[] originalAllowEditAliases)
-    {
-        mOriginalAllowEditAliases = originalAllowEditAliases;
-    }
-
-    /**
-     * Returns the original domains that allow alias editing.
-     *
-     * @return a <code>String</code> array with domains.
-     */
-    public String[] getOriginalAllowEditAliases()
-    {
-        return mOriginalAllowEditAliases;
-    }
-
-    /**
-     * Returns the newly checked edit alias items from the form.
-     *
-     * @return a Set of the newly checked edit alias items.
-     */
-    public Set getCheckedEditAliases()
-    {
-        return getDifference(mAllowEditAliases, mOriginalAllowEditAliases);
-    }
-
-    /**
-     * Returns the newly unchecked edit alias items from the form.
-     *
-     * @return a Set of the newly unchecked edit alias items.
-     */
-    public Set getUncheckedEditAliases()
-    {
-        return getDifference(mOriginalAllowEditAliases, mAllowEditAliases);
-    }
-
-    /**
      * Set domains that allow account editing.
      *
      * @param allowEditAccounts a <code>String</code> array with domains
@@ -241,71 +179,6 @@ public class SiteConfigForm extends JammForm
         return getDifference(mOriginalAllowEditPostmasters,
                              mAllowEditPostmasters);
     }
-
-    /**
-     * Gets the value of allowEditCatchalls
-     *
-     * @return the value of allowEditCatchalls
-     */
-    public String[] getAllowEditCatchalls()
-    {
-        return this.mAllowEditCatchalls;
-    }
-
-    /**
-     * Sets the value of mAllowEditCatchalls
-     *
-     * @param allowEditCatchalls Value to assign to this.mAllowEditCatchalls
-     */
-    public void setAllowEditCatchalls(String[] allowEditCatchalls)
-    {
-        this.mAllowEditCatchalls = allowEditCatchalls;
-    }
-
-    /**
-     * Gets the value of mOriginalAllowEditCatchalls
-     *
-     * @return the value of mOriginalAllowEditCatchalls
-     */
-    public String[] getOriginalAllowEditCatchalls()
-    {
-        return this.mOriginalAllowEditCatchalls;
-    }
-
-    /**
-     * Sets the value of mOriginalAllowEditCatchalls
-     *
-     * @param originalAllowEditCatchalls Value to assign to
-     *                                   this.mOriginalAllowEditCatchalls
-     */
-    public void setOriginalAllowEditCatchalls(
-        String[] originalAllowEditCatchalls)
-    {
-        this.mOriginalAllowEditCatchalls = originalAllowEditCatchalls;
-    }
-
-    /**
-     * Returns the newly checked edit Catchalls items from the form.
-     *
-     * @return a Set of the newly checked edit catchalls items.
-     */
-    public Set getCheckedEditCatchalls()
-    {
-        return getDifference(mAllowEditCatchalls,
-                             mOriginalAllowEditCatchalls);
-    }
-
-    /**
-     * Returns the newly unchecked edit account items from the form.
-     *
-     * @return a Set of the newly unchecked edit account items.
-     */
-    public Set getUncheckedEditCatchalls()
-    {
-        return getDifference(mOriginalAllowEditCatchalls,
-                             mAllowEditCatchalls);
-    }
-
     /**
      *
      * @param mapping an <code>ActionMapping</code> value
@@ -313,22 +186,14 @@ public class SiteConfigForm extends JammForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        mAllowEditAliases = new String[0];
-        mOriginalAllowEditAliases = new String[0];
         mAllowEditAccounts = new String[0];
         mOriginalAllowEditAccounts = new String[0];
         mAllowEditPostmasters = new String[0];
         mOriginalAllowEditPostmasters = new String[0];
-        mAllowEditCatchalls = new String[0];
-        mOriginalAllowEditCatchalls = new String[0];
     }
 
     /** the domains */
     private String[] mDomains;
-    /** domains that allow alias editing */
-    private String[] mAllowEditAliases;
-    /** original domains that allow alias editing */
-    private String[] mOriginalAllowEditAliases;
     /** domains that allow account editing */
     private String[] mAllowEditAccounts;
     /** original domains that allow account editing */
@@ -337,8 +202,4 @@ public class SiteConfigForm extends JammForm
     private String[] mAllowEditPostmasters;
     /** original domains that allow postmaster editing */
     private String[] mOriginalAllowEditPostmasters;
-    /** domains that allow catchall editing */
-    private String[] mAllowEditCatchalls;
-    /** original domains that allow catchall editing */
-    private String[] mOriginalAllowEditCatchalls;
 }
