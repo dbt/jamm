@@ -29,6 +29,12 @@
                type="jamm.webapp.UpdateCatchAllForm"/>
   </form-beans>
 
+  <global-exceptions>
+    <exception type="jamm.backend.MailManagerException"
+               key="general.error.body"
+               path="/private/general_error.jsp"/>
+  </global-exceptions>
+
   <!-- ========== Global Forward Definitions ============================== -->
   <global-forwards>
     <forward name="home" path="/" redirect="true"/>
