@@ -46,15 +46,15 @@ public class FileUtils
         {
             for (int i = 0; i < contents.length; i++)
             {
-                if (contents[i].isDirectory())
+                // Skip directories if they are symbolic links.
+                // Should get around the nuking of courier shared
+                // folders.
+                if (contents[i].isDirectory() &&
+                    isNotSymbolicLink(contents[i]))
                 {
-                    // Skip directories if they are symbolic links.
-                    // Should get around the nuking of courier shared
-                    // folders.
-                    if (isNotSymbolicLink(contents[i]))
-                    {
-                        recursiveDelete(contents[i]);
-                    }
+                    // Changed logic to fix problem Max Matslofva
+                    // has been seeing in lack of deleting.
+                    recursiveDelete(contents[i]);
                 }
                 else
                 {
