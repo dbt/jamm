@@ -238,15 +238,39 @@ public class MailManagerTest extends TestCase
         String accountDn = "mail=" + mail + "," + domainDn;
 
         // Create a manager against the new account
-        manager = new MailManager("localhost", BASE, accountDn,
-                                  accountPassword);
+        manager.setBindEntry(accountDn, accountPassword);
         assertTrue("Checking authentication of " + accountDn,
                    manager.authenticate());
 
-        manager = new MailManager("localhost", BASE, accountDn,
-                                  "bad password");
+        manager.setBindEntry(accountDn, "bad password");
         assertTrue("Checking non-authentication of " + accountDn,
                    !manager.authenticate());
+    }
+
+    public void testFindByMail()
+        throws MailManagerException
+    {
+        String domain = "find-by-mail-domain.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String accountName = "account";
+        String accountPassword = "account1pw";
+        manager.createAccount(domain, accountName, accountPassword);
+
+        String mail = accountName + "@" + domain;
+        String accountDn = "mail=" + mail + "," + domainDn;
+
+        String foundDn = manager.findByMail(mail);
+        assertEquals("Checking found DN", accountDn, foundDn);
+
+        String unknownMail = "no_account@" + domain;
+        foundDn = manager.findByMail(unknownMail);
+        assertNull("Checking DN not found for " + unknownMail, foundDn);
     }
 
     public void testAddCatchall()

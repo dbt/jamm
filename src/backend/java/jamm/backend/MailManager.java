@@ -12,12 +12,36 @@ import jamm.ldap.PasswordScheme;
 
 public class MailManager
 {
-    public MailManager(String host, String base, String binddn, String bindpw)
+    public MailManager(String host, String base, String bindDn,
+                       String bindPassword)
+    {
+        this(host, 389, base, bindDn, bindPassword);
+    }
+
+    public MailManager(String host, String base)
+    {
+        this(host, 389, base, "", "");
+    }
+
+    public MailManager(String host, int port, String base, String bindDn,
+                       String bindPassword)
     {
         mHost = host;
+        mPort = port;
         mBase = base;
-        mBindDn = binddn;
-        mBindPassword = bindpw;
+        mBindDn = bindDn;
+        mBindPassword = bindPassword;
+    }
+
+    public MailManager(String host, int port, String base)
+    {
+        this(host, port, base, "", "");
+    }
+
+    public void setBindEntry(String bindDn, String bindPassword)
+    {
+        mBindDn = bindDn;
+        mBindPassword = bindPassword;
     }
 
     public boolean authenticate()
@@ -26,7 +50,7 @@ public class MailManager
         LdapFacade ldap = null;
         boolean authenticated = false;
         
-        ldap = new LdapFacade(mHost);
+        ldap = new LdapFacade(mHost, mPort);
         try
         {
             ldap.simpleBind(mBindDn, mBindPassword);
@@ -48,13 +72,41 @@ public class MailManager
         return authenticated;
     }
 
+    public String findByMail(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String foundDn = null;
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.anonymousBind();
+            
+            ldap.searchSubtree(mBase, "mail=" + mail);
+
+            if (ldap.nextResult())
+            {
+                foundDn = ldap.getResultName();
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+        return foundDn;
+    }
+
     public void createDomain(String domain)
         throws MailManagerException
     {
         LdapFacade ldap = null;
         try
         {
-            ldap = new LdapFacade(mHost);
+            ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
 
             // Create the domain
@@ -106,7 +158,7 @@ public class MailManager
         
         try
         {
-            ldap = new LdapFacade(mHost);
+            ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
 
             Map attributes = new HashMap();
@@ -134,7 +186,7 @@ public class MailManager
         String mail = mail(domain, alias);
         try
         {
-            ldap = new LdapFacade(mHost);
+            ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
             ldap.modifyElementAttribute(mailDn(domain, mail), "maildrop",
                                         newDestination);
@@ -157,7 +209,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost);
+            ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
 
             Map attributes = new HashMap();
@@ -191,7 +243,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost);
+            ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
 
             Map attributes = new HashMap();
@@ -244,6 +296,7 @@ public class MailManager
     }
 
     private String mHost;
+    private int mPort;
     private String mBase;
     private String mBindDn;
     private String mBindPassword;
