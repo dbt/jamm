@@ -7,7 +7,8 @@
   <body>
     <h1 align="center">Admin Menu <bean:write name="domainName"/></h1>
 
-    <table width="80%" border="0" cellspacing="0" cellpadding="3">
+    <table width="80%" border="1" cellspacing="0" cellpadding="3"
+           align="center">
       <tr>
         <th>Account</th>
         <th>Delete</th>
@@ -24,7 +25,8 @@
 
     <br></br>
 
-    <table width="80%" border="0" cellspacing="0" cellpadding="3">
+    <table width="80%" border="1" cellspacing="0" cellpadding="3"
+           align="center">
       <tr>
         <th>Alias</th>
         <th>Destinations</th>
@@ -34,7 +36,7 @@
       <logic:iterate indexId="i" id="alias" name="aliases">
         <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
           <td><bean:write name="alias"/></td>
-          <td>x@y</td>
+          <td>user@domain1.example<br>user@domain2.example</td>
           <td align="center">D</td>
           <td align="center">A</td>
         </jamm:tr>
