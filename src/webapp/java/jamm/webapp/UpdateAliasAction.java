@@ -77,6 +77,7 @@ public class UpdateAliasAction extends JammAction
         String mail = form.getMail();
         AliasInfo alias = manager.getAlias(mail);
         
+        alias.setCommonName(form.getCommonName());
         Set newDestinations = new HashSet(alias.getMailDestinations());
         newDestinations.addAll(form.getAddedAddresses());
         newDestinations.removeAll(Arrays.asList(form.getDeleted()));

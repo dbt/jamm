@@ -36,13 +36,20 @@ import org.apache.struts.action.ActionErrors;
 public class AddAccountForm extends ActionForm
 {
     /**
-     * Sets the domain in this bean to the string passed in.
-     *
-     * @param domain The name of a domain.
+     * Resets the password stored in the bean to null.
      */
-    public void setDomain(String domain)
+    private void clearPasswords()
     {
-        mDomain = domain;
+        mPassword = null;
+        mRetypedPassword = null;
+    }
+
+    /**
+     * @return a String
+     */
+    public String getCommonName()
+    {
+        return mCommonName;
     }
 
     /**
@@ -56,16 +63,6 @@ public class AddAccountForm extends ActionForm
     }
 
     /**
-     * Sets the account name in this bean to the string passed in.
-     *
-     * @param name The name of the account.
-     */
-    public void setName(String name)
-    {
-        mName = name;
-    }
-
-    /**
      * Returns the name of the account stored in this bean.
      *
      * @return a string containing the account name.
@@ -76,16 +73,6 @@ public class AddAccountForm extends ActionForm
     }
 
     /**
-     * Sets the password stored in this bean to the string passed in.
-     *
-     * @param password The intended password.
-     */
-    public void setPassword(String password)
-    {
-        mPassword = password;
-    }
-
-    /**
      * Returns the intended password that is stored in this bean.
      *
      * @return a string containing the password.
@@ -93,17 +80,6 @@ public class AddAccountForm extends ActionForm
     public String getPassword()
     {
         return mPassword;
-    }
-
-    /**
-     * Sets the "retyped" password in this bean.  Needed as in the HTML form,
-     * the passwords aren't echoed.
-     *
-     * @param retypedPassword a string containing the second password try.
-     */
-    public void setRetypedPassword(String retypedPassword)
-    {
-        mRetypedPassword = retypedPassword;
     }
 
     /**
@@ -129,6 +105,54 @@ public class AddAccountForm extends ActionForm
         mDomain = request.getParameter("domain");
         mName = null;
         clearPasswords();
+    }
+
+    /**
+     * @param string User's common name
+     */
+    public void setCommonName(String string)
+    {
+        mCommonName = string;
+    }
+    /**
+     * Sets the domain in this bean to the string passed in.
+     *
+     * @param domain The name of a domain.
+     */
+    public void setDomain(String domain)
+    {
+        mDomain = domain;
+    }
+
+    /**
+     * Sets the account name in this bean to the string passed in.
+     *
+     * @param name The name of the account.
+     */
+    public void setName(String name)
+    {
+        mName = name;
+    }
+
+    /**
+     * Sets the password stored in this bean to the string passed in.
+     *
+     * @param password The intended password.
+     */
+    public void setPassword(String password)
+    {
+        mPassword = password;
+    }
+
+    /**
+     * Sets the "retyped" password in this bean.  Needed as in the HTML form,
+     * the passwords aren't echoed.
+     *
+     * @param retypedPassword a string containing the second password try.
+     */
+    public void setRetypedPassword(String retypedPassword)
+    {
+        mRetypedPassword = retypedPassword;
     }
 
     /**
@@ -161,15 +185,8 @@ public class AddAccountForm extends ActionForm
         return errors;
     }
 
-    /**
-     * Resets the password stored in the bean to null.
-     */
-    private void clearPasswords()
-    {
-        mPassword = null;
-        mRetypedPassword = null;
-    }
-
+    /** Common Name */
+    private String mCommonName;
     /** The domain. */
     private String mDomain;
     /** The account name. */

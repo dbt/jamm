@@ -69,7 +69,7 @@ public class AddAccountAction extends JammAction
         MailManager manager = getMailManager(user);
 
         manager.createAccount(form.getDomain(), form.getName(),
-                              form.getPassword());
+                              form.getCommonName(), form.getPassword());
 
         return findForward(mapping, "domain_admin", request);
     }

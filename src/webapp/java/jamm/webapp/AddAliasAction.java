@@ -70,6 +70,7 @@ public class AddAliasAction extends JammAction
                                                    form.getDomain());
 
         manager.createAlias(form.getDomain(), form.getName(),
+                            form.getCommonName(),
                             form.getDestinationAddresses());
 
         if (!form.isPasswordEmpty())

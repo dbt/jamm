@@ -112,7 +112,7 @@ public class UpdateAliasForm extends ActionForm
     /**
      * Set the CommonName value.
      *
-     * @param newCommonName The new CommonName value.
+     * @param commonName The new CommonName value.
      */
     public void setCommonName(String commonName)
     {

@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+
 /**
  * Bean which holds the information from an HTML form that calls the
  * AddAliasAction. Also, contains methods to validate the information
@@ -47,61 +48,30 @@ public class AddAliasForm extends ActionForm
     }
 
     /**
-     * Sets the domain of this bean to the domain contained in the string.
-     *
-     * @param domain a string containing the domain name.
+     * Resets the password to null.
      */
-    public void setDomain(String domain)
+    private void clearPasswords()
     {
-        mDomain = domain;
+        mPassword = null;
+        mRetypedPassword = null;
     }
 
     /**
-     * Returns the domain contained within this bean.
-     *
-     * @return a string containtaining the domain name.
+     * @return a String
      */
-    public String getDomain()
+    public String getCommonName()
     {
-        return mDomain;
+        return mCommonName;
     }
 
     /**
-     * Sets the name this alias will use.
+     * Returns the destinates as a List.
      *
-     * @param name a string containing the alias name
+     * @return a List containing the destination addresses
      */
-    public void setName(String name)
+    public List getDestinationAddresses()
     {
-        mName = name;
-    }
-
-    /**
-     * Returns the name of the alias this form represents.
-     *
-     * @return a string containing the alias name.
-     */
-    public String getName()
-    {
-        return mName;
-    }
-
-    /**
-     * Set the destinations for this alias.  It takes in a string of
-     * whitespace seperated addresses.
-     *
-     * @param destinations a whitespace seperated list of e-mail addresses.
-     */
-    public void setDestinations(String destinations)
-    {
-        mDestinations = destinations;
-        StringTokenizer tokenizer = new StringTokenizer(mDestinations,
-                                                        " \t\n\r\f,");
-        mAddresses.clear();
-        while (tokenizer.hasMoreTokens())
-        {
-            mAddresses.add(tokenizer.nextToken());
-        }
+        return mAddresses;
     }
 
     /**
@@ -116,23 +86,23 @@ public class AddAliasForm extends ActionForm
     }
 
     /**
-     * Returns the destinates as a List.
+     * Returns the domain contained within this bean.
      *
-     * @return a List containing the destination addresses
+     * @return a string containtaining the domain name.
      */
-    public List getDestinationAddresses()
+    public String getDomain()
     {
-        return mAddresses;
+        return mDomain;
     }
 
     /**
-     * Sets the password associated with this alias.
+     * Returns the name of the alias this form represents.
      *
-     * @param password a string containing the password for this alias.
+     * @return a string containing the alias name.
      */
-    public void setPassword(String password)
+    public String getName()
     {
-        mPassword = password;
+        return mName;
     }
 
     /**
@@ -143,16 +113,6 @@ public class AddAliasForm extends ActionForm
     public String getPassword()
     {
         return mPassword;
-    }
-
-    /**
-     * Sets the retyped password, used in confirming password.
-     *
-     * @param retypedPassword a string containing the retyped password.
-     */
-    public void setRetypedPassword(String retypedPassword)
-    {
-        mRetypedPassword = retypedPassword;
     }
 
     /**
@@ -195,6 +155,72 @@ public class AddAliasForm extends ActionForm
     }
 
     /**
+     * @param string User's common name
+     */
+    public void setCommonName(String string)
+    {
+        mCommonName = string;
+    }
+
+    /**
+     * Set the destinations for this alias.  It takes in a string of
+     * whitespace seperated addresses.
+     *
+     * @param destinations a whitespace seperated list of e-mail addresses.
+     */
+    public void setDestinations(String destinations)
+    {
+        mDestinations = destinations;
+        StringTokenizer tokenizer = new StringTokenizer(mDestinations,
+                                                        " \t\n\r\f,");
+        mAddresses.clear();
+        while (tokenizer.hasMoreTokens())
+        {
+            mAddresses.add(tokenizer.nextToken());
+        }
+    }
+
+    /**
+     * Sets the domain of this bean to the domain contained in the string.
+     *
+     * @param domain a string containing the domain name.
+     */
+    public void setDomain(String domain)
+    {
+        mDomain = domain;
+    }
+
+    /**
+     * Sets the name this alias will use.
+     *
+     * @param name a string containing the alias name
+     */
+    public void setName(String name)
+    {
+        mName = name;
+    }
+
+    /**
+     * Sets the password associated with this alias.
+     *
+     * @param password a string containing the password for this alias.
+     */
+    public void setPassword(String password)
+    {
+        mPassword = password;
+    }
+
+    /**
+     * Sets the retyped password, used in confirming password.
+     *
+     * @param retypedPassword a string containing the retyped password.
+     */
+    public void setRetypedPassword(String retypedPassword)
+    {
+        mRetypedPassword = retypedPassword;
+    }
+
+    /**
      * Validates the destination addresses and password.
      *
      * @param mapping The action mapping.
@@ -229,26 +255,20 @@ public class AddAliasForm extends ActionForm
 
         return errors;
     }
-
-    /**
-     * Resets the password to null.
-     */
-    private void clearPasswords()
-    {
-        mPassword = null;
-        mRetypedPassword = null;
-    }
+    /** The destinations as a List */
+    private List mAddresses;
+    /** Common name */
+    private String mCommonName;
+    /** The string of destinations */
+    private String mDestinations;
 
     /** The domain */
     private String mDomain;
     /** The alias name */
     private String mName;
-    /** The string of destinations */
-    private String mDestinations;
-    /** The destinations as a List */
-    private List mAddresses;
     /** The password */
     private String mPassword;
     /** The retyped password */
     private String mRetypedPassword;
+
 }
