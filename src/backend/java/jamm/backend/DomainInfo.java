@@ -52,7 +52,8 @@ public class DomainInfo implements Serializable
      *
      * @return the value of name
      */
-    public String getName() {
+    public String getName()
+    {
         return this.mName;
     }
 
@@ -61,7 +62,8 @@ public class DomainInfo implements Serializable
      *
      * @param argName Value to assign to this.name
      */
-    public void setName(String argName){
+    public void setName(String argName)
+    {
         this.mName = argName;
     }
 
@@ -70,7 +72,8 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditAliases
      */
-    public boolean getCanEditAliases() {
+    public boolean getCanEditAliases()
+    {
         return this.mCanEditAliases;
     }
 
@@ -79,7 +82,8 @@ public class DomainInfo implements Serializable
      *
      * @param argCanEditAliases Value to assign to this.canEditAliases
      */
-    public void setCanEditAliases(boolean argCanEditAliases){
+    public void setCanEditAliases(boolean argCanEditAliases)
+    {
         this.mCanEditAliases = argCanEditAliases;
     }
 
@@ -88,7 +92,8 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditAccounts
      */
-    public boolean getCanEditAccounts() {
+    public boolean getCanEditAccounts()
+    {
         return this.mCanEditAccounts;
     }
 
@@ -97,7 +102,8 @@ public class DomainInfo implements Serializable
      *
      * @param argCanEditAccounts Value to assign to this.canEditAccounts
      */
-    public void setCanEditAccounts(boolean argCanEditAccounts){
+    public void setCanEditAccounts(boolean argCanEditAccounts)
+    {
         this.mCanEditAccounts = argCanEditAccounts;
     }
 
@@ -106,7 +112,8 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditPostmasters
      */
-    public boolean getCanEditPostmasters() {
+    public boolean getCanEditPostmasters()
+    {
         return this.mCanEditPostmasters;
     }
 
@@ -115,7 +122,8 @@ public class DomainInfo implements Serializable
      *
      * @param argCanEditPostmasters Value to assign to this.canEditPostmasters
      */
-    public void setCanEditPostmasters(boolean argCanEditPostmasters){
+    public void setCanEditPostmasters(boolean argCanEditPostmasters)
+    {
         this.mCanEditPostmasters = argCanEditPostmasters;
     }
 
@@ -124,7 +132,8 @@ public class DomainInfo implements Serializable
      *
      * @return the value of canEditCatchalls
      */
-    public boolean getCanEditCatchalls() {
+    public boolean getCanEditCatchalls()
+    {
         return this.mCanEditCatchalls;
     }
 
@@ -133,13 +142,19 @@ public class DomainInfo implements Serializable
      *
      * @param argCanEditCatchalls Value to assign to this.canEditCatchalls
      */
-    public void setCanEditCatchalls(boolean argCanEditCatchalls){
+    public void setCanEditCatchalls(boolean argCanEditCatchalls)
+    {
         this.mCanEditCatchalls = argCanEditCatchalls;
     }
 
+    /** The domain name */
     private String mName;
+    /** Can domain admin edit aliases */
     private boolean mCanEditAliases;
+    /** Can domain admin edit accounts */
     private boolean mCanEditAccounts;
+    /** Can domain admin edit postmasters */
     private boolean mCanEditPostmasters;
+    /** Can domains admin edit catchalls */
     private boolean mCanEditCatchalls;
 }
