@@ -20,6 +20,7 @@
 package jamm.util;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Useful filesystem utilities
@@ -47,7 +48,13 @@ public class FileUtils
             {
                 if (contents[i].isDirectory())
                 {
-                    recursiveDelete(contents[i]);
+                    // Skip directories if they are symbolic links.
+                    // Should get around the nuking of courier shared
+                    // folders.
+                    if (isNotSymbolicLink(contents[i]))
+                    {
+                        recursiveDelete(contents[i]);
+                    }
                 }
                 else
                 {
@@ -61,5 +68,33 @@ public class FileUtils
         }
         
         return dir.delete();
+    }
+
+    
+    /**
+     * Check to see if a File object is a symbolic link.  This code is
+     * borrowed from Ant.  It may have false positives on some
+     * platforms.
+     *
+     * @param dir The file object to test
+     * @return true is a symbolic link, false otherwise
+     */
+    public static boolean isNotSymbolicLink(File file)
+    {
+        boolean result = false;
+        try
+        {
+            result = file.getAbsolutePath().equals(file.getCanonicalPath());
+        }
+        catch (IOException e)
+        {
+            // If we have an exception, we couldn't figure out if the
+            // file was a symbolic link or not.  To be safe, we'll
+            // return false.
+            System.out.println("Exception while figuring out symbolic link, " +
+                               "returning false");
+            System.out.println(e);
+        }
+        return result;
     }
 }
