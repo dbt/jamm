@@ -97,6 +97,8 @@ public class AddDomainForm extends ActionForm
     /**
      * The password is empty if both passwords are null or the empty
      * string.
+     *
+     * @return true when emtpy, false otherwise
      */
     public boolean isPasswordEmpty()
     {

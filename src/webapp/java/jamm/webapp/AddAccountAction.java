@@ -48,6 +48,10 @@ public class AddAccountAction extends JammAction
      * @param request The http request that caused this action.
      * @param response The http response that will be returned from
      *                 this action.
+     *
+     * @return an <code>ActionForward</code>
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

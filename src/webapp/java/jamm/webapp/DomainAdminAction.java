@@ -57,6 +57,10 @@ public class DomainAdminAction extends JammAction
      * @param actionForm Not used in this action.  Is ignored.
      * @param request the http request that caused this action.
      * @param response the http response
+     *
+     * @return an <code>ActionForward</code>
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

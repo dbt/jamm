@@ -48,6 +48,8 @@ public class AccountAdminAction extends JammAction
      *                 this action.
      *
      * @return the ActionForward of the next page to show.
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

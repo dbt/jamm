@@ -48,6 +48,10 @@ public class DomainAliasAction extends JammAction
      * @param actionForm a DomainConfigForm with the required info
      * @param request the http request for this action
      * @param response the http response for this action.
+     *
+     * @return an <code>ActionForward</code>
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

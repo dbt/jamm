@@ -31,40 +31,80 @@ import org.apache.struts.action.ActionErrors;
 
 
 /**
- * Hold alias update information
+ * Hold alias update information for UpdateAliasAction.
+ *
+ * @see jamm.webapp.UpdateAliasAction
  */
 public class UpdateAliasForm extends ActionForm
 {
+    /**
+     * Sets the e-mail address
+     *
+     * @param mail a <code>String</code> containing the mail address
+     */
     public void setMail(String mail)
     {
         mMail = mail;
     }
 
+    /**
+     * Returns the e-mail address
+     *
+     * @return a <code>String</code> containing the mail address
+     */
     public String getMail()
     {
         return mMail;
     }
 
+    /**
+     * Sets the addresses to be delete.
+     *
+     * @param deleted a <code>String</code> array of addresses
+     */
     public void setDeleted(String[] deleted)
     {
         mDeleted = deleted;
     }
 
+    /**
+     * Returns the addresses to be deleted.
+     *
+     * @return a <code>String</code> array of addresses
+     */
     public String[] getDeleted()
     {
         return mDeleted;
     }
 
+    /**
+     * Sets the addresses to be added.
+     *
+     * @param added a <code>String</code> of whitespace or comma
+     *              seperated addresses
+     */
     public void setAdded(String added)
     {
         mAdded = added;
     }
 
+    /**
+     * Returns the addresses to be added.
+     *
+     * @return a <code>String</code> of whitespace or comma seperated
+     *         addresses
+     */
     public String getAdded()
     {
         return mAdded;
     }
 
+    /**
+     * Returns the addresses to add as a List instead of the
+     * whitespace or comma seperated string.
+     *
+     * @return a <code>List</code> containing the addresses
+     */
     public List getAddedAddresses()
     {
         StringTokenizer tokenizer = new StringTokenizer(mAdded, " \t\n\r\f,");
@@ -77,7 +117,14 @@ public class UpdateAliasForm extends ActionForm
     }
 
     /**
+     * Resets the form to the default value.  It gets the value for
+     * mail from the http request, sets added to an empty string, and
+     * deleted to a zero length array.
      *
+     * @param mapping an <code>ActionMapping</code> used to select
+     *                this instance
+     * @param request a <code>HttpServletRequest</code> that is being
+     *                processed
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
@@ -86,6 +133,15 @@ public class UpdateAliasForm extends ActionForm
         mAdded = "";
     }
 
+    /**
+     * Validates the information from the HTML form.  This currently
+     * returns an empty ActionErrors object.
+     *
+     * @param mapping an <code>ActionMapping</code> of possible destinations
+     * @param request a <code>HttpServletRequest</code> being processed
+     *
+     * @return an <code>ActionErrors</code> object
+     */
     public ActionErrors validate(ActionMapping mapping,
                                  HttpServletRequest request)
     {
@@ -93,7 +149,10 @@ public class UpdateAliasForm extends ActionForm
         return errors;
     }
 
+    /** The mail address of the alias */
     private String mMail;
+    /** The addresses to delete from the alias. */
     private String[] mDeleted;
+    /** The addresses to add to the alias. */
     private String mAdded;
 }

@@ -168,6 +168,8 @@ public class AddAliasForm extends ActionForm
     /**
      * The password is empty if both passwords are null or the empty
      * string.
+     *
+     * @return returns true if the password is empty, false otherwise
      */
     public boolean isPasswordEmpty()
     {

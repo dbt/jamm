@@ -94,6 +94,10 @@ public class LoginForm extends ActionForm
     /**
      * Resets the form to its default state.  In this case, sets all
      * the variables to null.
+     *
+     * @param mapping an <code>ActionMapping</code> used to select
+     *                this instance
+     * @param request a <code>HttpServletRequest</code> being processed
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
@@ -102,7 +106,10 @@ public class LoginForm extends ActionForm
         mDone = null;
     }
 
+    /** The username */
     private String mUsername;
+    /** The password */
     private String mPassword;
+    /** The url to direct to when done logging in. */
     private String mDone;
 }

@@ -48,6 +48,10 @@ public class AddDomainAction extends JammAction
      * @param actionForm an AddDomainForm object holding the required info.
      * @param request The http request that caused this action to happen.
      * @param response The http response to this action.
+     *
+     * @return an <code>ActionForward</code>
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

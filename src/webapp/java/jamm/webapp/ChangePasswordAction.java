@@ -48,6 +48,10 @@ public class ChangePasswordAction extends Action
      * @param actionForm a ChangePasswordForm with our required information
      * @param request the http request
      * @param response the http response
+     *
+     * @return an <code>ActionForward</code>
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

@@ -42,6 +42,10 @@ public class LogoutAction extends Action
      * @param actionForm ignored in this action
      * @param request the http request to logout
      * @param response the http response
+     *
+     * @return an <code>ActionForward</code> of destinations
+     *
+     * @exception Exception if an error occurs
      */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,

@@ -43,6 +43,7 @@ public class User implements Serializable
      * @param username The username.
      * @param dn The distinguished name.
      * @param password The password.
+     * @param roles a <code>Set</code> containing the roles the user is in
      */
     public User(String username, String dn, String password, Set roles)
     {
@@ -54,6 +55,8 @@ public class User implements Serializable
 
     /**
      * Checks to see if this user is an "empty" user.
+     *
+     * @return true when user is empty, false otherwise
      */
     public boolean isEmpty()
     {
@@ -126,5 +129,6 @@ public class User implements Serializable
     /** The password. */
     private String mPassword;
 
+    /** The roles a user is in */
     private Set mRoles;
 }

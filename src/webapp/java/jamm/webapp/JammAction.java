@@ -51,6 +51,8 @@ public abstract class JammAction extends Action
      * Creates a MailManager object for the User.
      *
      * @param user the User to create a MailManager for.
+     *
+     * @return an initialized <code>MailManager</code>
      */
     protected MailManager getMailManager(User user)
     {
