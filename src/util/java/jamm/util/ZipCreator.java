@@ -132,7 +132,7 @@ public class ZipCreator
         }
         else
         {
-            zipName = parent + file.separator + file.getName();
+            zipName = parent + File.separator + file.getName();
         }
 
         // Strip off the base directory
@@ -181,7 +181,7 @@ public class ZipCreator
         if (aFile.length() < 51)
         {
             // If we just store it, we need to calculate some of the data
-            mZos.setMethod(mZos.STORED);
+            mZos.setMethod(ZipOutputStream.STORED);
             ze.setSize(aFile.length());
             ze.setCompressedSize(aFile.length());
             ze.setCrc(calcCRC32(aFile));
@@ -189,7 +189,7 @@ public class ZipCreator
         else
         {
             // If we are deflating, java does it for us
-            mZos.setMethod(mZos.DEFLATED);
+            mZos.setMethod(ZipOutputStream.DEFLATED);
         }
         
         mZos.putNextEntry(ze);
@@ -248,7 +248,7 @@ public class ZipCreator
         ze.setCompressedSize(0);
         ze.setCrc(0);
 
-        mZos.setMethod(mZos.STORED);
+        mZos.setMethod(ZipOutputStream.STORED);
         mZos.putNextEntry(ze);
         
         File[] contents = dir.listFiles();
