@@ -7,5 +7,5 @@
         <tr>
           <td>
             <html:img page="/imgs/jamm_logo.gif" width="230"
-                      height="48" alt="" border="0"/>
+                      height="48" alt="" border="0"/> %VERSION%
             <br />
