@@ -676,7 +676,7 @@ public class MailManager
     }
 
     /**
-     * Removes the domain, the postmaster entry, and the abuse entry.
+     * Removes the domain and any of its contents.
      *
      * @param domain the domain to remove
      * @exception MailManagerException if an error occurs
@@ -687,11 +687,22 @@ public class MailManager
         LdapFacade ldap = null;
         String domainDn = domainDn(domain);
         String pmdn = "cn=postmaster," + domainDn;
+        List children = new ArrayList();
+
         try
         {
-            deleteAlias("abuse@" + domain);
             ldap = getLdap();
-            ldap.deleteElement(pmdn);
+            ldap.searchOneLevel(domainDn, "objectClass=*");
+            while (ldap.nextResult())
+            {
+                children.add(ldap.getResultName());
+            }
+
+            Iterator i = children.iterator();
+            while (i.hasNext())
+            {
+                ldap.deleteElement((String) i.next());
+            }
             ldap.deleteElement(domainDn);
         }
         catch (NamingException e)

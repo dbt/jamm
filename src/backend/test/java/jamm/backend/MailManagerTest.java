@@ -991,6 +991,8 @@ public class MailManagerTest extends TestCase
         assertTrue("testing to see if jvd=" + domain + " has been created",
                    mLdap.nextResult());
 
+        manager.createAlias(domain, "yomama", new String[] {"yomama"});
+
         manager.deleteDomain(domain);
         mLdap.searchOneLevel(BASE, "jvd=" + domain);
         assertTrue("testing to see if jvd=" + domain + " has been removed",
