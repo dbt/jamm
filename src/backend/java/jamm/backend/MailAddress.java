@@ -19,11 +19,19 @@
 
 package jamm.backend;
 
+/**
+ * Utility routines for Internet-style "user@example.com" email
+ * addresses.
+ */
 public class MailAddress
 {
     /**
-     * returns the host part of a user@host e-mail address.  If it can't
-     * find the first '@', it can't figure out the host, so it returns null.
+     * Returns the host part of a user@host email address.  If it
+     * can't find the first '@', it can't figure out the host, so it
+     * returns null.
+     *
+     * @param address Internet-style email address
+     * @return The host name, or null
      */
     public static final String hostFromAddress(String address)
     {
@@ -38,8 +46,11 @@ public class MailAddress
     }
 
     /**
-     * returns the user part of a user@host e-mail address.  If it can't
+     * Returns the user part of a user@host email address.  If it can't
      * find the first '@', it assumes the whole string is the user.
+     *
+     * @param address Internet-style email address
+     * @return The user name
      */
     public static final String userFromAddress(String address)
     {
@@ -53,46 +64,16 @@ public class MailAddress
         return address.substring(0, separator);
     }
 
+    /**
+     * Constructs an Internet-style email address from a user and host
+     * name.
+     *
+     * @param user User name
+     * @param host Host name
+     * @return Internet-style email address
+     */
     public static final String addressFromParts(String user, String host)
     {
         return new StringBuffer(user).append("@").append(host).toString();
     }
-
-    public MailAddress(String address)
-    {
-        mUser = userFromAddress(address);
-        mHost = hostFromAddress(address);
-        mAddress = address;
-    }
-
-    public MailAddress(String user, String host)
-    {
-        mUser = user;
-        mHost = host;
-        mAddress = addressFromParts(user, host);
-    }
-
-    public String getUser()
-    {
-        return mUser;
-    }
-
-    public String getHost()
-    {
-        return mHost;
-    }
-
-    public String getAddress()
-    {
-        return mAddress;
-    }
-
-    public String toString()
-    {
-        return getAddress();
-    }
-
-    private String mUser;
-    private String mHost;
-    private String mAddress;
 }

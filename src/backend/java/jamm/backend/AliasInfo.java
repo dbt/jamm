@@ -26,10 +26,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Arrays;
 
+/**
+ * A bean that represents alias information.
+ */
 public class AliasInfo implements Serializable
 {
+    /**
+     * Create an alias with the specified name, destniations, active,
+     * and boolean flags.
+     *
+     * @param name Account name
+     * @param destinations List of destinations.
+     * @param active True if this account is active.
+     * @param amdministrator True if this account has administrator
+     * priveleges.
+     */
     public AliasInfo(String name, List destinations, boolean active,
-                       boolean administrator)
+                     boolean administrator)
     {
         mName = name;
         mDestinations = destinations;
@@ -37,38 +50,72 @@ public class AliasInfo implements Serializable
         mAdministrator = administrator;
     }
 
+    /**
+     * Returns this alias' name.
+     *
+     * @return This alias' name
+     */
     public String getName()
     {
         return mName;
     }
 
+    /**
+     * Sets the destinations to the specified collection, removing
+     * previous destinations.
+     *
+     * @param destinations New destinations
+     */
     public void setDestinations(Collection destinations)
     {
         mDestinations = new ArrayList(destinations);
     }
 
+    /**
+     * Sets the destinations to the specified array, removing previous
+     * destinations.
+     *
+     * @param destinations New destinations
+     */
     public void setDestinations(String[] destinations)
     {
         mDestinations = Arrays.asList(destinations);
     }
 
+    /**
+     * Returns a list of destinatinos.
+     */
     public List getDestinations()
     {
         return Collections.unmodifiableList(mDestinations);
     }
 
+    /**
+     * Returns true if this alias is active.
+     *
+     * @return True if this alias is active
+     */
     public boolean isActive()
     {
         return mActive;
     }
 
+    /**
+     * Returns true if this alias is an administrator.
+     *
+     * @return True if this alias is an administrator.
+     */
     public boolean isAdministrator()
     {
         return mAdministrator;
     }
 
+    /** The alias name. */
     private String mName;
+    /** The destinations. */
     private List mDestinations;
+    /** True if active. */
     private boolean mActive;
+    /** True if an administrator. */
     private boolean mAdministrator;
 }

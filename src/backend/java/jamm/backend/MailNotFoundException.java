@@ -19,26 +19,32 @@
 
 package jamm.backend;
 
+/**
+ * A element with the specified mail address could not be found.
+ */
 public class MailNotFoundException
     extends MailManagerException
 {
-    public MailNotFoundException()
+    /**
+     * Create a new instance with the specified mail address, but no
+     * root cause.
+     *
+     * @param message Message of this exception
+     */
+    public MailNotFoundException(String mail)
     {
-        super();
+        super(mail);
     }
 
-    public MailNotFoundException(String message)
+    /**
+     * Create a new instance with the specified mail address and root
+     * cause.
+     *
+     * @param message Message of this exception
+     * @param cause Root cause of this exception
+     */
+    public MailNotFoundException(String mail, Throwable cause)
     {
-        super(message);
-    }
-
-    public MailNotFoundException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public MailNotFoundException(Throwable cause)
-    {
-        super(cause);
+        super(mail, cause);
     }
 }

@@ -22,10 +22,24 @@ package jamm.backend;
 import java.util.Comparator;
 
 /**
- * Note: This is inconsistent with equals()
+ * Compares account by their names, ignoring case.  Note: This is
+ * inconsistent with equals().
  */
 public class AccountNameComparator implements Comparator
 {
+    /**
+     * Compares two <code>AccountInfo</code> objects by their name,
+     * ignoring case.
+     *
+     * @param o1 First object to compare.  Must be an
+     * <code>AccountInfo</code> object
+     * @param o2 Second object to compare.  Must be an
+     * <code>AccountInfo</code> object
+     * @return a negative integer, zero, or a positive integer as the
+     * first argument is less than, equal to, or greater than the
+     * second
+     * @see AccountInfo
+     */
     public int compare(Object o1, Object o2)
     {
         AccountInfo account1 = (AccountInfo) o1;
