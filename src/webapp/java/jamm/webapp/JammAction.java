@@ -163,6 +163,25 @@ public abstract class JammAction extends Action
     }
 
     /**
+     * Creates an ActionForward for the add_alias forward with an
+     * optional domain arguement.
+     * 
+     * @param mapping ActionMapping containing the forwards 
+     * @param domain the domain to use for the argument
+     * @return an ActionForward based on the inputs
+     */
+    protected ActionForward getAddAccountForward(ActionMapping mapping,
+                                               String domain)
+    {
+        ActionForward forward = mapping.findForward("add_account");
+        if (domain != null)
+        {
+            return addParameter(forward, "domain", domain);
+        }
+        return forward;
+    }
+
+    /**
      * Adds multiple parameters to the specified forward.  Each entry
      * in the map is added as "key=value".
      *
