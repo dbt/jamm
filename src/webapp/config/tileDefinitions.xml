@@ -56,4 +56,16 @@
   <definition name="access_error" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/access_error.jsp"/>
   </definition>
+  <definition name="communication_error" extends="mainLayout">
+    <put name="body" value="/WEB-INF/tiles/communication_error.jsp"/>
+  </definition>
+  <definition name="account_exists_error" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/account_exists_error.jsp"/>
+  </definition>
+  <definition name="domain_exists_error" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/domain_exists_error.jsp"/>
+  </definition>
+  <definition name="permission_error" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/permission_error.jsp"/>
+  </definition>
 </tiles-definitions>

@@ -20,46 +20,46 @@
 package jamm.backend;
 
 /**
- * An exception thrown when trying to add an account that exists already.
+ * An exception thrown when there is a permission problem.
  */
-public class AccountExistsException
+public class PermissionException
     extends MailManagerException
 {
     /**
-     * Creates a new <code>AccountExistsException</code> instance.
+     * Creates a new <code>PermissionException</code> instance.
      */
-    public AccountExistsException()
+    public PermissionException()
     {
         super();
     }
 
     /**
-     * Creates a new <code>AccountExistsException</code> instance.
+     * Creates a new <code>PermissionException</code> instance.
      *
      * @param message Descriptive message to go with the exception.
      */
-    public AccountExistsException(String message)
+    public PermissionException(String message)
     {
         super(message);
     }
 
     /**
-     * Creates a new <code>AccountExistsException</code> instance.
+     * Creates a new <code>PermissionException</code> instance.
      *
      * @param message Descriptive message to go with the exception.
      * @param cause The throwable that caused this exception.
      */
-    public AccountExistsException(String message, Throwable cause)
+    public PermissionException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
     /**
-     * Creates a new <code>AccountExistsException</code> instance.
+     * Creates a new <code>PermissionException</code> instance.
      *
      * @param cause The throwable that caused this exception.
      */
-    public AccountExistsException(Throwable cause)
+    public PermissionException(Throwable cause)
     {
         super(cause);
     }
