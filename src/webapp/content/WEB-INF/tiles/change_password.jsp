@@ -25,7 +25,7 @@
     <tr>
       <td><br></td>
       <td>
-        <html:submit styleClass="button">
+        <html:submit styleClass="mbutton">
           <bean:message key="change_password.button.submit"/>
         </html:submit>
         <html:submit property="clear" styleClass="button">
