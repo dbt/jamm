@@ -2,9 +2,7 @@
 package jamm.webapp;
 
 import jamm.ldap.LdapFacade;
-import jamm.ldap.LdapPassword;
 
-import java.io.PrintWriter;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServlet;
@@ -97,7 +95,7 @@ public class ChangeAliasServlet extends HttpServlet
             ldap.anonymousBind();
             ldap.searchSubtree(Globals.getLdapSearchBase(),
                                Globals.getLdapQueryFilter(user));
-            if (! ldap.nextResult())
+            if (!ldap.nextResult())
             {
                 ldap.close();
                 ldap = null;
@@ -120,6 +118,8 @@ public class ChangeAliasServlet extends HttpServlet
     private void closeLdap(LdapFacade ldap)
     {
         if (ldap != null)
+        {
             ldap.close();
+        }
     }
 }

@@ -10,7 +10,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttributes;
 
 public class LdapFacade
 {
@@ -163,9 +162,13 @@ public class LdapFacade
 
         relativeDn = mCurrentResultElement.getName();
         if (relativeDn.equals(""))
+        {
             return mSearchBase;
+        }
         else
+        {
             return  relativeDn + "," + mSearchBase;
+        }
     }
 
     public void close()

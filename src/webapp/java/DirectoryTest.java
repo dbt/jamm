@@ -64,7 +64,9 @@ public class DirectoryTest
         finally
         {
             if (ldap != null)
+            {
                 ldap.close();
+            }
         }
     }
 

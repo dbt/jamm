@@ -5,7 +5,6 @@ import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
 import jamm.ldap.PasswordScheme;
 
-import java.io.PrintWriter;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServlet;
@@ -71,7 +70,7 @@ public class ChangePasswordServlet extends HttpServlet
             }
 
 
-            if (! newPassword1.equals(newPassword2))
+            if (!newPassword1.equals(newPassword2))
             {
                 session.setAttribute("error",
                                      "New passwords do not match");
@@ -113,7 +112,7 @@ public class ChangePasswordServlet extends HttpServlet
             ldap.anonymousBind();
             ldap.searchSubtree(Globals.getLdapSearchBase(),
                                Globals.getLdapQueryFilter(user));
-            if (! ldap.nextResult())
+            if (!ldap.nextResult())
             {
                 ldap.close();
                 ldap = null;
@@ -136,6 +135,8 @@ public class ChangePasswordServlet extends HttpServlet
     private void closeLdap(LdapFacade ldap)
     {
         if (ldap != null)
+        {
             ldap.close();
+        }
     }
 }

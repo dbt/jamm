@@ -16,7 +16,7 @@ public class Md5Password extends LdapPassword
             md.update(clearText.getBytes());
             digest = md.digest();
         }
-        catch(NoSuchAlgorithmException e)
+        catch (NoSuchAlgorithmException e)
         {
             throw new UnsupportedOperationException(e.toString());
         }

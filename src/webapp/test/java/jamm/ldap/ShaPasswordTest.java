@@ -1,7 +1,6 @@
 package jamm.ldap;
 
 import junit.framework.TestCase;
-import java.util.Arrays;
 
 public class ShaPasswordTest extends TestCase
 {

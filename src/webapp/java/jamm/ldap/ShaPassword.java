@@ -21,7 +21,7 @@ public class ShaPassword extends LdapPassword
             md.update(clearText);
             digest = md.digest();
         }
-        catch(NoSuchAlgorithmException e)
+        catch (NoSuchAlgorithmException e)
         {
             throw new UnsupportedOperationException(e.toString());
         }

@@ -51,7 +51,8 @@ public class MailManager
                                ldap.getAttribute("cn"));
             ldap.close();
             ldap.simpleBind(
-                "mail=andy@pocuindustry.com, ou=pocuindustry.com, ou=email, dc=dribin, dc=net",
+                "mail=andy@pocuindustry.com, ou=pocuindustry.com, " +
+                "ou=email, dc=dribin, dc=net",
                 "andy1");
             System.out.println("homeDirectory: " +
                                ldap.getAttribute("homeDirectory"));
@@ -66,7 +67,9 @@ public class MailManager
     private void closeLdap(LdapFacade ldap)
     {
         if (ldap != null)
+        {
             ldap.close();
+        }
     }
 
     public static void main(String args[])

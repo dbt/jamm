@@ -27,6 +27,13 @@
     </classpath>
   </taskdef>
 
+  <taskdef name="checkstyle"
+           classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
+    <classpath>
+      <pathelement path="${checkstyle.jar}" />
+    </classpath>
+  </taskdef>
+
   <target name="build-properties-check">
     <condition property="build.properties.uptodate">
       <and>
@@ -130,6 +137,25 @@
   </target>
     
   <target name="dist" depends="dist-webapp" />
+
+  <target name="checkstyle">
+    <checkstyle lcurlyType="nl"
+                lcurlyMethod="nl"
+                lcurlyOther="nl"
+                rcurly="alone"
+                javadocScope="nothing"
+                >
+      <fileset dir="src/webapp/java" includes="**/*.java" />
+    </checkstyle>
+    <checkstyle lcurlyType="nl"
+                lcurlyMethod="nl"
+                lcurlyOther="nl"
+                rcurly="alone"
+                javadocScope="nothing"
+                >
+      <fileset dir="src/webapp/test/java" includes="**/*.java" />
+    </checkstyle>
+  </target>
 
   <target name="clean">
     <delete dir="build" />

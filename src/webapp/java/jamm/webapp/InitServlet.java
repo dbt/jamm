@@ -65,8 +65,12 @@ public class InitServlet extends HttpServlet
 
         value  = props.getProperty("jamm." + property);
         if (value != null)
+        {
             return Integer.parseInt(value);
+        }
         else
+        {
             return defaultValue;
+        }
     }
 }
