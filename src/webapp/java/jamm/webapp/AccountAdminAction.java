@@ -29,8 +29,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
+import jamm.backend.MailManagerException;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
 
@@ -63,12 +66,32 @@ public class AccountAdminAction extends JammAction
         throws Exception
     {
         User user = getUser(request);
+        MailManager manager = getMailManager(user);
+
         String mail = request.getParameter("mail");
         if (mail == null)
         {
             mail = user.getUsername();
         }
 
+        if (!isAllowedToBeHere(manager, mail, user))
+        {
+            List breadCrumbs = new ArrayList();
+            BreadCrumb breadCrumb;
+            breadCrumb = new BreadCrumb(
+                findForward(mapping, "home", request).getPath(),
+                "Home");
+            breadCrumbs.add(breadCrumb);
+            request.setAttribute("breadCrumbs", breadCrumbs);
+
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_ERROR,
+                       new ActionError("access.error"));
+            saveErrors(request, errors);
+            
+            return mapping.findForward("access_error");
+        }
+        
         ChangePasswordForm cpf = new ChangePasswordForm();
         cpf.setMail(mail);
         request.setAttribute("changePasswordForm", cpf);
@@ -94,7 +117,6 @@ public class AccountAdminAction extends JammAction
             breadCrumbs.add(breadCrumb);
         }
         
-        MailManager manager = getMailManager(user);
         if (manager.isAlias(mail))
         {
             breadCrumb = new BreadCrumb(
@@ -127,5 +149,33 @@ public class AccountAdminAction extends JammAction
 
             return (mapping.findForward("view"));
         }
+    }
+
+    /**
+     * Checks to see if the user is allowed to be here.
+     *
+     * @param manager The mail manager to check
+     * @param mail the mail user attempted to be edited
+     * @param user The user attempting to do the edit
+     * @return a value of whether this can be edited
+     * @exception MailManagerException if an error occurs
+     */
+    private boolean isAllowedToBeHere(MailManager manager, String mail,
+                                      User user)
+        throws MailManagerException
+    {
+        String domain = MailAddress.hostFromAddress(mail);
+
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            return true;
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            return manager.isPostmaster(domain, user.getUsername());
+        }
+
+        return user.getUsername().equals(mail);
     }
 }
