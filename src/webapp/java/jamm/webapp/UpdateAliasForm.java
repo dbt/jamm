@@ -3,6 +3,10 @@ package jamm.webapp;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -33,6 +37,17 @@ public class UpdateAliasForm extends ActionForm
     public String getAdded()
     {
         return mAdded;
+    }
+
+    public List getAddedAddresses()
+    {
+        StringTokenizer tokenizer = new StringTokenizer(mAdded, " \t\n\r\f,");
+        List addresses = new ArrayList();
+        while (tokenizer.hasMoreTokens())
+        {
+            addresses.add(tokenizer.nextToken());
+        }
+        return addresses;
     }
 
     /**

@@ -105,7 +105,8 @@
             type="jamm.webapp.UpdateAliasAction"
             name="updateAliasForm"
             scope="request"
-            validate="true">
+            validate="true"
+            input="/private/alias_admin.do">
       <forward name="alias_admin" path="/private/alias_admin.do"
                redirect="true"/>
     </action>

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -249,6 +250,17 @@ public class MailManager
         }
     }
 
+    public void modifyAlias(String mail, Collection newDestinations)
+        throws MailManagerException
+    {
+        String domain = domainFromMail(mail);
+        String alias = userFromMail(mail);
+        String[] destinationsArray = new String[0];
+        destinationsArray =
+            (String[]) newDestinations.toArray(destinationsArray);
+        modifyAlias(domain, alias, destinationsArray);
+    }
+
     public String[] getAliasDestinations(String mail)
         throws MailManagerException
     {
@@ -368,6 +380,12 @@ public class MailManager
     {
         int domainIndex = mail.indexOf("@");
         return mail.substring(domainIndex + 1);
+    }
+
+    private final String userFromMail(String mail)
+    {
+        int domainIndex = mail.indexOf("@");
+        return mail.substring(0, domainIndex);
     }
 
     private final String mail(String domain, String user)

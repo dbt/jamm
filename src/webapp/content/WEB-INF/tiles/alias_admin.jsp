@@ -13,6 +13,8 @@
   </table>
 </form>
 
+<html:errors/>
+
 <html:form action="/private/update_alias">
   <table width="85%" border="1" cellspacing="0">
     <tr>
