@@ -18,22 +18,20 @@ Building instructions
   * Cryptix version 3.2.0
     http://www.cryptix.org/
 
-  * Checkstyle version 2.2
+  * Checkstyle version 2.4
     http://checkstyle.sourceforge.net/
 
-  * Struts version 1.1-b1 or better
+  * Struts version 1.1 or better
     http://jakarta.apache.org/struts/
 
-  * Ant version 1.4.1
+  * Ant version 1.4.1 or better
     http://jakarta.apache.org/ant/
 
   * JUnit 3.7
     http://www.junit.org/
 
-  * Jakarta Commons CLI
-    This isn't fully released yet, so the nightly version Jamm is
-    written against is available through our project area on sourceforge.
-    http://prdownloads.sourceforge.net/jamm/jakarta-commons-cli.tar.gz?download
+  * Jakarta Commons CLI 1.0
+    http://jakarta.apache.org/commons/cli/index.html
 
   JUnit must be installed into the ${ANT_HOME}/lib/ directory.
 
