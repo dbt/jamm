@@ -9,25 +9,25 @@
   <html:hidden property="domain"/>
   <table border="0">
     <tr>
-      <th align="right">
-        Account Name
-      </th>
+      <td align="right">
+        <bean:message key="add_account.prompt.account_name"/>
+      </td>
       <td align="left">
         <html:text property="name" size="30"/>@<bean:write name="domain"/>
       </td>
     </tr>
     <tr>
-      <th align="right">
-        Password
-      </th>
+      <td align="right">
+        <bean:message key="add_account.prompt.password"/>
+      </td>
       <td align="left">
         <html:password property="password" size="30"/>
       </td>
     </tr>
     <tr>
-      <th align="right">
-        Retype Password
-      </th>
+      <td align="right">
+        <bean:message key="add_account.prompt.retype_password"/>
+      </td>
       <td align="left">
         <html:password property="retypedPassword" size="30"/>
       </td>
@@ -36,8 +36,11 @@
       <td><br></td>
       <td>
         <html:submit>
-          <bean:message key="login.button.submit"/>
+          <bean:message key="add_account.button.submit"/>
         </html:submit>
+        <html:cancel>
+          <bean:message key="button.cancel"/>
+        </html:cancel>
       </td>
     </tr>
   </table>
