@@ -1,5 +1,4 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<bean:parameter id="done" name="done" value="/"/>
 <html:errors/>
 <html:form action="/private/change_password" focus="password">
   <html:hidden property="mail"/>
@@ -30,6 +29,9 @@
       <td>
         <html:submit>
           <bean:message key="change_password.button.submit"/>
+        </html:submit>
+        <html:submit property="clear">
+          Clear Password
         </html:submit>
         <html:cancel>
           <bean:message key="button.cancel"/>
