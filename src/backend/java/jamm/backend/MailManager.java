@@ -320,47 +320,6 @@ public class MailManager
         return authenticated;
     }
 
-    /**
-     * Checks if the specified email address is a postmater.
-     *
-     * @param mail Email address to check
-     * @return True if this is a postmaster
-     * @throws MailManagerException If an error occured
-     */
-    public boolean isPostmaster(String mail)
-        throws MailManagerException
-    {
-        LdapFacade ldap = null;
-        boolean isPostmaster = false;
-        try
-        {
-            ldap = getLdap();
-
-            // Get all users in this domain who have postamster
-            // privileges.  The results are full DNs.
-            String domain = MailAddress.hostFromAddress(mail);
-            String postmasterMail = "postmaster@" + domain;
-            searchForMail(ldap, postmasterMail);
-            Set postmasters =
-                ldap.getAllResultAttributeValues("roleOccupant");
-
-            // Get DN for user in question and see if they are a
-            // postmaster.
-            searchForMail(ldap, mail);
-            String mailDn = ldap.getResultName();
-            isPostmaster = postmasters.contains(mailDn);
-        }
-        catch (NamingException e)
-        {
-            throw new MailManagerException(e);
-        }
-        finally
-        {
-            closeLdap(ldap);
-        }
-
-        return isPostmaster;
-    }
 
     /**
      * Returns a list of all domains that are present in this
@@ -1168,8 +1127,10 @@ public class MailManager
         boolean isAdmin = isPostmaster(name);
         String homeDirectory = ldap.getResultAttribute("homeDirectory");
         String mailbox = ldap.getResultAttribute("mailbox");
+        int lastChange =
+            Integer.parseInt(ldap.getResultAttribute("lastChange"));
         return new AccountInfo(name, isActive, isAdmin,
-                               homeDirectory, mailbox);
+                               homeDirectory, mailbox, lastChange);
     }
 
     /**
@@ -1208,8 +1169,23 @@ public class MailManager
     }
 
     /**
-     * Returns true if mail is a postmaster for domain.  Intended for
-     * internal use only, however, could be useful so made public.
+     * Checks if the specified email address is a postmaster for the
+     * domain he is in.
+     *
+     * @param mail Email address to check
+     * @return True if this is a postmaster
+     * @throws MailManagerException If an error occured
+     */
+    public boolean isPostmaster(String mail)
+        throws MailManagerException
+    {
+        String domain = MailAddress.hostFromAddress(mail);
+        return isPostmaster(domain, mail);
+    }
+
+    /**
+     * Returns true if mail is a postmaster for the given domain.
+     * 
      *
      * @param domain The domain to check in.
      * @param mail The mail address to check for
@@ -1222,15 +1198,24 @@ public class MailManager
         LdapFacade ldap = null;
         String pmFilter = "mail=postmaster@" + domain;
         boolean result = false;
+
         try
         {
             ldap = getLdap();
             ldap.searchOneLevel(domainDn(domain), pmFilter);
+
+            Set roleOccupants = null;
             if (ldap.nextResult())
             {
-                Set roleOccupants =
+                roleOccupants =
                     ldap.getAllResultAttributeValues("roleOccupant");
-                result = roleOccupants.contains(mailDn(mail));
+            }
+
+            if (roleOccupants != null)
+            {
+                searchForMail(ldap, mail);
+                String maildn = ldap.getResultName();
+                result = roleOccupants.contains(maildn);
             }
         }
         catch (NamingException e)
