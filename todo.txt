@@ -1,27 +1,35 @@
 Jamm itself:
 
-* Delete account.
+  For 1.0:
 
-* Delete domain.
+    * Delete account.
 
-* Create more meaningful exceptions for mail manager (i.e. subclasses
-  of MailManagerException).
+    * Delete domain.
 
-* Handle exceptions better on web site
+    * Create more meaningful exceptions for mail manager (i.e. subclasses
+      of MailManagerException).
 
-* Access control so users playing with URLs can't go someplace bad
+    * Handle exceptions better on web site
 
-* Send e-mail after account creation to assure creation of user directory
+    * Access control so users playing with URLs can't go someplace bad
 
-* Generate passwords for accounts and/or aliases
-  Port diceware to Java?
+    * Send e-mail after account creation to assure creation of user directory
 
-* User feedback after actions using html:messages.
+    * User feedback after actions using html:messages.
+
+  Not sure when:
+
+    * Generate passwords for accounts and/or aliases
+      Port diceware to Java?
+
+  Post 1.0:
+
+    * Have an account from one domain be a postmaster for multiple domains
 
 NAR User Requests:
 
-* migrate between domains
+    * migrate between domains
 
 Other User Requests:
 
-* more feedback after actions
+    * more feedback after actions
