@@ -56,7 +56,6 @@ public class LdapFacadeTest extends TestCase
      */
     protected void setUp()
     {
-        mLdap = null;
     }
 
     /**
@@ -64,11 +63,6 @@ public class LdapFacadeTest extends TestCase
      */
     protected void tearDown()
     {
-        if (mLdap != null)
-        {
-            mLdap.close();
-            mLdap = null;
-        }
     }
 
     /**
@@ -78,10 +72,10 @@ public class LdapFacadeTest extends TestCase
     public void testAnonymousBind()
         throws NamingException
     {
-        mLdap = new LdapFacade("localhost");
-        mLdap.anonymousBind();
-        assertNull("Checking name is null", mLdap.getName());
-        mLdap.close();
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.anonymousBind();
+        assertNull("Checking name is null", ldap.getName());
+        ldap.close();
     }
 
     /**
@@ -91,26 +85,26 @@ public class LdapFacadeTest extends TestCase
     public void testSimpleBind()
         throws NamingException
     {
-        mLdap = new LdapFacade("localhost");
+        LdapFacade ldap = new LdapFacade("localhost");
 
-        mLdap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
+        ldap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
         assertEquals("Checking manager name", LdapConstants.MGR_DN,
-                     mLdap.getName());
-        mLdap.close();
+                     ldap.getName());
+        ldap.close();
 
-        mLdap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
+        ldap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
         assertEquals("Checking account 1 name", LdapConstants.ACCT1_DN,
-                     mLdap.getName());
-        mLdap.close();
+                     ldap.getName());
+        ldap.close();
 
-        mLdap.simpleBind(ACCT2_DN, ACCT2_PW);
-        assertEquals("Checking account 2 name", ACCT2_DN, mLdap.getName());
-        mLdap.close();
+        ldap.simpleBind(ACCT2_DN, ACCT2_PW);
+        assertEquals("Checking account 2 name", ACCT2_DN, ldap.getName());
+        ldap.close();
 
         try
         {
             // Try with invalid password
-            mLdap.simpleBind(LdapConstants.ACCT1_DN, "badpw");
+            ldap.simpleBind(LdapConstants.ACCT1_DN, "badpw");
             fail("Should have thrown AuthenticationException");
         }
         catch (AuthenticationException e)
@@ -121,7 +115,7 @@ public class LdapFacadeTest extends TestCase
         try
         {
             // Try with invalid password
-            mLdap.simpleBind(LdapConstants.MGR_DN, "badpw");
+            ldap.simpleBind(LdapConstants.MGR_DN, "badpw");
             fail("Should have thrown an authentication exception");
         }
         catch (AuthenticationException e)
@@ -136,7 +130,7 @@ public class LdapFacadeTest extends TestCase
         try
         {
             // Try with invalid DN
-            mLdap.simpleBind("baddn", LdapConstants.ACCT1_PW);
+            ldap.simpleBind("baddn", LdapConstants.ACCT1_PW);
             fail("Should have thrown InvalidNameException");
         }
         catch (InvalidNameException e)
@@ -152,29 +146,29 @@ public class LdapFacadeTest extends TestCase
     public void testGetElementAttributes()
         throws NamingException
     {
-        mLdap = new LdapFacade("localhost");
+        LdapFacade ldap = new LdapFacade("localhost");
 
-        mLdap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
+        ldap.simpleBind(LdapConstants.ACCT1_DN, LdapConstants.ACCT1_PW);
         assertEquals("Checking account1 DN", LdapConstants.ACCT1_DN,
-                     mLdap.getName());
+                     ldap.getName());
         assertEquals("Checking mail", "acct1@domain1.test",
-                     mLdap.getAttribute("mail"));
+                     ldap.getAttribute("mail"));
         assertEquals("Checking homeDirectory", "/home/vmail/domains",
-                     mLdap.getAttribute("homeDirectory"));
+                     ldap.getAttribute("homeDirectory"));
         assertEquals("Checking mailbox", "domain1.test/acct1",
-                     mLdap.getAttribute("mailbox"));
+                     ldap.getAttribute("mailbox"));
         assertNull("Checking description",
-                   mLdap.getAttribute("description"));
+                   ldap.getAttribute("description"));
         // The password is stored as a binary object, so this test
         // ensures that the facade converts it to a string.
         assertEquals("Checking password", LdapConstants.ACCT1_PW_HASHED,
-                     mLdap.getAttribute("userPassword"));
+                     ldap.getAttribute("userPassword"));
 
         Set expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAccount");
 
-        Set objectClass = mLdap.getAllAttributeValues("objectClass");
+        Set objectClass = ldap.getAllAttributeValues("objectClass");
         assertEquals("Checking multi-value objectClass", expectedObjectClass,
                      objectClass);
 
@@ -183,9 +177,11 @@ public class LdapFacadeTest extends TestCase
         assertTrue("Checking upper case object class",
                    objectClass.contains("JammMailAccount"));
 
-        Set noAttribute = mLdap.getAllAttributeValues("noAttribute");
+        Set noAttribute = ldap.getAllAttributeValues("noAttribute");
         assertEquals("Checking noAttribute has no values",
                      Collections.EMPTY_SET, noAttribute);
+        
+        ldap.close();
     }
 
     /**
@@ -198,7 +194,7 @@ public class LdapFacadeTest extends TestCase
         Set expectedResults;
         Set results;
         
-        mLdap = new LdapFacade("localhost");
+        LdapFacade ldap = new LdapFacade("localhost");
 
         // There should only be these domains at this level
         expectedResults = new HashSet();
@@ -206,18 +202,20 @@ public class LdapFacadeTest extends TestCase
 
         results = new HashSet();
 
-        mLdap.anonymousBind();
-        mLdap.searchOneLevel("o=hosting,dc=jamm,dc=test",
+        ldap.anonymousBind();
+        ldap.searchOneLevel("o=hosting,dc=jamm,dc=test",
                              "objectclass=top");
 
-        while (mLdap.nextResult())
+        while (ldap.nextResult())
         {
-            results.add(mLdap.getResultName());
+            results.add(ldap.getResultName());
         }
 
         assertEquals("Checking results of one level search, " +
                      "(objectclass=top) ",
                      expectedResults, results);
+        
+        ldap.close();
     }
 
     /**
@@ -230,7 +228,7 @@ public class LdapFacadeTest extends TestCase
         Set expectedResults;
         Set results;
         
-        mLdap = new LdapFacade("localhost");
+        LdapFacade ldap = new LdapFacade("localhost");
 
         expectedResults = new HashSet();
         expectedResults.add(DOMAIN1_DN);
@@ -241,17 +239,19 @@ public class LdapFacadeTest extends TestCase
 
         results = new HashSet();
 
-        mLdap.anonymousBind();
-        mLdap.searchSubtree(DOMAIN1_DN, "objectClass=*");
+        ldap.anonymousBind();
+        ldap.searchSubtree(DOMAIN1_DN, "objectClass=*");
 
-        while (mLdap.nextResult())
+        while (ldap.nextResult())
         {
-            results.add(mLdap.getResultName());
+            results.add(ldap.getResultName());
         }
 
         assertEquals("Checking results of subtree search, " +
                      "(objectClass=jammMailAccount)",
                      expectedResults, results);
+        
+        ldap.close();
     }
 
     /**
@@ -261,32 +261,32 @@ public class LdapFacadeTest extends TestCase
     public void testGetResultAttributes()
         throws NamingException
     {
-        mLdap = new LdapFacade("localhost");
+        LdapFacade ldap = new LdapFacade("localhost");
 
-        mLdap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
-        mLdap.searchSubtree("o=hosting,dc=jamm,dc=test",
+        ldap.simpleBind(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
+        ldap.searchSubtree("o=hosting,dc=jamm,dc=test",
                             "mail=acct1@domain1.test");
-        assertTrue("Checking for results", mLdap.nextResult());
+        assertTrue("Checking for results", ldap.nextResult());
         assertEquals("Checking account1 DN", LdapConstants.ACCT1_DN,
-                     mLdap.getResultName());
+                     ldap.getResultName());
         assertEquals("Checking mail", "acct1@domain1.test",
-                     mLdap.getResultAttribute("mail"));
+                     ldap.getResultAttribute("mail"));
         assertEquals("Checking homeDirectory", "/home/vmail/domains",
-                     mLdap.getResultAttribute("homeDirectory"));
+                     ldap.getResultAttribute("homeDirectory"));
         assertEquals("Checking mailbox", "domain1.test/acct1",
-                     mLdap.getResultAttribute("mailbox"));
+                     ldap.getResultAttribute("mailbox"));
         assertNull("Checking description",
-                   mLdap.getAttribute("description"));
+                   ldap.getAttribute("description"));
         // The password is stored as a binary object, so this test
         // ensures that the facade converts it to a string.
         assertEquals("Checking password", LdapConstants.ACCT1_PW_HASHED,
-                     mLdap.getResultAttribute("userPassword"));
+                     ldap.getResultAttribute("userPassword"));
 
         Set expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAccount");
 
-        Set objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        Set objectClass = ldap.getAllResultAttributeValues("objectClass");
         assertEquals("Checking multi-value objectClass", expectedObjectClass,
                      objectClass);
 
@@ -295,10 +295,12 @@ public class LdapFacadeTest extends TestCase
         assertTrue("Checking upper case object class",
                    objectClass.contains("JammMailAccount"));
 
-        Set description = mLdap.getAllResultAttributeValues("description");
+        Set description = ldap.getAllResultAttributeValues("description");
         assertEquals("Checking description has no values",
                      Collections.EMPTY_SET, description);
-        assertTrue("Checking for no more results", !mLdap.nextResult());
+        assertTrue("Checking for no more results", !ldap.nextResult());
+        
+        ldap.close();
     }
 
     /**
@@ -315,13 +317,13 @@ public class LdapFacadeTest extends TestCase
 
         ouName = "my_ou";
         dn = "ou=" + ouName + ",dc=jamm,dc=test";
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(MGR_DN, MGR_PW);
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.simpleBind(MGR_DN, MGR_PW);
         
         // This element should not exist
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   !mLdap.nextResult());
+                   !ldap.nextResult());
 
         // Create a new element
         attributes = new BasicAttributes();
@@ -331,39 +333,41 @@ public class LdapFacadeTest extends TestCase
         attributes.put(objectClass);
         attributes.put("ou", ouName);
         attributes.put("description", "my description");
-        mLdap.addElement(dn, attributes);
+        ldap.addElement(dn, attributes);
 
         // See if the element exists and check the values
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
-                   mLdap.nextResult());
+                   ldap.nextResult());
 
         Set expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("organizationalUnit");
         assertEquals("Checking objectClass", expectedObjectClass,
-                     mLdap.getAllResultAttributeValues("objectClass"));
-        assertEquals("Checking ou", ouName, mLdap.getResultAttribute("ou"));
+                     ldap.getAllResultAttributeValues("objectClass"));
+        assertEquals("Checking ou", ouName, ldap.getResultAttribute("ou"));
         assertEquals("Checking description", "my description",
-                     mLdap.getResultAttribute("description"));
+                     ldap.getResultAttribute("description"));
 
         // Modify the description
-        mLdap.modifyElementAttribute(dn, "description", "new description");
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
-        assertTrue("Checking for results", mLdap.nextResult());
+        ldap.modifyElementAttribute(dn, "description", "new description");
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("Checking for results", ldap.nextResult());
         assertEquals("Checking description", "new description",
-                     mLdap.getResultAttribute("description"));
+                     ldap.getResultAttribute("description"));
 
         // Delete element
-        mLdap.deleteElement(dn);
+        ldap.deleteElement(dn);
 
         // This element should not exist
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   !mLdap.nextResult());
+                   !ldap.nextResult());
+        
+        ldap.close();
     }
 
     /**
@@ -375,13 +379,13 @@ public class LdapFacadeTest extends TestCase
     {
         String ouName = "ou_map";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(MGR_DN, MGR_PW);
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.simpleBind(MGR_DN, MGR_PW);
         
         // This element should not exist
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   !mLdap.nextResult());
+                   !ldap.nextResult());
 
         // Create a new element
         Map attributes = new HashMap();
@@ -393,28 +397,30 @@ public class LdapFacadeTest extends TestCase
         attributes.put("telephoneNumber", telephoneNumbers);
         attributes.put("ou", ouName);
         attributes.put("description", "my description");
-        mLdap.addElement(dn, attributes);
+        ldap.addElement(dn, attributes);
 
         // See if the element exists and check the values
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
-                   mLdap.nextResult());
+                   ldap.nextResult());
 
         Set expectedObjectClass = new HashSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("organizationalUnit");
         assertEquals("Checking objectClass", expectedObjectClass,
-                     mLdap.getAllResultAttributeValues("objectClass"));
-        assertEquals("Checking ou", ouName, mLdap.getResultAttribute("ou"));
+                     ldap.getAllResultAttributeValues("objectClass"));
+        assertEquals("Checking ou", ouName, ldap.getResultAttribute("ou"));
         assertEquals("Checking description", "my description",
-                     mLdap.getResultAttribute("description"));
+                     ldap.getResultAttribute("description"));
 
         Set expectedTelephoneNumbers = new HashSet();
         expectedTelephoneNumbers.add("555-1234");
         expectedTelephoneNumbers.add("555-6789");
         assertEquals("Checking telephoneNumber", expectedTelephoneNumbers,
-                     mLdap.getAllResultAttributeValues("telephoneNumber"));
+                     ldap.getAllResultAttributeValues("telephoneNumber"));
+        
+        ldap.close();
     }
 
     /**
@@ -426,13 +432,13 @@ public class LdapFacadeTest extends TestCase
     {
         String ouName = "change_password";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(MGR_DN, MGR_PW);
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.simpleBind(MGR_DN, MGR_PW);
 
         // This element should not exist
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   !mLdap.nextResult());
+                   !ldap.nextResult());
 
         Map attributes = new HashMap();
         attributes.put("objectClass", new String[] { "top",
@@ -442,28 +448,28 @@ public class LdapFacadeTest extends TestCase
         attributes.put("userPassword",
                        "{SSHA}ezzH8G5cwAx+WxOp6qy72kvIV+QGuOzC");
 
-        mLdap.addElement(dn, attributes);
+        ldap.addElement(dn, attributes);
 
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
-                   mLdap.nextResult());
+                   ldap.nextResult());
 
-        mLdap.close();
+        ldap.close();
 
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(dn, "warez");
+        ldap = new LdapFacade("localhost");
+        ldap.simpleBind(dn, "warez");
         assertEquals("Checking manager name", dn,
-                     mLdap.getName());
+                     ldap.getName());
 
-        mLdap.changePassword(dn, "testPassword");
-        mLdap.close();
+        ldap.changePassword(dn, "testPassword");
+        ldap.close();
 
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(dn, "testPassword");
+        ldap = new LdapFacade("localhost");
+        ldap.simpleBind(dn, "testPassword");
         assertEquals("Checking manager name", dn,
-                     mLdap.getName());
-        mLdap.close();
+                     ldap.getName());
+        ldap.close();
     }
         
     /**
@@ -475,13 +481,13 @@ public class LdapFacadeTest extends TestCase
     {
         String ouName = "mod_multi";
         String dn = "ou=" + ouName + ",dc=jamm,dc=test";
-        mLdap = new LdapFacade("localhost");
-        mLdap.simpleBind(MGR_DN, MGR_PW);
+        LdapFacade ldap = new LdapFacade("localhost");
+        ldap.simpleBind(MGR_DN, MGR_PW);
         
         // This element should not exist
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
-                   !mLdap.nextResult());
+                   !ldap.nextResult());
 
         // Create a new element
         Map attributes = new HashMap();
@@ -493,20 +499,20 @@ public class LdapFacadeTest extends TestCase
         attributes.put("telephoneNumber", telephoneNumbers);
         attributes.put("ou", ouName);
         attributes.put("description", "my description");
-        mLdap.addElement(dn, attributes);
+        ldap.addElement(dn, attributes);
 
         // Modify using Map
         telephoneNumbers.clear();
         telephoneNumbers.add("555-0666");
         telephoneNumbers.add("555-2222");
         telephoneNumbers.add("555-6759");
-        mLdap.modifyElementAttribute(dn, "telephoneNumber", telephoneNumbers);
+        ldap.modifyElementAttribute(dn, "telephoneNumber", telephoneNumbers);
 
         // See if the element exists and check the values
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
-                   mLdap.nextResult());
+                   ldap.nextResult());
 
         Set expectedTelephoneNumbers = new HashSet();
         expectedTelephoneNumbers.add("555-0666");
@@ -514,27 +520,26 @@ public class LdapFacadeTest extends TestCase
         expectedTelephoneNumbers.add("555-6759");
         assertEquals("Checking telephoneNumber after Map modify",
                      expectedTelephoneNumbers,
-                     mLdap.getAllResultAttributeValues("telephoneNumber"));
+                     ldap.getAllResultAttributeValues("telephoneNumber"));
 
         // Modify using String[]
-        mLdap.modifyElementAttribute(dn, "telephoneNumber",
+        ldap.modifyElementAttribute(dn, "telephoneNumber",
                                      new String[] {"555-1111"});
 
         // Check the values
-        mLdap.resetSearch();
-        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        ldap.resetSearch();
+        ldap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should exist",
-                   mLdap.nextResult());
+                   ldap.nextResult());
 
         expectedTelephoneNumbers.clear();
         expectedTelephoneNumbers.add("555-1111");
         assertEquals("Checking telephoneNumber after String[] modify",
                      expectedTelephoneNumbers,
-                     mLdap.getAllResultAttributeValues("telephoneNumber"));
+                     ldap.getAllResultAttributeValues("telephoneNumber"));
+        
+        ldap.close();
     }
-
-    /** ldap connection */
-    private LdapFacade mLdap;
 
     /** mgr dn to use */
     private static final String MGR_DN = "cn=Manager,dc=jamm,dc=test";
