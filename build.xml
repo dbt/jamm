@@ -227,44 +227,19 @@
   <target name="dist" depends="dist-webapp" />
 
   <target name="checkstyle">
-    <checkstyle lcurlyType="nl"
-                lcurlyMethod="nl"
-                lcurlyOther="nl"
-                rcurly="alone"
-                javadocScope="nothing"
-                headerFile="src/tools/license_header.checkstyle"
-                headerLinesRegexp="yes"
-                >
+    <checkstyle properties="checkstyle.properties"
+                javadocScope="nothing">
       <fileset dir="src/webapp/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle lcurlyType="nl"
-                lcurlyMethod="nl"
-                lcurlyOther="nl"
-                rcurly="alone"
-                javadocScope="nothing"
-                headerFile="src/tools/license_header.checkstyle"
-                headerLinesRegexp="yes"
-                >
+    <checkstyle properties="checkstyle.properties"
+                javadocScope="nothing">
       <fileset dir="src/webapp/test/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle lcurlyType="nl"
-                lcurlyMethod="nl"
-                lcurlyOther="nl"
-                rcurly="alone"
-                javadocScope="nothing"
-                headerFile="src/tools/license_header.checkstyle"
-                headerLinesRegexp="yes"
-                >
+    <checkstyle properties="checkstyle.properties">
       <fileset dir="src/backend/java" includes="**/*.java" />
     </checkstyle>
-    <checkstyle lcurlyType="nl"
-                lcurlyMethod="nl"
-                lcurlyOther="nl"
-                rcurly="alone"
-                javadocScope="nothing"
-                headerFile="src/tools/license_header.checkstyle"
-                headerLinesRegexp="yes"
-                >
+    <checkstyle properties="checkstyle.properties"
+                javadocScope="nothing">
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
   </target>
