@@ -30,8 +30,25 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+/**
+ * Calls MailManager to change the password for an account or alias
+ * based on the information passed in via the ChangePasswordForm.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.ChangePasswordForm
+ */
 public class ChangePasswordAction extends Action
 {
+    /**
+     * Performs the action.
+     *
+     * @see jamm.webapp.ChangePasswordForm
+     *
+     * @param mapping The action mapping of possible destinations.
+     * @param actionForm a ChangePasswordForm with our required information
+     * @param request the http request
+     * @param response the http response
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

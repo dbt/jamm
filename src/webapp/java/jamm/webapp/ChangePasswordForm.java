@@ -30,13 +30,15 @@ import org.apache.struts.action.ActionErrors;
  * Holds both new passwords the user typed.  This bean makes sure that
  * the passwords match and that the passwords don't suck.  For now, it
  * just checks the length of the password.
+ *
+ * @see jamm.webapp.ChangePasswordAction
  */
 public class ChangePasswordForm extends ActionForm
 {
     /**
      * Sets the mail address of the user to change the password for.
      *
-     * @param The mail address.
+     * @param mail The mail address.
      */
     public void setMail(String mail)
     {
@@ -47,7 +49,7 @@ public class ChangePasswordForm extends ActionForm
      * Returns the mail address of the user to change the password
      * for.
      *
-     * @return The mail address.
+     * @return a string containing the mail address.
      */
     public String getMail()
     {
@@ -67,7 +69,7 @@ public class ChangePasswordForm extends ActionForm
     /**
      * Returns the first password.
      *
-     * @return The first password.
+     * @return a string containing the first password.
      */
     public String getPassword()
     {
@@ -87,7 +89,7 @@ public class ChangePasswordForm extends ActionForm
     /**
      * Returns the second password.
      *
-     * @return The second password.
+     * @return a string containing the second password.
      */
     public String getRetypedPassword()
     {
@@ -95,7 +97,11 @@ public class ChangePasswordForm extends ActionForm
     }
 
     /**
-     * Clears out both passwords.
+     * Clears out both passwords and sets the Mail to the parameter
+     * passed in via the request.
+     *
+     * @param mapping The mapping used to select this instance.
+     * @param request The servlet request we are processing.
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
@@ -104,8 +110,12 @@ public class ChangePasswordForm extends ActionForm
     }
 
     /**
+     * Validates the passwords by calling the validatePassword method
+     * of the PasswordValidator.
      *
-     * @param mapping The action mapping.
+     * @see jamm.webapp.PasswordValidator#validatePassword
+     *
+     * @param mapping The mapping used to select this instance.
      * @param request The servlet request.
      * @return Any errors.
      */
