@@ -13,4 +13,7 @@
   <definition name="login" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/login.jsp"/>
   </definition>
+  <definition name="change_password" extends="mainLayout">
+    <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
+  </definition>
 </component-definitions>

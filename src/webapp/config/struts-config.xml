@@ -13,6 +13,8 @@
      -->
     <form-bean name="loginForm"
                type="jamm.webapp.LoginForm"/>
+    <form-bean name="changePasswordForm"
+               type="jamm.webapp.ChangePasswordForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -54,6 +56,14 @@
 
     <action path="/logout"
             type="jamm.webapp.LogoutAction"/>
+
+    <action path="/change_password"
+            type="jamm.webapp.ChangePasswordAction"
+            name="changePasswordForm"
+            scope="request"
+            validate="true"
+            input="/private/change_password.jsp">
+    </action>
 
     <!-- This will reload tileDefinitions.xml -->
     <action path="/admin/reload-tiles"
