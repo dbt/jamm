@@ -2,7 +2,7 @@
 
     * User feedback after actions using html:messages.
 
-	* Filter DomainAdmin by first letter
+    * Filter DomainAdmin by first letter
 
   Not sure when:
 
@@ -24,6 +24,7 @@
       - Backend supports this, must be built into webapp
 
 Bugs to be fixed:
+
+Bugs Fixed:
     * When a domain is set to be deleted, its catchall is still
       active.  Must set to inactive or set delete flag.
-      -- half done
