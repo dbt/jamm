@@ -78,6 +78,12 @@ public class SiteConfigAction extends JammAction
         i = form.getCheckedActive().iterator();
         modifyCapability(EDIT_ACTIVE, true, manager, domainInfos, i);
 
+        i = form.getUncheckedDelete().iterator();
+        modifyCapability(EDIT_DELETE, false, manager, domainInfos, i);
+        i = form.getCheckedDelete().iterator();
+        modifyCapability(EDIT_DELETE, true, manager, domainInfos, i);
+        
+
         i = domainInfos.values().iterator();
         while (i.hasNext())
         {
@@ -132,6 +138,10 @@ public class SiteConfigAction extends JammAction
                     di.setActive(setTo);
                     break;
 
+                case EDIT_DELETE:
+                    di.setDelete(setTo);
+                    break;
+
                 default:
                     throw new Exception("The should never be here");
             }
@@ -144,4 +154,6 @@ public class SiteConfigAction extends JammAction
     private static final int EDIT_POSTMASTERS = 2;
     /** a final meaning "call setActive" */
     private static final int EDIT_ACTIVE = 3;
+    /** a final meaning "call setDelete" */
+    private static final int EDIT_DELETE = 4;
 }
