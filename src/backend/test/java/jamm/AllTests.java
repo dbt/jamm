@@ -149,7 +149,7 @@ public class AllTests
         attributes = new BasicAttributes();
         objectClass = new BasicAttribute("objectClass");
         objectClass.add("top");
-        objectClass.add("dcObject");
+        objectClass.add("domain");
         attributes.put(objectClass);
         attributes.put("dc", "jamm");
         element = context.createSubcontext("dc=jamm,dc=test",
