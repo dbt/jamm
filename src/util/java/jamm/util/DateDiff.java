@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import java.io.File;
-
 /**
  * This tells you the diff between two dates.  For the get method, use
  * the defines from Calendar.  Currently, only SECOND, MINUTE, HOUR,
