@@ -5,6 +5,8 @@ schema that it follows. Unlike simliar projects, Jamm only modifies
 what is in LDAP and leaves some of the "aftermath" file cleanup to the
 administrator.
 
+Look at INSTALL for build and install instructions.
+
 Important Files
 ---------------
 
