@@ -276,7 +276,7 @@ public class LdapFacadeTest extends TestCase
         telephoneNumbers.add("555-6789");
         attributes.put("telephoneNumber", telephoneNumbers);
         attributes.put("ou", ouName);
-        attributes.put("description","my description");
+        attributes.put("description", "my description");
         mLdap.addElement(dn, attributes);
 
         // See if the element exists and check the values

@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.naming.Context;
@@ -188,12 +187,15 @@ public class LdapFacade
      * added for that value.  Here is an example:
      * <pre>
      * Set attributes = new HashSet();
+     * // Set a multi-value attribute with a String[]
      * attributes.add("objectClass", new String[] { "top", "organization" });
-     * attributes.add("o", "myOrg");
+     * // Set a multi-value attribute with a Set
      * Set phones = new HashSet();
      * phones.add("555-1234");
      * phones.add("555-6789");
      * attributes.add("telephoneNumber", phones);
+     * // Set single value attributes with a String
+     * attributes.add("o", "myOrg");
      * attributes.add("description", "Sample Organization");
      * ldapFacade.addElement("o=myOrg,dc=example,dc=com", attributes);
      * </pre>
