@@ -290,31 +290,6 @@ public class DateDiff
         return result.toString();
     }
 
-    /**
-     * Main method for testing.
-     *
-     * @param argv the arguements to use
-     */
-    public static final void main(String argv[])
-    {
-        String filename = new String();
-        if (!(argv.length > 0))
-        {
-            System.out.println("You need to supply a filename");
-            System.exit(1);
-        }
-        else
-        {
-            filename = argv[0];
-        }
-
-        File file = new File(filename);
-        DateDiff dd =
-            new DateDiff(file.lastModified(), System.currentTimeMillis());
-
-        System.out.println(dd);
-    }
-
     /** The object where we store our diff */
     private int mDiff[];
     /** The GregorianCalendar representation of the new time. */
