@@ -86,6 +86,8 @@ public class InitServlet extends HttpServlet
                                   "java.security.SecureRandom"));
             Globals.setRootDn(
                 getStringProperty(properties, "ldap.root_dn", ""));
+            Globals.setPasswordUseExOp(
+                getBooleanProperty(properties, "password.exop", true));
         }
         catch (IOException e)
         {
@@ -133,6 +135,24 @@ public class InitServlet extends HttpServlet
         else
         {
             return defaultValue;
+        }
+    }
+
+    private boolean getBooleanProperty(Properties props, String property,
+                                       boolean defaultValue)
+    {
+        String value;
+
+        value = props.getProperty("jamm." + property);
+
+        System.out.println("value: " + value);
+        if (value == null)
+        {
+            return defaultValue;
+        }
+        else
+        {
+            return Boolean.valueOf(value).booleanValue();
         }
     }
 }
