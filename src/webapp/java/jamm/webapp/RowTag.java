@@ -11,10 +11,6 @@ import java.io.IOException;
  *
  * @jsp:tag name="tr"
  *          body-content="JSP"
- *
- * @jsp:variable    name-from-attribute="index"
- *                  class="Integer"
- *                  scope="NESTED"
  */
 public class RowTag extends BodyTagSupport
 {
