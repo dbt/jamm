@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+
+<project default="build" basedir=".">
+
+  <!-- This must be done before any other propertes -->
+  <property file="${user.home}/.build.properties" />
+  <property file="${basedir}/build.properties" />
+
+  <!-- set global properties for this build -->
+  <property name="project.string"
+            value="${project.name}-${project.version}" />
+
+  <path id="lib.path">
+    <pathelement path="${servlet.jar}" />
+    <pathelement path="${cryptix.jar}" />
+  </path>
+
+  <path id="xdoclet.path">
+    <pathelement path="${ant.home}/lib/ant.jar" />
+    <pathelement path="${xdoclet.jar}" />
+    <pathelement path="${log4j.jar}" />
+  </path>
+
+  <taskdef name="webdoclet" classname="xdoclet.web.WebDocletTask">
+    <classpath>
+      <path refid="xdoclet.path" />
+    </classpath>
+  </taskdef>
+
+  <target name="build-properties-check">
+    <condition property="build.properties.uptodate">
+      <and>
+        <available file="build.properties" />
+        <available file="src/build.properties" />
+        <uptodate targetfile="build.properties">
+          <srcfiles dir="src" includes="build.properties" />
+        </uptodate>
+      </and>
+    </condition>
+  </target>
+
+  <target name="build-properties-up-to-date"
+          unless="build.properties.uptodate"
+          depends="build-properties-check">
+    <fail message="build.properties is out of date or missing." />
+  </target>
+
+  <target name="prepare" depends="build-properties-up-to-date">
+    <mkdir dir="build" />
+    <mkdir dir="build/webapp/root" />
+    <mkdir dir="build/webapp/root/WEB-INF" />
+    <mkdir dir="build/webapp/root/WEB-INF/classes" />
+    <mkdir dir="build/webapp/root/WEB-INF/lib" />
+
+    <mkdir dir="test" />
+    <mkdir dir="test/webapp" />
+    <mkdir dir="test/webapp/classes" />
+
+    <mkdir dir="dist" />
+  </target>
+
+  <target name="build-webapp-java" depends="prepare"
+          description="Builds all code for the web application.">
+    <javac srcdir="src/webapp/java"
+	   destdir="build/webapp/root/WEB-INF/classes"
+           optimize="${compile.optimize}" debug="${compile.debug}"
+	   classpathref="lib.path" />
+
+    <javac srcdir="src/webapp/test/java"
+	   destdir="test/webapp/classes"
+	   debug="on" optimize="off">
+      <classpath>
+        <pathelement location="build/webapp/root/WEB-INF/classes" />
+	<path refid="lib.path" />
+      </classpath>
+    </javac>
+
+    <copy todir="build/webapp/root/WEB-INF/lib" file="${cryptix.jar}" />
+
+    <copy todir="build/webapp/root">
+      <fileset dir="src/webapp/content" includes="**/*" />
+    </copy>
+  </target>
+  <target name="b-w-j" depends="build-webapp-java" />
+
+  <target name="build-webapp-webdoclet" depends="build-webapp-java">
+    <webdoclet sourcepath="src/webapp/java"
+               destdir="build/webapp/generated"
+               packagenames="jamm.*">
+      <classpath>
+        <path refid="xdoclet.path" />
+        <path refid="lib.path" />
+      </classpath>
+
+      <deploymentdescriptor servletspec="2.3"
+                            destdir="build/webapp/root/WEB-INF"
+                            displayname="Jamm"
+                            description="Java Mail Manager">
+      </deploymentdescriptor>
+    </webdoclet>
+  </target>
+  <target name="b-w-w" depends="build-webapp-webdoclet" />
+
+  <target name="build"
+          depends="build-webapp-webdoclet, build-webapp-java" />
+
+  <target name="test" depends="build">
+    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+      <classpath>
+        <pathelement location="test/webapp/classes" />
+        <pathelement location="build/webapp/root/WEB-INF/classes" />
+        <path refid="lib.path" />
+      </classpath>
+      <jvmarg value="-Dlog4j.disableOverride=${log4j.disableOverride}" />
+
+      <formatter type="plain" />
+      <test name="jamm.ldap.AllTests"
+            outfile="test/webapp/results" />
+    </junit>
+  </target>
+
+  <target name="dist" depends="build">
+    <jar jarfile="dist/${project.string}.jar" basedir="build/webapp/root" />
+  </target>
+
+  <target name="clean">
+    <delete dir="build" />
+    <delete dir="test" />
+    <delete dir="dist" />
+  </target>
+
+</project>

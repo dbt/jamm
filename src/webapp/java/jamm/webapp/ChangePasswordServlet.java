@@ -1,0 +1,141 @@
+
+package jamm.webapp;
+
+import jamm.ldap.LdapFacade;
+import jamm.ldap.LdapPassword;
+
+import java.io.PrintWriter;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.ServletException;
+
+import javax.naming.NamingException;
+
+
+/**
+ * Changes an LDAP password.
+ *
+ * @web:servlet name="change-password"
+ * @web:servlet-mapping url-pattern="/change"
+ */
+public class ChangePasswordServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request,
+			  HttpServletResponse response)
+	throws ServletException
+    {
+	String user;
+	String oldPassword;
+	String newPassword1;
+	String newPassword2;
+	String hashedPassword;
+        LdapFacade ldap;
+	HttpSession session;
+        String root;
+
+        ldap = null;
+	try
+        {
+	    session = request.getSession();
+	    user = request.getParameter("user");
+	    oldPassword = request.getParameter("old_password");
+	    newPassword1 = request.getParameter("new_password_1");
+	    newPassword2 = request.getParameter("new_password_2");
+            root = request.getContextPath();
+
+	    if (user.equals("") ||
+		oldPassword.equals("") ||
+		newPassword1.equals("") ||
+		newPassword2.equals(""))
+            {
+		session.setAttribute("error",
+				     "Please fill in all fields");
+		response.sendRedirect(root + "/error.jsp");
+                return;
+	    }
+
+            ldap = authenticate(user, oldPassword);
+                
+            if (ldap == null)
+            {
+                session.setAttribute("error",
+                                     "Invalid user and password");
+                response.sendRedirect(root + "/error.jsp");
+                return;
+            }
+
+
+            if (! newPassword1.equals(newPassword2))
+            {
+                session.setAttribute("error",
+                                     "New passwords do not match");
+                response.sendRedirect(root + "/error.jsp");
+                return;
+            }
+
+            hashedPassword =
+                LdapPassword.hash(LdapPassword.SSHA_SCHEME, newPassword1);
+            ldap.addModifyAttribute("userPassword", hashedPassword);
+            ldap.replaceModifiedAttributes();
+
+	    response.sendRedirect(root + "/success.jsp");
+	}
+	catch (IOException e)
+        {
+	    throw new ServletException(e);
+	}
+	catch (NamingException e)
+        {
+	    throw new ServletException(e);
+	}
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
+    private LdapFacade authenticate(String user, String password)
+    {
+        LdapFacade ldap;
+        String name;
+
+        ldap = null;
+        try
+        {
+            ldap = new LdapFacade("localhost");
+            ldap.anonymousBind();
+            ldap.searchSubtree(mSearchBase, "mail=" + user);
+            if (! ldap.hasMoreResults())
+            {
+                ldap.close();
+                ldap = null;
+                return ldap;
+            }
+
+            name = ldap.getResultName();
+            ldap.close();
+            ldap.simpleBind(name, password);
+        }
+        catch (NamingException e)
+        {
+            closeLdap(ldap);
+            ldap = null;
+        }
+	
+        return ldap;
+    }
+    
+    private void closeLdap(LdapFacade ldap)
+    {
+        if (ldap != null)
+            ldap.close();
+    }
+
+
+    String mHost = "localhost";
+    String mSearchBase = "ou=email,dc=dribin,dc=net";
+}
