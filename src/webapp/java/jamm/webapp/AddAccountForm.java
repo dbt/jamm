@@ -21,10 +21,10 @@ package jamm.webapp;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.validator.ValidatorForm;
 
 /**
  * Bean which holds the information from an HTML form that calls the
@@ -34,7 +34,7 @@ import org.apache.struts.action.ActionErrors;
  * @see jamm.webapp.AddAccountAction
  * @struts.form name="addAccountForm"
  */
-public class AddAccountForm extends ActionForm
+public class AddAccountForm extends ValidatorForm
 {
     /**
      * Resets the password stored in the bean to null.
@@ -127,8 +127,13 @@ public class AddAccountForm extends ActionForm
 
     /**
      * Sets the account name in this bean to the string passed in.
+     * 
+     * todo Finish validator tags for this file.
      *
      * @param name The name of the account.
+     * 
+     * @struts.validator type="required"
+     * @struts.validator-args arg0key="add_account.prompt.common_name"
      */
     public void setName(String name)
     {
