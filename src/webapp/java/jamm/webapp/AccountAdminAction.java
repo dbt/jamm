@@ -19,6 +19,8 @@
 
 package jamm.webapp;
 
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +30,7 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 import jamm.backend.AliasInfo;
+import jamm.backend.MailAddress;
 
 /**
  * Forwards a user or an administrator to the correct page for
@@ -69,16 +72,48 @@ public class AccountAdminAction extends JammAction
         request.setAttribute("changePasswordForm", cpf);
         request.setAttribute("mail", mail);
 
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            breadCrumb = new BreadCrumb(
+                findForward(mapping, "site_admin", request).getPath(),
+                "Site Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            String domain = MailAddress.hostFromAddress(mail);
+            breadCrumb = new BreadCrumb(
+                getDomainAdminForward(mapping, domain).getPath(),
+                "Domain Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+        
         MailManager manager = getMailManager(user);
         if (manager.isAlias(mail))
         {
+            breadCrumb = new BreadCrumb(
+                getAccountAdminForward(mapping, mail).getPath(),
+                "Alias Admin");
+            breadCrumbs.add(breadCrumb);
+            request.setAttribute("breadCrumbs", breadCrumbs);
+
             AliasInfo alias = manager.getAlias(mail);
             request.setAttribute("alias", alias);
             return (mapping.findForward("alias_admin"));
         }
         else
         {
-            return (mapping.findForward("account_admin"));
+            breadCrumb = new BreadCrumb(
+                getAccountAdminForward(mapping, mail).getPath(),
+                "Account Admin");
+            breadCrumbs.add(breadCrumb);
+            request.setAttribute("breadCrumbs", breadCrumbs);
+
+            return (mapping.findForward("view"));
         }
     }
 }

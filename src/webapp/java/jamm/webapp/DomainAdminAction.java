@@ -88,6 +88,23 @@ public class DomainAdminAction extends JammAction
         
         request.setAttribute("domain", domain);
 
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            breadCrumb = new BreadCrumb(
+                findForward(mapping, "site_admin", request).getPath(),
+                "Site Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        breadCrumb = new BreadCrumb(
+            getDomainAdminForward(mapping, domain).getPath(),
+            "Domain Admin");
+        breadCrumbs.add(breadCrumb);
+        request.setAttribute("breadCrumbs", breadCrumbs);
+
         List accounts = manager.getAccounts(domain);
         request.setAttribute("accounts", accounts);
 
@@ -151,6 +168,6 @@ public class DomainAdminAction extends JammAction
         dcf.setDomain(domain);
         request.setAttribute("domainAliasForm", dcf);
 
-        return (mapping.findForward("domain_admin"));
+        return (mapping.findForward("view"));
     }
 }

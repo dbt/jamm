@@ -67,6 +67,15 @@ public class SiteAdminAction extends JammAction
         List domains = manager.getDomains();
         request.setAttribute("domains", domains);
 
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        breadCrumb = new BreadCrumb(
+            findForward(mapping, "site_admin", request).getPath(),
+            "Site Admin");
+        breadCrumbs.add(breadCrumb);
+        request.setAttribute("breadCrumbs", breadCrumbs);
+
         SiteConfigForm siteConfigForm = new SiteConfigForm();
 
         List domainNames = new ArrayList();
@@ -126,6 +135,6 @@ public class SiteAdminAction extends JammAction
 
         request.setAttribute("siteConfigForm", siteConfigForm);
 
-        return (mapping.findForward("site_admin"));
+        return (mapping.findForward("view"));
     }
 }
