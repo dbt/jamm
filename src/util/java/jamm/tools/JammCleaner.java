@@ -19,11 +19,14 @@
 
 package jamm.tools;
 
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.MissingArgumentException;
+import org.apache.commons.cli.MissingOptionException;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Parser;
+import org.apache.commons.cli.GnuParser;
 
 /**
  * This is the application that cleans up after jamm.
@@ -49,22 +52,27 @@ public final class JammCleaner
      */
     private static Options getOptions()
     {
+        Option opt = null;
         Options opts = new Options();
-        opts.addOption('v', "verbose", NO_ARGS, "verbose");
-        opts.addOption('y', "yes", NO_ARGS, "Assume yes for all questions");
-        opts.addOption('h', HAS_ARGS, "ldap host  (default: localhost)");
-        opts.addOption('p', HAS_ARGS, "ldap port  (default: 389)");
-        opts.addOption('w', "password", HAS_ARGS,
+        opts.addOption("v", "verbose", NO_ARGS, "verbose");
+        opts.addOption("y", "yes", NO_ARGS, "Assume yes for all questions");
+        opts.addOption("h", HAS_ARGS, "ldap host  (default: localhost)");
+        opts.addOption("p", HAS_ARGS, "ldap port  (default: 389)");
+        opts.addOption("w", "password", HAS_ARGS,
                        "password to connect to LDAP with");
-        opts.addOption('n', "no-execute", NO_ARGS,
-                       "Print would be executed, but do not execute.");
-        opts.addOption('D', "dn", HAS_ARGS, "the dn to bind with",
-                       IS_REQUIRED);
-        opts.addOption('b', "base", HAS_ARGS, "base dn to search from",
-                       IS_REQUIRED);
-        opts.addOption('B', "backups", HAS_ARGS, "back up account contents " +
+        opts.addOption("n", "no-execute", NO_ARGS,
+                       "Print what would be executed, but do not execute.");
+
+        opt = new Option("D", "dn", HAS_ARGS, "the dn to bind with");
+        opt.setRequired(true);
+        opts.addOption(opt);
+
+        opt = new Option("b", "base", HAS_ARGS, "base dn to search from");
+        opt.setRequired(true);
+        opts.addOption(opt);
+        opts.addOption("B", "backups", HAS_ARGS, "back up account contents " +
                        "to this directory before deleting");
-        opts.addOption('?', "help", NO_ARGS, "prints help message");
+        opts.addOption("?", "help", NO_ARGS, "prints help message");
 
         return opts;
     }
@@ -132,14 +140,16 @@ public final class JammCleaner
     {
         Options opts = getOptions();
         CommandLine cmdl = null;
+        Parser parser = new GnuParser();
+        
         try
         {
-            cmdl = opts.parse(argv);
+            cmdl = parser.parse(opts,argv);
         }
         catch (MissingOptionException e)
         {
             System.out.println("Missing required options.");
-            // System.out.println(e.toString());
+            System.out.println(e.toString());
             printHelp(opts);
             System.exit(1);
         }
