@@ -144,7 +144,7 @@ public final class JammCleaner
         
         try
         {
-            cmdl = parser.parse(opts,argv);
+            cmdl = parser.parse(opts, argv);
         }
         catch (MissingOptionException e)
         {
