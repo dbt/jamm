@@ -21,13 +21,22 @@ package jamm.ldap;
 
 import junit.framework.TestCase;
 
+/**
+ * Unit test for the {@link ShaPassword} class.
+ */
 public class ShaPasswordTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public ShaPasswordTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Tests an SHA hash.
+     */
     public void testSha()
     {
         ShaPassword sha;

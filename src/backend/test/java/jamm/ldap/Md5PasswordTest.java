@@ -22,13 +22,22 @@ package jamm.ldap;
 import junit.framework.TestCase;
 import java.util.Arrays;
 
+/**
+ * Unit test for the {@link Md5Password} class.
+ */
 public class Md5PasswordTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public Md5PasswordTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Tests an MD5 hash.
+     */
     public void testMd5()
     {
         Md5Password md5;

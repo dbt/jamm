@@ -21,13 +21,22 @@ package jamm.backend;
 
 import junit.framework.TestCase;
 
+/**
+ * Unit test for the {@link MailAddress} class.
+ */
 public class MailAddressTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public MailAddressTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Tests getting host name from an address.
+     */
     public void testHostFromAddress()
     {
         assertEquals("testing with user@host address",
@@ -38,6 +47,9 @@ public class MailAddressTest extends TestCase
                    MailAddress.hostFromAddress(USER_ONLY));
     }
 
+    /**
+     * Tests getting user from an address.
+     */
     public void testUserFromAddress()
     {
         assertEquals("testing with user@host address",
@@ -49,6 +61,8 @@ public class MailAddressTest extends TestCase
                      MailAddress.userFromAddress(USER_ONLY));
     }
     
+    /** Sample valid email address */
     private static final String USER_AT_HOST = "kgarner@realtors.org";
+    /** Sample valid address that is the user only */
     private static final String USER_ONLY = "root";
 }

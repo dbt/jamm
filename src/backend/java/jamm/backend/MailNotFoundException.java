@@ -29,7 +29,7 @@ public class MailNotFoundException
      * Create a new instance with the specified mail address, but no
      * root cause.
      *
-     * @param message Message of this exception
+     * @param mail Email address that was not found.
      */
     public MailNotFoundException(String mail)
     {
@@ -40,7 +40,7 @@ public class MailNotFoundException
      * Create a new instance with the specified mail address and root
      * cause.
      *
-     * @param message Message of this exception
+     * @param mail Email address that was not found.
      * @param cause Root cause of this exception
      */
     public MailNotFoundException(String mail, Throwable cause)

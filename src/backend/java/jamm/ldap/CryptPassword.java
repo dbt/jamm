@@ -88,9 +88,11 @@ public class CryptPassword extends LdapPassword
     /**
      * Not implemented, always returns <code>false</code>.
      *
+     * @param hashedPassword The hashed password
+     * @param password The clear text password
      * @return <code>false</code>
      */
-    protected boolean doCheck(String hashedPasword, String password)
+    protected boolean doCheck(String hashedPassword, String password)
     {
         return false;
     }

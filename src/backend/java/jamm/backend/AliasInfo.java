@@ -38,7 +38,7 @@ public class AliasInfo implements Serializable
      * @param name Account name
      * @param destinations List of destinations.
      * @param active True if this account is active.
-     * @param amdministrator True if this account has administrator
+     * @param administrator True if this account has administrator
      * priveleges.
      */
     public AliasInfo(String name, List destinations, boolean active,
@@ -84,6 +84,8 @@ public class AliasInfo implements Serializable
 
     /**
      * Returns a list of destinatinos.
+     *
+     * @return An unmodifialbe list of destinations as strings.
      */
     public List getDestinations()
     {

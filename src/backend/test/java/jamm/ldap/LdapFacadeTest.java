@@ -34,18 +34,30 @@ import javax.naming.directory.BasicAttributes;
 
 import junit.framework.TestCase;
 
+/**
+ * Unit test for the {@link LdapFacade} class.
+ */
 public class LdapFacadeTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public LdapFacadeTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Ensures LDAP facade is null.
+     */
     protected void setUp()
     {
         mLdap = null;
     }
 
+    /**
+     * Closes the LDAP facade, if it is open.
+     */
     protected void tearDown()
     {
         if (mLdap != null)
@@ -55,6 +67,9 @@ public class LdapFacadeTest extends TestCase
         }
     }
 
+    /**
+     * Tests an anonymous bind.
+     */
     public void testAnonymousBind()
         throws NamingException
     {
@@ -64,6 +79,9 @@ public class LdapFacadeTest extends TestCase
         mLdap.close();
     }
 
+    /**
+     * Tests a simple bind.
+     */
     public void testSimpleBind()
         throws NamingException
     {
@@ -105,6 +123,9 @@ public class LdapFacadeTest extends TestCase
         }
     }
 
+    /**
+     * Tests getting element attributes.
+     */
     public void testGetElementAttributes()
         throws NamingException
     {
@@ -131,6 +152,9 @@ public class LdapFacadeTest extends TestCase
                      Collections.EMPTY_SET, noAttribute);
     }
 
+    /**
+     * Tests searching one leve.
+     */
     public void testSearchOneLevel()
         throws NamingException
     {
@@ -159,6 +183,9 @@ public class LdapFacadeTest extends TestCase
                      expectedResults, results);
     }
 
+    /**
+     * Tests searching a subtree.
+     */
     public void testSearchSubtree()
         throws NamingException
     {
@@ -187,6 +214,9 @@ public class LdapFacadeTest extends TestCase
                      expectedResults, results);
     }
 
+    /**
+     * Tests getting attributes from a searched result.
+     */
     public void testGetResultAttributes()
         throws NamingException
     {
@@ -213,6 +243,9 @@ public class LdapFacadeTest extends TestCase
         assertTrue("Checking for no more results", !mLdap.nextResult());
     }
 
+    /**
+     * Tests adding, modyfying, and deleting elements.
+     */
     public void testAddModifyDeleteElement()
         throws NamingException
     {
@@ -276,6 +309,9 @@ public class LdapFacadeTest extends TestCase
                    !mLdap.nextResult());
     }
 
+    /**
+     * Tests adding elements using a Map for attributes.
+     */
     public void testAddUsingMap()
         throws NamingException
     {
@@ -324,6 +360,9 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 
+    /**
+     * Tests modyfing a multi-value attribute.
+     */
     public void testModifyMultiValue()
         throws NamingException
     {

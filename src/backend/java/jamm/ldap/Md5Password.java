@@ -31,6 +31,7 @@ public class Md5Password extends LdapPassword
      * Generates the raw 128-bit MD5 hash of the clear text.  Many
      * applications use the Base-64 encoded version of the MD5.
      *
+     * @param clearText Clear text
      * @return A 16-byte array representing the MD5 hash of the clear
      * text.
      */
@@ -67,9 +68,11 @@ public class Md5Password extends LdapPassword
     /**
      * Not imlemented yet.
      *
+     * @param hashedPassword A hashed password
+     * @param password A clear text password
      * @return Always returns <code>false</code>
      */
-    protected boolean doCheck(String hashedpassword, String password)
+    protected boolean doCheck(String hashedPassword, String password)
     {
         return false;
     }

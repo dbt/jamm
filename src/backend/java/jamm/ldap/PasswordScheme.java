@@ -48,7 +48,9 @@ public final class PasswordScheme
         new PasswordScheme(mCount++);
 
     /**
-     * The maximum value of the enumeration.
+     * Returns the maximum value of the enumeration.
+     *
+     * @return The maximum value of the enumeration.
      */
     public static final int max()
     {
@@ -58,7 +60,7 @@ public final class PasswordScheme
     /**
      * Create a new enumeration instance.
      *
-     * @param Enumeration value.
+     * @param value Enumeration value.
      */
     private PasswordScheme(int value)
     {
@@ -67,6 +69,8 @@ public final class PasswordScheme
 
     /**
      * This instances enumeration value.
+     *
+     * @return The enumeration value.
      */
     public int value()
     {
@@ -75,6 +79,9 @@ public final class PasswordScheme
 
     /**
      * Two schemes are considered equal if their values match.
+     *
+     * @param other The other password scheme
+     * @return True if the schemes are equal
      */
     public boolean equals(PasswordScheme other)
     {

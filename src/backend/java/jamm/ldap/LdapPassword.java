@@ -82,6 +82,8 @@ public abstract class LdapPassword
      * Checks a hashed password against a clear text password.  This
      * is not yet implemented.
      *
+     * @param hashedPassword The hashed password
+     * @param password The clear text password
      * @return Always returns <code>false</code>
      */
     public static boolean check(String hashedPassword, String password)
@@ -137,12 +139,19 @@ public abstract class LdapPassword
     /**
      * Hashes a clear text password.  Should be overridden by
      * subclasses for each password scheme.
+     *
+     * @param password A clear text password
+     * @return A hashed password
      */
     protected abstract String doHash(String password);
 
     /**
      * Checks a hashed password against a clear text password.  Should
      * be overridden by subclasses for each password scheme.
+     *
+     * @param hashedPassword A hashed password
+     * @param password A clear text password
+     * @return A hashed password
      */
     protected abstract boolean doCheck(String hashedPassword, String password);
 
@@ -154,6 +163,7 @@ public abstract class LdapPassword
      * @throws UnsupportedOperationException If an error occured.
      */
     protected String encodeBase64(byte[] bytes)
+        throws UnsupportedOperationException
     {
         ByteArrayOutputStream   baos;
         Base64OutputStream      base64;

@@ -22,8 +22,14 @@ package jamm.backend;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+/**
+ * A suite of all tests in the jamm.backend.* packages.
+ */
 public class AllTests
 {
+    /**
+     * Returns a test suite for all classes in jamm.backend.*.
+     */
     public static Test suite()
     {
         TestSuite suite;

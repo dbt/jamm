@@ -32,7 +32,7 @@ public class AccountInfo implements Serializable
      *
      * @param name Account name
      * @param active True if this account is active.
-     * @param amdministrator True if this account has administrator
+     * @param administrator True if this account has administrator
      * priveleges.
      */
     public AccountInfo(String name, boolean active, boolean administrator)

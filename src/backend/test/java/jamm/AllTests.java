@@ -37,8 +37,18 @@ import javax.naming.directory.BasicAttributes;
 
 import jamm.ldap.LdapPassword;
 
+/**
+ * A top level test suite for all the backend classes.  It connects to
+ * the server and creates a known set of data into the directory prior
+ * to running the tests.
+ */
 public class AllTests
 {
+    /**
+     * Returns a test suite for all backend tests.
+     *
+     * @return A top-level test suite
+     */
     public static Test suite()
     {
         TestSuite suite;
@@ -74,6 +84,9 @@ public class AllTests
         return wrapper;
     }
 
+    /**
+     * Setup that needs to be performed only once.
+     */
     private static void oneTimeSetUp()
         throws Exception
     {
@@ -84,8 +97,10 @@ public class AllTests
     /**
      * Clears out LDAP data and adds initial dataset.
      *
-     * Add this to the end of your <tt>slapd.conf</tt> to create a separate
-     * database for Jamm testing:
+     * Add this to the end of your <tt>slapd.conf</tt> to create a
+     * separate database for Jamm testing. <b>Note</b>: Long lines
+     * cannot be continued with a backslash in
+     * <code>slapd.conf</code>.  It is only done here for readability.
      *
      * <pre>
      * database      ldbm
@@ -93,6 +108,12 @@ public class AllTests
      * rootdn        "cn=Manager,dc=jamm,dc=test"
      * rootpw        jammtest
      * directory     /var/lib/ldap/jamm
+     * access to dn=".*jvd=([^,]+),o=hosting,dc=jamm,dc=test"
+     *     by self write
+     *     by group/organizationalRole/roleOccupant="cn=postmaster,jvd=$1,\
+     *        o=hosting,dc=jamm,dc=test" write
+     *     by * read
+     *
      * access to *
      *     by self write
      *     by * read
@@ -203,6 +224,12 @@ public class AllTests
         context.close();
     }
 
+    /**
+     * Recursively destroys an entire subtree and all its elements.
+     *
+     * @param context Context to destroy from
+     * @param dn DN to destroy
+     */
     private static void destroySubtree(DirContext context, String dn)
     {
         SearchControls controls;
@@ -243,6 +270,9 @@ public class AllTests
         }
     }
     
+    /**
+     * Sets up the LDAP password stuff to use java.util.Random.
+     */
     private static void setupLdapPassword()
     {
         // Use normal random as SecureRandom takes too long to
@@ -250,6 +280,9 @@ public class AllTests
         LdapPassword.setRandomClass("java.util.Random");
     }
     
+    /**
+     * Does nothing.
+     */
     private static void oneTimeTearDown()
     {
     }

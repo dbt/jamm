@@ -22,8 +22,14 @@ package jamm.ldap;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+/**
+ * A suite of all tests in the jamm.ldap.* packages.
+ */
 public class AllTests
 {
+    /**
+     * Returns a test suite for all classes in jamm.ldap.*.
+     */
     public static Test suite()
     {
         TestSuite suite;

@@ -38,6 +38,10 @@ public class ClearPassword extends LdapPassword
     /**
      * Checks if the supplied password matches a hashed password.
      * Since this is clear text, a standard string compare is done.
+     *
+     * @param hashedPassword The hashed password
+     * @param password The clear text password
+     * @return True if the passwords match.
      */
     protected boolean doCheck(String hashedPassword, String password)
     {

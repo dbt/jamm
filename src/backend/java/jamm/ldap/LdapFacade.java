@@ -152,6 +152,7 @@ public class LdapFacade
      * Returns the distinguished name that was used to bind as.
      *
      * @return The DN used to bind as.
+     * @throws NamingException If an error occured
      */
     public String getName()
         throws NamingException
@@ -176,7 +177,8 @@ public class LdapFacade
     /**
      * Returns all values of an attribute as a <code>Set</code>.
      *
-     * @return The values of an attribute.
+     * @param name An attribute name
+     * @return The values of an attribute
      * @throws NamingException If an error occured
      */
     public Set getAllAttributeValues(String name)
@@ -461,7 +463,7 @@ public class LdapFacade
      * Gets the attributes for the current result element.
      *
      * @return All attributes for the current result element.
-     * @throws NamingExcpetion If an error occured
+     * @throws NamingException If an error occured
      */
     public NamingEnumeration getAllResultAttributes()
         throws NamingException

@@ -29,18 +29,30 @@ import junit.framework.TestCase;
 import jamm.ldap.LdapFacade;
 import jamm.LdapConstants;
 
+/**
+ * Unit test for the {@link MailManager} class.
+ */
 public class MailManagerTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public MailManagerTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Ensures LDAP facade reference is null.
+     */
     protected void setUp()
     {
         mLdap = null;
     }
 
+    /**
+     * Closes an open LDAP facade.
+     */
     protected void tearDown()
     {
         if (mLdap != null)
@@ -50,6 +62,9 @@ public class MailManagerTest extends TestCase
         }
     }
 
+    /**
+     * Tests creating a domain.
+     */
     public void testCreateDomain()
         throws NamingException, MailManagerException
     {
@@ -117,6 +132,9 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    /**
+     * Tests creating an alias.
+     */
     public void testCreateAlias()
         throws NamingException, MailManagerException
     {
@@ -160,6 +178,9 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    /**
+     * Tests modifying an alias.
+     */
     public void testModifyAlias()
         throws NamingException, MailManagerException
     {
@@ -189,6 +210,9 @@ public class MailManagerTest extends TestCase
                      mLdap.getAllResultAttributeValues("maildrop"));
     }
 
+    /**
+     * Tests retrieving data for an alias.
+     */
     public void testGetAlias()
         throws MailManagerException
     {
@@ -213,6 +237,9 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking destination", "mail2@xyz.test", destination);
     }
 
+    /**
+     * Tests deleting an alias.
+     */
     public void testDeleteAlias()
         throws NamingException, MailManagerException
     {
@@ -241,6 +268,9 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking alias is deleted", !mLdap.nextResult());
     }
 
+    /**
+     * Tests creating an account.
+     */
     public void testCreateAccount()
         throws NamingException, MailManagerException
     {
@@ -296,6 +326,9 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    /**
+     * Tests authenticating a user.
+     */
     public void testAuthenticate()
         throws MailManagerException
     {
@@ -328,6 +361,9 @@ public class MailManagerTest extends TestCase
                    !manager.authenticate());
     }
 
+    /**
+     * Tests getting DN of an email address.
+     */
     public void testGetDnFromMail()
         throws MailManagerException
     {
@@ -354,6 +390,9 @@ public class MailManagerTest extends TestCase
         assertNull("Checking DN not found for " + unknownMail, foundDn);
     }
 
+    /**
+     * Tests adding a catch-all alias.
+     */
     public void testAddCatchall()
         throws NamingException, MailManagerException
     {
@@ -392,6 +431,9 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    /**
+     * Tests changing passwords.
+     */
     public void testChangePassword()
         throws MailManagerException
     {
@@ -439,6 +481,9 @@ public class MailManagerTest extends TestCase
                    manager.authenticate());
     }
 
+    /**
+     * Testing alias detection.
+     */
     public void testIsAlias()
         throws MailManagerException
     {
@@ -462,6 +507,9 @@ public class MailManagerTest extends TestCase
                    manager.isAlias(aliasName + "@" + domain));
     }
 
+    /**
+     * Testing postmaster detection.
+     */
     public void testIsPostmaster()
         throws MailManagerException
     {
@@ -482,6 +530,9 @@ public class MailManagerTest extends TestCase
                    !manager.isPostmaster(aliasName + "@" + domain));
     }
 
+    /**
+     * Tests getting all account and alias data.
+     */
     public void testGetAccountsAndAliases()
         throws MailManagerException
     {
@@ -513,7 +564,7 @@ public class MailManagerTest extends TestCase
             { "z@x.test", "M@x.test", "a@x.test"});
         manager.changePassword("xxxx@" + domain, "xxxx");
         manager.createAlias(domain, "", new String[]
-            { "z@x.test" } );
+            { "z@x.test" });
 
         List accounts = manager.getAccounts(domain);
         assertEquals("Checking number of accounts", 3, accounts.size());
@@ -531,6 +582,9 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking number of aliases", 4, aliases.size());
     }
 
+    /**
+     * Tests getting all domains.
+     */
     public void testGetDomains()
         throws MailManagerException
     {
@@ -542,6 +596,8 @@ public class MailManagerTest extends TestCase
                      domains.contains("domain1.test"));
     }
 
+    /** The LDAP facade used for most tests. */
     private LdapFacade mLdap;
+    /** The base of the LDAP directory. */
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }

@@ -149,6 +149,8 @@ public class MailManager
     /**
      * Closes an LDAP facade if it is not null.  This is handy in
      * finally blocks.
+     *
+     * @param ldap LDAP facade to close.
      */
     private void closeLdap(LdapFacade ldap)
     {
@@ -230,8 +232,9 @@ public class MailManager
     }
 
     /**
-     * Checks if the specified mail address is a postmater.
+     * Checks if the specified email address is a postmater.
      *
+     * @param mail Email address to check
      * @return True if this is a postmaster
      * @throws MailManagerException If an error occured
      */
@@ -275,7 +278,7 @@ public class MailManager
      * directory.
      *
      * @return A list of domains, as strings
-     * @throw MailManagerException If an error occured
+     * @throws MailManagerException If an error occured
      */
     public List getDomains()
         throws MailManagerException
@@ -480,7 +483,7 @@ public class MailManager
     /**
      * Modify an existing alias replacing existing data.
      *
-     * @param aliasInfo New alias data
+     * @param alias New alias data
      * @throws MailManagerException If an error occured
      */
     public void modifyAlias(AliasInfo alias)

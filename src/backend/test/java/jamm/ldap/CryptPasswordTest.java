@@ -21,13 +21,22 @@ package jamm.ldap;
 
 import junit.framework.TestCase;
 
+/**
+ * Unit test for the {@link CryptPassword} class.
+ */
 public class CryptPasswordTest extends TestCase
 {
+    /**
+     * Standard JUnit constructor.
+     */
     public CryptPasswordTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Test of crypt(3) hashing.
+     */
     public void testCrypt()
     {
         CryptPassword   crypt;

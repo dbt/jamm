@@ -19,10 +19,17 @@
 
 package jamm;
 
+/**
+ * Constants used during unit testing.
+ */
 public class LdapConstants
 {
+    /** LDAP server: <code>localhost</code> */
     public static final String HOST = "localhost";
+    /** LDAP port: 389 */
     public static final int PORT = 389;
+    /** Root DN: <code>cn=Manager,dc=jamm,dc=test</code> */
     public static final String MGR_DN = "cn=Manager,dc=jamm,dc=test";
+    /** Root password: <code>jammtest</code> */
     public static final String MGR_PW = "jammtest";
 }

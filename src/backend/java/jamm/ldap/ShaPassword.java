@@ -30,7 +30,7 @@ public class ShaPassword extends LdapPassword
     /**
      * Generates the raw 160-bit SHA hash of the clear text.
      *
-     * @param Clear text, as a string
+     * @param clearText Clear text, as a string
      * @return A 20-byte array representing the SHA hash of the clear
      * text
      */ 
@@ -42,7 +42,7 @@ public class ShaPassword extends LdapPassword
     /**
      * Generates the raw 160-bit SHA hash of the clear text.
      *
-     * @param Clear text, as a byte array
+     * @param clearText Clear text, as a byte array
      * @return A 20-byte array representing the SHA hash of the clear
      * text
      */ 
@@ -79,9 +79,11 @@ public class ShaPassword extends LdapPassword
     /**
      * Not imlemented yet.
      *
+     * @param hashedPassword A hashed password
+     * @param password A clear text password
      * @return Always returns <code>false</code>
      */
-    protected boolean doCheck(String hashedpassword, String password)
+    protected boolean doCheck(String hashedPassword, String password)
     {
         return false;
     }

@@ -48,6 +48,8 @@ public class SaltedShaPassword extends ShaPassword
     /**
      * Not imlemented yet.
      *
+     * @param hashedPassword A hashed password
+     * @param password A clear text password
      * @return Always returns <code>false</code>
      */
     protected boolean doCheck(String hashedPassword, String password)
