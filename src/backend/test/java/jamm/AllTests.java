@@ -185,7 +185,7 @@ public class AllTests
         attributes.put("postfixTransport", "virtual:");
         attributes.put("editAliases", "TRUE");
         attributes.put("editAccounts", "TRUE");
-        attributes.put("editPostmasters", "TRUE");
+        attributes.put("editPostmasters", "FALSE");
         attributes.put("editCatchalls", "FALSE");
         element = context.createSubcontext(
             "jvd=domain1.test, o=hosting, dc=jamm, dc=test", attributes);

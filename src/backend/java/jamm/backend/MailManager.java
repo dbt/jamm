@@ -352,16 +352,15 @@ public class MailManager
         throws NamingException
     {
         String name = ldap.getResultAttribute("jvd");
-        boolean canEditAliases = stringToBoolean(
-            ldap.getResultAttribute("editAliases"));
         boolean canEditAccounts = stringToBoolean(
             ldap.getResultAttribute("editAccounts"));
         boolean canEditPostmasters = stringToBoolean(
             ldap.getResultAttribute("editPostmasters"));
-        boolean canEditCatchalls = stringToBoolean(
-            ldap.getResultAttribute("editCatchalls"));
-        return new DomainInfo(name, canEditAliases, canEditAccounts,
-                              canEditPostmasters, canEditCatchalls);
+        /*
+          boolean active = stringToBoolean(
+          ldap.getResultAttribute("active"));
+        */
+        return new DomainInfo(name, canEditAccounts, canEditPostmasters, true);
     }
 
     /**
@@ -401,18 +400,12 @@ public class MailManager
         try
         {
             ldap = getLdap();
-            ldap.modifyElementAttribute(domaindn, "editAliases",
-                                        booleanToString(
-                                            domain.getCanEditAliases()));
             ldap.modifyElementAttribute(domaindn, "editAccounts",
                                         booleanToString(
                                             domain.getCanEditAccounts()));
             ldap.modifyElementAttribute(domaindn, "editPostmasters",
                                         booleanToString(
                                             domain.getCanEditPostmasters()));
-            ldap.modifyElementAttribute(domaindn, "editCatchalls",
-                                        booleanToString(
-                                            domain.getCanEditCatchalls()));
         }
         catch (NamingException e)
         {

@@ -620,14 +620,10 @@ public class MailManagerTest extends TestCase
             if (di.getName().equals("domain1.test"))
             {
                 domainFound = true;
-                assertTrue("Testing editAliases",
-                           di.getCanEditAliases());
                 assertTrue("Testing editAccounts",
                            di.getCanEditAccounts());
                 assertTrue("Testing editPostmasters",
-                           di.getCanEditPostmasters());
-                assertTrue("Testing editCatchalls",
-                           !di.getCanEditCatchalls());
+                           !di.getCanEditPostmasters());
             }
         }
         assertTrue("Checking for domain1.test", domainFound);
@@ -642,14 +638,12 @@ public class MailManagerTest extends TestCase
 
         DomainInfo di = manager.getDomain("domain1.test");
 
-        assertTrue("Testing editAliases",
-                   di.getCanEditAliases());
         assertTrue("Testing editAccounts",
                    di.getCanEditAccounts());
         assertTrue("Testing editPostmasters",
-                   di.getCanEditPostmasters());
-        assertTrue("Testing editCatchalls",
-                   !di.getCanEditCatchalls());
+                   !di.getCanEditPostmasters());
+        assertTrue("Testing active",
+                   di.getActive());
     }
 
     /**
@@ -668,7 +662,6 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
 
         DomainInfo di = manager.getDomain(domain);
-        di.setCanEditAliases(false);
         di.setCanEditAccounts(false);
 
         manager.modifyDomain(di);
@@ -678,15 +671,11 @@ public class MailManagerTest extends TestCase
         mLdap.searchOneLevel(BASE, "jvd=" + domain);
         assertTrue("Checking for result", mLdap.nextResult());
 
-        assertTrue("Checking editAliases",
-                   !stringToBoolean(mLdap.getResultAttribute("editAliases")));
         assertTrue("Checking editAccounts",
                    !stringToBoolean(mLdap.getResultAttribute("editAccounts")));
         assertTrue("Checking editPostmasters",
                    stringToBoolean(
                        mLdap.getResultAttribute("editPostmasters")));
-        assertTrue("Checking editCatchalls",
-                   stringToBoolean(mLdap.getResultAttribute("editCatchalls")));
     }
 
     private boolean stringToBoolean(String string)
