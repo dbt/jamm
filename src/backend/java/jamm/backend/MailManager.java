@@ -50,6 +50,21 @@ public class MailManager
         mBindPassword = bindPassword;
     }
 
+    private LdapFacade getFacade()
+        throws NamingException
+    {
+        LdapFacade ldap = new LdapFacade(mHost, mPort);
+        if (mBindDn.equals("") && mBindPassword.equals(""))
+        {
+            ldap.anonymousBind();
+        }
+        else
+        {
+            ldap.simpleBind(mBindDn, mBindPassword);
+        }
+        return ldap;
+    }
+    
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
     {
@@ -57,9 +72,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
-            
+            ldap = getFacade();
             searchForMail(ldap, mail);
 
             String foundDn = ldap.getResultName();
@@ -89,10 +102,9 @@ public class MailManager
         LdapFacade ldap = null;
         boolean authenticated = false;
         
-        ldap = new LdapFacade(mHost, mPort);
         try
         {
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
             authenticated = true;
         }
         catch (AuthenticationException e)
@@ -118,8 +130,7 @@ public class MailManager
         boolean isPostmaster = false;
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
 
             // Get all users in this domain who have postamster
             // privileges.  The results are full DNs.
@@ -154,9 +165,7 @@ public class MailManager
         String foundDn = null;
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.anonymousBind();
-            
+            ldap = getFacade();
             searchForMail(ldap, mail);
             foundDn = ldap.getResultName();
         }
@@ -193,8 +202,7 @@ public class MailManager
         LdapFacade ldap = null;
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
 
             // Create the domain
             Map attributes = new HashMap();
@@ -245,8 +253,7 @@ public class MailManager
         
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
 
             Map attributes = new HashMap();
             attributes.put("objectClass",
@@ -274,8 +281,7 @@ public class MailManager
         String mail = mail(domain, alias);
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
             ldap.modifyElementAttribute(mailDn(domain, mail), "maildrop",
                                         newDestinations);
         }
@@ -308,9 +314,7 @@ public class MailManager
         
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
-
+            ldap = getFacade();
             searchForMail(ldap, mail);
             Set objectClasses =
                 ldap.getAllResultAttributeValues("objectClass");
@@ -335,9 +339,7 @@ public class MailManager
         String[] destinations = new String[0];
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
-
+            ldap = getFacade();
             searchForMail(ldap, mail);
 
             AliasInfo alias = createAliasInfo(ldap);
@@ -363,8 +365,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
             String domainDn = domainDn(domain);
             ldap.searchOneLevel(domainDn, "objectClass=JammMailAlias");
 
@@ -416,9 +417,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
-
+            ldap = getFacade();
             Map attributes = new HashMap();
             attributes.put("objectClass",
                            new String[] { "top", "JammMailAccount" });
@@ -449,8 +448,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
+            ldap = getFacade();
             String domainDn = domainDn(domain);
             ldap.searchOneLevel(domainDn, "objectClass=JammMailAccount");
 
@@ -485,9 +483,7 @@ public class MailManager
 
         try
         {
-            ldap = new LdapFacade(mHost, mPort);
-            ldap.simpleBind(mBindDn, mBindPassword);
-
+            ldap = getFacade();
             Map attributes = new HashMap();
             attributes.put("objectClass",
                            new String[] { "top", "JammMailAlias" });
