@@ -33,6 +33,7 @@ public class DomainInfo implements Serializable
      * @param name a <code>String</code> value
      * @param canEditAccounts a <code>boolean</code> value
      * @param canEditPostmasters a <code>boolean</code> value
+     * @param active is domain active
      */
     public DomainInfo(String name, boolean canEditAccounts,
                       boolean canEditPostmasters, boolean active)
