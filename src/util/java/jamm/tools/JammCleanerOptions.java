@@ -45,26 +45,6 @@ public final class JammCleanerOptions
     }
 
     /**
-     * Gets the value of assumeYes
-     *
-     * @return the value of assumeYes
-     */
-    public static boolean isAssumeYes() 
-    {
-        return JammCleanerOptions.mAssumeYes;
-    }
-
-    /**
-     * Sets the value of assumeYes
-     *
-     * @param assumeYes Value to assign to this.assumeYes
-     */
-    public static void setAssumeYes(boolean assumeYes)
-    {
-        JammCleanerOptions.mAssumeYes = assumeYes;
-    }
-
-    /**
      * Gets the value of bindDn
      *
      * @return the value of bindDn
@@ -223,7 +203,6 @@ public final class JammCleanerOptions
     {
         StringBuffer sb = new StringBuffer();
         sb.append("verbose: ").append(mVerbose).append("\n");
-        sb.append("assume yes: ").append(mAssumeYes).append("\n");
         sb.append("host: ").append(mHost).append("\n");
         sb.append("port: ").append(mPort).append("\n");
         sb.append("bind dn: ").append(mBindDn).append("\n");
@@ -234,8 +213,6 @@ public final class JammCleanerOptions
         
     /** verbosity */
     private static boolean mVerbose = false;
-    /** assume yes to questions */
-    private static boolean mAssumeYes = false;
     /** what's the DN to connect as */
     private static String mBindDn = null;
     /** The password to use */
