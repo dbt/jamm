@@ -23,14 +23,14 @@ public class DomainMenuAction extends Action
         request.setAttribute("domainName", "example.com");
         
         List accounts = new ArrayList();
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 6; i++)
         {
             accounts.add("account" + i);
         }
         request.setAttribute("accounts", accounts);
 
         List aliases = new ArrayList();
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 7; i++)
         {
             aliases.add("alias" + i);
         }

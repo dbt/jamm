@@ -32,7 +32,7 @@
         <th>Active</th>
       </tr>
       <logic:iterate indexId="i" id="alias" name="aliases">
-        <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
+        <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
           <td><bean:write name="alias"/></td>
           <td>x@y</td>
           <td align="center">D</td>
