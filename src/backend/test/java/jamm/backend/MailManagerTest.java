@@ -104,7 +104,6 @@ public class MailManagerTest extends TestCase
         String domain;
         String domainDn;
         String aliasName;
-        String aliasDestination;
         String email;
         Set expectedObjectClass;
         Set objectClass;
@@ -116,8 +115,7 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
 
         aliasName = "alias";
-        aliasDestination = "postmaster";
-        manager.createAlias(domain, aliasName, aliasDestination);
+        manager.createAlias(domain, aliasName, new String[] {"postmaster"});
 
         email = aliasName + "@" + domain;
 
@@ -153,15 +151,43 @@ public class MailManagerTest extends TestCase
         String aliasName = "alias";
         String aliasMail = aliasName + "@" + domain;
         manager.createDomain(domain);
-        manager.createAlias(domain, aliasName, "mail1@abc.test");
-        manager.modifyAlias(domain, aliasName, "mail2@xyz.test");
+        manager.createAlias(domain, aliasName,
+                            new String[] {"mail1@abc.test"});
+        manager.modifyAlias(domain, aliasName,
+                            new String[] {"mail2@xyz.test", "mail3@mmm.test"});
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
         mLdap.searchSubtree(BASE, "mail=" + aliasMail);
         assertTrue("Checking for a result", mLdap.nextResult());
-        assertEquals("Checking alias mail", "mail2@xyz.test",
-                     mLdap.getResultAttribute("maildrop"));
+        Set expectedMaildrops = new HashSet();
+        expectedMaildrops.add("mail2@xyz.test");
+        expectedMaildrops.add("mail3@mmm.test");
+        assertEquals("Checking alias mail", expectedMaildrops,
+                     mLdap.getAllResultAttributeValues("maildrop"));
+    }
+
+    public void testGetAliasDestinations()
+        throws MailManagerException
+    {
+        String domain = "get-alias-dest.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        String aliasName = "alias";
+        String aliasMail = aliasName + "@" + domain;
+        manager.createDomain(domain);
+        manager.createAlias(domain, aliasName,
+                            new String[] {"mail2@xyz.test", "mail1@abc.test"});
+
+        String[] destinations = manager.getAliasDestinations(aliasMail);
+        assertEquals("Checking number of destinations", 2,
+                     destinations.length);
+        assertEquals("Checking destination", "mail1@abc.test",
+                     destinations[0]);
+        assertEquals("Checking destination", "mail2@xyz.test",
+                     destinations[1]);
     }
 
     public void testCreateAccount()
@@ -318,7 +344,7 @@ public class MailManagerTest extends TestCase
     public void testChangePassword()
         throws MailManagerException
     {
-        String domain = "change-password.test";
+        String domain = "chpasswd.test";
         String domainDn = "jvd=" + domain + "," + BASE;
 
         MailManager manager =
@@ -333,7 +359,8 @@ public class MailManagerTest extends TestCase
         String mail = accountName + "@" + domain;
         String accountDn = "mail=" + mail + "," + domainDn;
 
-        manager.createAccount(domain, accountName, originalPassword);
+        manager.createAlias(domain, accountName,
+                            new String[] {"mail1@abc.com", "mail2@xyz.com"});
         manager.changePassword(mail, newPassword1);
 
         manager.setBindEntry(accountDn, newPassword1);

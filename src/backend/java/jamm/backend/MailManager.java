@@ -1,7 +1,9 @@
 package jamm.backend;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -54,24 +56,17 @@ public class MailManager
             ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
             
-            ldap.searchSubtree(mBase, "mail=" + mail);
+            searchForMail(ldap, mail);
 
-            if (ldap.nextResult())
-            {
-                String foundDn = ldap.getResultName();
-                String hashedPassword =
-                    LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
-                ldap.modifyElementAttribute(foundDn, "userPassword",
-                                            hashedPassword);
+            String foundDn = ldap.getResultName();
+            String hashedPassword =
+                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
+            ldap.modifyElementAttribute(foundDn, "userPassword",
+                                        hashedPassword);
 
-                if (foundDn.equals(mBindDn))
-                {
-                    mBindPassword = newPassword;
-                }
-            }
-            else
+            if (foundDn.equals(mBindDn))
             {
-                throw new MailManagerException("mail not found: " + mail);
+                mBindPassword = newPassword;
             }
         }
         catch (NamingException e)
@@ -122,22 +117,34 @@ public class MailManager
             ldap = new LdapFacade(mHost, mPort);
             ldap.anonymousBind();
             
-            ldap.searchSubtree(mBase, "mail=" + mail);
-
-            if (ldap.nextResult())
-            {
-                foundDn = ldap.getResultName();
-            }
+            searchForMail(ldap, mail);
+            foundDn = ldap.getResultName();
         }
         catch (NamingException e)
         {
             throw new MailManagerException(e);
+        }
+        catch (MailNotFoundException e)
+        {
+            // This is not an exceptional case for this method
+            foundDn = null;
         }
         finally
         {
             closeLdap(ldap);
         }
         return foundDn;
+    }
+
+    private void searchForMail(LdapFacade ldap, String mail)
+        throws NamingException, MailNotFoundException
+    {
+        ldap.searchSubtree(mBase, "mail=" + mail);
+
+        if (! ldap.nextResult())
+        {
+            throw new MailNotFoundException(mail);
+        }
     }
 
     public void createDomain(String domain)
@@ -190,7 +197,7 @@ public class MailManager
         }
     }
 
-    public void createAlias(String domain, String alias, String destination)
+    public void createAlias(String domain, String alias, String[] destinations)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -205,7 +212,7 @@ public class MailManager
             attributes.put("objectClass",
                            new String[] {"top", "JammMailAlias"});
             attributes.put("mail", mail);
-            attributes.put("maildrop", destination);
+            attributes.put("maildrop", destinations);
             ldap.addElement(mailDn(domain, mail), attributes);
         }
         catch (NamingException e)
@@ -219,7 +226,8 @@ public class MailManager
         }
     }
 
-    public void modifyAlias(String domain, String alias, String newDestination)
+    public void modifyAlias(String domain, String alias,
+                            String[] newDestinations)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -229,7 +237,7 @@ public class MailManager
             ldap = new LdapFacade(mHost, mPort);
             ldap.simpleBind(mBindDn, mBindPassword);
             ldap.modifyElementAttribute(mailDn(domain, mail), "maildrop",
-                                        newDestination);
+                                        newDestinations);
         }
         catch (NamingException e)
         {
@@ -239,6 +247,33 @@ public class MailManager
         {
             closeLdap(ldap);
         }
+    }
+
+    public String[] getAliasDestinations(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String[] destinations = new String[0];
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+
+            searchForMail(ldap, mail);
+
+            Set maildrops = ldap.getAllResultAttributeValues("maildrop");
+            destinations = (String[]) maildrops.toArray(destinations);
+            Arrays.sort(destinations);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Could not modify alias" + mail, e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+        return destinations;
     }
 
     public void createAccount(String domain, String account, String password)
@@ -318,6 +353,21 @@ public class MailManager
         mailDn.append("mail=").append(mail).append(",");
         mailDn.append(domainDn(domain));
         return mailDn.toString();
+    }
+
+    private final String mailDn(String mail)
+    {
+        String domain = domainFromMail(mail);
+        StringBuffer mailDn = new StringBuffer();
+        mailDn.append("mail=").append(mail).append(",");
+        mailDn.append(domainDn(domain));
+        return mailDn.toString();
+    }
+
+    private final String domainFromMail(String mail)
+    {
+        int domainIndex = mail.indexOf("@");
+        return mail.substring(domainIndex + 1);
     }
 
     private final String mail(String domain, String user)
