@@ -44,6 +44,6 @@ public class ChangePasswordAction extends Action
             user.setPassword(form.getPassword1());
         }
         
-        return mapping.findForward("home");
+        return mapping.findForward("user_home");
     }
 }

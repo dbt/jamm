@@ -7,18 +7,19 @@
     <put name="body" value=""/>
   </definition>
 
-  <definition name="privateLayout" extends="mainLayout">
-    <put name="header" value="/WEB-INF/common/private_header.jsp"/>
-    <put name="footer" value="/WEB-INF/common/private_footer.jsp"/>
-  </definition>
-
   <definition name="home" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/home.jsp"/>
   </definition>
   <definition name="login" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/login.jsp"/>
   </definition>
-  <definition name="change_password" extends="mainLayout">
+
+  <definition name="privateLayout" extends="mainLayout">
+    <put name="header" value="/WEB-INF/common/private_header.jsp"/>
+    <put name="footer" value="/WEB-INF/common/private_footer.jsp"/>
+  </definition>
+
+  <definition name="change_password" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
   </definition>
 
