@@ -5,14 +5,13 @@
     <tt><bean:write name="user" property="username"/></tt>.
     <ul>
       <li>
-        <html:link forward="logout">
-          <bean:message key="home.logout"/>
+        <html:link forward="user_home">
+          Go to your home page.
         </html:link>
       </li>
       <li>
-        <html:link page="/private/change_password.jsp" paramId="mail"
-                   paramName="user" paramProperty="username">
-          <bean:message key="home.change_password"/>
+        <html:link forward="logout">
+          <bean:message key="home.logout"/>
         </html:link>
       </li>
     </ul>
