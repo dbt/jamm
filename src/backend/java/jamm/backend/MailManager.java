@@ -1354,22 +1354,31 @@ public class MailManager
                                      boolean active)
         throws NamingException, MailManagerException
     {
-                AliasInfo ai = getAlias("abuse@" + domainName);
-                if (ai != null)
-                {
-                    ai.setActive(active);
-                    modifyAlias(ai);
-                }
+        AliasInfo ai = getAlias("abuse@" + domainName);
+        if (ai != null)
+        {
+            ai.setActive(active);
+            modifyAlias(ai);
+        }
 
-                String pmMail = "postmaster@" + domainName;
-                ldap.searchOneLevel(domainDn(domainName), "mail=" + pmMail);
-
-                if (ldap.nextResult())
-                {
-                    ldap.modifyElementAttribute(ldap.getResultName(),
-                                                "accountActive",
-                                                booleanToString(active));
-                }
+        ai = null;
+        ai = getAlias("@" + domainName);
+        if (ai != null)
+        {
+            ai.setActive(active);
+            modifyAlias(ai);
+        }
+        
+        String pmMail = "postmaster@" + domainName;
+        ldap.searchOneLevel(domainDn(domainName), "mail=" + pmMail);
+        
+        if (ldap.nextResult())
+        {
+            ldap.modifyElementAttribute(ldap.getResultName(),
+                                        "accountActive",
+                                        booleanToString(active));
+        }
+        
     }
 
     /**
@@ -1640,7 +1649,7 @@ public class MailManager
 
             // We should recursively set stuff inactive if inactive.  If
             // active, set abuse and postmaster to be active.
-            if (domain.getActive())
+            if (domain.getActive() && !domain.getDelete())
             {
                 hiddenAccountUpdate(ldap, domainName, true);
             }
