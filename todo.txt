@@ -3,7 +3,7 @@ Jamm itself:
   For 1.0:
 
     * Create more meaningful exceptions for mail manager (i.e. subclasses
-      of MailManagerException).
+      of MailManagerException).  Also, more meaningful error pages.
 
     * Access control so users playing with URLs can't go someplace bad
       - 70% done
