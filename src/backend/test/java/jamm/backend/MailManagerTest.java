@@ -877,7 +877,7 @@ public class MailManagerTest extends TestCase
         assertEquals("Checking common name for alias[1]", "MMMM",
                      alias.getCommonName());
         assertTrue("Checking is Postmaster for alias[1]",
-                   alias.isAdministrator());
+                   !alias.isAdministrator());
         
         alias = (AliasInfo) aliases.get(3);
         assertEquals ("Checking name for alias[3]", "zzzz@" + domain,
@@ -1282,8 +1282,78 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("homeDirectory"));
         mLdap.close();
     }
-
     
+    public void testGetAccountsAndAliasesStartsWith()
+        throws MailManagerException
+    {
+        String domain = "alphabet.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+        MailManagerOptions.setUsePasswordExOp(true);
+        manager.changePassword("postmaster@" + domain, "pm");
+
+        // Create some accounts
+        manager.createAccount(domain, "aaa", "aaa", "aaa");
+        manager.createAccount(domain, "abba", "abba", "abba");
+        manager.createAccount(domain, "caa", "caa", "caa");
+        manager.createAccount(domain, "cat", "cat", "cat");
+        manager.createAccount(domain, "cba", "cba", "cba");
+
+        // Create some aliases
+        manager.createAlias(domain, "aaaa", "aaaa", new String[] { "a@a.test"});
+        manager.createAlias(domain, "abaa", "aaaa", new String[] { "a@a.test"});
+        manager.createAlias(domain, "acaa", "aaaa", new String[] { "a@a.test"});
+        manager.createAlias(domain, "maaa", "aaaa", new String[] { "a@a.test"});
+        manager.createAlias(domain, "mbaa", "aaaa", new String[] { "a@a.test"});
+
+        // Test accounts
+        List accounts = manager.getAccountsStartsWith("a");
+        assertEquals("Testing that we have two accounts that start with a",
+                     accounts.size(), 2);
+        for (Iterator i = accounts.iterator(); i.hasNext();)
+        {
+            AccountInfo account = (AccountInfo) i.next();
+            assertTrue("Checking starts with a",
+                       account.getName().startsWith("a"));
+        }
+
+        accounts = manager.getAccountsStartsWith("c");
+        assertEquals("Testing that we have two accounts that start with c",
+                     accounts.size(), 3);
+        for (Iterator i = accounts.iterator(); i.hasNext();)
+        {
+            AccountInfo account = (AccountInfo) i.next();
+            assertTrue("Checking starts with c",
+                       account.getName().startsWith("c"));
+        }
+        
+        // Test aliases
+        List aliases = manager.getAliasesStartsWith("a");
+        assertEquals("Testing that we have two accounts that start with a",
+                     aliases.size(), 3);
+        for (Iterator i = aliases.iterator(); i.hasNext();)
+        {
+            AliasInfo alias = (AliasInfo) i.next();
+            assertTrue("Checking starts with a",
+                       alias.getName().startsWith("a"));
+        }
+        
+        aliases = manager.getAliasesStartsWith("a");
+        assertEquals("Testing that we have two accounts that start with m",
+                     aliases.size(), 2);
+        for (Iterator i = aliases.iterator(); i.hasNext();)
+        {
+            AliasInfo alias = (AliasInfo) i.next();
+            assertTrue("Checking starts with m",
+                       alias.getName().startsWith("m"));
+        }
+
+    }
+
     /**
      * Creates a boolean representation of the string passed in,
      * ignoring case.
