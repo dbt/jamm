@@ -89,7 +89,7 @@ public class UpdateAliasAction extends JammAction
                        new ActionError("alias.error.non_zero_aliases"));
         }
 
-        if (!errors.empty())
+        if (!errors.isEmpty())
         {
             saveErrors(request, errors);
             return new ActionForward(mapping.getInput());
