@@ -60,21 +60,7 @@ public class DomainAdminAction extends JammAction
         request.setAttribute("domainAccountForm", daf);
 
         // Prepare aliases
-        List aliases = new ArrayList();
-        for (int x = 1; x <= 6; x++)
-        {
-            List destinations = new ArrayList();
-            for (int j = 1; j <= 2; j++)
-            {
-                destinations.add("user" + j + "@example.com");
-            }
-            boolean active = false;
-            boolean admin = false;
-            
-            AliasInfo alias= new AliasInfo("alias" + x, destinations, active,
-                                           admin);
-            aliases.add(alias);
-        }
+        List aliases = manager.getAliases(domain);
         request.setAttribute("aliases", aliases);
 
         return (mapping.findForward("domain_admin"));
