@@ -1,7 +1,5 @@
 package jamm.backend;
 
-import jamm.util.ChainedException;
-
 public class MailNotFoundException
     extends MailManagerException
 {

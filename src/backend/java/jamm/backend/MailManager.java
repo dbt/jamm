@@ -141,7 +141,7 @@ public class MailManager
     {
         ldap.searchSubtree(mBase, "mail=" + mail);
 
-        if (! ldap.nextResult())
+        if (!ldap.nextResult())
         {
             throw new MailNotFoundException(mail);
         }
