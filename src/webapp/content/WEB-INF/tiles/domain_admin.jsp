@@ -159,14 +159,7 @@ Catch-All:
             <bean:write name="alias" property="name"/>
           </html:link>
           <div class=destinations>&nbsp;Destinations:
-            <!--
-            FIXME:  Needs to be fixed to name= property=
-                    Will have to look at struts tags as example on how
-                    to do it.
-            -->
-            <jamm:list-abbrev limit="3" name="alias"
-                              property="mailDestinations"/>
-                              
+            <jamm:join limit="3" name="alias" property="mailDestinations"/>
           </div>
         </td>
         <td align="left" width="6" bgcolor="#FFFFFF">
@@ -174,10 +167,6 @@ Catch-All:
                     border="0"
                     imageName='<%=alias.getName()%>'/>
         </td>
-        <!--              <td align="left" width="6" bgcolor="#FFFFFF" valign="center">
-      <html:img page='/imgs/sm_arrow.gif' width="6"
-        height="9" border="0"/>
-      </td>-->
         <td align="center" width="79" class="multibox">
           <html:multibox property="itemsToDelete">
             <bean:write name="alias" property="name"/>
