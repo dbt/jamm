@@ -129,45 +129,10 @@ public class DomainAdminAction extends JammAction
         breadCrumbs.add(breadCrumb);
         request.setAttribute("breadCrumbs", breadCrumbs);
 
-        // Prepare accounts
-        List accounts = manager.getAccounts(domain);
-        doAccounts(request, manager, domain, accounts);
-
-        // Prepare aliases
-        List aliases = manager.getAliases(domain);
-        doAliases(request, manager, domain, aliases);
-
-        AliasInfo catchAllAlias = manager.getAlias("@" + domain);
-        if (catchAllAlias != null)
-        {
-            List destinations = catchAllAlias.getDestinations();
-            request.setAttribute("catchAllAlias", destinations.get(0));
-        }
-        else
-        {
-            request.setAttribute("catchAllAlias", "");
-        }
-
-        DomainInfo domainInfo = manager.getDomain(domain);
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
-            domainInfo.getCanEditPostmasters())
-        {
-            request.setAttribute("canEditPostmasters", Boolean.TRUE);
-        }
-        else
-        {
-            request.setAttribute("canEditPostmasters", Boolean.FALSE);
-        }
-
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
-            domainInfo.getCanEditAccounts())
-        {
-            request.setAttribute("canEditAccounts", Boolean.TRUE);
-        }
-        else
-        {
-            request.setAttribute("canEditAccounts", Boolean.FALSE);
-        }
+        doAccounts(request, manager, domain);
+        doAliases(request, manager, domain);
+        doCatchAll(request, manager, domain);
+        doDomainInfo(request, manager, domain);
 
         return (mapping.findForward("view"));
     }
@@ -204,11 +169,13 @@ public class DomainAdminAction extends JammAction
      * @param request The request we're servicing
      * @param manager a mail manager instance to use
      * @param domain The domain we're manipulating
-     * @param accounts a List of accounts
+     * @exception MailManagerException if an error occurs
      */
     private void doAccounts(HttpServletRequest request, MailManager manager,
-                            String domain, List accounts)
+                            String domain)
+        throws MailManagerException
     {
+        List accounts = manager.getAccounts(domain);
         request.setAttribute("accounts", accounts);
 
         List activeAccounts = new ArrayList();
@@ -246,11 +213,13 @@ public class DomainAdminAction extends JammAction
      * @param request the request being serviced
      * @param manager The mail manager to use
      * @param domain which domain are we manipulating
-     * @param aliases a List of aliases
+     * @exception MailManagerException if an error occurs
      */
     private void doAliases(HttpServletRequest request, MailManager manager,
-                           String domain, List aliases)
+                           String domain)
+        throws MailManagerException
     {
+        List aliases = manager.getAliases(domain);
         request.setAttribute("aliases", aliases);
 
         List activeAliases = new ArrayList();
@@ -280,5 +249,65 @@ public class DomainAdminAction extends JammAction
         dcf.setAdminItems(adminAliasesArray);
         dcf.setDomain(domain);
         request.setAttribute("domainAliasForm", dcf);
+    }
+
+    /**
+     * Prepares the info for the CatchAll.
+     *
+     * @param request the request being serviced
+     * @param manager the mail manager
+     * @param domain the domain
+     * @exception MailManagerException if an error occurs
+     */
+    private void doCatchAll(HttpServletRequest request, MailManager manager,
+                            String domain)
+        throws MailManagerException
+    {
+        AliasInfo catchAllAlias = manager.getAlias("@" + domain);
+        if (catchAllAlias != null)
+        {
+            List destinations = catchAllAlias.getDestinations();
+            request.setAttribute("catchAllAlias", destinations.get(0));
+        }
+        else
+        {
+            request.setAttribute("catchAllAlias", "");
+        }
+    }
+
+    /**
+     * Prepares the domain info
+     *
+     * @param request the request being serviced
+     * @param manager the mail manager
+     * @param domain the domain
+     * @exception MailManagerException if an error occurs
+     */
+    private void doDomainInfo(HttpServletRequest request, MailManager manager,
+                              String domain)
+        throws MailManagerException
+    {
+        User user = getUser(request);
+        
+        DomainInfo domainInfo = manager.getDomain(domain);
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
+            domainInfo.getCanEditPostmasters())
+        {
+            request.setAttribute("canEditPostmasters", Boolean.TRUE);
+        }
+        else
+        {
+            request.setAttribute("canEditPostmasters", Boolean.FALSE);
+        }
+
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
+            domainInfo.getCanEditAccounts())
+        {
+            request.setAttribute("canEditAccounts", Boolean.TRUE);
+        }
+        else
+        {
+            request.setAttribute("canEditAccounts", Boolean.FALSE);
+        }
     }
 }
