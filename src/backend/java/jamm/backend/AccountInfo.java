@@ -63,6 +63,16 @@ public class AccountInfo implements Serializable
     }
 
     /**
+     * Sets the value of active.
+     *
+     * @param value boolean value representing activeness
+     */
+    public void setActive(boolean value)
+    {
+        mActive = value;
+    }
+
+    /**
      * Returns true if this account is an administrator.
      *
      * @return rue if this account is an administrator
@@ -70,6 +80,16 @@ public class AccountInfo implements Serializable
     public boolean isAdministrator()
     {
         return mAdministrator;
+    }
+
+    /**
+     * Sets the value of administrator.
+     *
+     * @param value boolean value to set administrator to.
+     */
+    public void setAdministrator(boolean value)
+    {
+        mAdministrator = value;
     }
 
     /** Account name. */

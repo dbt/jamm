@@ -103,6 +103,16 @@ public class AliasInfo implements Serializable
     }
 
     /**
+     * Sets active to the value passed in.
+     *
+     * @param value boolean value to set active to.
+     */
+    public void setActive(boolean value)
+    {
+        mActive = value;
+    }
+
+    /**
      * Returns true if this alias is an administrator.
      *
      * @return True if this alias is an administrator.
@@ -112,6 +122,16 @@ public class AliasInfo implements Serializable
         return mAdministrator;
     }
 
+    /**
+     * Sets administator to boolean value passed in.
+     *
+     * @param value boolean value for administrator
+     */
+    public void setAdministrator(boolean value)
+    {
+        mAdministrator = value;
+    }
+    
     /** The alias name. */
     private String mName;
     /** The destinations. */
