@@ -72,14 +72,14 @@
   <target name="build-backend" depends="prepare"
           description="Builds all code for the backend.">
     <depend srcDir="src/backend/java" destDir="build/backend/classes"
-            cache="build/depcache" closure="yes" />
+            cache="build/backend/depcache" closure="yes" />
     <javac srcdir="src/backend/java"
        destdir="build/backend/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
            classpathref="lib.path" />
 
     <depend srcDir="src/backend/test/java" destDir="test/backend/classes"
-            cache="build/depcache" closure="yes">
+            cache="test/backend/depcache" closure="yes">
       <classpath>
         <pathelement location="build/backend/classes" />
       </classpath>
@@ -99,16 +99,33 @@
 
   <target name="build-webapp-java" depends="prepare, build-backend"
           description="Builds all code for the web application.">
+    <depend srcDir="src/webapp/java"
+            destDir="build/webapp/root/WEB-INF/classes"
+            cache="build/webapp/depcache" closure="yes">
+      <classpath>
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
+      </classpath>
+    </depend>
     <javac srcdir="src/webapp/java"
            destdir="build/webapp/root/WEB-INF/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
            deprecation="${compile.deprecation}">
       <classpath>
-        <path refid="lib.path" />
         <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
       </classpath>
     </javac>
 
+    <depend srcDir="src/webapp/test/java"
+            destDir="build/webapp/root/WEB-INF/classes"
+            cache="test/webapp/depcache" closure="yes">
+      <classpath>
+        <pathelement location="build/webapp/root/WEB-INF/classes" />
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
+      </classpath>
+    </depend>
     <javac srcdir="src/webapp/test/java" destdir="test/webapp/classes"
            debug="on" optimize="off">
       <classpath>
