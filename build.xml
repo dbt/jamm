@@ -13,6 +13,7 @@
   <path id="lib.path">
     <pathelement path="${servlet.jar}" />
     <pathelement path="${cryptix.jar}" />
+    <pathelement path="${struts.lib}/struts.jar" />
   </path>
 
   <path id="xdoclet.path">
@@ -75,7 +76,7 @@
     <javac srcdir="src/backend/java"
        destdir="build/backend/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
-       classpathref="lib.path" />
+           classpathref="lib.path" />
 
     <depend srcDir="src/backend/test/java" destDir="test/backend/classes"
             cache="build/depcache" closure="yes">
@@ -84,11 +85,11 @@
       </classpath>
     </depend>
     <javac srcdir="src/backend/test/java"
-       destdir="test/backend/classes"
-       debug="on" optimize="off">
+           destdir="test/backend/classes"
+           debug="on" optimize="off">
       <classpath>
-       <pathelement location="build/backend/classes" />
-    <path refid="lib.path" />
+        <pathelement location="build/backend/classes" />
+        <path refid="lib.path" />
       </classpath>
     </javac>
   </target>
@@ -98,7 +99,8 @@
           description="Builds all code for the web application.">
     <javac srcdir="src/webapp/java"
            destdir="build/webapp/root/WEB-INF/classes"
-           optimize="${compile.optimize}" debug="${compile.debug}">
+           optimize="${compile.optimize}" debug="${compile.debug}"
+           deprecation="${compile.deprecation}">
       <classpath>
         <path refid="lib.path" />
         <pathelement location="build/backend/classes" />
