@@ -402,7 +402,8 @@ public class MailManager
                 String name = ldap.getResultAttribute("mail");
                 // Skip "special" accounts
                 if (name.startsWith("postmaster@") ||
-                    name.startsWith("abuse@"))
+                    name.startsWith("abuse@") ||
+                    name.startsWith("@"))
                 {
                     continue;
                 }
