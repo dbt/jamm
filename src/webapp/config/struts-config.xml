@@ -97,7 +97,7 @@
       <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
-    <action path="/change_password"
+    <action path="/private/change_password"
             type="jamm.webapp.ChangePasswordAction"
             name="changePasswordForm"
             scope="request"
