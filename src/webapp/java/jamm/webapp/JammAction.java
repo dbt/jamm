@@ -142,6 +142,17 @@ public abstract class JammAction extends Action
         }
         return forward;
     }
+    
+    protected ActionForward getAddAliasForward(ActionMapping mapping,
+                                               String domain)
+    {
+        ActionForward forward = mapping.findForward("add_alias");
+        if (domain != null)
+        {
+            return addParameter(forward, "domain", domain);
+        }
+        return forward;
+    }
 
     /**
      * Adds multiple parameters to the specified forward.  Each entry
