@@ -34,33 +34,41 @@
       <th> <bean:message key="site_admin_header.edit_catchall" /> </th>
     </tr>
 
-    <logic:iterate indexId="i" id="domain" name="siteConfigForm"
-                   property="domains" type="String">
+    <logic:iterate indexId="i" id="domain" name="domains"
+                   type="jamm.backend.DomainInfo">
       <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
         <td>
           <html:link page="/private/domain_admin.do" paramId="domain"
-                     paramName="domain">
-            <bean:write name="domain"/>
+                     paramName="domain" paramProperty="name">
+            <bean:write name="domain" property="name"/>
           </html:link>
         </td>
         <td align="center">
-          X
+          <html:multibox property="allowEditAliases">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
         </td>
         <td align="center">
-          X
+          <html:multibox property="allowEditAccounts">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
         </td>
         <td align="center">
-          X
+          <html:multibox property="allowEditPostmasters">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
         </td>
         <td align="center">
-          X
+          <html:multibox property="allowEditCatchalls">
+            <bean:write name="domain" property="name"/>
+          </html:multibox>
         </td>
       </jamm:tr>
     </logic:iterate>
   </table>
   <center>
     <html:submit>
-      CLICK!
+      <bean:message key="site_admin.button.submit"/>
     </html:submit>
   </center>
 </html:form>

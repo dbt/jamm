@@ -65,24 +65,64 @@ public class SiteAdminAction extends JammAction
         User user = getUser(request);
         MailManager manager = getMailManager(user);
         List domains = manager.getDomains();
+        request.setAttribute("domains", domains);
 
         SiteConfigForm siteConfigForm = new SiteConfigForm();
 
         List domainNames = new ArrayList();
+        List allowEditAliases = new ArrayList();
+        List allowEditAccounts = new ArrayList();
+        List allowEditPostmasters = new ArrayList();
+        List allowEditCatchalls = new ArrayList();
+
         Iterator i = domains.iterator();
         while (i.hasNext())
         {
             DomainInfo di = (DomainInfo) i.next();
-            domainNames.add(di.getName());
+            String name = di.getName();
+            
+            domainNames.add(name);
+
+            if (di.getCanEditAliases())
+            {
+                allowEditAliases.add(name);
+            }
+            if (di.getCanEditAccounts())
+            {
+                allowEditAccounts.add(name);
+            }
+            if (di.getCanEditPostmasters())
+            {
+                allowEditPostmasters.add(name);
+            }
+            if (di.getCanEditCatchalls())
+            {
+                allowEditCatchalls.add(name);
+            }
         }
             
         siteConfigForm.setDomains(
             (String []) domainNames.toArray(new String[0]));
 
-        siteConfigForm.setOriginalAllowEditAliases(new String[0]);
-        siteConfigForm.setOriginalAllowEditAccounts(new String[0]);
-        siteConfigForm.setOriginalAllowEditPostmasters(new String[0]);
-        siteConfigForm.setOriginalAllowEditCatchalls(new String[0]);
+        String[] editAliasesArray =
+            (String []) allowEditAliases.toArray(new String[0]);
+        siteConfigForm.setOriginalAllowEditAliases(editAliasesArray);
+        siteConfigForm.setAllowEditAliases(editAliasesArray);
+
+        String[] editAccountsArray =
+            (String []) allowEditAccounts.toArray(new String[0]);
+        siteConfigForm.setAllowEditAccounts(editAccountsArray);
+        siteConfigForm.setOriginalAllowEditAccounts(editAccountsArray);
+
+        String[] editPostmastersArray =
+            (String []) allowEditPostmasters.toArray(new String[0]);
+        siteConfigForm.setAllowEditPostmasters(editPostmastersArray);
+        siteConfigForm.setOriginalAllowEditPostmasters(editPostmastersArray);
+
+        String[] editCatchallArray =
+            (String []) allowEditCatchalls.toArray(new String[0]);
+        siteConfigForm.setAllowEditCatchalls(editCatchallArray);
+        siteConfigForm.setOriginalAllowEditCatchalls(editCatchallArray);
 
         request.setAttribute("siteConfigForm", siteConfigForm);
 
