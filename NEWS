@@ -1,24 +1,31 @@
-Changes since 0.0.1
--------------------
+Version 0.9.0 - 13 Jun 2002
+---------------------------
 
-* Better/Existing Javadocs
+* Initial beta release.
 
-* Case insensitive but preserving String and CaseInsensitiveStringSet
-  used by LdapFacade
+* Improved site navagation using bread crumbs.
 
-* Fixes for Java 1.4
-
-* Schema updates to add domain capabilities
-
-* BreadCrumbs for improved site navagation
-
-* Site admin screen now allows selecting of what a domain can do.
+* Site admin screen now allows selecting of domain capabilities.
   (However, the domain pages don't listen yet.)
 
-* Catch-All administration works
+* Catch-All administration works.
 
-* Account checkboxes for active and admin work
+* Schema updates to add domain capabilities.
 
-* Alias checkboxes for active and admin work
+* Account checkboxes for active and admin work.
 
-* checkstyle.properties file added to config checkstyle
+* Alias checkboxes for active and admin work.
+
+* Now correctly handles LDAP attributes as case insensitive, but case
+  preserving.
+
+* Fixes for Java JDK 1.4.0.
+
+* [SOURCE] Upgraded to Checkstyle 2.2.
+
+* [SOURCE] Better/Existing Javadocs.
+
+Version 0.0.1 - 23 May 2002
+---------------------------
+
+* Initial public release (alpha stage).
