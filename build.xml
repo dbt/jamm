@@ -305,6 +305,7 @@
         <include name="INSTALL"/>
         <include name="README"/>
         <include name="LICENSE"/>
+        <include name="NEWS"/>
         <include name="src/schema/jamm.schema"/>
         <include name="doc/samples/sample.ldif"/>
         <include name="build/${project.string}.war"/>
