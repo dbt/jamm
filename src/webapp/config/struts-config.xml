@@ -17,6 +17,8 @@
                type="jamm.webapp.DomainConfigForm"/>
     <form-bean name="updateAliasForm"
                type="jamm.webapp.UpdateAliasForm"/>
+    <form-bean name="updateAccountForm"
+               type="jamm.webapp.UpdateAccountForm"/>
     <form-bean name="addDomainForm"
                type="jamm.webapp.AddDomainForm"/>
     <form-bean name="addAccountForm"
@@ -142,6 +144,14 @@
     <action path="/private/update_alias"
             type="jamm.webapp.UpdateAliasAction"
             name="updateAliasForm"
+            scope="request"
+            validate="true"
+            input="/private/account_admin.do">
+    </action>
+
+    <action path="/private/update_account"
+            type="jamm.webapp.UpdateAccountAction"
+            name="updateAccountForm"
             scope="request"
             validate="true"
             input="/private/account_admin.do">
