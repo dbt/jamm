@@ -59,7 +59,7 @@ public class SiteConfigForm extends ActionForm
     /**
      * Sets the domains that allow aliases editing.
      *
-     * @param editAliases a <code>String</code> array with the domains
+     * @param allowEditAliases a <code>String</code> array with the domains
      *                    that allow alias editing
      */
     public void setAllowEditAliases(String[] allowEditAliases)
@@ -198,7 +198,8 @@ public class SiteConfigForm extends ActionForm
      *
      * @return the value of allowEditCatchalls
      */
-    public String[] getAllowEditCatchalls() {
+    public String[] getAllowEditCatchalls()
+    {
         return this.mAllowEditCatchalls;
     }
 
@@ -207,7 +208,8 @@ public class SiteConfigForm extends ActionForm
      *
      * @param allowEditCatchalls Value to assign to this.mAllowEditCatchalls
      */
-    public void setAllowEditCatchalls(String[] allowEditCatchalls){
+    public void setAllowEditCatchalls(String[] allowEditCatchalls)
+    {
         this.mAllowEditCatchalls = allowEditCatchalls;
     }
 
@@ -216,7 +218,8 @@ public class SiteConfigForm extends ActionForm
      *
      * @return the value of mOriginalAllowEditCatchalls
      */
-    public String[] getOriginalAllowEditCatchalls() {
+    public String[] getOriginalAllowEditCatchalls()
+    {
         return this.mOriginalAllowEditCatchalls;
     }
 
@@ -227,7 +230,8 @@ public class SiteConfigForm extends ActionForm
      *                                   this.mOriginalAllowEditCatchalls
      */
     public void setOriginalAllowEditCatchalls(
-        String[] originalAllowEditCatchalls){
+        String[] originalAllowEditCatchalls)
+    {
         this.mOriginalAllowEditCatchalls = originalAllowEditCatchalls;
     }
 
@@ -264,6 +268,7 @@ public class SiteConfigForm extends ActionForm
         mOriginalAllowEditCatchalls = new String[0];
     }
 
+    /** the domains */
     private String[] mDomains;
     /** domains that allow alias editing */
     private String[] mAllowEditAliases;
