@@ -1,0 +1,24 @@
+Changes since 0.0.1
+-------------------
+
+* Better/Existing Javadocs
+
+* Case insensitive but preserving String and CaseInsensitiveStringSet
+  used by LdapFacade
+
+* Fixes for Java 1.4
+
+* Schema updates to add domain capabilities
+
+* BreadCrumbs for improved site navagation
+
+* Site admin screen now allows selecting of what a domain can do.
+  (However, the domain pages don't listen yet.)
+
+* Catch-All administration works
+
+* Account checkboxes for active and admin work
+
+* Alias checkboxes for active and admin work
+
+* checkstyle.properties file added to config checkstyle
