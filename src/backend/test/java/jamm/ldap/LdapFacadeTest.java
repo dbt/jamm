@@ -3,6 +3,8 @@ package jamm.ldap;
 import jamm.LdapConstants;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -249,6 +251,54 @@ public class LdapFacadeTest extends TestCase
         mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
         assertTrue("ou=" + ouName + " should not exist",
                    !mLdap.nextResult());
+    }
+
+    public void testAddUsingMap()
+        throws NamingException
+    {
+        String ouName = "ou_map";
+        String parent = "dc=jamm,dc=test";
+        String dn = "ou=" + ouName + ",dc=jamm,dc=test";
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(MGR_DN, MGR_PW);
+        
+        // This element should not exist
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should not exist",
+                   !mLdap.nextResult());
+
+        // Create a new element
+        Map attributes = new HashMap();
+        attributes.put("objectClass", new String[] { "top",
+                                                     "organizationalUnit"});
+        Set telephoneNumbers = new HashSet();
+        telephoneNumbers.add("555-1234");
+        telephoneNumbers.add("555-6789");
+        attributes.put("telephoneNumber", telephoneNumbers);
+        attributes.put("ou", ouName);
+        attributes.put("description","my description");
+        mLdap.addElement(dn, attributes);
+
+        // See if the element exists and check the values
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should exist",
+                   mLdap.nextResult());
+
+        Set expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("organizationalUnit");
+        assertEquals("Checking objectClass", expectedObjectClass,
+                     mLdap.getAllResultAttributeValues("objectClass"));
+        assertEquals("Checking ou", ouName, mLdap.getResultAttribute("ou"));
+        assertEquals("Checking description", "my description",
+                     mLdap.getResultAttribute("description"));
+
+        Set expectedTelephoneNumbers = new HashSet();
+        expectedTelephoneNumbers.add("555-1234");
+        expectedTelephoneNumbers.add("555-6789");
+        assertEquals("Checking telephoneNumber", expectedTelephoneNumbers,
+                     mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 
     private LdapFacade mLdap;

@@ -3,6 +3,9 @@ package jamm.ldap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -13,6 +16,7 @@ import javax.naming.directory.SearchResult;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.BasicAttribute;
 
 /**
  * This class provides an easier to use interface for LDAP on top of
@@ -175,6 +179,65 @@ public class LdapFacade
 
         subcontext = mContext.createSubcontext(distinguishedName, attributes);
         subcontext.close();
+    }
+
+    /**
+     * Adds a new element with the attributes specified in a Map.
+     * Each value of the map can either be a String, String[], or Set.
+     * If the value is either a String[] or Set, then all entries are
+     * added for that value.  Here is an example:
+     * <pre>
+     * Set attributes = new HashSet();
+     * attributes.add("objectClass", new String[] { "top", "organization" });
+     * attributes.add("o", "myOrg");
+     * Set phones = new HashSet();
+     * phones.add("555-1234");
+     * phones.add("555-6789");
+     * attributes.add("telephoneNumber", phones);
+     * attributes.add("description", "Sample Organization");
+     * ldapFacade.addElement("o=myOrg,dc=example,dc=com", attributes);
+     * </pre>
+     *
+     * @param dn DN to add
+     * @param attributes Attributes for new element
+     * @throws NamingException if element could not be added
+     */
+    public void addElement(String dn, Map attributes)
+        throws NamingException
+    {
+        Attributes jndiAttributes = new BasicAttributes();
+        Iterator attributeNames = attributes.keySet().iterator();
+        while (attributeNames.hasNext())
+        {
+            String name = (String) attributeNames.next();
+            Object value = attributes.get(name);
+            if (value instanceof String)
+            {
+                jndiAttributes.put(name, value);
+            }
+            else if (value instanceof Set)
+            {
+                Set values = (Set) value;
+                BasicAttribute attribute = new BasicAttribute(name);
+                Iterator i = values.iterator();
+                while (i.hasNext())
+                {
+                    attribute.add(i.next());
+                }
+                jndiAttributes.put(attribute);
+            }
+            else
+            {
+                String[] values = (String[]) value;
+                BasicAttribute attribute = new BasicAttribute(name);
+                for (int i = 0; i < values.length; i++)
+                {
+                    attribute.add(values[i]);
+                }
+                jndiAttributes.put(attribute);
+            }
+        }
+        addElement(dn, jndiAttributes);
     }
 
     /**
