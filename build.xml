@@ -92,6 +92,8 @@
         <path refid="lib.path" />
       </classpath>
     </javac>
+    <jar jarfile="build/backend/${project.name}-backend.jar"
+         basedir="build/backend/classes"/>
   </target>
   <target name="b-b" depends="build-backend" />
 
@@ -119,6 +121,9 @@
     <copy todir="build/webapp/root">
       <fileset dir="src/webapp/content" includes="**/*" />
     </copy>
+
+    <copy todir="build/webapp/root/WEB-INF/lib"
+          file="build/backend/${project.name}-backend.jar" />
 
     <copy todir="build/webapp/root/WEB-INF/lib" file="${cryptix.jar}" />
 
@@ -191,8 +196,8 @@
   <target name="dist-webapp"
       depends="build-webapp, build-webapp-webdoclet">
     <jar jarfile="dist/${project.string}.war"
-     basedir="build/webapp/root"
-     excludes="WEB-INF/jamm.properties">
+         basedir="build/webapp/root"
+         excludes="WEB-INF/jamm.properties">
       <manifest>
         <attribute name="Main-Class" value="dude" />
       </manifest>
