@@ -96,6 +96,14 @@ public class DomainAccountAction extends JammAction
             // modifiedItems += s.size();
             i = s.iterator();
             modifyActive(manager, accountInfos, true, i);
+
+            s = form.getUncheckedDeleteItems();
+            i = s.iterator();
+            modifyDelete(manager, accountInfos, false, i);
+
+            s = form.getCheckedDeleteItems();
+            i = s.iterator();
+            modifyDelete(manager, accountInfos, true, i);
         }
 
         if (domainInfo.getCanEditPostmasters() || userIsSiteAdmin)
@@ -170,6 +178,27 @@ public class DomainAccountAction extends JammAction
             String account = (String) i.next();
             AccountInfo ai = getAccount(manager, accountInfos, account);
             ai.setActive(setTo);
+        }
+    }
+
+    /**
+     * This modifies the delete flag for the accounts in the iterator.
+     *
+     * @param manager the mail manger
+     * @param accountInfos account info cache
+     * @param setTo boolean value to change to
+     * @param i an iterator filled with AccountInfo
+     * @exception MailManagerException if an error occurs
+     */
+    private void modifyDelete(MailManager manager, HashMap accountInfos,
+                              boolean setTo, Iterator i)
+        throws MailManagerException
+    {
+        while (i.hasNext())
+        {
+            String account = (String) i.next();
+            AccountInfo ai = getAccount(manager, accountInfos, account);
+            ai.setDelete(setTo);
         }
     }
 

@@ -33,6 +33,12 @@ Catch-All:
                  property="originalAdminItems" type="String">
     <html:hidden property="originalAdminItems" value="<%=account%>"/>
   </logic:iterate>
+
+  <logic:iterate id="account" name="domainAccountForm"
+                 property="originalItemsToDelete" type="String">
+    <html:hidden property="originalItemsToDelete" value="<%=account%>"/>
+  </logic:iterate>
+
   <table width="100%" border="0">
     <tr>
       <td>

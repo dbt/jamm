@@ -17,6 +17,11 @@
     <html:hidden property="originalActive" value="<%=domain%>"/>
   </logic:iterate>
 
+  <logic:iterate id="domain" name="siteConfigForm"
+                 property="originalDelete" type="String">
+    <html:hidden property="originalDelete" value="<%=domain%>"/>
+  </logic:iterate>
+
   <table width="100%" border="0">
     <tr>
       <td>

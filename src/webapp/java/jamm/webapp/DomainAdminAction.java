@@ -166,17 +166,23 @@ public class DomainAdminAction extends JammAction
 
         List activeAccounts = new ArrayList();
         List adminAccounts = new ArrayList();
+        List deleteAccounts = new ArrayList();
         Iterator i = accounts.iterator();
         while (i.hasNext())
         {
             AccountInfo account = (AccountInfo) i.next();
+            String name = account.getName();
             if (account.isActive())
             {
-                activeAccounts.add(account.getName());
+                activeAccounts.add(name);
             }
             if (account.isAdministrator())
             {
-                adminAccounts.add(account.getName());
+                adminAccounts.add(name);
+            }
+            if (account.getDelete())
+            {
+                deleteAccounts.add(name);
             }
         }
 
@@ -184,11 +190,15 @@ public class DomainAdminAction extends JammAction
             (String []) activeAccounts.toArray(new String[0]);
         String[] adminAccountsArray =
             (String []) adminAccounts.toArray(new String[0]);
+        String[] deleteAccountsArray =
+            (String []) deleteAccounts.toArray(new String[0]);
         DomainConfigForm dcf = new DomainConfigForm();
         dcf.setOriginalActiveItems(activeAccountsArray);
         dcf.setActiveItems(activeAccountsArray);
         dcf.setOriginalAdminItems(adminAccountsArray);
         dcf.setAdminItems(adminAccountsArray);
+        dcf.setOriginalItemsToDelete(deleteAccountsArray);
+        dcf.setItemsToDelete(deleteAccountsArray);
         dcf.setDomain(domain);
         request.setAttribute("domainAccountForm", dcf);
     }

@@ -47,6 +47,16 @@ public class DomainConfigForm extends JammForm
     }
 
     /**
+     * Sets the original list of items to delete.
+     *
+     * @param originalItemsToDelete original items to delete
+     */
+    public void setOriginalItemsToDelete(String[] originalItemsToDelete)
+    {
+        mOriginalItemsToDelete = originalItemsToDelete;
+    }
+
+    /**
      * Returns the items to delete.
      *
      * @return a string array containing the items to delete.
@@ -54,6 +64,16 @@ public class DomainConfigForm extends JammForm
     public String[] getItemsToDelete()
     {
         return mItemsToDelete;
+    }
+
+    /**
+     * returns the original list of items to delete
+     *
+     * @return a string array
+     */
+    public String[] getOriginalItemsToDelete()
+    {
+        return mOriginalItemsToDelete;
     }
 
     /**
@@ -229,6 +249,7 @@ public class DomainConfigForm extends JammForm
     {
         mItems = new String[0];
         mItemsToDelete = new String[0];
+        mOriginalItemsToDelete = new String[0];
         mOriginalActiveItems = new String[0];
         mActiveItems = new String[0];
         mOriginalAdminItems = new String[0];
