@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionError;
 
 /**
  * Bean to hold information for the CatchAllAction.
@@ -127,7 +129,39 @@ public class CatchAllForm extends ActionForm
     {
         mStatus = null;
         mDestination = null;
-        mDomain = request.getParameter("domain");
+        mDomain = null;
+    }
+
+    /**
+     * Validates the data in the form.
+     *
+     * @param mapping the mapping used to select this instance
+     * @param request The servlet request we are processing.
+     * @return a collection of action errors
+     */
+    public ActionErrors validate(ActionMapping mapping,
+                                 HttpServletRequest request)
+    {
+        ActionErrors errors = new ActionErrors();
+        
+        if (isCatchAllOn() && isFieldBlank(mDestination))
+        {
+            errors.add("destination",
+                new ActionError("catchall.error.no_destination"));
+        }
+
+        return errors;
+    }
+
+    /**
+     * Returns true if the string field passed in is blank.
+     *
+     * @param field A field to test for blankness
+     * @return true if blank, false otherwise
+     */
+    private boolean isFieldBlank(String field)
+    {
+        return (field == null || field.equals(""));
     }
 
     /** Is the catch all on or off? */

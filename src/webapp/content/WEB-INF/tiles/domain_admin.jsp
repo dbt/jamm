@@ -1,6 +1,8 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
 <h1 align="center">Admin Menu <bean:write name="domain"/></h1>
 
+<html:errors/>
+
 <table width="80%" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
     <td>
