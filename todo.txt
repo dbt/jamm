@@ -1,8 +1,5 @@
   For 1.0:
 
-    * Access control so users playing with URLs can't go someplace bad
-      - 70% done
-
     * User feedback after actions using html:messages.
 
   Not sure when:
@@ -15,11 +12,11 @@
     * A configurable limit of the number of accounts/aliases a domain
       can have.
 
+    * Quota editor?
+
   Post 1.0:
 
     * Have an account from one domain be a postmaster for multiple domains
-
-    * Quota editor?
 
     * LDAP connection caching/persistance
 
