@@ -70,7 +70,7 @@
 	   destdir="test/webapp/classes"
 	   debug="on" optimize="off">
       <classpath>
-        <pathelement location="build/webapp/root/WEB-INF/classes" />
+       <pathelement location="build/webapp/root/WEB-INF/classes" />
 	<path refid="lib.path" />
       </classpath>
     </javac>
@@ -101,10 +101,11 @@
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />
 
-  <target name="build"
-          depends="build-webapp-webdoclet, build-webapp-java" />
+  <target name="build-webapp" depends="build-webapp-java" />
 
-  <target name="test" depends="build">
+  <target name="build" depends="build-webapp" />
+
+  <target name="test-webapp" depends="build-webapp">
     <junit printsummary="yes" fork="yes" haltonfailure="yes">
       <classpath>
         <pathelement location="test/webapp/classes" />
@@ -119,9 +120,15 @@
     </junit>
   </target>
 
-  <target name="dist" depends="build">
-    <jar jarfile="dist/${project.string}.jar" basedir="build/webapp/root" />
+  <target name="test" depends="test-webapp" />
+
+  <target name="dist-webapp"
+	  depends="build-webapp, build-webapp-webdoclet">
+    <jar jarfile="dist/${project.string}.war"
+	 basedir="build/webapp/root" />
   </target>
+    
+  <target name="dist" depends="dist-webapp" />
 
   <target name="clean">
     <delete dir="build" />

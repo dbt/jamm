@@ -20,7 +20,7 @@ import javax.naming.NamingException;
  * Changes an LDAP password.
  *
  * @web:servlet name="change-password"
- * @web:servlet-mapping url-pattern="/change"
+ * @web:servlet-mapping url-pattern="/password/change"
  */
 public class ChangePasswordServlet extends HttpServlet
 {
@@ -35,7 +35,6 @@ public class ChangePasswordServlet extends HttpServlet
 	String hashedPassword;
         LdapFacade ldap;
 	HttpSession session;
-        String root;
 
         ldap = null;
 	try
@@ -45,7 +44,6 @@ public class ChangePasswordServlet extends HttpServlet
 	    oldPassword = request.getParameter("old_password");
 	    newPassword1 = request.getParameter("new_password_1");
 	    newPassword2 = request.getParameter("new_password_2");
-            root = request.getContextPath();
 
 	    if (user.equals("") ||
 		oldPassword.equals("") ||
@@ -54,7 +52,7 @@ public class ChangePasswordServlet extends HttpServlet
             {
 		session.setAttribute("error",
 				     "Please fill in all fields");
-		response.sendRedirect(root + "/error.jsp");
+		response.sendRedirect("error.jsp");
                 return;
 	    }
 
@@ -64,7 +62,7 @@ public class ChangePasswordServlet extends HttpServlet
             {
                 session.setAttribute("error",
                                      "Invalid user and password");
-                response.sendRedirect(root + "/error.jsp");
+                response.sendRedirect("error.jsp");
                 return;
             }
 
@@ -73,7 +71,7 @@ public class ChangePasswordServlet extends HttpServlet
             {
                 session.setAttribute("error",
                                      "New passwords do not match");
-                response.sendRedirect(root + "/error.jsp");
+                response.sendRedirect("error.jsp");
                 return;
             }
 
@@ -82,7 +80,7 @@ public class ChangePasswordServlet extends HttpServlet
             ldap.addModifyAttribute("userPassword", hashedPassword);
             ldap.replaceModifiedAttributes();
 
-	    response.sendRedirect(root + "/success.jsp");
+	    response.sendRedirect("success.jsp");
 	}
 	catch (IOException e)
         {
@@ -106,9 +104,10 @@ public class ChangePasswordServlet extends HttpServlet
         ldap = null;
         try
         {
-            ldap = new LdapFacade("localhost");
+            ldap = new LdapFacade(Globals.getLdapHost());
             ldap.anonymousBind();
-            ldap.searchSubtree(mSearchBase, "mail=" + user);
+            ldap.searchSubtree(Globals.getLdapSearchBase(),
+                               Globals.getLdapQueryFilter(user));
             if (! ldap.hasMoreResults())
             {
                 ldap.close();
@@ -134,8 +133,4 @@ public class ChangePasswordServlet extends HttpServlet
         if (ldap != null)
             ldap.close();
     }
-
-
-    String mHost = "localhost";
-    String mSearchBase = "ou=email,dc=dribin,dc=net";
 }

@@ -1,0 +1,16 @@
+
+# The LDAP host.  The default is localhost
+#
+#jamm.ldap.host =
+
+# The LDAP port. The default is 389
+#
+#jamm.ldap.port =
+
+# The search base.
+#
+#jamm.ldap.search_base =
+
+# The query filter. {0} is replaced with the user name.
+#
+#jamm.ldap.query_filter = (&(mail={0})(paidup=true))
