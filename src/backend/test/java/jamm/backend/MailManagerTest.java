@@ -1283,7 +1283,12 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
     
-    public void testGetAccountsAndAliasesStartsWith()
+    /**
+     * Tests both getAccountsStartingWith and getAliasesStartingWith.
+     * 
+     * @throws MailManagerException on error
+     */
+    public void testGetAccountsAndAliasesStartingWith()
         throws MailManagerException
     {
         String domain = "alphabet.test";
@@ -1311,7 +1316,7 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, "mbaa", "aaaa", new String[] { "a@a.test"});
 
         // Test accounts
-        List accounts = manager.getAccountsStartsWith("a");
+        List accounts = manager.getAccountsStartingWith("a", domain);
         assertEquals("Testing that we have two accounts that start with a",
                      accounts.size(), 2);
         for (Iterator i = accounts.iterator(); i.hasNext();)
@@ -1321,7 +1326,7 @@ public class MailManagerTest extends TestCase
                        account.getName().startsWith("a"));
         }
 
-        accounts = manager.getAccountsStartsWith("c");
+        accounts = manager.getAccountsStartingWith("c", domain);
         assertEquals("Testing that we have two accounts that start with c",
                      accounts.size(), 3);
         for (Iterator i = accounts.iterator(); i.hasNext();)
@@ -1332,7 +1337,7 @@ public class MailManagerTest extends TestCase
         }
         
         // Test aliases
-        List aliases = manager.getAliasesStartsWith("a");
+        List aliases = manager.getAliasesStartingWith("a", domain);
         assertEquals("Testing that we have two accounts that start with a",
                      aliases.size(), 3);
         for (Iterator i = aliases.iterator(); i.hasNext();)
@@ -1340,9 +1345,11 @@ public class MailManagerTest extends TestCase
             AliasInfo alias = (AliasInfo) i.next();
             assertTrue("Checking starts with a",
                        alias.getName().startsWith("a"));
+            assertTrue("Checking name isn't abuse",
+                       !alias.getName().startsWith("abuse"));
         }
         
-        aliases = manager.getAliasesStartsWith("a");
+        aliases = manager.getAliasesStartingWith("m", domain);
         assertEquals("Testing that we have two accounts that start with m",
                      aliases.size(), 2);
         for (Iterator i = aliases.iterator(); i.hasNext();)
