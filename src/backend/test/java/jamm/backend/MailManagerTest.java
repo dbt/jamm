@@ -245,6 +245,10 @@ public class MailManagerTest extends TestCase
         manager.setBindEntry(accountDn, "bad password");
         assertTrue("Checking non-authentication of " + accountDn,
                    !manager.authenticate());
+
+        manager.setBindEntry(accountDn, "");
+        assertTrue("Checking non-authentication of " + accountDn,
+                   !manager.authenticate());
     }
 
     public void testFindByMail()

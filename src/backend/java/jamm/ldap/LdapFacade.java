@@ -9,6 +9,7 @@ import java.util.Iterator;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.AuthenticationException;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
@@ -83,15 +84,31 @@ public class LdapFacade
 
     /**
      * Bind with simple authentication as a DN.  If successful,
-     * attributes of the DN will be available.
+     * attributes of the DN will be available.  This differs from the
+     * JNDI bind in that an empty or null password results in an
+     * <code>AuthenticationException</code>, where as JNDI will
+     * continue with the bind, but falling back to an anonymous bind.
      *
      * @param dn Distinguished name to bind as
      * @param password Password for the DN
+     * @throws AuthenticationException The DN and password do not
+     * match (including empty and null passwords)
      * @throws NamingException If could not bind
      */
     public void simpleBind(String dn, String password)
-        throws NamingException
+        throws AuthenticationException, NamingException
     {
+        // A password that is null or an empty string causes JNDI to
+        // fall back to an anonymous bind.  This is supposed to be
+        // helpful since LDAP requires a password.  But, it is a
+        // little misleading and can cause problems, esp. when taking
+        // passwords from an end user.  Force an authentication
+        // exception in this case.
+        if ((password == null) || (password.equals("")))
+        {
+            throw new AuthenticationException("Empty password");
+        }
+
         mEnvironment.put(Context.SECURITY_AUTHENTICATION, "simple");
         mEnvironment.put(Context.SECURITY_PRINCIPAL, dn);
         mEnvironment.put(Context.SECURITY_CREDENTIALS, password);
