@@ -17,6 +17,8 @@
                type="jamm.webapp.ChangePasswordForm"/>
     <form-bean name="domainAccountForm"
                type="jamm.webapp.DomainAccountForm"/>
+    <form-bean name="updateAliasForm"
+               type="jamm.webapp.UpdateAliasForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -96,6 +98,15 @@
             scope="request"
             validate="false">
       <forward name="domain_admin" path="/private/domain_admin.do"
+               redirect="true"/>
+    </action>
+
+    <action path="/private/update_alias"
+            type="jamm.webapp.UpdateAliasAction"
+            name="updateAliasForm"
+            scope="request"
+            validate="true">
+      <forward name="alias_admin" path="/private/alias_admin.do"
                redirect="true"/>
     </action>
 

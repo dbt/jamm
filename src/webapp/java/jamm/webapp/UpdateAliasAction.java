@@ -1,0 +1,28 @@
+package jamm.webapp;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+
+import jamm.backend.MailManager;
+
+public class UpdateAliasAction extends Action
+{
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm actionForm,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)
+        throws Exception
+    {
+        UpdateAliasForm form = (UpdateAliasForm) actionForm;
+
+        System.out.println("Added: " + form.getAdded());
+        System.out.println("Deleted: " +
+                           java.util.Arrays.asList(form.getDeleted()));
+        return (mapping.findForward("alias_admin"));
+    }
+}
