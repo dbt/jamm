@@ -1141,14 +1141,18 @@ public class MailManager
                 {
                     accountCount++;
                 }
-                derivedLdap.searchOneLevel(
-                    domainDn(name),
-                    "(&(!(cn=postmaster))(objectClass=" + ALIAS_OBJECT_CLASS +
-                        "))");
+                derivedLdap.searchOneLevel(domainDn(name),
+                    "(&(!(|(cn=postmaster)(cn=abuse)))(objectClass="
+                        + ALIAS_OBJECT_CLASS + "))");
+                        
                 int aliasCount = 0;
                 while (derivedLdap.nextResult())
                 {
-                    aliasCount++;
+                    String mail = derivedLdap.getResultAttribute("mail");
+                    if (mail != null && !mail.startsWith("@"))
+                    {
+                        aliasCount++;
+                    }
                 }
 
                 domains.add(

@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionMapping;
  *
  * @see jamm.webapp.DomainAccountAction
  * @see jamm.webapp.DomainAliasAction
+ * @struts.form name="domainAccountAliasForm"
  */
 public class DomainConfigForm extends JammForm
 {

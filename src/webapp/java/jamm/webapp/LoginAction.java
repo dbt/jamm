@@ -43,6 +43,12 @@ import org.apache.struts.action.ActionError;
  *
  * @see jamm.webapp.LoginForm
  * @see jamm.webapp.Globals
+ * 
+ * @struts.action name="loginForm"
+ *              scope="request"
+ *              validate="false"
+ *              path="/login"
+ *              input="/login.jsp"
  */
 public class LoginAction extends Action
 {

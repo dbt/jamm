@@ -59,6 +59,10 @@
                      paramName="domain" paramProperty="name">
             <bean:write name="domain" property="name"/>
           </html:link>
+          &nbsp;
+          accounts: <bean:write name="domain" property="accountCount"/>
+          &nbsp;
+          aliases: <bean:write name="domain" property="aliasCount"/>
         </td>
         <td align="left" width="6" bgcolor="#FFFFFF">
           <html:img page='/imgs/sm_arrow.gif' width="6" height="9"

@@ -36,6 +36,7 @@ import org.apache.struts.action.ActionErrors;
  * as well as reset/clear the form.
  *
  * @see jamm.webapp.AddAliasAction
+ * @struts.form name="addAliasForm"
  */
 public class AddAliasForm extends ActionForm
 {

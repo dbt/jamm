@@ -24,10 +24,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * @author kgarner
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @struts.form name="updateAccountForm"
  */
 public class UpdateAccountForm extends ActionForm
 {

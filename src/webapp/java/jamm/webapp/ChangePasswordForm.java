@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionErrors;
  * just checks the length of the password.
  *
  * @see jamm.webapp.ChangePasswordAction
+ * @struts.form name="changePasswordForm"
  */
 public class ChangePasswordForm extends ActionForm
 {

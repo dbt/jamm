@@ -32,6 +32,8 @@ import org.apache.struts.action.ActionForward;
  * Steps to be taken when someone logs out.  Currently, we remove
  * is_authenticated and user from the session and then send the user
  * to the "home" location.
+ * 
+ * @struts.action path="/logout"
  */
 public class LogoutAction extends Action
 {

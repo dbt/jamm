@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionErrors;
  * as well as reset/clear the form.
  *
  * @see jamm.webapp.AddDomainAction
+ * @struts.form name="addDomainForm"
  */
 public class AddDomainForm extends ActionForm
 {

@@ -1,0 +1,2 @@
+    <action path="/admin/reload-tiles"
+            type="org.apache.struts.tiles.actions.ReloadDefinitionsAction"/>

@@ -191,6 +191,8 @@
       <classpath>
         <path refid="xdoclet.path"/>
         <path location="${xdoclet.web.jar}"/>
+        <path location="${xdoclet.apache.jar}"/>
+        <path location="${xdoclet.ejb.jar}"/>
         <pathelement location="${servlet.jar}"/>
         <pathelement location="build/backend/classes" />
         <path refid="lib.path" />
@@ -208,6 +210,8 @@
       </deploymentdescriptor>
       <jsptaglib jspversion="1.2" destdir="build/webapp/root/WEB-INF/tld"
                  shortname="jamm" filename="jamm.tld" />
+      <strutsconfigxml version="1.1" destdir="build/tmp"
+                       mergedir="src/webapp/config/struts-merge"/>
     </webdoclet>
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />

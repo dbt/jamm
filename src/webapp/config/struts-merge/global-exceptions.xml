@@ -1,0 +1,17 @@
+  <global-exceptions>
+    <exception type="jamm.backend.MailManagerException"
+               key="general.error.body"
+               path="/private/general_error.jsp"/>
+    <exception type="jamm.backend.MailManagerCommunicationException"
+               key="communication.error.body"
+               path="/communication_error.jsp"/>
+    <exception type="jamm.backend.AccountExistsException"
+               key="account_exists.error.body"
+               path="/private/account_exists_error.jsp"/>
+    <exception type="jamm.backend.DomainExistsException"
+               key="domain_exists.error.body"
+               path="/private/domain_exists_error.jsp"/>
+    <exception type="jamm.backend.PermissionException"
+               key="permission.error.body"
+               path="/private/permission_error.jsp"/>
+  </global-exceptions>

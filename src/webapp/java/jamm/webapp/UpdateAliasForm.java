@@ -34,6 +34,7 @@ import org.apache.struts.action.ActionErrors;
  * Hold alias update information for UpdateAliasAction.
  *
  * @see jamm.webapp.UpdateAliasAction
+ * @struts.form name="updateAliasForm"
  */
 public class UpdateAliasForm extends ActionForm
 {

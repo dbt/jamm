@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
  * form.
  *
  * @see jamm.webapp.SiteConfigAction
+ * @struts.form name="siteConfigForm"
  */
 public class SiteConfigForm extends JammForm
 {

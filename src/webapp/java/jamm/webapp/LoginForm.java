@@ -28,6 +28,8 @@ import org.apache.struts.action.ActionMapping;
  * Bean to hold the data for the LoginAction.
  *
  * @see jamm.webapp.LoginAction
+ * 
+ * @struts.form name="loginForm"
  */
 public class LoginForm extends ActionForm
 {

@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionErrors;
  * as well as reset/clear the form.
  *
  * @see jamm.webapp.AddAccountAction
+ * @struts.form name="addAccountForm"
  */
 public class AddAccountForm extends ActionForm
 {
