@@ -93,7 +93,7 @@
   </target>
   <target name="b-b" depends="build-backend" />
 
-  <target name="build-webapp-java" depends="prepare"
+  <target name="build-webapp-java" depends="prepare, build-backend"
           description="Builds all code for the web application.">
     <javac srcdir="src/webapp/java"
            destdir="build/webapp/root/WEB-INF/classes"
