@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class MainMenuAction extends Action
+public class MainMenuAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -16,39 +16,14 @@ public class MainMenuAction extends Action
                                  HttpServletResponse response)
         throws Exception
     {
-        if (isDomainAdmin(request))
+        User user = getUser(request);
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
         {
             return (mapping.findForward("domain_admin"));
         }
-        else if (isAccountAdmin(request))
+        else
         {
             return (mapping.findForward("account_admin"));
         }
-        else if (isAliasAdmin(request))
-        {
-            return (mapping.findForward("alias_admin"));
-        }
-        else
-        {
-            return (mapping.findForward("alias_admin"));
-        }
-    }
-
-    private boolean isDomainAdmin(HttpServletRequest request)
-    {
-        String type = request.getParameter("t");
-        return (type == null);
-    }
-
-    private boolean isAccountAdmin(HttpServletRequest request)
-    {
-        String type = request.getParameter("t");
-        return type.equals("a");
-    }
-
-    private boolean isAliasAdmin(HttpServletRequest request)
-    {
-        String type = request.getParameter("t");
-        return type.equals("f");
     }
 }
