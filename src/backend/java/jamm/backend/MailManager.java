@@ -942,7 +942,7 @@ public class MailManager
      * @return List of {@link AliasInfo} objects
      * @throws MailManagerException If an error occured
      */
-    public List getFilteredAliases(String filter, String domain)
+    private List getFilteredAliases(String filter, String domain)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -958,15 +958,6 @@ public class MailManager
 
             while (ldap.nextResult())
             {
-//                String name = ldap.getResultAttribute("mail");
-//                // Skip "special" accounts
-//                if (name.startsWith("postmaster@") ||
-//                    name.startsWith("abuse@") ||
-//                    name.startsWith("@"))
-//                {
-//                    continue;
-//                }
-
                 AliasInfo alias = createAliasInfo(ldap, postmasters);
                 aliases.add(alias);
             }
