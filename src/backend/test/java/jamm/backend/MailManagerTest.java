@@ -22,6 +22,7 @@ package jamm.backend;
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
+import java.util.Iterator;
 import javax.naming.NamingException;
 
 import junit.framework.TestCase;
@@ -592,8 +593,18 @@ public class MailManagerTest extends TestCase
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                             LdapConstants.MGR_PW);
         List domains = manager.getDomains();
-        assertTrue("Checking for domain1.test",
-                     domains.contains("domain1.test"));
+        Iterator i = domains.iterator();
+        boolean domainFound = false;
+        while (i.hasNext())
+        {
+            DomainInfo di = (DomainInfo) i.next();
+
+            if (di.getName().equals("domain1.test"))
+            {
+                domainFound = true;
+            }
+        }
+        assertTrue("Checking for domain1.test", domainFound);
     }
 
     /** The LDAP facade used for most tests. */
