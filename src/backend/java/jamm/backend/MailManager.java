@@ -853,7 +853,7 @@ public class MailManager
           List foo = getFilteredAccounts(filter, domain);
           if (foo.size() > 1)
           {
-              // todo bitch about more than one domain here.
+              // todo bitch about more than one account here.
           }
           
           if (foo.size() == 0)
@@ -880,14 +880,19 @@ public class MailManager
     }
 
     /**
+     * Returns accounts that start with the string passed in.
      * 
-     * @param string
-     * @return
+     * @param string the string the account should start with
+     * @param domain the domain to search
+     * @return a list of matching accounts
+     * @throws MailManagerException on error
      */
-    public List getAccountsStartsWith(String string)
+    public List getAccountsStartingWith(String string, String domain)
+        throws MailManagerException
     {
-        // TODO Auto-generated method stub
-        return null;
+        String filter = "(&(mail=" + string + "*)(objectClass=" +
+                        ACCOUNT_OBJECT_CLASS + "))";
+        return getFilteredAccounts(filter, domain);
     }
 
     /**
@@ -927,35 +932,29 @@ public class MailManager
     public List getAliases(String domain)
         throws MailManagerException
     {
-        String filter = "objectClass=" + ALIAS_OBJECT_CLASS;
-        List aliases = getFilteredAliases(filter, domain);
-        
-        // Skip the "special" accounts
-        Iterator i = aliases.iterator();
-        while (i.hasNext())
-        {
-            AliasInfo ai = (AliasInfo) i.next();
-            String name = ai.getName();
-            if (name.startsWith("postmaster@") ||
-                name.startsWith("abuse@") ||
-                name.startsWith("@"))
-            {
-                i.remove();
-            }
-        }
+        String filter =
+            "(&(objectClass=" + ALIAS_OBJECT_CLASS + ")(!(|(mail=postmaster@" +
+            domain + ")(mail=abuse@" + domain + ")(mail=@" + domain + "))))";
 
-        return aliases;
+        return getFilteredAliases(filter, domain);
     }
 
     /**
-     * 
-     * @param string
-     * @return
+     * Returns aliases that start with the passed in string.
+     * @param string the prefix of the account
+     * @param domain the domain to search
+     * @return a List of matching domains
+     * @throws MailManagerException on error 
      */
-    public List getAliasesStartsWith(String string)
+    public List getAliasesStartingWith(String string, String domain)
+        throws MailManagerException
     {
-        // TODO Auto-generated method stub
-        return null;
+        String filter = "(&(mail=" + string + "*)(objectClass=" +
+                        ALIAS_OBJECT_CLASS + ")(!(|(mail=abuse@" +
+                        domain + ")(mail=postmaster@" + domain +
+                        ")(mail=@" + domain + "))))";
+                        
+        return getFilteredAliases(filter, domain);
     }
 
     /**
