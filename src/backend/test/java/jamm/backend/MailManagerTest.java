@@ -433,7 +433,7 @@ public class MailManagerTest extends TestCase
                    !manager.isPostmaster(aliasName + "@" + domain));
     }
 
-    public void testGetInfo()
+    public void testGetAccountsAndAliases()
         throws MailManagerException
     {
         String domain = "info.test";
