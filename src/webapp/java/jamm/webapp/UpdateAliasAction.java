@@ -58,6 +58,6 @@ public class UpdateAliasAction extends Action
         }
 
         manager.modifyAlias(mail, newDestinations);
-        return (mapping.findForward("alias_admin"));
+        return (mapping.findForward("account_admin"));
     }
 }

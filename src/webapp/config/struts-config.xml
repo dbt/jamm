@@ -66,7 +66,6 @@
             type="jamm.webapp.MainMenuAction">
       <forward name="account_admin" path="/private/account_admin.do"/>
       <forward name="domain_admin" path="/private/domain_admin.do"/>
-      <forward name="alias_admin" path="/private/alias_admin.do"/>
     </action>
 
     <action path="/private/domain_admin"
@@ -102,8 +101,8 @@
             name="updateAliasForm"
             scope="request"
             validate="true"
-            input="/private/alias_admin.do">
-      <forward name="alias_admin" path="/private/alias_admin.do"
+            input="/private/account_admin.do">
+      <forward name="account_admin" path="/private/account_admin.do"
                redirect="true"/>
     </action>
 
