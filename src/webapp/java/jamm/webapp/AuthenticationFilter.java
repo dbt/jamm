@@ -36,8 +36,8 @@ import javax.servlet.http.HttpSession;
  * enter into the private area.  It redirects to "/login.jsp" with
  * the argument of "done=<URL ORIGINALLY SPECIFIED>".
  *
- * @web:filter name="Authentication Filter"
- * @web:filter-mapping url-pattern="/private/*"
+ * @web.filter name="Authentication Filter"
+ * @web.filter-mapping url-pattern="/private/*"
  */
 public class AuthenticationFilter implements Filter
 {

@@ -34,7 +34,7 @@ import jamm.backend.MailManagerOptions;
  * Performs all necessary one-time initializations for the web
  * application.
  *
- * @web:servlet name="init-servlet" load-on-startup="1"
+ * @web.servlet name="init-servlet" load-on-startup="1"
  */
 public class InitServlet extends HttpServlet
 {
