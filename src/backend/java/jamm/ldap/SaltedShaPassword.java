@@ -1,6 +1,6 @@
 package jamm.ldap;
 
-import java.security.SecureRandom;
+import java.util.Random;
 
 public class SaltedShaPassword extends ShaPassword
 {
@@ -22,10 +22,10 @@ public class SaltedShaPassword extends ShaPassword
 
     private static byte[] getRandomSalt()
     {
-        SecureRandom random;
+        Random random;
         byte[] salt;
 
-        random = new SecureRandom();
+        random = createRandom();
         salt = new byte[4];
         random.nextBytes(salt);
         return salt;
