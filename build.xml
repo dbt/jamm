@@ -138,6 +138,8 @@
           file="src/webapp/config/tileDefinitions.xml"/>
     <copy todir="build/webapp/root/WEB-INF/"
           file="src/webapp/config/jamm.properties"/>
+    <copy todir="build/webapp/root/WEB-INF/"
+          file="src/webapp/config/jamm.properties.dist"/>
   </target>
   <target name="b-w-j" depends="build-webapp-java" />
 
