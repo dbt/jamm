@@ -126,6 +126,7 @@ public final class Globals
      * Sets the root dn to use when loggin in as "root".
      *
      * @param rootDn a string containing the root dn
+     */
     public static void setRootDn(String rootDn)
     {
         mRootDn = rootDn;
