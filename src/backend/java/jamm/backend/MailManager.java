@@ -771,7 +771,7 @@ public class MailManager
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Count not create domain: " +
+            throw new MailManagerException("Could not create domain: " +
                                            domain, e);
         }
         finally
@@ -812,7 +812,7 @@ public class MailManager
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Count not remove domain: " +
+            throw new MailManagerException("Could not remove domain: " +
                                            domain, e);
         }
         finally
@@ -868,7 +868,7 @@ public class MailManager
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Count not create alias: " + mail,
+            throw new MailManagerException("Could not create alias: " + mail,
                                            e);
         }
         finally
