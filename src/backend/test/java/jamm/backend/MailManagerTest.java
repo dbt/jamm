@@ -433,6 +433,14 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking non-authentication of " + accountDn,
                    !manager.authenticate());
 
+        // This is different than the above test since the manager DN
+        // does not have a userPassword attribute.  This causes JNDI
+        // to throw a different exception.  This tests that special
+        // case.
+        manager.setBindEntry(LdapConstants.MGR_DN, "bad password");
+        assertTrue("Checking non-authentication of " + accountDn,
+                   !manager.authenticate());
+
         manager.setBindEntry(accountDn, "");
         assertTrue("Checking non-authentication of " + accountDn,
                    !manager.authenticate());
