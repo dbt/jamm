@@ -566,17 +566,15 @@ public class MailManagerTest extends TestCase
                    manager.authenticate());
 
         // Clear password
-        // manager.setBindEntry(postmasterDn, postmasterPassword);
-        // manager.changePassword(mail, "a");
+        manager.setBindEntry(postmasterDn, postmasterPassword);
+        manager.changePassword(mail, null);
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(postmasterDn, postmasterPassword);
         mLdap.searchSubtree(BASE, "mail=" + mail);
         assertTrue("Checking for result", mLdap.nextResult());
         assertEquals("Checking mail", mail, mLdap.getResultAttribute("mail"));
-        /*
-        assertEquals("Checking password field is empty", "",
-                     mLdap.getResultAttribute("userPassword"));
-        */
+        assertNull("Checking password field does not exist",
+                   mLdap.getResultAttribute("userPassword"));
     }
 
     /**

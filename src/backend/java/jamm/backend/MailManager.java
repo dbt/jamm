@@ -162,11 +162,15 @@ public class MailManager
     }
 
     /**
-     * Changes the password for an email account or alias.
+     * Changes the password for an email account or alias.  This does
+     * not hash or encode the password, so that must be done prior to
+     * calling this method.  To remove the password (so the user may
+     * not log in with this alias or account), pass <code>null</code>
+     * for the new password.
      *
      * @param mail Email address to change password for
-     * @param newPassword New password for this account or alias.
-     * @throws MailManagerException If an error occured.
+     * @param newPassword New password for this account or alias
+     * @throws MailManagerException If an error occured
      */
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
@@ -179,8 +183,17 @@ public class MailManager
             searchForMail(ldap, mail);
 
             String foundDn = ldap.getResultName();
-            String hashedPassword =
-                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
+            String hashedPassword;
+            if (newPassword != null)
+            {
+                hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
+                                                   newPassword);
+            }
+            else
+            {
+                hashedPassword = null;
+            }
+
             ldap.modifyElementAttribute(foundDn, "userPassword",
                                         hashedPassword);
 
