@@ -31,7 +31,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
-import jamm.backend.MailManagerException;
 import jamm.backend.AliasInfo;
 import jamm.backend.MailAddress;
 
@@ -74,11 +73,6 @@ public class AccountAdminAction extends JammAction
 
         Map extraInfo = new HashMap();
         extraInfo.put("mail", mail);
-        if (!isAllowedToBeHere(request, extraInfo))
-        {
-            doAccessError(request, mapping);
-            return mapping.findForward("access_error");
-        }
         
         ChangePasswordForm cpf = new ChangePasswordForm();
         cpf.setMail(mail);
@@ -137,43 +131,5 @@ public class AccountAdminAction extends JammAction
 
             return (mapping.findForward("view"));
         }
-    }
-
-    /**
-     * Checks to see if the domain admin is allowed to be here.
-     *
-     * @param request the request we are servicing
-     * @param extraInfo Should contain information for the "mail"
-     * @return boolean value signifying if the domain admin can be here.
-     * @exception MailManagerException if an error occurs
-     */
-    protected boolean isDomainAdminAllowed(HttpServletRequest request,
-                                           Map extraInfo)
-        throws MailManagerException
-    {
-        User user = getUser(request);
-        MailManager manager = getMailManager(user);
-        String mail = (String) extraInfo.get("mail");
-        String domain = MailAddress.hostFromAddress(mail);
-
-        return manager.isPostmaster(domain, user.getUsername());
-    }
-
-    /**
-     * Checks to see if the domain admin is allowed to be here.
-     *
-     * @param request The request we are servicing
-     * @param extraInfo Should contain information for the "mail" address
-     * @return boolean value signifying if the user can be here.
-     * @exception MailManagerException if an error occurs
-     */
-    protected boolean isUserAllowed(HttpServletRequest request,
-                                    Map extraInfo)
-        throws MailManagerException
-    {
-        User user = getUser(request);
-        String mail = (String) extraInfo.get("mail");
-        
-        return user.getUsername().equals(mail);
     }
 }

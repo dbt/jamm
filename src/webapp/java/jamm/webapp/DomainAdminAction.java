@@ -91,11 +91,6 @@ public class DomainAdminAction extends JammAction
 
         Map extraInfo = new HashMap();
         extraInfo.put("domain", domain);
-        if (!isAllowedToBeHere(request, extraInfo))
-        {
-            doAccessError(request, mapping);
-            return mapping.findForward("access_error");
-        }
         
         request.setAttribute("domain", domain);
 
@@ -128,25 +123,6 @@ public class DomainAdminAction extends JammAction
         doDomainInfo(request, manager, domain);
 
         return (mapping.findForward("view"));
-    }
-
-    /**
-     * Checks to see if the domain admin can be here.
-     *
-     * @param request the request
-     * @param extraInfo map packed with "domain"
-     * @return boolean value of access allowed
-     * @exception MailManagerException if an error occurs
-     */
-    protected boolean isDomainAdminAllowed(HttpServletRequest request,
-                                           Map extraInfo)
-        throws MailManagerException
-    {
-        User user = getUser(request);
-        MailManager manager = getMailManager(user);
-        String domain = (String) extraInfo.get("domain");
-        
-        return manager.isPostmaster(domain, user.getUsername());
     }
 
     /**

@@ -64,12 +64,6 @@ public class SiteAdminAction extends JammAction
     {
         User user = getUser(request);
         MailManager manager = getMailManager(user);
-
-        if (!isAllowedToBeHere(request, null))
-        {
-            doAccessError(request, mapping);
-            return mapping.findForward("access_error");
-        }
         
         List domains = manager.getDomains();
         request.setAttribute("domains", domains);
