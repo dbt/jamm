@@ -19,6 +19,9 @@
 
 package jamm.webapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,12 +66,16 @@ public class AddAliasAction extends JammAction
             return findForward(mapping, "domain_admin", request);
         }
 
+
         AddAliasForm form = (AddAliasForm) actionForm;
         User user = getUser(request);
         MailManager manager = getMailManager(user);
+
+        makeBreadCrumbs(mapping, request, form.getDomain(), user);
+
         String mail = MailAddress.addressFromParts(form.getName(),
                                                    form.getDomain());
-
+        request.setAttribute("mail", mail);
         manager.createAlias(form.getDomain(), form.getName(),
                             form.getCommonName(),
                             form.getDestinationAddresses());
@@ -80,4 +87,38 @@ public class AddAliasAction extends JammAction
 
         return findForward(mapping, "domain_admin", request);
     }
+    private void makeBreadCrumbs(ActionMapping mapping,
+                                 HttpServletRequest request, String domain,
+                                 User user)
+    {
+        // Create the bread crumbs
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            breadCrumb =
+                new BreadCrumb(
+                    findForward(mapping, "site_admin", request).getPath(),
+                    "Site Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            breadCrumb =
+                new BreadCrumb(
+                    getDomainAdminForward(mapping, domain).getPath(),
+                    "Domain Admin");
+            breadCrumbs.add(breadCrumb);
+        }
+
+        String forward = getAddAliasForward(mapping, domain).getPath();
+        breadCrumb = new BreadCrumb(forward, "Add Alias");
+        breadCrumbs.add(breadCrumb);
+        
+        request.setAttribute("goBack", forward);
+
+        request.setAttribute("breadCrumbs", breadCrumbs);
+    }
+
 }
