@@ -1,3 +1,10 @@
+Version 0.9.6 - 2 Dec 2003
+--------------------------
+
+* Fixed many LDAP connection leaks.
+
+* Lots of behind the scenes performance fixes
+
 Version 0.9.5 - 1 Aug 2003
 --------------------------
 
