@@ -74,7 +74,9 @@ public class AllTests
      * rootdn        "cn=Manager,dc=jamm,dc=test"
      * rootpw        jammtest
      * directory     /var/lib/ldap/jamm
-     * access to * by * read
+     * access to *
+     *     by self write
+     *     by * read
      * </pre>
      */
 

@@ -315,6 +315,38 @@ public class MailManagerTest extends TestCase
         mLdap.close();
     }
 
+    public void testChangePassword()
+        throws MailManagerException
+    {
+        String domain = "change-password.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String accountName = "account";
+        String originalPassword = "account1pw";
+        String newPassword = "changed pw";
+        String mail = accountName + "@" + domain;
+        String accountDn = "mail=" + mail + "," + domainDn;
+
+        manager.createAccount(domain, accountName, originalPassword);
+        manager.setBindEntry(accountDn, originalPassword);
+        assertTrue("Checking authentication using original password",
+                   manager.authenticate());
+        manager.changePassword(newPassword);
+        assertTrue("Checking authentication using new password",
+                   manager.authenticate());
+        manager.setBindEntry(accountDn, originalPassword);
+        assertTrue("Checking non-authentication using original password",
+                   !manager.authenticate());
+        manager.setBindEntry(accountDn, newPassword);
+        assertTrue("Double checking new password",
+                   manager.authenticate());
+    }
+
     private LdapFacade                      mLdap;
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }

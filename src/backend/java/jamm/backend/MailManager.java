@@ -44,6 +44,32 @@ public class MailManager
         mBindPassword = bindPassword;
     }
 
+    public void changePassword(String newPassword)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+            
+            String hashedPassword =
+                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword);
+            ldap.modifyElementAttribute(ldap.getName(), "userPassword",
+                                        hashedPassword);
+            mBindPassword = newPassword;
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
     public boolean authenticate()
         throws MailManagerException
     {
