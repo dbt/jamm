@@ -11,7 +11,7 @@ Jamm itself:
 
     * User feedback after actions using html:messages.
 
-    * Finish backup-before-delete funcationality of jammCleaner
+    * Finish backup-before-delete functionality of jammCleaner
 
   Not sure when:
 
