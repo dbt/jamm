@@ -4,8 +4,6 @@ Jamm itself:
 
 * Delete domain.
 
-* Change/delete assign postmaster@domain's password
-
 * Create more meaningful exceptions for mail manager (i.e. subclasses
   of MailManagerException).
 
@@ -25,3 +23,7 @@ Jamm itself:
 NAR User Requests:
 
 * migrate between domains
+
+Other User Requests:
+
+* more feedback after actions
