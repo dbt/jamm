@@ -676,6 +676,36 @@ public class MailManager
     }
 
     /**
+     * Removes the domain, the postmaster entry, and the abuse entry.
+     *
+     * @param domain the domain to remove
+     * @exception MailManagerException if an error occurs
+     */
+    public void deleteDomain(String domain)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String domainDn = domainDn(domain);
+        String pmdn = "cn=postmaster," + domainDn;
+        try
+        {
+            deleteAlias("abuse@" + domain);
+            ldap = getLdap();
+            ldap.deleteElement(pmdn);
+            ldap.deleteElement(domainDn);
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Count not remove domain: " +
+                                           domain, e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
+    /**
      * Create a new alias on an existing domain.  See {@link
      * #createAlias(String, String, String[])} for details.
      *

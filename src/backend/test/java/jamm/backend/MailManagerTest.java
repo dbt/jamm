@@ -88,7 +88,7 @@ public class MailManagerTest extends TestCase
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
         mLdap.searchOneLevel(BASE, "jvd=" + domain);
-        assertTrue("jvd=" + domain + " hasn't been created",
+        assertTrue("testing to see if jvd=" + domain + " has been created",
                    mLdap.nextResult());
 
         assertEquals("Checking editAliases",
@@ -973,6 +973,30 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking to see if inactive account is returned",
                    newAccount.getName().equals(inactiveAccount.getName()));
         
+    }
+
+    public void testDeleteDomain()
+        throws NamingException, MailManagerException
+    {
+        String domain = "remove-domain.test";
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        manager.createDomain(domain);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(BASE, "jvd=" + domain);
+        assertTrue("testing to see if jvd=" + domain + " has been created",
+                   mLdap.nextResult());
+
+        manager.deleteDomain(domain);
+        mLdap.searchOneLevel(BASE, "jvd=" + domain);
+        assertTrue("testing to see if jvd=" + domain + " has been removed",
+                   !mLdap.nextResult());
+
+        mLdap.close();
     }
     
     /**
