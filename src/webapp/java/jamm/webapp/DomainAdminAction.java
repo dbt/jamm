@@ -52,7 +52,7 @@ import jamm.backend.DomainInfo;
  * @see jamm.backend.MailManager
  * @see jamm.webapp.DomainConfigForm
  * 
- * @struts.action validate="false" path="/private/site_admin"
+ * @struts.action validate="false" path="/private/domain_admin"
  *                roles="Site Administrator, Domain Administrator"
  * @struts.action-forward name="view" path="/private/domain_admin.jsp"
  */
