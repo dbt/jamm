@@ -26,6 +26,7 @@ import java.util.Iterator;
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
 import jamm.backend.DomainInfo;
+import jamm.util.UserQueries;
 
 /**
  * Cleans up domains
@@ -58,19 +59,44 @@ public class DomainCleaner
             while (i.hasNext())
             {
                 DomainInfo domain = (DomainInfo) i.next();
-                AccountCleaner ac =
-                    new AccountCleaner(domain.getName(),
-                                       AccountCleaner.CLEAN_ALL);
-                ac.cleanUp();
+                boolean cleanUp = false;
 
-                // We assume all the accounts were cleaned up,
-                // so we just nuke the domain
-                mManager.deleteDomain(domain.getName());
+                cleanUp = JammCleanerOptions.isAssumeYes();
+
+                if (!cleanUp)
+                {
+                    StringBuffer sb = new StringBuffer(domain.getName());
+                    sb.append(" is marked for deletion.\n");
+                    sb.append("Would you like to remove its data?");
+                    cleanUp = UserQueries.askYesNo(sb.toString());
+                }
+
+                if (cleanUp)
+                {
+                    AccountCleaner ac =
+                        new AccountCleaner(domain.getName(),
+                                           AccountCleaner.CLEAN_ALL);
+                    ac.cleanUp();
+
+                    // We assume all the accounts were cleaned up,
+                    // so we just nuke the domain
+                    if (JammCleanerOptions.isVerbose() ||
+                        JammCleanerOptions.isNonDestructive())
+                    {
+                        System.out.println(
+                            "Removing domain " + domain.getName());
+                    }
+                    if (!JammCleanerOptions.isNonDestructive())
+                    {
+                        mManager.deleteDomain(domain.getName());
+                    }
+                }
             }
         }
         catch (MailManagerException e)
         {
             System.out.println("Problem purging domains: " + e);
+            e.printStackTrace();
         }
     }
 
