@@ -118,6 +118,21 @@ public class ChangePasswordForm extends ActionForm
         return mDone;
     }
 
+    public void setClear(String clear)
+    {
+        mClear = clear;
+    }
+
+    public String getClear()
+    {
+        return mClear;
+    }
+
+    public boolean wasClearClicked()
+    {
+        return (!mClear.equals(""));
+    }
+
     /**
      * Clears out both passwords and sets the Mail to the parameter
      * passed in via the request.
@@ -130,6 +145,7 @@ public class ChangePasswordForm extends ActionForm
         clearPasswords();
         mMail = request.getParameter("mail");
         mDone = request.getParameter("done");
+        mClear = "";
     }
 
     /**
@@ -146,6 +162,14 @@ public class ChangePasswordForm extends ActionForm
                                  HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
+
+        // If clear password was clicked, then the rest of the fields
+        // don't matter.
+        if (wasClearClicked())
+        {
+            return errors;
+        }
+
         if (!PasswordValidator.validatePassword(mPassword, mRetypedPassword,
                                                 errors))
         {
@@ -175,4 +199,6 @@ public class ChangePasswordForm extends ActionForm
 
     /** The name of the page to forward to when done with the action. */
     private String mDone;
+
+    private String mClear;
 }
