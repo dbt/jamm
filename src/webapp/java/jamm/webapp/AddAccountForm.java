@@ -128,7 +128,7 @@ public class AddAccountForm extends ValidatorForm
     /**
      * Sets the account name in this bean to the string passed in.
      * 
-     * todo Finish validator tags for this file.
+     * tdo Finish validator tags for this file. -- Validator xdoclet not ready
      *
      * @param name The name of the account.
      * 
