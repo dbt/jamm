@@ -7,6 +7,11 @@
     <put name="body" value=""/>
   </definition>
 
+  <definition name="privateLayout" extends="mainLayout">
+    <put name="header" value="/WEB-INF/common/private_header.jsp"/>
+    <put name="footer" value="/WEB-INF/common/private_footer.jsp"/>
+  </definition>
+
   <definition name="home" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/home.jsp"/>
   </definition>
@@ -16,7 +21,14 @@
   <definition name="change_password" extends="mainLayout">
     <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
   </definition>
-  <definition name="domain_admin" extends="mainLayout">
+
+  <definition name="domain_admin" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/domain_admin.jsp"/>
+  </definition>
+  <definition name="account_admin" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/account_admin.jsp"/>
+  </definition>
+  <definition name="alias_admin" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/alias_admin.jsp"/>
   </definition>
 </component-definitions>
