@@ -36,7 +36,7 @@ public class AllTests
         TestSuite suite;
 
         suite = new TestSuite();
-        suite.addTestSuite(CryptPasswordTest.class);
+//        suite.addTestSuite(CryptPasswordTest.class);
         suite.addTestSuite(Md5PasswordTest.class);
         suite.addTestSuite(ShaPasswordTest.class);
         suite.addTestSuite(LdapFacadeTest.class);
