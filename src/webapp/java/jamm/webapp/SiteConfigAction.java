@@ -61,16 +61,6 @@ public class SiteConfigAction extends JammAction
         User user = getUser(request);
         MailManager manager = getMailManager(user);
 
-        System.out.println("====================================" +
-                           "====================================");
-
-        System.out.println("AllowEditAliases: " +
-                           Arrays.asList(form.getAllowEditAliases()));
-        System.out.println("Unchecked editAliases: " +
-                           form.getUncheckedEditAliases());
-        System.out.println("Checked editAliases: " +
-                           form.getCheckedEditAliases());
-
         HashMap domainInfos = new HashMap();
 
         Iterator i = form.getUncheckedEditAliases().iterator();
