@@ -241,6 +241,66 @@ public class SiteConfigForm extends JammForm
     }
 
     /**
+     * Get the items to delete
+     *
+     * @return string array of domains to delete
+     */
+    public String[] getDelete()
+    {
+        return mDelete;
+    }
+
+    /**
+     * Sets the items to delete
+     *
+     * @param delete list of strings to delete
+     */
+    public void setDelete(String[] delete)
+    {
+        mDelete = delete;
+    }
+
+    /**
+     * Get the original list of items to delete
+     *
+     * @return String aray of domain names
+     */
+    public String[] getOriginalDelete()
+    {
+        return mOriginalDelete;
+    }
+
+    /**
+     * set the original list of items to delete
+     *
+     * @param originalDelete a string array of domain names
+     */
+    public void setOriginalDelete(String[] originalDelete)
+    {
+        mOriginalDelete = originalDelete;
+    }
+    
+    /**
+     * returns the newly checked items to delete
+     *
+     * @return a set of Strings
+     */
+    public Set getCheckedDelete()
+    {
+        return getDifference(mDelete, mOriginalDelete);
+    }
+
+    /**
+     * Returns the newly unchecked items to delete
+     *
+     * @return a set of strings
+     */
+    public Set getUncheckedDelete()
+    {
+        return getDifference(mOriginalDelete, mDelete);
+    }
+
+    /**
      * Resets the accounts, postmasters, and active domains to empty
      * arrays.
      *
@@ -255,6 +315,8 @@ public class SiteConfigForm extends JammForm
         mOriginalAllowEditPostmasters = new String[0];
         mActive = new String[0];
         mOriginalActive = new String[0];
+        mDelete = new String[0];
+        mOriginalDelete = new String[0];
     }
 
     /** the domains */
@@ -271,4 +333,8 @@ public class SiteConfigForm extends JammForm
     private String[] mOriginalActive;
     /** List of active domains */
     private String[] mActive;
+    /** List of domains marked for deletion */
+    private String[] mDelete;
+    /** original list of domains marked for deletion */
+    private String[] mOriginalDelete;
 }
