@@ -98,6 +98,14 @@ public abstract class JammAction extends Action
         }
     }
 
+    /**
+     * Returns a forward to the <code>domain_admin</code> forward,
+     * using the specified domain name as a parameter.
+     *
+     * @param mapping Mapping to find forward on.
+     * @param domain Domain name
+     * @return Action forward
+     */
     protected ActionForward getDomainAdminForward(ActionMapping mapping,
                                                   String domain)
     {
@@ -109,6 +117,14 @@ public abstract class JammAction extends Action
         return forward;
     }
 
+    /**
+     * Returns a forward to the <code>account_admin</code> forward,
+     * using the specified email address as a parameter.
+     *
+     * @param mapping Mapping to find forward on.
+     * @param mail Email address
+     * @return Action forward
+     */
     protected ActionForward getAccountAdminForward(ActionMapping mapping,
                                                    String mail)
     {

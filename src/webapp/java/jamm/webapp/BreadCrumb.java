@@ -22,26 +22,49 @@ package jamm.webapp;
 import java.io.Serializable;
 
 /**
- * An immutable bean to hold user information.
+ * An immutable bean to hold one item in a list of bread crumbs.
+ * Bread crumbs are the trail of pages leading to the current page.
+ * Each bread crumb is a link to a page higher up in the navigation
+ * hierarchy.  This is a primary source of navigation for the user.
  */
 public class BreadCrumb implements Serializable
 {
+    /**
+     * Create a new bread crumb item with the specified hyperlink and
+     * text.
+     *
+     * @param link Hyperlink for this bread crumb
+     * @param text Test for this bread crumb
+     */
     public BreadCrumb(String link, String text)
     {
         mLink = link;
         mText = text;
     }
 
+    /**
+     * Returns the text of this bread crumb.
+     *
+     * @return The text of this bread crumb
+     */
     public String getText()
     {
         return mText;
     }
 
+    /**
+     * Returns the hyperlink for this bread crumb.
+     *
+     * @return The hyperlink for this bread crumb
+     */
     public String getLink()
     {
         return mLink;
     }
 
+    /** Text of this bread crumb.*/
     private String mText;
+
+    /** Hyperlink of this bread crumb. */
     private String mLink;
 }
