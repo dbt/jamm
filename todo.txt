@@ -11,8 +11,6 @@ Jamm itself:
 
 * Access control so users playing with URLs can't go someplace bad
 
-* Install doc
-
 * Send e-mail after account creation to assure creation of user directory
 
 * Generate passwords for accounts and/or aliases
