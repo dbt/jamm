@@ -26,17 +26,57 @@ public class MailManagerTest extends TestCase
     }
 
     public void testCreateDomain()
-        throws NamingException
+        throws NamingException, MailManagerException
     {
         MailManager manager;
 
-        manager = new MailManager();
-        manager.createDomain("domain1.test");
+        String domain = "domain3.test";
+        String sdomain = "jvd=" + domain + "," + BASE;
+
+        manager = new MailManager("localhost", BASE,
+                                  "cn=Manager,dc=jamm,dc=test", "jammtest");
+        manager.createDomain(domain);
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
+        mLdap.searchOneLevel(BASE, "jvd=" + domain);
+        assertTrue("jvd=" + domain + " hasn't been created",
+                   mLdap.nextResult());
+
+
+        mLdap.searchOneLevel(sdomain, "objectClass=*");
+        int counter = 0;
+        while (mLdap.nextResult())
+        {
+            counter++;
+            if (mLdap.getResultName().equals("cn=postmaster," + sdomain))
+            {
+                assertEquals("Checking postmaster cn",
+                             mLdap.getResultAttribute("cn"),
+                             "postmaster");
+                assertEquals("Checking postmaster mail",
+                             mLdap.getResultAttribute("mail"),
+                             "postmaster@" + domain);
+                assertEquals("Checking postmaster maildrop",
+                             mLdap.getResultAttribute("maildrop"),
+                             "postmaster");
+            }
+            if (mLdap.getResultName().equals("mail=abuse@" + domain))
+            {
+                assertEquals("Checking abuse mail",
+                             mLdap.getResultAttribute("mail"),
+                             "abuse@" + domain);
+                assertEquals("Checking abuse maildrop",
+                             mLdap.getResultAttribute("maildrop"),
+                             "postmaster");
+            }
+        }
+        assertEquals("Checking if we have the right amount of results",
+                     counter, 2);
+        
         mLdap.close();
     }
 
     private LdapFacade                      mLdap;
+    private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }

@@ -69,11 +69,19 @@
 
   <target name="build-backend" depends="prepare"
           description="Builds all code for the backend.">
+    <depend srcDir="src/backend/java" destDir="build/backend/classes"
+            cache="build/depcache" closure="yes" />
     <javac srcdir="src/backend/java"
        destdir="build/backend/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
        classpathref="lib.path" />
 
+    <depend srcDir="src/backend/test/java" destDir="test/backend/classes"
+            cache="build/depcache" closure="yes">
+      <classpath>
+        <pathelement location="build/backend/classes" />
+      </classpath>
+    </depend>
     <javac srcdir="src/backend/test/java"
        destdir="test/backend/classes"
        debug="on" optimize="off">
@@ -210,6 +218,31 @@
                 >
       <fileset dir="src/backend/test" includes="**/*.java" />
     </checkstyle>
+  </target>
+
+  <target name="prepare-doc" depends="prepare">
+    <mkdir dir="doc" />
+  </target>
+  
+  <target name="doc" depends="prepare-doc">
+    <javadoc packagenames="jamm.*"
+             destdir="doc"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="JAMM Docs"
+             private="yes"
+             doctitle="JAva Mail Manager">
+      <sourcepath>
+        <pathelement location="src/backend/java" />
+        <pathelement location="src/backend/test/java" />
+        <pathelement location="src/webapp/java" />
+      </sourcepath>
+      <classpath>
+        <path refid="lib.path" />
+        <pathelement location="${ant.home}/lib/junit.jar" />
+      </classpath>
+    </javadoc>
   </target>
 
   <target name="clean">
