@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 import jamm.backend.AccountInfo;
+import jamm.backend.MailAddress;
 
 public class DomainAdminAction extends JammAction
 {
@@ -24,7 +25,7 @@ public class DomainAdminAction extends JammAction
     {
         User user  = getUser(request);
         MailManager manager = getMailManager(user);
-        String domain = domainFromMail(user.getUsername());
+        String domain = MailAddress.hostFromAddress(user.getUsername());
         request.setAttribute("domainName", domain);
 
         List accounts = manager.getAccounts(domain);
@@ -62,11 +63,5 @@ public class DomainAdminAction extends JammAction
         request.setAttribute("aliases", aliases);
 
         return (mapping.findForward("domain_admin"));
-    }
-
-    private final String domainFromMail(String mail)
-    {
-        int domainIndex = mail.indexOf("@");
-        return mail.substring(domainIndex + 1);
     }
 }

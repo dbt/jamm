@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 
 import jamm.backend.MailManager;
+import jamm.backend.AliasInfo;
 
 public class UpdateAliasAction extends JammAction
 {
@@ -33,9 +34,9 @@ public class UpdateAliasAction extends JammAction
                             user.getPassword());
 
         String mail = form.getMail();
-        String[] destinations = manager.getAliasDestinations(mail);
+        AliasInfo alias = manager.getAlias(mail);
         
-        Set newDestinations = new HashSet(Arrays.asList(destinations));
+        Set newDestinations = new HashSet(alias.getDestinations());
         newDestinations.addAll(form.getAddedAddresses());
         newDestinations.removeAll(Arrays.asList(form.getDeleted()));
 
@@ -53,7 +54,8 @@ public class UpdateAliasAction extends JammAction
             return new ActionForward(mapping.getInput());
         }
 
-        manager.modifyAlias(mail, newDestinations);
+        alias.setDestinations(newDestinations);
+        manager.modifyAlias(alias);
 
         // Get the forward, and then create a new forward with the mail
         // tacked onto it.

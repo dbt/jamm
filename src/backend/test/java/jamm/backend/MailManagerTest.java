@@ -154,8 +154,10 @@ public class MailManagerTest extends TestCase
         manager.createDomain(domain);
         manager.createAlias(domain, aliasName,
                             new String[] {"mail1@abc.test"});
-        manager.modifyAlias(domain, aliasName,
-                            new String[] {"mail2@xyz.test", "mail3@mmm.test"});
+        AliasInfo alias = manager.getAlias(aliasMail);
+        alias.setDestinations(new String[] {"mail2@xyz.test",
+                                            "mail3@mmm.test"});
+        manager.modifyAlias(alias);
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -168,7 +170,7 @@ public class MailManagerTest extends TestCase
                      mLdap.getAllResultAttributeValues("maildrop"));
     }
 
-    public void testGetAliasDestinations()
+    public void testGetAlias()
         throws MailManagerException
     {
         String domain = "get-alias-dest.test";
@@ -182,13 +184,14 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, aliasName,
                             new String[] {"mail2@xyz.test", "mail1@abc.test"});
 
-        String[] destinations = manager.getAliasDestinations(aliasMail);
+        AliasInfo alias = manager.getAlias(aliasMail);
+        List destinations = alias.getDestinations();
         assertEquals("Checking number of destinations", 2,
-                     destinations.length);
-        assertEquals("Checking destination", "mail1@abc.test",
-                     destinations[0]);
-        assertEquals("Checking destination", "mail2@xyz.test",
-                     destinations[1]);
+                     destinations.size());
+        String destination = (String) destinations.get(0);
+        assertEquals("Checking destination", "mail1@abc.test", destination);
+        destination = (String) destinations.get(1);
+        assertEquals("Checking destination", "mail2@xyz.test", destination);
     }
 
     public void testCreateAccount()

@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import javax.naming.NamingException;
@@ -133,7 +132,7 @@ public class MailManager
 
             // Get all users in this domain who have postamster
             // privileges.  The results are full DNs.
-            String domain = domainFromMail(mail);
+            String domain = MailAddress.hostFromAddress(mail);
             String postmasterMail = "postmaster@" + domain;
             searchForMail(ldap, postmasterMail);
             Set postmasters =
@@ -218,7 +217,8 @@ public class MailManager
                            new String[] {"top", "organizationalRole",
                                          "JammMailAlias"});
             attributes.put("cn", "postmaster");
-            attributes.put("mail", mail(domain, "postmaster"));
+            attributes.put("mail",
+                           MailAddress.addressFromParts("postmaster", domain));
             attributes.put("maildrop", "postmaster");
             String dn = "cn=postmaster," + domainDn;
             attributes.put("roleOccupant", dn);
@@ -228,7 +228,7 @@ public class MailManager
             attributes.clear();
             attributes.put("objectClass",
                            new String[] {"top", "JammMailAlias"});
-            String mail = mail(domain, "abuse");
+            String mail = MailAddress.addressFromParts("abuse", domain);
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
             ldap.addElement(mailDn(domain, mail), attributes);
@@ -248,7 +248,7 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        String mail = mail(domain, alias);
+        String mail = MailAddress.addressFromParts(alias, domain);
         
         try
         {
@@ -272,37 +272,24 @@ public class MailManager
         }
     }
 
-    public void modifyAlias(String domain, String alias,
-                            String[] newDestinations)
+    public void modifyAlias(AliasInfo alias)
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        String mail = mail(domain, alias);
         try
         {
             ldap = getFacade();
-            ldap.modifyElementAttribute(mailDn(domain, mail), "maildrop",
-                                        newDestinations);
+            ldap.modifyElementAttribute(mailDn(alias.getName()), "maildrop",
+                                        alias.getDestinations());
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Could not modify alias" + mail, e);
+            throw new MailManagerException(alias.getName(), e);
         }
         finally
         {
             closeLdap(ldap);
         }
-    }
-
-    public void modifyAlias(String mail, Collection newDestinations)
-        throws MailManagerException
-    {
-        String domain = domainFromMail(mail);
-        String alias = userFromMail(mail);
-        String[] destinationsArray = new String[0];
-        destinationsArray =
-            (String[]) newDestinations.toArray(destinationsArray);
-        modifyAlias(domain, alias, destinationsArray);
     }
 
     public boolean isAlias(String mail)
@@ -321,7 +308,7 @@ public class MailManager
         }
         catch (NamingException e)
         {
-            throw new MailManagerException(e);
+            throw new MailManagerException(mail, e);
         }
         finally
         {
@@ -331,29 +318,26 @@ public class MailManager
         return isAlias;
     }
 
-    public String[] getAliasDestinations(String mail)
+    public AliasInfo getAlias(String mail)
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        String[] destinations = new String[0];
+        AliasInfo alias = null;
         try
         {
             ldap = getFacade();
             searchForMail(ldap, mail);
-
-            AliasInfo alias = createAliasInfo(ldap);
-            destinations =
-                (String[]) alias.getDestinations().toArray(destinations);
+            alias = createAliasInfo(ldap);
         }
         catch (NamingException e)
         {
-            throw new MailManagerException("Could not modify alias" + mail, e);
+            throw new MailManagerException(e);
         }
         finally
         {
             closeLdap(ldap);
         }
-        return destinations;
+        return alias;
     }
 
     public List getAliases(String domain)
@@ -412,7 +396,7 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        String mail = mail(domain, account);
+        String mail = MailAddress.addressFromParts(account, domain);
 
         try
         {
@@ -519,30 +503,11 @@ public class MailManager
 
     private final String mailDn(String mail)
     {
-        String domain = domainFromMail(mail);
+        String domain = MailAddress.hostFromAddress(mail);
         StringBuffer mailDn = new StringBuffer();
         mailDn.append("mail=").append(mail).append(",");
         mailDn.append(domainDn(domain));
         return mailDn.toString();
-    }
-
-    private final String domainFromMail(String mail)
-    {
-        int domainIndex = mail.indexOf("@");
-        return mail.substring(domainIndex + 1);
-    }
-
-    private final String userFromMail(String mail)
-    {
-        int domainIndex = mail.indexOf("@");
-        return mail.substring(0, domainIndex);
-    }
-
-    private final String mail(String domain, String user)
-    {
-        StringBuffer mail = new StringBuffer();
-        mail.append(user).append("@").append(domain);
-        return mail.toString();
     }
 
     private void closeLdap(LdapFacade ldap)

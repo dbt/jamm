@@ -2,6 +2,10 @@ package jamm.backend;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Arrays;
 
 public class AliasInfo implements Serializable
 {
@@ -19,9 +23,19 @@ public class AliasInfo implements Serializable
         return mName;
     }
 
+    public void setDestinations(Collection destinations)
+    {
+        mDestinations = new ArrayList(destinations);
+    }
+
+    public void setDestinations(String[] destinations)
+    {
+        mDestinations = Arrays.asList(destinations);
+    }
+
     public List getDestinations()
     {
-        return mDestinations;
+        return Collections.unmodifiableList(mDestinations);
     }
 
     public boolean isActive()

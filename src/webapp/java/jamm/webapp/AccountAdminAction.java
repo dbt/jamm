@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
+import jamm.backend.AliasInfo;
 
 public class AccountAdminAction extends JammAction
 {
@@ -27,10 +28,10 @@ public class AccountAdminAction extends JammAction
         MailManager manager = getMailManager(user);
         if (manager.isAlias(mail))
         {
-            String[] destinations = manager.getAliasDestinations(mail);
+            AliasInfo alias = manager.getAlias(mail);
 
             request.setAttribute("mail", mail);
-            request.setAttribute("destinations", destinations);
+            request.setAttribute("alias", alias);
 
             return (mapping.findForward("alias_admin"));
         }

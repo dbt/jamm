@@ -23,7 +23,8 @@
       <th>Delete</th>
     </tr>
 
-    <logic:iterate indexId="i" id="destination" name="destinations">
+    <logic:iterate indexId="i" id="destination" name="alias"
+                   property="destinations">
       <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
         <td><bean:write name="destination"/></td>
         <td align="center">
