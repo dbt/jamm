@@ -36,6 +36,8 @@ public class DomainInfo implements Serializable
      * @param canEditPostmasters a <code>boolean</code> value
      * @param active is domain active
      * @param delete is this marked for deletion
+     * @param aliasCount the number of aliases in this domain
+     * @param accountCount the number of accounts in this domain
      * @param lastChange time of last change in unix time.
      */
     public DomainInfo(String name, boolean canEditAccounts,
@@ -54,8 +56,9 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * Returns the number of accounts in this domain.
      * 
-     * @return
+     * @return an int with the count
      */
     public int getAccountCount()
     {
@@ -73,8 +76,9 @@ public class DomainInfo implements Serializable
     }
 
     /**
+     * Returns the number of aliases in this domain.
      * 
-     * @return
+     * @return an int with the count
      */
     public int getAliasCount()
     {
@@ -181,7 +185,7 @@ public class DomainInfo implements Serializable
         this.mName = argName;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString()

@@ -53,7 +53,7 @@ public class ChainedRuntimeException extends RuntimeException
     public ChainedRuntimeException(String message, Throwable cause)
     {
         super(message);
-        this.cause = cause;
+        this.mCause = cause;
     }
 
     /**
@@ -64,7 +64,7 @@ public class ChainedRuntimeException extends RuntimeException
     public ChainedRuntimeException(Throwable cause)
     {
         super();
-        this.cause = cause;
+        this.mCause = cause;
     }
 
     /**
@@ -75,7 +75,7 @@ public class ChainedRuntimeException extends RuntimeException
      */
     public Throwable getCause()
     {
-        return cause;
+        return mCause;
     }
 
     /**
@@ -85,10 +85,10 @@ public class ChainedRuntimeException extends RuntimeException
     public void printStackTrace()
     {
         super.printStackTrace();
-        if (cause != null)
+        if (mCause != null)
         {
             System.err.println("Caused by:");
-            cause.printStackTrace();
+            mCause.printStackTrace();
         }
     }
 
@@ -101,10 +101,10 @@ public class ChainedRuntimeException extends RuntimeException
     public void printStackTrace(java.io.PrintStream ps)
     {
         super.printStackTrace(ps);
-        if (cause != null)
+        if (mCause != null)
         {
             ps.println("Caused by:");
-            cause.printStackTrace(ps);
+            mCause.printStackTrace(ps);
         }
     }
 
@@ -117,13 +117,13 @@ public class ChainedRuntimeException extends RuntimeException
     public void printStackTrace(java.io.PrintWriter pw)
     {
         super.printStackTrace(pw);
-        if (cause != null)
+        if (mCause != null)
         {
             pw.println("Caused by:");
-            cause.printStackTrace(pw);
+            mCause.printStackTrace(pw);
         }
     }
 
     /** The root cause of this exception. */
-    private Throwable cause = null;
+    private Throwable mCause = null;
 }

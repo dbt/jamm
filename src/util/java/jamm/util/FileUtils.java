@@ -76,7 +76,7 @@ public class FileUtils
      * borrowed from Ant.  It may have false positives on some
      * platforms.
      *
-     * @param dir The file object to test
+     * @param file The file object to test
      * @return true is a symbolic link, false otherwise
      */
     public static boolean isNotSymbolicLink(File file)

@@ -132,7 +132,7 @@ public class MailManager
             ldap = getLdap();
             Map attributes = new HashMap();
             attributes.put("objectClass",
-                           new String[] { "top", ALIAS_OBJECT_CLASS});
+                           new String[] { "top", ALIAS_OBJECT_CLASS });
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
             attributes.put("lastChange", getUnixTimeString());
@@ -432,7 +432,7 @@ public class MailManager
             ldap = getLdap();
             Map attributes = new HashMap();
             attributes.put("objectClass",
-                           new String[] { "top", ACCOUNT_OBJECT_CLASS});
+                           new String[] { "top", ACCOUNT_OBJECT_CLASS });
             attributes.put("homeDirectory",
                            MailManagerOptions.getVmailHomedir());
             attributes.put("mail", mail);
@@ -1141,9 +1141,10 @@ public class MailManager
                 {
                     accountCount++;
                 }
-                derivedLdap.searchOneLevel(domainDn(name),
-                    "(&(!(|(cn=postmaster)(cn=abuse)))(objectClass="
-                        + ALIAS_OBJECT_CLASS + "))");
+                derivedLdap.searchOneLevel(
+                    domainDn(name),
+                    "(&(!(|(cn=postmaster)(cn=abuse)))(objectClass=" +
+                        ALIAS_OBJECT_CLASS + "))");
                         
                 int aliasCount = 0;
                 while (derivedLdap.nextResult())

@@ -98,7 +98,7 @@ public class AccountInfo implements Serializable
      */
     public int getLastChange()
     {
-        return this.lastChange;
+        return this.mLastChange;
     }
 
     /**
@@ -180,7 +180,7 @@ public class AccountInfo implements Serializable
     }
 
     /** time of last change */
-    private int lastChange;
+    private int mLastChange;
     /** True if this account active. */
     private boolean mActive;
     /** True if this account is an adiministrator. */

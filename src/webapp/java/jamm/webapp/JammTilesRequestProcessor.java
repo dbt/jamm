@@ -58,7 +58,7 @@ public class JammTilesRequestProcessor extends TilesRequestProcessor
         }
 
         User user = JammAction.getUser(request);
-        for (int i = 0 ; i < roles.length; i++)
+        for (int i = 0; i < roles.length; i++)
         {
             if (user.isUserInRole(roles[i]))
             {
