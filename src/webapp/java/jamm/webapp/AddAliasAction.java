@@ -18,6 +18,11 @@ public class AddAliasAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
+        if (isCancelled(request))
+        {
+            return mapping.findForward("user_home");
+        }
+
         AddAliasForm form = (AddAliasForm) actionForm;
         User user = getUser(request);
         MailManager manager = getMailManager(user);

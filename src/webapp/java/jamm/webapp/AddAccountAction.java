@@ -17,6 +17,11 @@ public class AddAccountAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
+        if (isCancelled(request))
+        {
+            return mapping.findForward("user_home");
+        }
+
         AddAccountForm form = (AddAccountForm) actionForm;
         User user = getUser(request);
         MailManager manager = getMailManager(user);
