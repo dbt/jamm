@@ -176,6 +176,8 @@
     </copy>
 
     <copy todir="build/webapp/root/WEB-INF/"
+          file="src/webapp/config/validator-rules.xml"/>
+    <copy todir="build/webapp/root/WEB-INF/"
           file="src/webapp/config/tileDefinitions.xml"/>
     <copy todir="build/webapp/root/WEB-INF/"
           file="src/webapp/config/jamm.properties"/>
@@ -210,6 +212,7 @@
                  shortname="jamm" filename="jamm.tld" />
       <strutsconfigxml version="1.1" destdir="build/webapp/root/WEB-INF"
                        mergedir="src/webapp/config/struts-merge"/>
+      <strutsvalidationxml destdir="build/webapp/root/WEB-INF"/>
     </webdoclet>
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />
