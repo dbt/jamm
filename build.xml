@@ -268,8 +268,18 @@
 
   <target name="dist-util"
           depends="build-util, build-backend">
-    <tar tarfile="build/jammUtils-${project.version}.tar.gz" basedir="build/util/dist"
-         compression="gzip" />
+    <!-- <tar tarfile="build/jammUtils-${project.version}.tar"
+         basedir="build/util/dist" />
+    -->
+    <tar destfile="build/jammUtils-${project.version}.tar">
+      <tarfileset dir="build/util/dist">
+        <include name="**/*"/>
+        <exclude name="bin/jammCleaner"/>
+      </tarfileset>
+      <tarfileset dir="build/util/dist" mode="555">
+        <include name="bin/jammCleaner"/>
+      </tarfileset>
+    </tar>
   </target>
     
   <target name="dist" depends="dist-webapp, dist-util" />
@@ -360,7 +370,7 @@
         <include name="src/schema/jamm.schema"/>
         <include name="doc/samples/sample.ldif"/>
         <include name="build/${project.string}.war"/>
-        <include name="build/jammUtils-${project.version}.tar.gz"/>
+        <include name="build/jammUtils-${project.version}.tar"/>
         <include name="src/util/perl/updateLdif.pl"/>
       </fileset>
     </copy>
@@ -370,7 +380,8 @@
     <gzip zipfile="dist/${project.string}-bin.tar.gz"
           src="build/${project.string}-bin.tar"/>
     <!-- Make text files DOS-compatible before making zip file-->
-    <fixcrlf srcdir="build/dist-bin" eol="crlf" excludes="**/*.war"/>
+    <fixcrlf srcdir="build/dist-bin" eol="crlf"
+             excludes="**/*.war,**/*.jar,**/*.tar,**/*.gz"/>
     <zip zipfile="dist/${project.string}-bin.zip"
          basedir="build/dist-bin"/>
   </target>
