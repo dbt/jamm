@@ -73,12 +73,21 @@
         <attribute name="Main-Class" value="jamm.tools.JammCleaner"/>
       </manifest>
     </jar>
+
     <copy todir="build/util/dist/lib"
           file="build/backend/${project.name}-backend.jar" />
+    
+    <copy todir="build/util/dist/lib" file="${cli.jar}" />
+
+    <copy todir="build/util/dist/lib" file="${log4j.jar}" />
+    
     <copy todir="build/util/dist/lib"
-          file="${cli.jar}" />
-    <copy todir="build/util/dist/bin"
-          file="src/util/shell/jammCleaner" />
+          file="src/util/config/jammCleaner.properties.dist"/>
+    
+    <copy todir="build/util/dist/lib"
+          file="src/util/config/jammCleaner.properties"/>
+    
+    <copy todir="build/util/dist/bin" file="src/util/shell/jammCleaner" />
     <chmod file="build/util/dist/bin/jammCleaner" perm="555" />
   </target>
 
@@ -257,6 +266,7 @@
       <tarfileset dir="build/util/dist">
         <include name="**/*"/>
         <exclude name="bin/jammCleaner"/>
+        <exclude name="lib/jammCleaner.properties"/>
       </tarfileset>
       <tarfileset dir="build/util/dist" mode="555">
         <include name="bin/jammCleaner"/>
