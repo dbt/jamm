@@ -3,43 +3,42 @@ package jamm.ldap;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import cryptix.util.mime.Base64OutputStream;
 
 public abstract class LdapPassword
 {
-    public static final int CLEAR_SCHEME            = 1;
-    public static final int CRYPT_SCHEME            = 2;
-    public static final int MD5_SCHEME              = 3;
-    public static final int SHA_SCHEME              = 4;
-    public static final int SSHA_SCHEME             = 5;
-
-    public static String hash(int scheme, String password)
+    public static String hash(PasswordScheme scheme, String password)
     {
         LdapPassword    method;
 
-        switch(scheme)
+        if (mSchemeLookup == null)
         {
-            case CRYPT_SCHEME:
-                method = new CryptPassword();
-                break;
-
-            case MD5_SCHEME:
-                method = new Md5Password();
-                break;
-
-            case SHA_SCHEME:
-                method = new ShaPassword();
-                break;
-
-            case SSHA_SCHEME:
-                method = new SaltedShaPassword();
-                break;
-
-            case CLEAR_SCHEME:
-            default:
-                method = new ClearPassword();
+            initSchemeLookup();
         }
+        
+        method = (LdapPassword) mSchemeLookup.get(scheme);
+        if (method == null)
+        {
+            method = new ClearPassword();
+        }
+
         return method.doHash(password);
+    }
+
+    private static void initSchemeLookup()
+    {
+        mSchemeLookup = new HashMap();
+        mSchemeLookup.put(PasswordScheme.CRYPT_SCHEME,
+                          new CryptPassword());
+        mSchemeLookup.put(PasswordScheme.MD5_SCHEME,
+                          new Md5Password());
+        mSchemeLookup.put(PasswordScheme.SHA_SCHEME,
+                          new ShaPassword());
+        mSchemeLookup.put(PasswordScheme.SSHA_SCHEME,
+                          new SaltedShaPassword());
     }
 
     public static boolean check(String hashedPassword, String password)
@@ -91,4 +90,6 @@ public abstract class LdapPassword
     {
         return append(first.getBytes(), second);
     }
+
+    private static Map mSchemeLookup;
 }

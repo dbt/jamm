@@ -3,6 +3,7 @@ package jamm.webapp;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
+import jamm.ldap.PasswordScheme;
 
 import java.io.PrintWriter;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class ChangePasswordServlet extends HttpServlet
             }
 
             hashedPassword =
-                LdapPassword.hash(LdapPassword.SSHA_SCHEME, newPassword1);
+                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, newPassword1);
             modifiedAttributes =
                 new BasicAttributes("userPassword", hashedPassword);
             ldap.replaceModifiedAttributes(modifiedAttributes);
