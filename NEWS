@@ -1,3 +1,15 @@
+Version 0.9.4 - 24 Oct 2002
+---------------------------
+
+* Schema changes - perl script to help update.
+
+* jammCleaner will not archive an accounts data in a zip file before nuking
+  the account from the file system.  Also, verbosity fixes.
+
+* Various spelling fixes
+
+* Updated to struts 1.1-b3 and commons-cli 1.0
+
 Version 0.9.3 - 24 Oct 2002
 ---------------------------
 
