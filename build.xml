@@ -67,6 +67,8 @@
     <mkdir dir="build/webapp/root/WEB-INF/tld" />
 
     <mkdir dir="build/util/classes" />
+    <mkdir dir="build/util/dist/lib" />
+    <mkdir dir="build/util/dist/bin" />
 
     <mkdir dir="test" />
     <mkdir dir="test/backend/classes" />
@@ -248,14 +250,27 @@
       depends="build-webapp, build-webapp-webdoclet">
     <jar jarfile="build/${project.string}.war"
          basedir="build/webapp/root"
-         excludes="WEB-INF/jamm.properties">
+         excludes="WEB-INF/jamm.properties"/>
+  </target>
+
+  <target name="dist-util"
+          depends="build-util, build-backend">
+    <jar jarfile="build/util/dist/lib/${project.string}-util.jar"
+         basedir="build/util/classes">
       <manifest>
-        <attribute name="Main-Class" value="dude" />
+        <attribute name="Main-Class" value="jamm.tools.JammCleaner"/>
       </manifest>
     </jar>
+    <copy todir="build/util/dist/lib"
+          file="build/backend/${project.name}-backend.jar" />
+    <copy todir="build/util/dist/lib"
+          file="${cli.jar}" />
+    <copy todir="build/util/dist/bin"
+          file="src/util/shell/jammCleaner" />
   </target>
+        
     
-  <target name="dist" depends="dist-webapp" />
+  <target name="dist" depends="dist-webapp, dist-util" />
 
   <target name="checkstyle">
     <checkstyle properties="checkstyle.properties">
