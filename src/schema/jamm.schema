@@ -1,4 +1,4 @@
-#$Id: jamm.schema,v 1.6 2002-04-05 18:26:20 ark-sf Exp $
+#$Id: jamm.schema,v 1.7 2002-05-09 18:48:36 ark-sf Exp $
 # We depend on courier.schema
 #
 # OID prefix: 1.3.6.1.4.1.12461
@@ -25,6 +25,37 @@ attributetype ( 1.3.6.1.4.1.12461.1.1.4 NAME 'jvd'
         EQUALITY caseIgnoreIA5Match
         SUBSTR caseIgnoreIA5SubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+# The following attributes are borrowed from Courier's schema so that
+# the Jamm Schema can live on its own.
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.5 NAME 'mailbox'
+	DESC 'The absolute path to the mailbox for a mail account in a non-default location'
+        EQUALITY caseExactIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.6 NAME 'quota'
+	DESC 'A string that represents the quota on a mailbox'
+        EQUALITY caseExactIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.7 NAME 'clearPassword'
+	DESC 'A separate text that stores the mail account password in clear text'
+        EQUALITY octetStringMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128})
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.8 NAME 'maildrop'
+        DESC 'RFC822 Mailbox - mail alias'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype ( 1.3.6.1.4.1.12461.1.1.9 NAME 'mailsource'
+        DESC 'Message source'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
 #
 # Objects: 1.3.6.1.4.1.12461.1.2
 #
