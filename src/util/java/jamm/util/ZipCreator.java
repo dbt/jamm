@@ -33,6 +33,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * ZipCreator is a facade type class to add in the creation of a zip file.
+ * It is generally better to pass the full filename to the add method.
  * Example code:
  * <pre>
  *      ZipCreator zc = new ZipCreator("/tmp/dude.test.zip");
@@ -43,6 +44,9 @@ import java.util.zip.ZipOutputStream;
  *      zc.add("/usr/src/linux-2.4.19.tar.bz2");
  *      zc.close();
  * </pre>
+ * If you use setBaseDirectory, if a file being added matches the base
+ * directory, when the file is stored in the zip file, the base
+ * directory will be stripped off the filename in the zip file.
  */
 public class ZipCreator
 {
@@ -143,10 +147,6 @@ public class ZipCreator
         // Strip off leading '/'
         if (zipName.charAt(0) == '/')
         {
-            if (JammCleanerOptions.isVerbose())
-            {
-                System.err.println("Stripping off leading '/'");
-            }
             zipName = zipName.substring(1);
         }
 
@@ -176,11 +176,6 @@ public class ZipCreator
         String zipName = getZipName(aFile);
         ZipEntry ze = new ZipEntry(zipName);
         ze.setTime(aFile.lastModified());
-
-        if (JammCleanerOptions.isVerbose())
-        {
-            System.out.println("Adding " + zipName);
-        }
 
         // Don't compress really small stuff
         if (aFile.length() < 51)
@@ -252,8 +247,6 @@ public class ZipCreator
         ze.setSize(0);
         ze.setCompressedSize(0);
         ze.setCrc(0);
-
-        System.out.println("Adding " + zipName);
 
         mZos.setMethod(mZos.STORED);
         mZos.putNextEntry(ze);
