@@ -95,9 +95,6 @@ public class DomainAdminAction extends JammAction
             return mapping.findForward("general_error");
         }
 
-        Map extraInfo = new HashMap();
-        extraInfo.put("domain", domain);
-        
         request.setAttribute("domain", domain);
 
         Map postmasterPasswordParameters = new HashMap();
