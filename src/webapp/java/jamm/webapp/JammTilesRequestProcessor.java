@@ -21,12 +21,11 @@ package jamm.webapp;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.tiles.TilesRequestProcessor;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.tiles.TilesRequestProcessor;
 
 /**
  * Extention of the TilesRequestProcessor to assure that roles are
@@ -42,7 +41,6 @@ public class JammTilesRequestProcessor extends TilesRequestProcessor
      * @param mapping the action mapping
      * @return a boolean
      * @exception IOException if an error occurs
-     * @exception ServletException if an error occurs
      */
     protected boolean processRoles(HttpServletRequest request,
                                    HttpServletResponse response,

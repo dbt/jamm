@@ -21,7 +21,6 @@ package jamm.ldap;
 
 import java.io.Serializable;
 
-import javax.naming.NamingException;
 import javax.naming.SizeLimitExceededException;
 import javax.naming.ldap.ExtendedRequest;
 import javax.naming.ldap.ExtendedResponse;
@@ -154,7 +153,6 @@ public class ModifyPasswordRequest
      * @param length the length of the response
      * @return returns null as the modify password operation doesn't
      *         generate a response.
-     * @exception NamingException if an error occurs
      */
     public ExtendedResponse createExtendedResponse(String id,
                                                    byte[] berValue,

@@ -501,7 +501,6 @@ public class LdapFacade
      * Gets the attributes for the current result element.
      *
      * @return All attributes for the current result element.
-     * @throws NamingException If an error occured
      */
     public NamingEnumeration getAllResultAttributes()
     {
@@ -512,7 +511,6 @@ public class LdapFacade
      * Gets the name (DN) of the current result attribute.
      *
      * @return DN of the current result attribute.
-     * @throws NamingException If an error occured
      */
     public String getResultName()
     {

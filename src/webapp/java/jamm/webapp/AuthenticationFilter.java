@@ -45,8 +45,6 @@ public class AuthenticationFilter implements Filter
      * initializes the authentication filter.
      *
      * @param config the FilterConfig object that this Filter should use
-     *
-     * @exception ServletException if an error occurs
      */
     public void init(FilterConfig config)
     {
