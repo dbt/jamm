@@ -26,15 +26,32 @@ import org.apache.struts.action.Action;
 
 import jamm.backend.MailManager;
 
+/**
+ * Class provides utility functions that all/most of the Actions in
+ * Jamm use.  Actions in Jamm should extend this class and use these
+ * functions when needed.
+ */
 public abstract class JammAction extends Action
 {
+    /**
+     * Gets the User object from the request/session and returns it.
+     *
+     * @param request the http request causing this action.
+     *
+     * @return the logged in User
+     */
     protected User getUser(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         return user;
     }
-            
+
+    /**
+     * Creates a MailManager object for the User.
+     *
+     * @param user the User to create a MailManager for.
+     */
     protected MailManager getMailManager(User user)
     {
         return new MailManager(Globals.getLdapHost(),

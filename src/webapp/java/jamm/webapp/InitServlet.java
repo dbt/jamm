@@ -38,12 +38,30 @@ import javax.servlet.ServletException;
  */
 public class InitServlet extends HttpServlet
 {
+    /**
+     * Initializes the servlet and prepares it for service.
+     *
+     * @param config The config from the servlet container.
+     *
+     * @throws ServletException when the configuration fails.
+     */
     public void init(ServletConfig config)
         throws ServletException
     {
         loadProperties(config);
     }
 
+    /**
+     * Loads the jamm.properties file and uses it to initalize the
+     * Globals object.
+     *
+     * @see jamm.webapp.Globals
+     *
+     * @param config The configuration from the servlet container.
+     *
+     * @throws ServletException when their is an IOException loading
+     *                          the properties file
+     */
     private void loadProperties(ServletConfig config)
         throws ServletException
     {
@@ -78,12 +96,32 @@ public class InitServlet extends HttpServlet
         
     }
 
+    /**
+     * Returns the property as a string taken from the Properties object.
+     *
+     * @param props properties object containing the data
+     * @param property the property name to return
+     * @param defaultValue the default value to use if the property
+     *                     doesn't exist in props
+     *
+     * @return a string containing the property's value
+     */
     private String getStringProperty(Properties props,
                                      String property, String defaultValue)
     {
         return props.getProperty("jamm." + property, defaultValue).trim();
     }
 
+    /**
+     * Returns the property as an integer taken from the Properties object.
+     *
+     * @param props properties object containing the data
+     * @param property the property name to return
+     * @param defaultValue the default value to use if the property
+     *                     doesn't exist in props
+     *
+     * @return a int with the property's value
+     */
     private int getIntProperty(Properties props,
                                String property, int defaultValue)
     {
