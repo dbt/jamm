@@ -22,7 +22,7 @@
      -->
     <forward name="home" path="/home.jsp" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
-    <forward name="logoff" path="/logoff.do"/>
+    <forward name="logout" path="/logout.do"/>
   </global-forwards>
 
 
@@ -52,6 +52,8 @@
             input="/login.jsp">
     </action>
 
+    <action path="/logout"
+            type="jamm.webapp.LogoutAction"/>
 
     <!-- This will reload tileDefinitions.xml -->
     <action path="/admin/reload-tiles"
