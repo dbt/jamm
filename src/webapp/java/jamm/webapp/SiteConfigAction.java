@@ -31,15 +31,10 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 
 /**
- * Calls MailManager to loads the information the site_admin page
- * needs and then forwards to the site_admin page.  Currently, the
- * list of domains is loaded and saved in the request attribute
- * <code>domains</code>.  Prepopulates the SiteConfigForm with data.
  *
  * @see jamm.backend.MailManager
- * @see jamm.webapp.SiteConfigForm
  */
-public class SiteAdminAction extends JammAction
+public class SiteConfigAction extends JammAction
 {
     /**
      * Performs the action.
@@ -59,20 +54,16 @@ public class SiteAdminAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
+        SiteConfigForm form = (SiteConfigForm) actionForm;
         User user = getUser(request);
         MailManager manager = getMailManager(user);
-        List domains = manager.getDomains();
 
-        SiteConfigForm siteConfigForm = new SiteConfigForm();
-        siteConfigForm.setDomains((String []) domains.toArray(new String[0]));
-
-        siteConfigForm.setOriginalAllowEditAliases(new String[0]);
-        siteConfigForm.setOriginalAllowEditAccounts(new String[0]);
-        siteConfigForm.setOriginalAllowEditPostmasters(new String[0]);
-        siteConfigForm.setOriginalAllowEditCatchalls(new String[0]);
-
-        request.setAttribute("siteConfigForm", siteConfigForm);
-
-        return (mapping.findForward("site_admin"));
+        System.out.println("====================================" +
+                           "====================================");
+        
+        System.out.println("Don't Allow Alias: " +
+                           form.getAllowEditAliases());
+                           
+        return mapping.findForward("site_admin");
     }
 }

@@ -27,6 +27,8 @@
                type="jamm.webapp.AddAccountForm"/>
     <form-bean name="addAliasForm"
                type="jamm.webapp.AddAliasForm"/>
+    <form-bean name="siteConfigForm"
+               type="jamm.webapp.SiteConfigForm"/>
   </form-beans>
 
   <!-- ========== Global Forward Definitions ============================== -->
@@ -161,6 +163,14 @@
             input="/private/add_alias.jsp">
       <forward name="success" path="/private/domain_admin.do"
                redirect="true"/>
+    </action>
+
+    <action path="/private/site_config"
+            type="jamm.webapp.SiteConfigAction"
+            name="siteConfigForm"
+            scope="request"
+            validate="false"
+            input="/private/site_admin.jsp">
     </action>
 
     <!-- This will reload tileDefinitions.xml -->
