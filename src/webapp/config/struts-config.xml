@@ -54,6 +54,7 @@
              redirect="true"/>
     <forward name="alias_admin" path="/private/alias_admin.do"
              redirect="true"/>
+    <forward name="change_password" path="/private/change_password.jsp"/>
   </global-forwards>
 
 
