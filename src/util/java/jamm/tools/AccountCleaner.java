@@ -100,27 +100,41 @@ public class AccountCleaner
      */
     private void nukeAccounts()
     {
-        boolean debug = JammCleanerOptions.isDebug();
+        boolean nondestruct = JammCleanerOptions.isNonDestructive();
         Iterator a = mDeadAccounts.iterator();
 
         while (a.hasNext())
         {
             AccountInfo account = (AccountInfo) a.next();
-            if (!debug && FileUtils.recursiveDelete(
-                    new File(account.getFullPathToMailbox())))
+            if (nondestruct)
             {
-                if (JammCleanerOptions.isVerbose())
-                {
-                    System.out.println(account.getName() +
-                                       " successfully deleted");
-                }
+                System.out.println(account.getName() +
+                                   " successfully deleted");
             }
             else
             {
-                if (debug)
+                File file = new File(account.getFullPathToMailbox());
+                boolean successful = FileUtils.recursiveDelete(file);
+
+                if (successful)
                 {
-                    System.out.println(account.getName() +
-                                       " successfully deleted");
+                    boolean ldapsuccess = false;
+                    try
+                    {
+                        mManager.deleteAccount(account.getName());
+                        ldapsuccess = true;
+                    }
+                    catch (MailManagerException e)
+                    {
+                        System.out.println("Error: " + account.getName() +
+                                           "not deleted: " + e.toString());
+                    }
+                    
+                    if (ldapsuccess && JammCleanerOptions.isVerbose())
+                    {
+                        System.out.println(account.getName() +
+                                           " successfully deleted");
+                    }
                 }
                 else
                 {
