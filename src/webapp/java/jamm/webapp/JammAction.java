@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import jamm.backend.MailManager;
+import jamm.backend.MailManagerException;
 import jamm.backend.MailAddress;
 
 /**
@@ -189,5 +190,27 @@ public abstract class JammAction extends Action
         path.append(parameterName).append("=");
         path.append(parameterValue);
         return new ActionForward(path.toString(), forward.getRedirect());
+    }
+
+    /**
+     * Changes the password based on which password choice to use from
+     * Globals.
+     *
+     * @param manager The MailManager to call against
+     * @param mail the e-mail address to change the password for
+     * @param password the password to set to
+     */
+    protected void changePassword(MailManager manager, String mail,
+                                  String password)
+        throws MailManagerException
+    {
+        if (Globals.isPasswordUseExOp())
+        {
+            manager.changePasswordExOp(mail, password);
+        }
+        else
+        {
+            manager.changePasswordHash(mail, password);
+        }
     }
 }
