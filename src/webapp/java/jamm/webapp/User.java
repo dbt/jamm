@@ -1,5 +1,7 @@
 package jamm.webapp;
 
+import java.util.Set;
+import java.util.Collections;
 import java.io.Serializable;
 
 /**
@@ -13,7 +15,7 @@ public class User implements Serializable
      */
     public User()
     {
-        this("", "", "");
+        this("", "", "", Collections.EMPTY_SET);
     }
 
     /**
@@ -23,11 +25,12 @@ public class User implements Serializable
      * @param dn The distinguished name.
      * @param password The password.
      */
-    public User(String username, String dn, String password)
+    public User(String username, String dn, String password, Set roles)
     {
         mUsername = username;
         mDn = dn;
         mPassword = password;
+        mRoles = roles;
     }
 
     /**
@@ -68,6 +71,33 @@ public class User implements Serializable
         return mPassword;
     }
 
+    /**
+     * Sets this user's password.
+     *
+     * @param password New password
+     */
+    public void setPassword(String password)
+    {
+        mPassword = password;
+    }
+
+    /**
+     * Verifies if user is in a role.
+     *
+     * @param role Role to check for.
+     * @return <code>true</code> if user is in the role.
+     */
+    public boolean isUserInRole(String role)
+    {
+        return mRoles.contains(role);
+    }
+
+    /** String for domain administrator. */
+    public static final String DOMAIN_ADMIN_ROLE = "Domain Administrator";
+
+    /** String for site administrator. */
+    public static final String SITE_ADMIN_ROLE = "Site Administrator";
+
     /**  The username. */
     private String mUsername;
 
@@ -77,4 +107,5 @@ public class User implements Serializable
     /** The password. */
     private String mPassword;
 
+    private Set mRoles;
 }

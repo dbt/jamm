@@ -2,6 +2,8 @@ package jamm.webapp;
 
 import jamm.backend.MailManager;
 
+import java.util.Set;
+import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -53,7 +55,14 @@ public class LoginAction extends Action
             return new ActionForward(mapping.getInput());
         }
 
-        User user = new User(form.getUsername(), userDn, form.getPassword());
+        Set roles = new HashSet();
+        if (manager.isPostmaster(form.getUsername()))
+        {
+            roles.add(User.DOMAIN_ADMIN_ROLE);
+        }
+
+        User user = new User(form.getUsername(), userDn, form.getPassword(),
+                             roles);
         HttpSession session = request.getSession();
         session.setAttribute("is_authenticated", "true");
         session.setAttribute("user", user);
