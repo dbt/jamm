@@ -409,6 +409,52 @@ public class LdapFacadeTest extends TestCase
                      mLdap.getAllResultAttributeValues("telephoneNumber"));
     }
 
+    public void testChangePassword()
+        throws NamingException
+    {
+        String ouName = "change_password";
+        String parent = "dc=jamm,dc=test";
+        String dn = "ou=" + ouName + ",dc=jamm,dc=test";
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(MGR_DN, MGR_PW);
+
+        // This element should not exist
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should not exist",
+                   !mLdap.nextResult());
+
+        Map attributes = new HashMap();
+        attributes.put("objectClass", new String[] { "top",
+                                                     "organizationalUnit"});
+        attributes.put("ou", ouName);
+        // "warez" == ssh value below
+        attributes.put("userPassword",
+                       "{SSHA}ezzH8G5cwAx+WxOp6qy72kvIV+QGuOzC");
+
+        mLdap.addElement(dn, attributes);
+
+        mLdap.resetSearch();
+        mLdap.searchOneLevel("dc=jamm,dc=test", "ou=" + ouName);
+        assertTrue("ou=" + ouName + " should exist",
+                   mLdap.nextResult());
+
+        mLdap.close();
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(dn, "warez");
+        assertEquals("Checking manager name", dn,
+                     mLdap.getName());
+
+        mLdap.changePassword(dn, "testPassword");
+        mLdap.close();
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(dn, "testPassword");
+        assertEquals("Checking manager name", dn,
+                     mLdap.getName());
+        mLdap.close();
+    }
+        
     /**
      * Tests modyfing a multi-value attribute.
      */
