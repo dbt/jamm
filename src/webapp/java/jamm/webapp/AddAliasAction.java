@@ -76,6 +76,8 @@ public class AddAliasAction extends JammAction
         String mail = MailAddress.addressFromParts(form.getName(),
                                                    form.getDomain());
         request.setAttribute("mail", mail);
+        request.setAttribute("aliasDomain", form.getDomain());
+        
         manager.createAlias(form.getDomain(), form.getName(),
                             form.getCommonName(),
                             form.getDestinationAddresses());
@@ -125,8 +127,6 @@ public class AddAliasAction extends JammAction
         breadCrumb = new BreadCrumb(forward, "Add Alias");
         breadCrumbs.add(breadCrumb);
         
-        request.setAttribute("goBack", forward);
-
         request.setAttribute("breadCrumbs", breadCrumbs);
     }
 }
