@@ -64,19 +64,20 @@ public class AccountAdminAction extends JammAction
             mail = user.getUsername();
         }
 
+        ChangePasswordForm cpf = new ChangePasswordForm();
+        cpf.setMail(mail);
+        request.setAttribute("changePasswordForm", cpf);
+        request.setAttribute("mail", mail);
+
         MailManager manager = getMailManager(user);
         if (manager.isAlias(mail))
         {
             AliasInfo alias = manager.getAlias(mail);
-
-            request.setAttribute("mail", mail);
             request.setAttribute("alias", alias);
-
             return (mapping.findForward("alias_admin"));
         }
         else
         {
-            request.setAttribute("mail", mail);
             return (mapping.findForward("account_admin"));
         }
     }
