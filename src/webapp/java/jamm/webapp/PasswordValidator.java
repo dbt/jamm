@@ -22,11 +22,23 @@ package jamm.webapp;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+/**
+ * Utility class that provides static methods for validating passwords
+ * and their "goodness."
+ */
 public class PasswordValidator
 {
     /**
      * The same as validatePassword(String, ActionErrors), except that
      * the two passwords must match before checking the validity.
+     *
+     * @param password a <code>String</code> containing the password
+     * @param retypedPassword a <code>String</code> containing the
+     *                        retyped password
+     * @param errors an <code>ActionErrors</code> object that errors
+     *               can be added to.
+     *
+     * @return true when a password is good, false when not
      */
     public static boolean validatePassword(String password,
                                            String retypedPassword,
@@ -49,6 +61,12 @@ public class PasswordValidator
      * smoke tests.  For now, only the length of the password is
      * considered, but more elaborate tests such as dictionary tests
      * could be performed.
+     *
+     * @param password a <code>String</code> containing the password
+     * @param errors an <code>ActionErrors</code> object that errors
+     *               can be added to.
+     *
+     * @return true when good, false when bad
      */
     public static boolean validatePassword(String password,
                                            ActionErrors errors)
@@ -65,5 +83,6 @@ public class PasswordValidator
         }
     }
 
+    /** Minimum length that a password should be. */
     private static final int MINIMUM_LENGTH = 5;
 }

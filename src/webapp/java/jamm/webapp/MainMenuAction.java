@@ -26,8 +26,30 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+/**
+ * Directs the user to the appropriate menu depending on their level
+ * of access.  User.SITE_ADMIN_ROLE is directed to the site_admin
+ * forward.  User.DOMAIN_ADMIN_ROLE is directed to the domain_admin
+ * forward.  User.SITE_ADMIN_ROLE takes precendence over
+ * User.DOMAIN_ADMIN_ROLE.  Everyone else is directed to the
+ * account_admin forward.
+ *
+ * @see jamm.webapp.User
+ */
 public class MainMenuAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping an <code>ActionMapping</code> of possible locations.
+     * @param actionForm an <code>ActionForm</code>, ignored in this action
+     * @param request a <code>HttpServletRequest</code>
+     * @param response a <code>HttpServletResponse</code>
+     *
+     * @return an <code>ActionForward</code> of the next destination.
+     *
+     * @exception Exception if an error occurs
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

@@ -28,8 +28,21 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
+/**
+ * Steps to be taken when someone logs out.  Currently, we remove
+ * is_authenticated and user from the session and then send the user
+ * to the "home" location.
+ */
 public class LogoutAction extends Action
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping the mapping of possible locations
+     * @param actionForm ignored in this action
+     * @param request the http request to logout
+     * @param response the http response
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

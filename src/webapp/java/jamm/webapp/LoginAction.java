@@ -35,8 +35,27 @@ import org.apache.struts.action.RedirectingActionForward;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 
+/**
+ * Verifies the username and password passed in via the LoginForm and
+ * logs the user in.  If there is an error it'll return to the login
+ * page with an error condition.  If "root" tries to log in, it will
+ * use the root dn defined in Globals.
+ *
+ * @see jamm.webapp.LoginForm
+ * @see jamm.webapp.Globals
+ */
 public class LoginAction extends Action
 {
+    /**
+     * Performs the action.
+     *
+     * @see jamm.webapp.LoginForm
+     *
+     * @param mapping The action mapping with possible destinations.
+     * @param actionForm a LoginForm with the login info
+     * @param request the http request that caused this action.
+     * @param response the http response
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

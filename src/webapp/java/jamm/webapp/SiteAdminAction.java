@@ -30,8 +30,28 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 
+/**
+ * Calls MailManager to loads the information the site_admin page
+ * needs and then forwards to the site_admin page.  Currently, the
+ * list of domains is loaded and saved in the request attribute
+ * <code>domains</code>.
+ *
+ * @see jamm.backend.MailManager
+ */
 public class SiteAdminAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping <code>ActionMapping</code> of possible locations.
+     * @param actionForm <code>ActionForm</code>, ignored in this action
+     * @param request a <code>HttpServletRequest</code> that caused the action
+     * @param response a <code>HttpServletResponse</code>
+     *
+     * @return an <code>ActionForward</code> value
+     *
+     * @exception Exception if an error occurs
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

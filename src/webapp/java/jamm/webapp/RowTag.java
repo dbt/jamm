@@ -35,6 +35,10 @@ public class RowTag extends BodyTagSupport
 {
 
     /**
+     * Sets the name of the index variable. 
+     *
+     * @param index a <code>String</code> with the name
+     *
      * @jsp:attribute   required="true" rtexprvalue="true"
      *                  description="Name of index variable"
      */
@@ -44,6 +48,11 @@ public class RowTag extends BodyTagSupport
     }
 
     /**
+     * Sets the color for the even rows.
+     *
+     * @param evenColor a <code>String</code> containing the hex value
+     *                  of the color
+     * 
      * @jsp:attribute   required="true" rtexprvalue="true"
      *                  description="Even color"
      */
@@ -53,6 +62,11 @@ public class RowTag extends BodyTagSupport
     }
 
     /**
+     * Sets the color for the odd rows.
+     *
+     * @param oddColor a <code>String</code> containing the hex value
+     *                 of the color.
+     *
      * @jsp:attribute   required="true" rtexprvalue="true"
      *                  description="Odd color"
      */
@@ -61,12 +75,28 @@ public class RowTag extends BodyTagSupport
         mOddColor = oddColor;
     }
 
+    /**
+     * Returns EVAL_BODY_BUFFERED to tell the JSP container to perform
+     * eval the body.
+     *
+     * @return the <code>int</code> value specifying EVAL_BODY_BUFFERED
+     *
+     * @exception JspTagException if an error occurs
+     */
     public int doStartTag()
         throws JspTagException
     {
         return EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * When the close tag is hit, this method renders a &lt;tr&gt; tag
+     * with the color set, dumps the body, and then a closing &lt;tr&gt;.
+     * 
+     * @return the <code>int</code> value specifying EVAL_PAGE
+     *
+     * @exception JspException if an error occurs
+     */
     public int doEndTag()
         throws JspException
     {
@@ -100,6 +130,13 @@ public class RowTag extends BodyTagSupport
         return EVAL_PAGE;
     }
 
+    /**
+     * Returns "bgcolor=?????" where the appropriate color is filled
+     * in based on wether mIndex is even or odd.
+     *
+     * @param buffer a <code>StringBuffer</code> object to which the
+     *               bgcolor information can be appended to.
+     */
     private void renderBgColor(StringBuffer buffer)
     {
         int index = ((Integer) pageContext.getAttribute(mIndex)).intValue();
@@ -117,7 +154,10 @@ public class RowTag extends BodyTagSupport
         }
     }
 
+    /** The index value */
     private String mIndex;
+    /** The value for the even row color */
     private String mEvenColor;
+    /** The value for the odd row color */
     private String mOddColor;
 }
