@@ -78,7 +78,7 @@
     <javac srcdir="src/util/java"
            destdir="build/util/classes"
            optimize="${compile.optimize}" debug="${compile.debug}"
-           deprecation="${compile.deprecation}">
+           deprecation="${compile.deprecation}" target="1.1">
       <classpath>
         <pathelement location="build/backend/classes" />
         <path refid="lib.path" />
@@ -104,7 +104,7 @@
     <depend srcDir="src/backend/java" destDir="build/backend/classes"
             cache="build/backend/depcache" closure="yes" />
     <javac srcdir="src/backend/java"
-       destdir="build/backend/classes"
+           destdir="build/backend/classes" target="1.1"
            optimize="${compile.optimize}" debug="${compile.debug}"
            classpathref="lib.path" />
 
@@ -115,7 +115,7 @@
       </classpath>
     </depend>
     <javac srcdir="src/backend/test/java"
-           destdir="test/backend/classes"
+           destdir="test/backend/classes" target="1.1"
            debug="on" optimize="off">
       <classpath>
         <pathelement location="build/backend/classes" />
@@ -138,7 +138,7 @@
       </classpath>
     </depend>
     <javac srcdir="src/webapp/java"
-           destdir="build/webapp/root/WEB-INF/classes"
+           destdir="build/webapp/root/WEB-INF/classes" target="1.1"
            optimize="${compile.optimize}" debug="${compile.debug}"
            deprecation="${compile.deprecation}">
       <classpath>
@@ -157,7 +157,7 @@
       </classpath>
     </depend>
     <javac srcdir="src/webapp/test/java" destdir="test/webapp/classes"
-           debug="on" optimize="off">
+           debug="on" optimize="off" target="1.1">
       <classpath>
         <pathelement location="build/webapp/root/WEB-INF/classes" />
         <pathelement location="build/backend/classes" />
