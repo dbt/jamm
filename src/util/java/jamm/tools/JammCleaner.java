@@ -27,6 +27,7 @@ import org.apache.commons.cli.HelpFormatter;
  * This is the application that cleans up after jamm.
  */
 public final class JammCleaner
+    implements JammCleanerDefines
 {
     /**
      * Print out the help message
@@ -124,13 +125,4 @@ public final class JammCleaner
         AccountCleaner ac = new AccountCleaner();
         ac.cleanUp();
     }
-
-    /** static define for addOption */
-    private static final boolean NO_ARGS = false;
-    /** static define for addOption */
-    private static final boolean HAS_ARGS = true;
-    /** static define for addOption */
-    private static final boolean IS_REQUIRED = true;
-    /** static define for addOption */
-    private static final boolean NOT_REQUIRED = false;
 }
