@@ -133,7 +133,7 @@ public class LoginAction extends Action
         User user = new User(form.getUsername(), userDn, form.getPassword(),
                              roles);
         HttpSession session = request.getSession();
-        session.setAttribute("is_authenticated", "true");
+        session.setAttribute(AuthenticationFilter.AUTHENTICATION_KEY, "true");
         session.setAttribute("user", user);
         return new RedirectingActionForward(form.getDone());
     }

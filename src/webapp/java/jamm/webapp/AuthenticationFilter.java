@@ -106,5 +106,5 @@ public class AuthenticationFilter implements Filter
     /** The configuration for the filter. */
     private FilterConfig mConfig;
     /** The static string for use in the session attributes. */
-    private static final String AUTHENTICATION_KEY = "is_authenticated";
+    public static final String AUTHENTICATION_KEY = "is_authenticated";
 }
