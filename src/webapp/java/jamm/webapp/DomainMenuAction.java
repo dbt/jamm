@@ -32,7 +32,13 @@ public class DomainMenuAction extends Action
         List aliases = new ArrayList();
         for (int i = 1; i <= 7; i++)
         {
-            aliases.add("alias" + i);
+            AliasDetails alias = new AliasDetails("alias" + i);
+            for (int j = 1; j <= 3; j++)
+            {
+                alias.addDestination("user" + j + "@example.com");
+            }
+
+            aliases.add(alias);
         }
         request.setAttribute("aliases", aliases);
 

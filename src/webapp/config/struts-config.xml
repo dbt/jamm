@@ -61,6 +61,8 @@
     <action path="/private/index"
             type="jamm.webapp.MainMenuAction">
       <forward name="domain_menu" path="/private/domain_menu.do"/>
+      <forward name="account_admin" path="/private/account_admin.jsp"/>
+      <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
     <action path="/private/domain_menu"

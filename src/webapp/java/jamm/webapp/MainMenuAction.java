@@ -17,6 +17,39 @@ public class MainMenuAction extends Action
                                  HttpServletResponse response)
         throws Exception
     {
-        return (mapping.findForward("domain_menu"));
+        if (isDomainAdmin(request))
+        {
+            return (mapping.findForward("domain_menu"));
+        }
+        else if (isAccountAdmin(request))
+        {
+            return (mapping.findForward("account_admin"));
+        }
+        else if (isAliasAdmin(request))
+        {
+            return (mapping.findForward("alias_admin"));
+        }
+        else
+        {
+            return (mapping.findForward("alias_admin"));
+        }
+    }
+
+    private boolean isDomainAdmin(HttpServletRequest request)
+    {
+        String type = request.getParameter("t");
+        return (type == null);
+    }
+
+    private boolean isAccountAdmin(HttpServletRequest request)
+    {
+        String type = request.getParameter("t");
+        return type.equals("a");
+    }
+
+    private boolean isAliasAdmin(HttpServletRequest request)
+    {
+        String type = request.getParameter("t");
+        return type.equals("f");
     }
 }

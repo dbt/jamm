@@ -1,7 +1,7 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<html>
+<html:html>
   <head>
-    <title></title>
+    <title>Jamm - Domain Admin</title>
   </head>
 
   <body bgcolor="#FFFFFF">
@@ -35,8 +35,13 @@
       </tr>
       <logic:iterate indexId="i" id="alias" name="aliases">
         <jamm:tr index="i" evenColor="#E6E6FA" oddColor="#FFDEAD">
-          <td><bean:write name="alias"/></td>
-          <td>user@domain1.example<br>user@domain2.example</td>
+          <td><bean:write name="alias" property="alias"/></td>
+          <td>
+            <logic:iterate id="destination" name="alias"
+                           property="destinations">
+              <bean:write name="destination"/><br>
+            </logic:iterate>
+          </td>
           <td align="center">D</td>
           <td align="center">A</td>
         </jamm:tr>
@@ -44,4 +49,4 @@
     </table>
 
   </body>
-</html>
+</html:html>
