@@ -29,8 +29,23 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 import jamm.backend.AliasInfo;
 
+/**
+ * Forwards a user or an administrator to the correct page for
+ * administration, either the alias_admin page or the account_admin
+ * page.  If the request contains a "mail=" arguement, that will be used,
+ * if not, it will default to the current users information.
+ */
 public class AccountAdminAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping Where we get our forwards from.
+     * @param actionForm This action does not depend on a form,
+     *                   so this should be null.
+     * @param request The http request that caused this action.
+     * @param request The http response that will be returned from this action.
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

@@ -28,8 +28,26 @@ import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
 
+/**
+ * Calls the MailManager to add a virtual account based on the information
+ * passed in via the AddActionForm.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.AddAccountForm
+ */
 public class AddAccountAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @see jamm.webapp.AddAccountForm
+     *
+     * @param mapping The mapping of our possible destinations.
+     * @param actionForm An AddAccountForm object with the required
+     *                   information.
+     * @param request The http request that caused this action.
+     * @param request The http response that will be returned from this action.
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

@@ -29,8 +29,25 @@ import org.apache.struts.action.ActionForward;
 import jamm.backend.MailManager;
 import jamm.backend.MailAddress;
 
+/**
+ * Calls the MailManager to add a virtual alias based on the
+ * information passed in via the AddAliasForm.
+ *
+ * @see jamm.backend.MailManager
+ * @see jamm.webapp.AddAliasForm
+ */
 public class AddAliasAction extends JammAction
 {
+    /**
+     * Perform the action.
+     *
+     * @see jamm.webapp.AddAliasForm
+     *
+     * @param mapping The action mapping of possible destinations.
+     * @param actionForm an AddAliasForm object holding the required info.
+     * @param request The http request that caused this action to happen.
+     * @param response The http response to this action.
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,
