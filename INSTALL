@@ -30,6 +30,11 @@ Building instructions
     * JUnit 3.7
       http://www.junit.org/
 
+    * Jakarta Commons CLI
+      This isn't fully released yet, so the nightly version Jamm is
+      written against is available through our project area on sourceforge.
+      http://prdownloads.sourceforge.net/jamm/jakarta-commons-cli.tar.gz?download
+
   JUnit must be installed into the ${ANT_HOME}/lib/ directory.
 
   Once all that is installed, you need to create a local
