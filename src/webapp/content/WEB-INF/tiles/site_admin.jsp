@@ -35,7 +35,7 @@
                               hspace="1"/>
                   </td>
                   <td width="79">
-                    <html:img page="/imgs/account_is_active.gif"
+                    <html:img page="/imgs/domain_is_active.gif"
                               width="79" height="23" alt="" border="0"/>
                   </td>
                 </tr>
