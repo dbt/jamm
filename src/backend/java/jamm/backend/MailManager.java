@@ -510,7 +510,7 @@ public class MailManager
 
     /**
      * Create a new alias on an existing domain.  See {@link
-     * #createAlias(String, String, String[])} for details.
+     * #createAlias(String, String, String, String[])} for details.
      *
      * @param domain Domain name
      * @param alias Alias name
