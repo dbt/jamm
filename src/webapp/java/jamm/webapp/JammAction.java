@@ -143,6 +143,14 @@ public abstract class JammAction extends Action
         return forward;
     }
     
+    /**
+     * Creates an ActionForward for the add_alias forward with an
+     * optional domain arguement.
+     * 
+     * @param mapping ActionMapping containing the forwards 
+     * @param domain the domain to use for the argument
+     * @return an ActionForward based on the inputs
+     */
     protected ActionForward getAddAliasForward(ActionMapping mapping,
                                                String domain)
     {

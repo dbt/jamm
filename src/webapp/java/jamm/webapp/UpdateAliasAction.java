@@ -103,6 +103,15 @@ public class UpdateAliasAction extends JammAction
         return findForward(mapping, "account_admin", request);
     }
 
+    /**
+     * Creates bread crumbs to find our way back.
+     * 
+     * @param mapping an <code>ActionMapping</code> of possible destinations
+     * @param request a <code>HttpServletRequest</code>
+     * @param mail the e-mail address
+     * @param user the user updating the alias
+     * @return a List of BreadCrumbs
+     */
     private List makeBreadCrumbs(ActionMapping mapping,
                                  HttpServletRequest request, String mail,
                                  User user)

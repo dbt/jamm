@@ -87,6 +87,15 @@ public class AddAliasAction extends JammAction
 
         return findForward(mapping, "domain_admin", request);
     }
+
+    /**
+     * Create a trail of bread crumbs to find our way back.
+     * 
+     * @param mapping ActionMapping
+     * @param request HTTP Request
+     * @param domain the domain we're creating an alias for
+     * @param user the user creating the alias
+     */
     private void makeBreadCrumbs(ActionMapping mapping,
                                  HttpServletRequest request, String domain,
                                  User user)
@@ -120,5 +129,4 @@ public class AddAliasAction extends JammAction
 
         request.setAttribute("breadCrumbs", breadCrumbs);
     }
-
 }
