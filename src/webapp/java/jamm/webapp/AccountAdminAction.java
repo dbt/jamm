@@ -18,7 +18,11 @@ public class AccountAdminAction extends JammAction
         throws Exception
     {
         User user = getUser(request);
-        String mail = user.getUsername();
+        String mail = request.getParameter("mail");
+        if (mail == null)
+        {
+            mail = user.getUsername();
+        }
 
         MailManager manager = getMailManager(user);
         if (manager.isAlias(mail))
