@@ -196,7 +196,7 @@ public class AllTests
         attributes = new BasicAttributes();
         objectClass = new BasicAttribute("objectClass");
         objectClass.add("top");
-        objectClass.add("JammMailAccount");
+        objectClass.add("jammMailAccount");
         attributes.put(objectClass);
         attributes.put("mail", "acct1@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
@@ -213,7 +213,7 @@ public class AllTests
         attributes = new BasicAttributes();
         objectClass = new BasicAttribute("objectClass");
         objectClass.add("top");
-        objectClass.add("JammMailAccount");
+        objectClass.add("jammMailAccount");
         attributes.put(objectClass);
         attributes.put("mail", "acct2@domain1.test");
         attributes.put("homeDirectory", "/home/vmail/domains");
