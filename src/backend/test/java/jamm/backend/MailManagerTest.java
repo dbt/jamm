@@ -1,8 +1,11 @@
 package jamm.backend;
 
-import junit.framework.TestCase;
+import java.util.Set;
+import java.util.HashSet;
 import javax.naming.NamingException;
-import javax.naming.AuthenticationException;
+
+import junit.framework.TestCase;
+
 import jamm.ldap.LdapFacade;
 import jamm.LdapConstants;
 
@@ -31,6 +34,8 @@ public class MailManagerTest extends TestCase
         throws NamingException, MailManagerException
     {
         MailManager manager;
+        Set expectedObjectClass;
+        Set objectClass;
 
         String domain = "domain3.test";
         String domainDn = "jvd=" + domain + "," + BASE;
@@ -61,6 +66,14 @@ public class MailManagerTest extends TestCase
                 assertEquals("Checking postmaster maildrop",
                              "postmaster",
                              mLdap.getResultAttribute("maildrop"));
+
+                expectedObjectClass = new HashSet();
+                expectedObjectClass.add("top");
+                expectedObjectClass.add("organizationalRole");
+                expectedObjectClass.add("JammMailAlias");
+                objectClass = mLdap.getAllResultAttributeValues("objectClass");
+                assertEquals("Checking postmaster objectClass",
+                             expectedObjectClass, objectClass);
             }
             if (mLdap.getResultName().equals("mail=abuse@" + domain))
             {
@@ -70,6 +83,12 @@ public class MailManagerTest extends TestCase
                 assertEquals("Checking abuse maildrop",
                              "postmaster",
                              mLdap.getResultAttribute("maildrop"));
+                expectedObjectClass = new HashSet();
+                expectedObjectClass.add("top");
+                expectedObjectClass.add("JammMailAlias");
+                objectClass = mLdap.getAllResultAttributeValues("objectClass");
+                assertEquals("Checking abuse objectClass",
+                             expectedObjectClass, objectClass);
             }
         }
         assertEquals("Checking if we have the right amount of results",
@@ -82,18 +101,25 @@ public class MailManagerTest extends TestCase
         throws NamingException, MailManagerException
     {
         MailManager manager;
-        String domain = "aliadomainDn.test";
-        String domainDn = "jvd=" + domain + "," + BASE;
+        String domain;
+        String domainDn;
+        String aliasName;
+        String aliasDestination;
+        String email;
+        Set expectedObjectClass;
+        Set objectClass;
 
+        domain = "aliadomainDn.test";
+        domainDn = "jvd=" + domain + "," + BASE;
         manager = new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                                   LdapConstants.MGR_PW);
         manager.createDomain(domain);
 
-        String aliasName = "alias";
-        String aliasDestination = "postmaster";
+        aliasName = "alias";
+        aliasDestination = "postmaster";
         manager.createAlias(domain, aliasName, aliasDestination);
 
-        String email = aliasName + "@" + domain;
+        email = aliasName + "@" + domain;
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -106,6 +132,13 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("maildrop"));
         assertTrue("Checking for no more aliases", !mLdap.nextResult());
 
+        expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("JammMailAlias");
+        objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        assertEquals("Checking alias objectClass", expectedObjectClass,
+                     objectClass);
+
         mLdap.close();
     }
 
@@ -115,16 +148,23 @@ public class MailManagerTest extends TestCase
         MailManager manager;
         String domain = "accountdomain.test";
         String domainDn = "jvd=" + domain + "," + BASE;
+        String accountName;
+        String accountPassword;
+        String email;
+        Set expectedObjectClass;
+        Set objectClass;
 
+        domain = "accountdomain.test";
+        domainDn = "jvd=" + domain + "," + BASE;
         manager = new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                                   LdapConstants.MGR_PW);
         manager.createDomain(domain);
 
-        String accountName = "account";
-        String accountPassword = "account1pw";
+        accountName = "account";
+        accountPassword = "account1pw";
         manager.createAccount(domain, accountName, accountPassword);
 
-        String email = accountName + "@" + domain;
+        email = accountName + "@" + domain;
 
         mLdap = new LdapFacade("localhost");
         mLdap.anonymousBind();
@@ -141,17 +181,20 @@ public class MailManagerTest extends TestCase
                      mLdap.getResultAttribute("mailbox"));
         assertTrue("Checking for no more account results",
                    !mLdap.nextResult());
+
+        expectedObjectClass = new HashSet();
+        expectedObjectClass.add("top");
+        expectedObjectClass.add("JammMailAccount");
+        objectClass = mLdap.getAllResultAttributeValues("objectClass");
+        assertEquals("Checking alias objectClass", expectedObjectClass,
+                     objectClass);
+
         mLdap.close();
 
-        try
-        {
-            mLdap.simpleBind("mail=" + email + "," + domainDn,
-                             accountPassword);
-        }
-        catch (AuthenticationException e)
-        {
-            fail("Should bind without an exception");
-        }
+        // Make sure we can bind as this new user
+        mLdap.simpleBind("mail=" + email + "," + domainDn,
+                         accountPassword);
+        mLdap.close();
     }
 
     private LdapFacade                      mLdap;
