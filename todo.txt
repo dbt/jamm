@@ -18,8 +18,6 @@
 
     * Have an account from one domain be a postmaster for multiple domains
 
-    * LDAP connection caching/persistance
-
   NAR User Requests:
 
     *  migrate between domains
