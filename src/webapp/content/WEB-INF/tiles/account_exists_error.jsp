@@ -3,14 +3,23 @@
   Account or Alias already exists.
 </h2>
 
-<html:messages header="account_exists.error.header"
-               footer="account_exists.error.footer" id="error">
-  <bean:write name="mail"/> <bean:write name="error"/>
-</html:messages>
+<p>
+  <font color="red">An account or alias for <bean:write name="mail"/>
+  already exists.</font>
+</p>
 
-<%-- <html:link page="<%= goBack %>"><%= goBack %></html:link> --%>
-<bean:write name="goBack"/>
+<p>
+  <logic:present name="aliasDomain">
+    <html:link forward="add_alias" paramName="aliasDomain" paramId="domain">
+      Please try again.
+    </html:link>
+  </logic:present>
 
-<%
-// TODO finish me!
-%>
+  <logic:present name="accountDomain">
+    <html:link forward="add_account" paramName="accountDomain"
+               paramId="domain">
+      Please try again.
+    </html:link>
+  </logic:present>
+</p>
+  
