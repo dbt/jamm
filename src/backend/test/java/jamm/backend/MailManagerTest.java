@@ -1393,6 +1393,42 @@ public class MailManagerTest extends TestCase
         }
 
     }
+    
+    public void testDoNotCreatePostmaster()
+        throws MailManagerException
+    {
+        String domain = "no-postmaster.test";
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        MailManagerException eCaught = null;
+        try
+        {
+            manager.createAlias(domain, "postmaster", "pm",
+                                new String[] { "postmaster" });
+        }
+        catch (AccountExistsException e)
+        {
+            eCaught = e;
+        }
+        assertNotNull("Testing that trying to create alias postmaster@domain" +
+                      " creates exception", eCaught);
+        
+        eCaught = null;
+        try
+        {
+            manager.createAccount(domain, "postmaster", "pm", domain);
+        }
+        catch (AccountExistsException e)
+        {
+            eCaught = e;
+        }
+        assertNotNull("Testing that trying to create account " +
+                      "postmaster@domain creates exception", eCaught);
+    }
 
     /**
      * Creates a boolean representation of the string passed in,
