@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC "<XDtXml:publicId/>" "<XDtXml:systemId/>">
+
+<struts-config>
+
+  <!-- ========== Data Sources Definitions =================================== -->
+  <XDtMerge:merge file="struts-data-sources.xml">
+  <!--
+    Define your Struts data sources in a file called struts-data-sources.xml and place
+    it in your merge directory.
+  -->
+  </XDtMerge:merge>
+
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+  <XDtClass:forAllClasses type="org.apache.struts.action.ActionForm">
+   <XDtClass:forAllClassTags tagName="struts:form" superclasses="false">
+    <form-bean
+      name="<XDtClass:classTagValue tagName="struts:form" paramName="name"/>"
+      type="<XDtClass:fullClassName/>"
+    />
+   </XDtClass:forAllClassTags>
+  </XDtClass:forAllClasses>
+
+   <XDtMerge:merge file="struts-forms.xml">
+    <!--
+         If you have non XDoclet forms, define them in a file called struts-forms.xml and
+         place it in your merge directory.
+    -->
+   </XDtMerge:merge>
+  </form-beans>
+
+  <!-- ========== Global Exceptions Definitions =================================== -->
+  <XDtMerge:merge file="global-exceptions.xml">
+  <!--
+    Define your exceptions in a file called global-exceptions.xml and place
+    it in your merge directory.
+  -->
+  </XDtMerge:merge>
+
+  <!-- ========== Global Forward Definitions =================================== -->
+  <XDtMerge:merge file="global-forwards.xml">
+  <!--
+    Define your forwards in a file called global-forwards.xml and place
+    it in your merge directory.
+  -->
+  </XDtMerge:merge>
+
+  <!-- ========== Action Mapping Definitions =================================== -->
+   <XDtConfig:ifConfigParamNotEquals paramName="Controller" value="">
+   <action-mappings type="<XDtConfig:configParameterValue paramName="Controller"/>">
+   </XDtConfig:ifConfigParamNotEquals>
+   <XDtConfig:ifConfigParamEquals paramName="Controller" value="">
+   <action-mappings>
+   </XDtConfig:ifConfigParamEquals>  <XDtClass:forAllClasses type="org.apache.struts.action.Action">
+   <XDtClass:forAllClassTags tagName="struts:action">
+    <action
+      path="<XDtClass:classTagValue tagName="struts:action" paramName="path"/>"
+      type="<XDtClass:fullClassName/>"
+    <XDtClass:ifHasClassTag tagName="struts:action" paramName="name">
+      name="<XDtClass:classTagValue tagName="struts:action" paramName="name"/>"
+     <XDtClass:ifHasClassTag tagName="struts:action" paramName="prefix">
+      attribute="<XDtClass:classTagValue tagName="struts:action" paramName="attribute"/>"
+     </XDtClass:ifHasClassTag>
+     <XDtClass:ifHasClassTag tagName="struts:action" paramName="prefix">
+      prefix="<XDtClass:classTagValue tagName="struts:action" paramName="prefix"/>"
+     </XDtClass:ifHasClassTag>
+     <XDtClass:ifHasClassTag tagName="struts:action" paramName="suffix">
+      suffix="<XDtClass:classTagValue tagName="struts:action" paramName="suffix"/>"
+     </XDtClass:ifHasClassTag>
+      scope="<XDtClass:classTagValue tagName="struts:action" paramName="scope" default="request" values="request,session"/>"
+     <XDtClass:ifHasClassTag tagName="struts:action" paramName="input">
+      input="<XDtClass:classTagValue tagName="struts:action" paramName="input"/>"
+     </XDtClass:ifHasClassTag>
+    </XDtClass:ifHasClassTag>
+     <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="1.1">
+     <XDtClass:ifHasClassTag tagName="struts.action" paramName="roles">
+      roles="<XDtClass:classTagValue tagName="struts.action" paramName="roles"/>"
+     </XDtClass:ifHasClassTag>
+     </XDtConfig:ifConfigParamGreaterOrEquals>
+     <XDtClass:ifHasClassTag tagName="struts:action" paramName="parameter">
+      parameter="<XDtClass:classTagValue tagName="struts:action" paramName="parameter"/>"
+     </XDtClass:ifHasClassTag>
+      unknown="<XDtClass:classTagValue tagName="struts:action" paramName="unknown" values="true,false" default="false"/>"
+      validate="<XDtClass:classTagValue tagName="struts:action" paramName="validate" values="true,false" default="true"/>"
+    >
+     <XDtClass:forAllClassTags tagName="struts:action-exception">
+      <exception
+        key="<XDtClass:classTagValue tagName="struts:action-exception" paramName="key"/>"
+        type="<XDtClass:classTagValue tagName="struts:action-exception" paramName="type"/>"
+       <XDtClass:ifHasClassTag tagName="struts:action-exception" paramName="className">
+        className="<XDtClass:classTagValue tagName="struts:action-exception" paramName="className"/>"
+       </XDtClass:ifHasClassTag>
+       <XDtClass:ifHasClassTag tagName="struts:action-exception" paramName="handler">
+        handler="<XDtClass:classTagValue tagName="struts:action-exception" paramName="handler"/>"
+       </XDtClass:ifHasClassTag>
+       <XDtClass:ifHasClassTag tagName="struts:action-exception" paramName="path">
+        path="<XDtClass:classTagValue tagName="struts:action-exception" paramName="path"/>"
+       </XDtClass:ifHasClassTag>
+       <XDtClass:ifHasClassTag tagName="struts:action-exception" paramName="scope">
+        scope="<XDtClass:classTagValue tagName="struts:action-exception" paramName="scope"/>"
+       </XDtClass:ifHasClassTag>
+      />
+      </XDtClass:forAllClassTags>
+     <XDtClass:forAllClassTags tagName="struts:action-forward">
+      <forward
+       <XDtClass:ifHasClassTag tagName="struts:action-forward" paramName="className">
+        className="<XDtClass:classTagValue tagName="struts:action" paramName="className"/>"
+       </XDtClass:ifHasClassTag>
+       <XDtClass:ifHasClassTag tagName="struts:action-forward" paramName="contextRelative">
+        contextRelative="<XDtClass:classTagValue tagName="struts:action" paramName="contextRelative"/>"
+       </XDtClass:ifHasClassTag>
+        name="<XDtClass:classTagValue tagName="struts:action-forward" paramName="name"/>"
+        path="<XDtClass:classTagValue tagName="struts:action-forward" paramName="path"/>"
+        redirect="<XDtClass:classTagValue tagName="struts:action-forward" paramName="redirect" default="false" values="true,false"/>"
+      />
+     </XDtClass:forAllClassTags>
+    </action>
+   </XDtClass:forAllClassTags>
+  </XDtClass:forAllClasses>
+
+   <XDtMerge:merge file="struts-actions.xml">
+    <!-- If you have non XDoclet actions, define them in a file called struts-actions.xml and place it in your merge directory. -->
+   </XDtMerge:merge>
+   <XDtMerge:merge file="actions.xml">
+   </XDtMerge:merge>
+  </action-mappings>
+
+  <XDtMerge:merge file="struts-controller.xml">
+   <!-- Define your Struts controller in a file called struts-controller.xml and place it in your merge directory. -->
+  </XDtMerge:merge>
+
+  <XDtMerge:merge file="struts-message-resources.xml">
+   <!-- Define your Struts message-resources in a file called struts-message-resources.xml and place it in your merge directory. -->
+  </XDtMerge:merge>
+
+  <XDtMerge:merge file="struts-plugins.xml">
+   <!-- Define your Struts plugins in a file called struts-plugins.xml and place it in your merge directory. -->
+  </XDtMerge:merge>
+
+</struts-config>
