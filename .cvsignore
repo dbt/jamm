@@ -2,3 +2,5 @@ build
 test
 dist
 build.properties
+.classpath
+.project
