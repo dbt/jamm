@@ -408,7 +408,7 @@ public class MailManager
         throws MailManagerException
     {
         String filter = "(&(objectClass=" + DOMAIN_OBJECT_CLASS + ")" +
-            "(delete=FALSE))";
+            "(delete=TRUE))";
 
         return getFilteredDomains(filter);
     }
