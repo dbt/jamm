@@ -22,7 +22,6 @@ package jamm.webapp;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -58,7 +57,7 @@ public class JammTilesRequestProcessor extends TilesRequestProcessor
             return true;
         }
 
-        User user = getUser(request);
+        User user = JammAction.getUser(request);
         for (int i = 0 ; i < roles.length; i++)
         {
             if (user.isUserInRole(roles[i]))
@@ -73,19 +72,4 @@ public class JammTilesRequestProcessor extends TilesRequestProcessor
 
         return false;
     }
-
-    /**
-     * Gets the User object from the request/session and returns it.
-     *
-     * @param request the http request causing this action.
-     *
-     * @return the logged in User
-     */
-    protected User getUser(HttpServletRequest request)
-    {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        return user;
-    }
-
 }
