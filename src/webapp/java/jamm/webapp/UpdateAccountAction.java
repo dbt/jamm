@@ -18,6 +18,8 @@
  */
 package jamm.webapp;
 
+import java.util.logging.Logger;
+
 import jamm.backend.AccountInfo;
 import jamm.backend.MailManager;
 
@@ -51,10 +53,16 @@ public class UpdateAccountAction extends JammAction
         String mail = form.getMail();
         AccountInfo account = manager.getAccount(mail);
 
+        LOG.info("Mail is " + mail);
+        LOG.info("Account is " + account);
+        LOG.info("Form is " + form);
         account.setCommonName(form.getCommonName());
         
         manager.modifyAccount(account);
 
         return findForward(mapping, "account_admin", request);
     }
+    
+    private static Logger LOG =
+        Logger.getLogger(UpdateAccountAction.class.getName());
 }
