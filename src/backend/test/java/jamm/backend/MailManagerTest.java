@@ -1,6 +1,7 @@
 package jamm.backend;
 
 import java.util.Set;
+import java.util.List;
 import java.util.HashSet;
 import javax.naming.NamingException;
 
@@ -352,6 +353,15 @@ public class MailManagerTest extends TestCase
                             LdapConstants.MGR_PW);
         manager.createDomain(domain);
 
+        String postmasterMail = "postmaster@" + domain;
+        String postmasterDn = "cn=postmaster," +domainDn;
+        String postmasterPassword = "pm1";
+        manager.changePassword(postmasterMail, postmasterPassword);
+        manager.setBindEntry(postmasterDn, postmasterPassword);
+        assertTrue("Checking postmatser can authenticate",
+                   manager.authenticate());
+        manager.setBindEntry(LdapConstants.MGR_DN, LdapConstants.MGR_PW);
+
         String accountName = "account";
         String originalPassword = "account1pw";
         String newPassword1 = "changed pw";
@@ -421,6 +431,34 @@ public class MailManagerTest extends TestCase
                    manager.isPostmaster("postmaster@" + domain));
         assertTrue("Checking alias does NOT have postmaster privileges",
                    !manager.isPostmaster(aliasName + "@" + domain));
+    }
+
+    public void testGetInfo()
+        throws MailManagerException
+    {
+        String domain = "info.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+        manager.changePassword("postmaster@" + domain, "pm");
+        manager.createAccount(domain, "zzz", "zzz");
+        manager.createAccount(domain, "aaa", "aaa");
+        manager.createAccount(domain, "MMM", "MMM");
+
+        List accounts = manager.getAccounts(domain);
+        assertEquals("Checking number of accounts", 3, accounts.size());
+        AccountInfo account = (AccountInfo) accounts.get(0);
+        assertEquals("Checking name for account[0]",
+                     "aaa@" + domain, account.getName());
+        account = (AccountInfo) accounts.get(1);
+        assertEquals("Checking name for account[1]",
+                     "MMM@" + domain, account.getName());
+        account = (AccountInfo) accounts.get(2);
+        assertEquals("Checking name for account[2]",
+                     "zzz@" + domain, account.getName());
     }
 
     private LdapFacade mLdap;

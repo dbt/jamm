@@ -2,9 +2,12 @@ package jamm.backend;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
@@ -383,7 +386,42 @@ public class MailManager
         {
             closeLdap(ldap);
         }
-        
+    }
+
+    public List getAccounts(String domain)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        List accounts = new ArrayList();
+
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+            String domainDn = domainDn(domain);
+            ldap.searchOneLevel(domainDn, "objectClass=JammMailAccount");
+
+            while (ldap.nextResult())
+            {
+                String name = ldap.getResultAttribute("mail");
+                boolean isActive = true;
+                boolean isAdmin = false;
+                AccountInfo account = new AccountInfo(name, isActive, isAdmin);
+                accounts.add(account);
+            }
+
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        Collections.sort(accounts, new AccountNameComparator());
+        return accounts;
     }
 
     public void addCatchall(String domain, String destination)
