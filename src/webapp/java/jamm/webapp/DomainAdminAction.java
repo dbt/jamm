@@ -172,13 +172,13 @@ public class DomainAdminAction extends JammAction
         AliasInfo ai = manager.getAlias("@" + domain);
         if (ai != null)
         {
-            caf.setIsActive("on");
+            caf.setCatchAllOn();
             List destinations = ai.getDestinations();
             caf.setDestination((String) destinations.get(0));
         }
         else
         {
-            caf.setIsActive("off");
+            caf.setCatchAllOff();
         }
         caf.setDomain(domain);
         request.setAttribute("catchAllForm", caf);

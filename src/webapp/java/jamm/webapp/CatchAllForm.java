@@ -32,23 +32,49 @@ import org.apache.struts.action.ActionMapping;
 public class CatchAllForm extends ActionForm
 {
     /**
-     * Gets the value of isActive
+     * Gets the value of the status
      *
-     * @return the value of isActive
+     * @return the value of status
      */
-    public String getIsActive() 
+    public String getStatus() 
     {
-        return this.mIsActive;
+        return this.mStatus;
     }
 
     /**
-     * Sets the value of isActive
+     * Sets the value of status
      *
-     * @param argIsActive Value to assign to this.isActive
+     * @param argStatus Value to assign to this.status
      */
-    public void setIsActive(String argIsActive)
+    public void setStatus(String argStatus)
     {
-        this.mIsActive = argIsActive;
+        this.mStatus = argStatus;
+    }
+
+    /**
+     * Returns true if status == this.ON (case insensitive), false otherwise
+     *
+     * @return true if on, false if off
+     */
+    public boolean isCatchAllOn()
+    {
+        return mStatus.compareToIgnoreCase(ON) == 0;
+    }
+
+    /**
+     * Sets value of status to this.ON
+     */
+    public void setCatchAllOn()
+    {
+        mStatus = ON;
+    }
+
+    /**
+     * Sets value of status to "off"
+     */
+    public void setCatchAllOff()
+    {
+        mStatus = OFF;
     }
 
     /**
@@ -99,15 +125,20 @@ public class CatchAllForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        mIsActive = null;
+        mStatus = null;
         mDestination = null;
         mDomain = request.getParameter("domain");
     }
 
     /** Is the catch all on or off? */
-    private String mIsActive;
+    private String mStatus;
     /** The destination of the catch all */
     private String mDestination;
     /** The domain for the catchall */
     private String mDomain;
+    /** The value for status to be considered on. */
+    public final static String ON = "on";
+    /** The default value for status to be considered not on. */
+    public final static String OFF = "off";
+
 }

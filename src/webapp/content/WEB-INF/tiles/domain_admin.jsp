@@ -136,15 +136,31 @@
               <bean:message key="domain_admin.link.add_alias"/>
             </html:link>
           </td>
-          <td>
+          <td align="center">
             <html:form action="/private/update_catchall">
               <html:hidden property="domain"/>
-              On <html:radio property="isActive" value="on"/>
-              Off <html:radio property="isActive" value="off"/>
-              <html:text property="destination" />
+              <table>
+                <tr>
+                  <th>
+                    Catch-All
+                  </th>
+                  <th>
+                    destination
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    On <html:radio property="status" value="on"/>
+                    Off <html:radio property="status" value="off"/>
+                  </td>
+                  <td>
+                    <html:text property="destination" />
+                  </td>
+                </tr>
+              </table>
               <br />
               <html:submit>
-                <bean:message key="domain_admin.button.submit"/>
+                <bean:message key="domain_admin.button.submit_catch_all"/>
               </html:submit>
             </html:form>
           </td>
