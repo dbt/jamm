@@ -3,6 +3,7 @@
 <html:errors/>
 <html:form action="/private/change_password" focus="password">
   <html:hidden property="mail"/>
+  <html:hidden property="done"/>
   <table border="0">
     <tr>
       <td align="right"> <bean:message key="change_password.user_info"/> </td>
