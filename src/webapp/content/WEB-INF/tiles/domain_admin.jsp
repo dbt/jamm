@@ -152,8 +152,8 @@
                 </tr>
                 <tr>
                   <td>
-                    On <html:radio property="status" value="on"/>
-                    Off <html:radio property="status" value="off"/>
+                    <html:radio property="status" value="on"/> On
+                    <html:radio property="status" value="off"/> Off
                   </td>
                   <td>
                     <html:text property="destination" />
