@@ -1,0 +1,53 @@
+#!/usr/bin/perl -w
+
+use strict;
+use FileHandle;
+use File::Basename;
+use vars qw($COMMAND $LICENSE_HEADER);
+
+$COMMAND = basename($0);
+$LICENSE_HEADER = "license_header.txt";
+
+sub get_header_text
+{
+    my @header_text;
+    my $header;
+
+    $header = new FileHandle(dirname($0) . "/" . $LICENSE_HEADER)
+        or die "${COMMAND}: $!: ${LICENSE_HEADER}\n";
+    @header_text = <$header>;
+    return @header_text;
+}
+
+my $extension = ".bak";
+my @files;
+my $file;
+my @header_text;
+
+@files = @ARGV;
+@header_text = get_header_text();
+
+foreach $file (@files)
+{
+    my $in;
+    my $out;
+    my $backup;
+
+    $backup = $file . $extension;
+
+    rename $file, $backup;
+
+    $in = new FileHandle($backup) or warn "$!: $backup\n";
+    $out = new FileHandle($file, "w") or warn "$!: $file\n";
+
+    next if ((! defined($in)) or (! defined($out)));
+
+    print $out @header_text;
+    while (<$in>)
+    {
+        print $out $_;
+    }
+
+    $out->close();
+    $in->close();
+}
