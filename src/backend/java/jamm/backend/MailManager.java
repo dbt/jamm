@@ -292,7 +292,18 @@ public class MailManager
             ldap.searchOneLevel(mBase, "jvd=*");
             while (ldap.nextResult())
             {
-                domains.add(ldap.getResultAttribute("jvd"));
+                String name = ldap.getResultAttribute("jvd");
+                boolean canEditAliases = true;
+                boolean canEditAccounts = true;
+                boolean canEditPostmasters = false;
+                boolean canEditCatchalls = false;
+
+                DomainInfo domainInfo =
+                    new DomainInfo(name, canEditAliases, canEditAccounts,
+                                   canEditPostmasters, canEditCatchalls);
+                                                       
+            
+                domains.add(domainInfo);
             }
         }
         catch (NamingException e)
@@ -304,7 +315,7 @@ public class MailManager
             closeLdap(ldap);
         }
 
-        Collections.sort(domains, String.CASE_INSENSITIVE_ORDER);
+        // Collections.sort(domains, String.CASE_INSENSITIVE_ORDER);
         return domains;
     }
 

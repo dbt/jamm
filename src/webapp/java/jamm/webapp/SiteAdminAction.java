@@ -20,6 +20,8 @@
 package jamm.webapp;
 
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
+import jamm.backend.DomainInfo;
 
 /**
  * Calls MailManager to loads the information the site_admin page
@@ -64,7 +67,17 @@ public class SiteAdminAction extends JammAction
         List domains = manager.getDomains();
 
         SiteConfigForm siteConfigForm = new SiteConfigForm();
-        siteConfigForm.setDomains((String []) domains.toArray(new String[0]));
+
+        List domainNames = new ArrayList();
+        Iterator i = domains.iterator();
+        while (i.hasNext())
+        {
+            DomainInfo di = (DomainInfo) i.next();
+            domainNames.add(di.getName());
+        }
+            
+        siteConfigForm.setDomains(
+            (String [])domainNames.toArray(new String[0]));
 
         siteConfigForm.setOriginalAllowEditAliases(new String[0]);
         siteConfigForm.setOriginalAllowEditAccounts(new String[0]);
