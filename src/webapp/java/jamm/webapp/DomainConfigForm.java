@@ -57,6 +57,27 @@ public class DomainConfigForm extends JammForm
     }
 
     /**
+     * Returns newly checked items to delete.
+     *
+     * @return a set of accounts
+     */
+    public Set getCheckedDeleteItems()
+    {
+        return getDifference(mItemsToDelete, mOriginalItemsToDelete);
+    }
+
+    /**
+     * Returns newly unchecked items to delete.
+     *
+     * @return a set of accounts
+     */
+    public Set getUncheckedDeleteItems()
+    {
+        return getDifference(mOriginalItemsToDelete, mItemsToDelete);
+    }
+    
+
+    /**
      * The original list of active items.
      *
      * @param originalActiveItems an array of strings containing the
@@ -219,6 +240,8 @@ public class DomainConfigForm extends JammForm
     private String[] mItems;
     /** The checked items to delete */
     private String[] mItemsToDelete;
+    /** The original list of items to delete */
+    private String[] mOriginalItemsToDelete;
     /** The original list of active items */
     private String[] mOriginalActiveItems;
     /** The checked active items */
