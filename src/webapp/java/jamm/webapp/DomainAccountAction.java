@@ -1,11 +1,9 @@
 package jamm.webapp;
 
 import java.util.Arrays;
-import jamm.backend.MailManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
@@ -22,7 +20,9 @@ public class DomainAccountAction extends Action
     {
         DomainAccountForm form = (DomainAccountForm) actionForm;
 
-        System.out.println("========================================================================");
+        System.out.println("====================================" +
+                           "====================================");
+        
         System.out.println("Delete: " +
                            Arrays.asList(form.getAccountsToDelete()));
         System.out.println("Unchecked active: " +
