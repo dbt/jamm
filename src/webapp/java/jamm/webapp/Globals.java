@@ -88,31 +88,6 @@ public final class Globals
     }
 
     /**
-     * Sets the query filter to use when doing ldap searches for users.
-     * The string "{0}" will be replaced when used.
-     *
-     * @param ldapQueryFilter a string containing the query
-     */
-    public static void setLdapQueryFilter(String ldapQueryFilter)
-    {
-        mLdapQueryFormat = new MessageFormat(ldapQueryFilter);
-    }
-
-    /**
-     * Returns the ldap query filter, with the substition done.
-     *
-     * @param address the string to replace "{0}" with.
-     *
-     * @return a string with the substituted query filter.
-     */
-    public static String getLdapQueryFilter(String address)
-    {
-        Object[] args = {address};
-
-        return mLdapQueryFormat.format(args);
-    }
-
-    /**
      * Return the rootdn to use when logging in as "root".
      *
      * @return a string containing the root dn
@@ -138,8 +113,6 @@ public final class Globals
     private static int mLdapPort;
     /** the search base */
     private static String mLdapSearchBase;
-    /** the query stored as a MessageFormat object */
-    private static MessageFormat mLdapQueryFormat;
     /** The root dn */
     private static String mRootDn;
 }

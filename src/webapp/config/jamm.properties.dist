@@ -11,10 +11,6 @@
 #
 #jamm.ldap.search_base =
 
-# The query filter. {0} is replaced with the user name.
-#
-#jamm.ldap.query_filter = (&(mail={0})(paidup=true))
-
 # The DN of the "root" user
 #
 #jamm.ldap.root_dn =

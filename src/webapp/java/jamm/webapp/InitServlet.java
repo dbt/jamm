@@ -81,8 +81,6 @@ public class InitServlet extends HttpServlet
                 getIntProperty(properties, "ldap.port", 389));
             Globals.setLdapSearchBase(
                 getStringProperty(properties, "ldap.search_base", ""));
-            Globals.setLdapQueryFilter(
-                getStringProperty(properties, "ldap.query_filter", ""));
             LdapPassword.setRandomClass(
                 getStringProperty(properties, "random_class",
                                   "java.security.SecureRandom"));
