@@ -13,6 +13,10 @@ Version 0.9.3 - 24 Oct 2002
 
 * active flag now works on domains
 
+* Because of delete and active flags, you may want a LDAP filter that
+  looks something like:
+  (&(mail=%s)(objectClass=JammMailAccount)(accountActive=TRUE)(delete=FALSE))
+
 Version 0.9.2 - 29 Aug 2002
 ---------------------------
 
