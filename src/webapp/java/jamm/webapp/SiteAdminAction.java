@@ -89,6 +89,7 @@ public class SiteAdminAction extends JammAction
         List allowEditAccounts = new ArrayList();
         List allowEditPostmasters = new ArrayList();
         List active = new ArrayList();
+        List delete = new ArrayList();
 
         Iterator i = domains.iterator();
         while (i.hasNext())
@@ -110,6 +111,10 @@ public class SiteAdminAction extends JammAction
             {
                 active.add(name);
             }
+            if (di.getDelete())
+            {
+                delete.add(name);
+            }
         }
             
         siteConfigForm.setDomains(
@@ -129,6 +134,11 @@ public class SiteAdminAction extends JammAction
             (String []) active.toArray(new String[0]);
         siteConfigForm.setActive(activeArray);
         siteConfigForm.setOriginalActive(activeArray);
+
+        String[] deleteArray =
+            (String []) delete.toArray(new String[0]);
+        siteConfigForm.setDelete(deleteArray);
+        siteConfigForm.setOriginalDelete(deleteArray);
 
         request.setAttribute("siteConfigForm", siteConfigForm);
 
