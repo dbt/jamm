@@ -47,10 +47,11 @@ A typical invocation for running in cron would look like:
   # jammCleaner -b "o=hosting,dc=kgarner,dc=com" \
      -D "cn=Manager,dc=kgarner,dc=com" -w managerpassword -y 
 
-Please note, that in jamm 0.9.3 the -B option is not yet implemented.
-
-
 Contact Us
 ----------
-Dave Dribin (dave@dribin.org)
+
+Jamm-Users Mailing List 
+     http://lists.sourceforge.net/lists/listinfo/jamm-users
+
 Keith Garner (kgarner@kgarner.com)
+Dave Dribin (dave@dribin.org)
