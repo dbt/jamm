@@ -1,0 +1,16 @@
+#!/bin/sh
+# One can set JAMM_HOME_DIR as an environmental variable and we'll use
+# that.  Otherwise, we'll guess it off of where we were called from.
+
+if [ x$JAMM_HOME_DIR == 'x' ]; then
+    JAMM_HOME_DIR=`dirname $0`/..
+fi
+
+JAMM_LIB_DIR=$JAMM_HOME_DIR/lib
+
+for i in $JAMM_LIB_DIR/*
+do
+    CLASSPATH=$i:$CLASSPATH
+done
+
+java -cp $CLASSPATH jamm.tools.JammCleaner $*
