@@ -129,7 +129,8 @@ public class AccountCleaner
         }
         catch (MailManagerException e)
         {
-            System.err.println("Problem purging accounts: " + e);
+            System.err.println("Problem purging accounts: " + e.toString());
+            e.printStackTrace();
         }
     }
 
