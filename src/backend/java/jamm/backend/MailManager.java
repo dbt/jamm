@@ -580,6 +580,7 @@ public class MailManager
                            new String[] {"top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", mail);
             attributes.put("maildrop", destinations);
+            attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
@@ -603,11 +604,31 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
+        String mail = alias.getName();
+        String dn = mailDn(mail);
+        String domain = MailAddress.hostFromAddress(mail);
+
         try
         {
             ldap = getLdap();
-            ldap.modifyElementAttribute(mailDn(alias.getName()), "maildrop",
+            ldap.modifyElementAttribute(dn, "maildrop",
                                         alias.getDestinations());
+            ldap.modifyElementAttribute(dn, "accountActive",
+                                        booleanToString(alias.isActive()));
+            if (isPostmaster(domain, mail))
+            {
+                if (!alias.isAdministrator())
+                {
+                    removePostmaster(domain, mail);
+                }
+            }
+            else
+            {
+                if (alias.isAdministrator())
+                {
+                    addPostmaster(domain, mail);
+                }
+            }
         }
         catch (NamingException e)
         {
@@ -742,17 +763,19 @@ public class MailManager
      * @param ldap LDAP facade where result exists
      * @return A new alias information bean
      * @throws NamingException If the object could not be created
+     * @throws MailManagerException If their is a problem looking up postmaster
      */
     private AliasInfo createAliasInfo(LdapFacade ldap)
-        throws NamingException
+        throws NamingException, MailManagerException
     {
         String name = ldap.getResultAttribute("mail");
 
         List destinations =
             new ArrayList(ldap.getAllResultAttributeValues("maildrop"));
         Collections.sort(destinations, String.CASE_INSENSITIVE_ORDER);
-        boolean isActive = true;
-        boolean isAdmin = false;
+        boolean isActive = stringToBoolean(
+            ldap.getResultAttribute("accountActive"));
+        boolean isAdmin = isPostmaster(name);
         return new AliasInfo(name, destinations, isActive, isAdmin);
     }
 
@@ -808,6 +831,7 @@ public class MailManager
             String hashedPassword =
                 LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
             attributes.put("userPassword", hashedPassword);
+            attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
@@ -821,6 +845,51 @@ public class MailManager
         }
     }
 
+    /**
+     * Modifies an account entry based on the AccountInfo passed on.
+     *
+     * @param account AccountInfo with current settings.
+     * @exception MailManagerException if an error occurs
+     */
+    public void modifyAccount(AccountInfo account)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+
+        String mail = account.getName();
+        String dn = mailDn(account.getName());
+        String domain = MailAddress.hostFromAddress(mail);
+        
+        try
+        {
+            ldap = getLdap();
+            ldap.modifyElementAttribute(dn, "accountActive",
+                                        booleanToString(account.isActive()));
+            if (isPostmaster(domain, mail))
+            {
+                if (!account.isAdministrator())
+                {
+                    removePostmaster(domain, mail);
+                }
+            }
+            else
+            {
+                if (account.isAdministrator())
+                {
+                    addPostmaster(domain, mail);
+                }
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(mail, e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+    
     /**
      * Returns all accounts for the specified domain as a list of
      * {@link AccountInfo} objects.
@@ -844,10 +913,7 @@ public class MailManager
 
             while (ldap.nextResult())
             {
-                String name = ldap.getResultAttribute("mail");
-                boolean isActive = true;
-                boolean isAdmin = false;
-                AccountInfo account = new AccountInfo(name, isActive, isAdmin);
+                AccountInfo account = createAccountInfo(ldap);
                 accounts.add(account);
             }
 
@@ -863,6 +929,60 @@ public class MailManager
 
         Collections.sort(accounts, new AccountNameComparator());
         return accounts;
+    }
+
+    /**
+     * Returns a single AccountInfo for a given e-mail address.
+     *
+     * @param mail an e-mail address
+     * @return an AccountInfo object or null
+     * @exception MailManagerException if an error occurs
+     */
+    public AccountInfo getAccount(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        AccountInfo account = null;
+        try
+        {
+            ldap = getLdap();
+            searchForMail(ldap, mail);
+            account = createAccountInfo(ldap);
+        }
+        catch (MailNotFoundException e)
+        {
+            account = null;
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+        return account;
+    }
+
+    /**
+     * Creates a new <code>AccountInfo</code> object from the current
+     * result in the LDAP facade.  This assumes a search has been
+     * previously done and the facade has been advanced to point to an
+     * alias element.
+     *
+     * @param ldap LDAP facade where result exists
+     * @return A new account information bean
+     * @throws NamingException If the object could not be created
+     * @throws MailManagerException If there is a problem looking up postmaster
+     */
+    private AccountInfo createAccountInfo(LdapFacade ldap)
+        throws NamingException, MailManagerException
+    {
+        String name = ldap.getResultAttribute("mail");
+        boolean isActive =
+            stringToBoolean(ldap.getResultAttribute("accountActive"));
+        boolean isAdmin = isPostmaster(name);
+        return new AccountInfo(name, isActive, isAdmin);
     }
 
     /**
@@ -896,6 +1016,106 @@ public class MailManager
         finally
         {
             closeLdap(ldap);
+        }
+    }
+
+    /**
+     * Returns true if mail is a postmaster for domain.  Intended for
+     * internal use only, however, could be useful so made public.
+     *
+     * @param domain The domain to check in.
+     * @param mail The mail address to check for
+     * @return true if a postmaster, false if not.
+     * @exception MailManagerException if an error occurs
+     */
+    public boolean isPostmaster(String domain, String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String pmFilter = "mail=postmaster@" + domain;
+        boolean result = false;
+        try
+        {
+            ldap = getLdap();
+            ldap.searchOneLevel(domainDn(domain), pmFilter);
+            if (ldap.nextResult())
+            {
+                Set roleOccupants =
+                    ldap.getAllResultAttributeValues("roleOccupant");
+                result = roleOccupants.contains(mailDn(mail));
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("lookup up postmaster " + mail, e);
+        }
+
+        return result;
+    }
+    
+    /**
+     * Adds user given by mail postmaster powers over domain.
+     *
+     * @param domain The domain to grant powers in.
+     * @param mail The person to give power to.
+     * @throws MailManagerException When a postmaster can't be added.
+     */
+    public void addPostmaster(String domain, String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String pmMail = "postmaster@" + domain;
+        try
+        {
+            ldap = getLdap();
+            ldap.searchOneLevel(domainDn(domain), "mail=" + pmMail);
+
+            if (ldap.nextResult())
+            {
+                Set roleOccupants =
+                    ldap.getAllResultAttributeValues("roleOccupant");
+                roleOccupants.add(mailDn(mail));
+                ldap.modifyElementAttribute(ldap.getResultName(),
+                                            "roleOccupant", roleOccupants);
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Adding " + mail + " as postmaster",
+                                           e);
+        }
+    }
+
+    /**
+     * Removes postmaster power from mail in domain.
+     *
+     * @param domain The domain to look in.
+     * @param mail The mail address to remove power from.
+     * @exception MailManagerException if an error occurs
+     */
+    public void removePostmaster(String domain, String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        String pmMail = "postmaster@" + domain;
+        try
+        {
+            ldap = getLdap();
+            ldap.searchOneLevel(domainDn(domain), "mail=" + pmMail);
+
+            if (ldap.nextResult())
+            {
+                Set roleOccupants =
+                    ldap.getAllResultAttributeValues("roleOccupant");
+                roleOccupants.remove(mailDn(mail));
+                ldap.modifyElementAttribute(ldap.getResultName(),
+                                            "roleOccupant", roleOccupants);
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException("Removing " + mail +
+                                           " as postmaster", e);
         }
     }
             
