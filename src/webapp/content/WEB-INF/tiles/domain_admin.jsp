@@ -2,6 +2,26 @@
 <span class=header>DOMAIN ADMINISTRATION for <bean:write name="domain"/></span>
 <br />
 <html:errors/>
+
+<html:link forward="change_password" paramId="mail"
+           name="postmasterPasswordParameters">
+  <bean:message key="domain_admin.link.change_postmaster_pw"/>
+</html:link>
+<br />
+
+Catch-All:
+<logic:notEmpty name="catchAllAlias">
+  <b><bean:message key="catch_all.active"/></b>
+  Destination: <b><bean:write name="catchAllAlias"/></b>
+</logic:notEmpty>
+<logic:empty name="catchAllAlias">
+  <b><bean:message key="catch_all.inactive"/></b>
+</logic:empty>
+<html:link forward="catch_all_admin" paramId="domain" paramName="domain">
+  Edit Catch-All
+</html:link>
+<br />
+
 <html:form action="/private/domain_account">
   <html:hidden property="domain"/>
   <logic:iterate id="account" name="domainAccountForm"
@@ -88,7 +108,7 @@
         <tr>
           <td align=right>
             <logic:equal name="canEditAccounts" value="true">
-              <html:submit styleClass="button">
+              <html:submit styleClass="mbutton">
                 <bean:message key="domain_admin.button.submit"/>
               </html:submit>
               <html:reset styleClass="button">
@@ -205,57 +225,11 @@
   <table width="100%" border="0" cellspacing="0" cellpadding="4"><tr><td>
         <tr>
           <td align=right>
-            <html:submit styleClass="button">
+            <html:submit styleClass="mbutton">
               <bean:message key="domain_admin.button.submit"/>
             </html:submit>
             <html:reset styleClass="button">
               <bean:message key="button.reset"/> </html:reset>
         </tr>
   </table>
-</html:form>
-
-<br/>
-    
-<html:link forward="change_password" paramId="mail"
-           name="postmasterPasswordParameters">
-  <bean:message key="domain_admin.link.change_postmaster_pw"/>
-</html:link>
-<br />
-Catch-All:
-<logic:equal name="catchAllForm"
-             property="catchAllOn" value="true"><b>Active</b> <br />
-Destination: <b><bean:write name="catchAllForm"
-                            property="destination" /></b>
-</logic:equal>
-<logic:notEqual name="catchAllForm"
-                property="catchAllOn" value="true">Inactive</logic:notEqual>
-
-<a href="">Edit Catch-All</a>
-<br />
-<br />
-<html:form action="/private/update_catchall">
-  <html:hidden property="domain"/>
-  <table border="1" cellspacing="0" cellpadding="0">
-    <tr>
-      <th>
-        Catch-All
-      </th>
-      <th>
-        destination
-      </th>
-    </tr>
-    <tr>
-      <td>
-        <html:radio property="status" value="on"/> On
-        <html:radio property="status" value="off"/> Off
-      </td>
-      <td>
-        <html:text property="destination" />
-      </td>
-    </tr>
-  </table>
-  <br />
-  <html:submit>
-    <bean:message key="domain_admin.button.submit_catch_all"/>
-  </html:submit>
 </html:form>
