@@ -5,13 +5,10 @@ Jamm itself:
     * Create more meaningful exceptions for mail manager (i.e. subclasses
       of MailManagerException).
 
-    * Handle exceptions better on web site
-
     * Access control so users playing with URLs can't go someplace bad
+      - 70% done
 
     * User feedback after actions using html:messages.
-
-    * allow virtual "home" to be configurable.
 
   Not sure when:
 
@@ -25,6 +22,8 @@ Jamm itself:
     * Have an account from one domain be a postmaster for multiple domains
 
     * Quota editor?
+
+    * LDAP connection caching/persistance
 
     NAR User Requests:
 
