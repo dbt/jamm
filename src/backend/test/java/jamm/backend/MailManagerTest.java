@@ -812,6 +812,7 @@ public class MailManagerTest extends TestCase
         manager.createAlias(domain, "zzzz", "zzzz", new String[]
             { "z@z.test", "M@z.test", "a@z.test"});
         manager.changePassword("zzzz@" + domain, "zzzz");
+        manager.addPostmaster(domain, "zzz@" + domain);
         manager.createAlias(domain, "MMMM", "MMMM", new String[]
             { "z@M.test", "M@M.test", "a@cMtest"});
         manager.changePassword("MMMM@" + domain, "MMMM");
@@ -860,7 +861,7 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking active for account[2]",
                    account.isActive());
         assertTrue("Checking admin for account[2]",
-                   !account.isAdministrator());
+                   account.isAdministrator());
         assertEquals("Checking homeDirectory for account[2]",
                      "/home/vmail/domains", account.getHomeDirectory());
         assertEquals("Checking mailbox for account[2]",
