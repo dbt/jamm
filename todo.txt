@@ -20,7 +20,7 @@ Jamm itself:
 * Generate passwords for accounts and/or aliases
   Port diceware to Java?
 
-* have MailManager.authenticate() pay attention to accountActive flag
+* User feedback after actions using html:messages.
 
 NAR User Requests:
 
