@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
+import javax.naming.AuthenticationNotSupportedException;
 import javax.naming.InvalidNameException;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
@@ -105,7 +106,7 @@ public class LdapFacadeTest extends TestCase
         try
         {
             // Try with invalid password
-            mLdap.simpleBind(MGR_DN, "badpw");
+            mLdap.simpleBind(ACCT1_DN, "badpw");
             fail("Should have thrown AuthenticationException");
         }
         catch (AuthenticationException e)
@@ -115,8 +116,23 @@ public class LdapFacadeTest extends TestCase
 
         try
         {
+            // Try with invalid password
+            mLdap.simpleBind(LdapConstants.MGR_DN, "badpw");
+            fail("Should have thrown an authentication exception");
+        }
+        catch (AuthenticationException e)
+        {
+            // Expected in JDK 1.3.1
+        }
+        catch (AuthenticationNotSupportedException e)
+        {
+            // Expected in JDK 1.4.0
+        }
+
+        try
+        {
             // Try with invalid DN
-            mLdap.simpleBind("baddn", MGR_PW);
+            mLdap.simpleBind("baddn", ACCT1_PW);
             fail("Should have thrown InvalidNameException");
         }
         catch (InvalidNameException e)
