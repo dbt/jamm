@@ -29,40 +29,35 @@ public class AuthenticationFilter implements Filter
         mConfig = null;
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,
+    public void doFilter(ServletRequest servletRequest,
+                         ServletResponse servletResponse,
                          FilterChain chain)
         throws IOException, ServletException
     {
         if (request instanceof HttpServletRequest)
         {
-            HttpServletRequest hreq = (HttpServletRequest) request;
-            HttpServletResponse hresp = (HttpServletResponse) response;
-            HttpSession session = hreq.getSession();
+            HttpServletRequest request = (HttpServletRequest) servletRequest;
+            HttpServletResponse response =
+                (HttpServletResponse) servletResponse;
+            HttpSession session = request.getSession();
 
             if ((session == null) ||
                 (session.getAttribute(AUTHENTICATION_KEY) == null))
             {
-                StringBuffer done = hreq.getRequestURL();
-                String query = hreq.getQueryString();
+                StringBuffer done = request.getRequestURL();
+                String query = request.getQueryString();
                 if (query != null)
                 {
                     done.append("?").append(query);
                 }
-                hresp.sendRedirect(hreq.getContextPath() + "/login.jsp?done=" +
-                                   done.toString());
+                response.sendRedirect(request.getContextPath() +
+                                      "/login.jsp?done=" + done.toString());
                 return;
             }
         }
 
         // User is authenticated
-        chain.doFilter(request, response);
-    }
-
-    private void validateUser(HttpServletRequest request,
-                              HttpServletResponse response)
-        throws IOException, ServletException
-    {
-        
+        chain.doFilter(servletRequest, servletResponse);
     }
 
     private FilterConfig mConfig;
