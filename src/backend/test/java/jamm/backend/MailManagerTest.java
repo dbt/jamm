@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 
 import jamm.ldap.LdapFacade;
 import jamm.LdapConstants;
+import jamm.util.CaseInsensitiveStringSet;
 
 /**
  * Unit test for the {@link MailManager} class.
@@ -186,7 +187,7 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking for no more aliases", !mLdap.nextResult());
 
 
-        expectedObjectClass = new HashSet();
+        expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAlias");
         objectClass = mLdap.getAllResultAttributeValues("objectClass");
@@ -387,7 +388,7 @@ public class MailManagerTest extends TestCase
         assertTrue("Checking for no more account results",
                    !mLdap.nextResult());
 
-        expectedObjectClass = new HashSet();
+        expectedObjectClass = new CaseInsensitiveStringSet();
         expectedObjectClass.add("top");
         expectedObjectClass.add("JammMailAccount");
         objectClass = mLdap.getAllResultAttributeValues("objectClass");
