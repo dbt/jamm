@@ -261,6 +261,34 @@ public class MailManager
         modifyAlias(domain, alias, destinationsArray);
     }
 
+    public boolean isAlias(String mail)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        boolean isAlias = false;
+        
+        try
+        {
+            ldap = new LdapFacade(mHost, mPort);
+            ldap.simpleBind(mBindDn, mBindPassword);
+
+            searchForMail(ldap, mail);
+            Set objectClasses =
+                ldap.getAllResultAttributeValues("objectClass");
+            isAlias = objectClasses.contains("JammMailAlias");
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        return isAlias;
+    }
+
     public String[] getAliasDestinations(String mail)
         throws MailManagerException
     {

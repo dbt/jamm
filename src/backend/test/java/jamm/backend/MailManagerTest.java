@@ -380,6 +380,29 @@ public class MailManagerTest extends TestCase
                    manager.authenticate());
     }
 
-    private LdapFacade                      mLdap;
+    public void testIsAlias()
+        throws MailManagerException
+    {
+        String domain = "is-alias.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+        manager.createDomain(domain);
+
+        String accountName = "account";
+        String accountPassword = "accountpw";
+        manager.createAccount(domain, accountName, accountPassword);
+        assertTrue("Checking account is not an alias",
+                   !manager.isAlias(accountName + "@" + domain));
+
+        String aliasName = "alias";
+        manager.createAlias(domain, aliasName, new String[] {"a@b.c"});
+        assertTrue("Checking alias is an alias",
+                   manager.isAlias(aliasName + "@" + domain));
+    }
+
+    private LdapFacade mLdap;
     private static final String BASE = "o=hosting,dc=jamm,dc=test";
 }
