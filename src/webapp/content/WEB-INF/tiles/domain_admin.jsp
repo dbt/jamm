@@ -1,10 +1,11 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
-<h1 align="center">Admin Menu <bean:write name="domainName"/></h1>
+<h1 align="center">Admin Menu <bean:write name="domain"/></h1>
 
 <table width="80%" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
     <td>
       <html:form action="/private/domain_account">
+        <html:hidden property="domain"/>
         <logic:iterate id="account" name="domainAccountForm"
                        property="originalActiveItems" type="String">
           <html:hidden property="originalActiveItems" value="<%=account%>"/>
@@ -61,6 +62,7 @@
       <br/>
 
       <html:form action="/private/domain_alias">
+        <html:hidden property="domain"/>
         <logic:iterate id="alias" name="domainAliasForm"
                        property="originalActiveItems" type="String">
           <html:hidden property="originalActiveItems" value="<%=alias%>"/>
@@ -124,13 +126,13 @@
         <tr>
           <td>
             <html:link forward="add_account" paramId="domain"
-                       paramName="domainName">
+                       paramName="domain">
               <bean:message key="domain_admin.link.add_account"/>
             </html:link>
           </td>
           <td>
             <html:link forward="add_alias" paramId="domain"
-                       paramName="domainName">
+                       paramName="domain">
               <bean:message key="domain_admin.link.add_alias"/>
             </html:link>
           </td>
