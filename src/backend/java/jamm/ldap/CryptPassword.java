@@ -9,7 +9,6 @@ public class CryptPassword extends LdapPassword
     public CryptPassword()
     {
         super();
-        mRandomClass = "java.security.SecureRandom";
     }
 
     public String crypt(String salt, String clearText)
@@ -49,35 +48,4 @@ public class CryptPassword extends LdapPassword
     {
         return false;
     }
-
-    public void setRandomClass(String randomClass)
-    {
-        mRandomClass = randomClass;
-    }
-
-    private Random createRandom()
-    {
-        Random  random;
-
-        try
-        {
-            random = (Random) Class.forName(mRandomClass).newInstance();
-        }
-        catch (ClassNotFoundException e)
-        {
-            random = new Random();
-        }
-        catch (InstantiationException e)
-        {
-            random = new Random();
-        }
-        catch (IllegalAccessException e)
-        {
-            random = new Random();
-        }
-
-        return random;
-    }
-
-    private String mRandomClass;
 }

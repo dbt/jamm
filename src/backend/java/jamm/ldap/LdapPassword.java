@@ -2,6 +2,7 @@ package jamm.ldap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -44,6 +45,35 @@ public abstract class LdapPassword
     public static boolean check(String hashedPassword, String password)
     {
         return false;
+    }
+
+    public static void setRandomClass(String randomClass)
+    {
+        mRandomClass = randomClass;
+    }
+
+    protected static Random createRandom()
+    {
+        Random  random;
+
+        try
+        {
+            random = (Random) Class.forName(mRandomClass).newInstance();
+        }
+        catch (ClassNotFoundException e)
+        {
+            random = new Random();
+        }
+        catch (InstantiationException e)
+        {
+            random = new Random();
+        }
+        catch (IllegalAccessException e)
+        {
+            random = new Random();
+        }
+
+        return random;
     }
 
     protected abstract String doHash(String password);
@@ -92,4 +122,5 @@ public abstract class LdapPassword
     }
 
     private static Map mSchemeLookup;
+    private static String mRandomClass = "java.security.SecureRandom";
 }
