@@ -34,19 +34,28 @@ import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
 import jamm.ldap.PasswordScheme;
 
+/**
+ * Manages the backend mail LDAP subtree.  All mail data is stored in
+ * a subtree of an LDAP directory.  This manipulates that data,
+ * creating, deleting, and modifying LDAP entries, but not exposing
+ * any of the LDAP complexities to the user of this object.  A
+ * connection is not kept around, but created as needed.
+ */
 public class MailManager
 {
-    public MailManager(String host, String base, String bindDn,
-                       String bindPassword)
-    {
-        this(host, 389, base, bindDn, bindPassword);
-    }
-
-    public MailManager(String host, String base)
-    {
-        this(host, 389, base, "", "");
-    }
-
+    /**
+     * Create a mail manager.  The host and port number of the LDAP
+     * server is supplied.  If the bind DN is an empty string (""),
+     * then an anonymous bind is done, otherwise a a simple bind is
+     * done using the given element DN and password.
+     *
+     * @param host Host name of LDAP server
+     * @param port Port number of LDAP server
+     * @param base The base DN of the mail subtree
+     * @param bindDn The DN of the element to bind as, or the empty
+     * string for an anonymous bind.
+     * @param bindPassword The password of the bind element
+     */
     public MailManager(String host, int port, String base, String bindDn,
                        String bindPassword)
     {
@@ -57,17 +66,71 @@ public class MailManager
         mBindPassword = bindPassword;
     }
 
+    /**
+     * Create a mail manager using the default LDAP port. See {@link
+     * #MailManager(String, int, String, String, String) the full
+     * constructor} for details.
+     *
+     * @param host Host name of LDAP server
+     * @param base The base DN of the mail subtree
+     * @param bindDn The DN of the element to bind as
+     * @param bindPassword The password of the bind element
+     */
+    public MailManager(String host, String base, String bindDn,
+                       String bindPassword)
+    {
+        this(host, 389, base, bindDn, bindPassword);
+    }
+
+    /**
+     * Create a mail manager using the default LDAP port using an
+     * anonymous bind. See {@link #MailManager(String, int, String,
+     * String, String) the full constructor} for details.
+     *
+     * @param host Host name of LDAP server
+     * @param base The base DN of the mail subtree
+     */
+    public MailManager(String host, String base)
+    {
+        this(host, 389, base, "", "");
+    }
+
+    /**
+     * Create a mail manager using an anonymous bind. See {@link
+     * #MailManager(String, int, String, String, String) the full
+     * constructor} for details.
+     *
+     * @param host Host name of LDAP server
+     * @param port The port number of LDAP server
+     * @param base The base DN of the mail subtree
+     */
     public MailManager(String host, int port, String base)
     {
         this(host, port, base, "", "");
     }
 
+    /**
+     * Change the entry to bind as.  To perform an anonymous bind, set
+     * the bind DN to be the empty string ("").
+     *
+     * @param bindDn The DN of the element to bind as, or the empty
+     * string for an anonymous bind.
+     * @param bindPassword The password of the bind element.
+     */
     public void setBindEntry(String bindDn, String bindPassword)
     {
         mBindDn = bindDn;
         mBindPassword = bindPassword;
     }
 
+    /**
+     * Create a new LDAP facade using the specified LDAP host and
+     * port.  It creates a facade with an anonymous bind if the bind
+     * DN is the empty string.
+     *
+     * @return A new LDAP facade
+     * @throws NamingException If an error occured
+     */
     private LdapFacade getLdap()
         throws NamingException
     {
@@ -83,6 +146,10 @@ public class MailManager
         return ldap;
     }
     
+    /**
+     * Closes an LDAP facade if it is not null.  This is handy in
+     * finally blocks.
+     */
     private void closeLdap(LdapFacade ldap)
     {
         if (ldap != null)
@@ -91,6 +158,13 @@ public class MailManager
         }
     }
 
+    /**
+     * Changes the password for an email account or alias.
+     *
+     * @param mail Email address to change password for
+     * @param newPassword New password for this account or alias.
+     * @throws MailManagerException If an error occured.
+     */
     public void changePassword(String mail, String newPassword)
         throws MailManagerException
     {
@@ -122,6 +196,12 @@ public class MailManager
         }
     }
 
+    /**
+     * Checks to see if we can bind as the specified element.
+     *
+     * @return True if bind as the element.
+     * @throws MailManagerException If an error occured
+     */
     public boolean authenticate()
         throws MailManagerException
     {
@@ -149,6 +229,12 @@ public class MailManager
         return authenticated;
     }
 
+    /**
+     * Checks if the specified mail address is a postmater.
+     *
+     * @return True if this is a postmaster
+     * @throws MailManagerException If an error occured
+     */
     public boolean isPostmaster(String mail)
         throws MailManagerException
     {
@@ -184,6 +270,13 @@ public class MailManager
         return isPostmaster;
     }
 
+    /**
+     * Returns a list of all domains that are present in this
+     * directory.
+     *
+     * @return A list of domains, as strings
+     * @throw MailManagerException If an error occured
+     */
     public List getDomains()
         throws MailManagerException
     {
@@ -212,6 +305,15 @@ public class MailManager
         return domains;
     }
 
+    /**
+     * Gets the LDAP DN of the specified email address.  Returns
+     * <code>null</code> if the address was not found.
+     *
+     * @param mail Email address to lookup
+     * @return The LDAP DN of the address, or <code>null</code>, if
+     * not found.
+     * @throws MailManagerException If an error occured.
+     */
     public String getDnFromMail(String mail)
         throws MailManagerException
     {
@@ -239,6 +341,19 @@ public class MailManager
         return foundDn;
     }
 
+    /**
+     * Searchs the subtree for an entry matching the specified email
+     * address.  If the address is found, the caller can get the
+     * results from the LDAP facade without calling
+     * <code>nextResult()</code>.  If the address is not found, an
+     * exception is thrown.
+     *
+     * @param ldap The LDAP facade to use for the search
+     * @param mail Email address to search for
+     * @throws MailNotFoundException If the address is not found
+     * @throws NamingException If a JNDI error occured
+     * @see jamm.ldap.LdapFacade#nextResult
+     */
     private void searchForMail(LdapFacade ldap, String mail)
         throws NamingException, MailNotFoundException
     {
@@ -250,6 +365,14 @@ public class MailManager
         }
     }
 
+    /**
+     * Creates a new domain with the specified name.  It creates a new
+     * subtree for the domain as well as the postmater and abuse
+     * aliases, both with no password.
+     *
+     * @param domain Name of the new domain
+     * @throws MailManagerException If an error occured
+     */
     public void createDomain(String domain)
         throws MailManagerException
     {
@@ -287,7 +410,7 @@ public class MailManager
             String mail = MailAddress.addressFromParts("abuse", domain);
             attributes.put("mail", mail);
             attributes.put("maildrop", "postmaster");
-            ldap.addElement(mailDn(domain, mail), attributes);
+            ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
         {
@@ -300,6 +423,15 @@ public class MailManager
         }
     }
 
+    /**
+     * Create a new alias on an existing domain.  See {@link
+     * #createAlias(String, String, String[])} for details.
+     *
+     * @param domain Domain name
+     * @param alias Alias name
+     * @param destinations A collection of String objects
+     * @throws MailManagerException If an error occured
+     */
     public void createAlias(String domain, String alias,
                             Collection destinations)
         throws MailManagerException
@@ -308,6 +440,15 @@ public class MailManager
                     (String []) destinations.toArray(new String[0]));
     }
 
+    /**
+     * Create a new alias on an existing domain.  All previous
+     * destinations are replaced with this list of destinations.
+     *
+     * @param domain Doman mame
+     * @param alias Alias name
+     * @param destinations An array of destinations
+     * @throws MailManagerException If an error occured
+     */
     public void createAlias(String domain, String alias, String[] destinations)
         throws MailManagerException
     {
@@ -323,7 +464,7 @@ public class MailManager
                            new String[] {"top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", mail);
             attributes.put("maildrop", destinations);
-            ldap.addElement(mailDn(domain, mail), attributes);
+            ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
         {
@@ -336,6 +477,12 @@ public class MailManager
         }
     }
 
+    /**
+     * Modify an existing alias replacing existing data.
+     *
+     * @param aliasInfo New alias data
+     * @throws MailManagerException If an error occured
+     */
     public void modifyAlias(AliasInfo alias)
         throws MailManagerException
     {
@@ -356,6 +503,13 @@ public class MailManager
         }
     }
 
+    /**
+     * Checks if this email address is an alias or an account.
+     *
+     * @param mail Email address
+     * @return True if it is an alias, false if it is an account
+     * @throws MailManagerException If an error occured
+     */
     public boolean isAlias(String mail)
         throws MailManagerException
     {
@@ -382,6 +536,13 @@ public class MailManager
         return isAlias;
     }
 
+    /**
+     * Returns all data for the specified alias.
+     *
+     * @param mail Email address of an alias
+     * @return The alias information bean
+     * @throws MailManagerException If an error occured
+     */
     public AliasInfo getAlias(String mail)
         throws MailManagerException
     {
@@ -404,6 +565,14 @@ public class MailManager
         return alias;
     }
 
+    /**
+     * Returns all aliases for the specified domain as list of {@link
+     * AliasInfo} objects.
+     *
+     * @param domain Domain name
+     * @return List of {@link AliasInfo} objects
+     * @throws MailManagerException If an error occured
+     */
     public List getAliases(String domain)
         throws MailManagerException
     {
@@ -444,6 +613,16 @@ public class MailManager
         return aliases;
     }
 
+    /**
+     * Creates a new <code>AliasInfo</code> object from the current
+     * result in the LDAP facade.  This assumes a search has been
+     * previously done and the facade has been advanced to point to an
+     * alias element.
+     *
+     * @param ldap LDAP facade where result exists
+     * @return A new alias information bean
+     * @throws NamingException If the object could not be created
+     */
     private AliasInfo createAliasInfo(LdapFacade ldap)
         throws NamingException
     {
@@ -457,6 +636,12 @@ public class MailManager
         return new AliasInfo(name, destinations, isActive, isAdmin);
     }
 
+    /**
+     * Delete the specified alias.
+     *
+     * @param mail Email address of alias to delete
+     * @throws MailManagerException If the alias could not be deleted
+     */
     public void deleteAlias(String mail)
         throws MailManagerException
     {
@@ -477,6 +662,14 @@ public class MailManager
         }
     }
 
+    /**
+     * Create a new account on an existing domain.
+     *
+     * @param domain Domain name
+     * @param account New account name
+     * @param password Password of new account
+     * @throws MailManagerException If the account could not be created
+     */
     public void createAccount(String domain, String account, String password)
         throws MailManagerException
     {
@@ -495,7 +688,7 @@ public class MailManager
             String hashedPassword =
                 LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
             attributes.put("userPassword", hashedPassword);
-            ldap.addElement(mailDn(domain, mail), attributes);
+            ldap.addElement(mailDn(mail), attributes);
         }
         catch (NamingException e)
         {
@@ -508,6 +701,14 @@ public class MailManager
         }
     }
 
+    /**
+     * Returns all accounts for the specified domain as a list of
+     * {@link AccountInfo} objects.
+     *
+     * @param domain Domain name
+     * @return List of {@link AccountInfo} objects
+     * @throws MailManagerException If an error occured
+     */
     public List getAccounts(String domain)
         throws MailManagerException
     {
@@ -544,6 +745,13 @@ public class MailManager
         return accounts;
     }
 
+    /**
+     * Adds a catch all alias for the specified domain.
+     *
+     * @param domain Domain name
+     * @param destination Destination alias
+     * @throws MailManagerException If the catch all could not be added
+     */
     public void addCatchall(String domain, String destination)
         throws MailManagerException
     {
@@ -558,7 +766,7 @@ public class MailManager
                            new String[] { "top", ALIAS_OBJECT_CLASS});
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
-            ldap.addElement(mailDn(domain, catchAll), attributes);
+            ldap.addElement(mailDn(catchAll), attributes);
         }
         catch (NamingException e)
         {
@@ -571,7 +779,12 @@ public class MailManager
         }
     }
             
-
+    /**
+     * Constructs the DN of a domain.
+     *
+     * @param domain Domain name
+     * @return DN for this domain
+     */
     private final String domainDn(String domain)
     {
         StringBuffer domainDn = new StringBuffer();
@@ -579,14 +792,12 @@ public class MailManager
         return domainDn.toString();
     }
 
-    private final String mailDn(String domain, String mail)
-    {
-        StringBuffer mailDn = new StringBuffer();
-        mailDn.append("mail=").append(mail).append(",");
-        mailDn.append(domainDn(domain));
-        return mailDn.toString();
-    }
-
+    /**
+     * Constructs the DN of an email address.
+     *
+     * @param mail Email address
+     * @return DN for this address
+     */
     private final String mailDn(String mail)
     {
         String domain = MailAddress.hostFromAddress(mail);
@@ -596,12 +807,19 @@ public class MailManager
         return mailDn.toString();
     }
 
+    /** Name of the object class used for accounts. */
     private static final String ACCOUNT_OBJECT_CLASS = "JammMailAccount";
+    /** Name of the object class used for aliases. */
     private static final String ALIAS_OBJECT_CLASS = "JammMailAlias";
 
+    /** Host name of LDAP server. */
     private String mHost;
+    /** Port number of LDAP server */
     private int mPort;
+    /** The base of the LDAP subtree for mail data */
     private String mBase;
+    /** The DN of the element to bind as */
     private String mBindDn;
+    /** The password of the bind element */
     private String mBindPassword;
 }
