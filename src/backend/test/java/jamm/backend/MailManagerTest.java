@@ -452,6 +452,40 @@ public class MailManagerTest extends TestCase
     }
 
     /**
+     * Tests nuking an account.
+     *
+     * @exception NamingException if an error occurs
+     * @exception MailManagerException if an error occurs
+     */
+    public void testDeleteAccount()
+        throws NamingException, MailManagerException
+    {
+        MailManager manager =
+            new MailManager("localhost", BASE, LdapConstants.MGR_DN,
+                            LdapConstants.MGR_PW);
+
+        String domain = "nukeaccountdomain.test";
+        String domainDn = "jvd=" + domain + "," + BASE;
+        String accountName = "account";
+        String accountPassword = "account1pw";
+        String accountMail = accountName + "@" + domain;
+
+        manager.createDomain(domain);
+        manager.createAccount(domain, accountName, accountPassword);
+
+        LdapFacade mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchOneLevel(domainDn, "mail=" + accountMail);
+        assertTrue("Checking for account", mLdap.nextResult());
+
+        manager.deleteAccount(accountMail);
+        mLdap.searchOneLevel(domainDn, "mail=" + accountMail);
+        assertTrue("Checking for non-existance of account",
+                   !mLdap.nextResult());
+        mLdap.close();
+    }
+
+    /**
      * Tests authenticating a user.
      */
     public void testAuthenticate()

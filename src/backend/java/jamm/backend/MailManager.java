@@ -950,6 +950,20 @@ public class MailManager
     }
 
     /**
+     * Delete the specified account.  Note: <b>this only removes the
+     * account from LDAP!</b> The code is currently no different from
+     * deleteAlias in implementation, so this just calls deleteAlias.
+     *
+     * @param mail the e-mail account to delete
+     * @exception MailManagerException if an error occurs
+     */
+    public void deleteAccount(String mail)
+        throws MailManagerException
+    {
+        deleteAlias(mail);
+    }
+
+    /**
      * Create a new account on an existing domain.
      *
      * @param domain Domain name
