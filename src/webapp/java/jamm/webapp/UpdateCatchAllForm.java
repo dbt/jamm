@@ -31,7 +31,7 @@ import org.apache.struts.action.ActionError;
  *
  * @see jamm.webapp.CatchAllAction
  */
-public class CatchAllForm extends ActionForm
+public class UpdateCatchAllForm extends ActionForm
 {
     /**
      * Gets the value of the status
@@ -147,7 +147,7 @@ public class CatchAllForm extends ActionForm
         if (isCatchAllOn() && isFieldBlank(mDestination))
         {
             errors.add("destination",
-                new ActionError("catchall.error.no_destination"));
+                new ActionError("catch_all_admin.error.no_destination"));
         }
 
         return errors;

@@ -32,17 +32,17 @@ import org.apache.struts.action.ActionForward;
 
 /**
  * @see jamm.backend.MailManager
- * @see jamm.webapp.CatchAllForm
+ * @see jamm.webapp.UpdateCatchAllForm
  */
-public class CatchAllAction extends JammAction
+public class UpdateCatchAllAction extends JammAction
 {
     /**
      * Performs the action.
      *
-     * @see jamm.webapp.CatchAllForm
+     * @see jamm.webapp.UpdateCatchAllForm
      *
      * @param mapping The action mapping of possible destinations.
-     * @param actionForm a ChangePasswordForm with our required information
+     * @param actionForm a UpdateCatchAllForm with our required information
      * @param request the http request
      * @param response the http response
      *
@@ -56,10 +56,15 @@ public class CatchAllAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
-        CatchAllForm form = (CatchAllForm) actionForm;
+        UpdateCatchAllForm form = (UpdateCatchAllForm) actionForm;
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
    
+        if (isCancelled(request))
+        {
+            return findForward(mapping, "domain_admin", request);
+        }
+        
         String domain = form.getDomain();
         String catchAll = "@" + domain;
         String destination = form.getDestination();
