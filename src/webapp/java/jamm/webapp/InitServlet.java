@@ -1,6 +1,8 @@
 
 package jamm.webapp;
 
+import jamm.ldap.LdapPassword;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -44,6 +46,9 @@ public class InitServlet extends HttpServlet
                 getStringProperty(properties, "ldap.search_base", ""));
             Globals.setLdapQueryFilter(
                 getStringProperty(properties, "ldap.query_filter", ""));
+            LdapPassword.setRandomClass(
+                getStringProperty(properties, "random_class",
+                                  "java.security.SecureRandom"));
         }
         catch (IOException e)
         {

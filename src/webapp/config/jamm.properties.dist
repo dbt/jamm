@@ -14,3 +14,8 @@
 # The query filter. {0} is replaced with the user name.
 #
 #jamm.ldap.query_filter = (&(mail={0})(paidup=true))
+
+# The class used to generate random numbers.  The default is
+# java.security.SecureRandom.
+#
+#jamm.random_class = java.util.Random
