@@ -13,6 +13,8 @@ Jamm itself:
 
     * Finish backup-before-delete functionality of jammCleaner
 
+    * allow virtual "home" to be configurable.
+
   Not sure when:
 
     * Generate passwords for accounts and/or aliases
@@ -23,6 +25,8 @@ Jamm itself:
   Post 1.0:
 
     * Have an account from one domain be a postmaster for multiple domains
+
+    * Quota editor
 
     NAR User Requests:
 
