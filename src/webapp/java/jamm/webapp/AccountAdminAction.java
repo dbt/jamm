@@ -9,7 +9,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class AccountAdminAction extends Action
+import jamm.backend.MailManager;
+
+public class AccountAdminAction extends JammAction
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -17,9 +19,23 @@ public class AccountAdminAction extends Action
                                  HttpServletResponse response)
         throws Exception
     {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        request.setAttribute("mail", user.getUsername());
-        return (mapping.findForward("account_admin"));
+        User user = getUser(request);
+        String mail = user.getUsername();
+
+        MailManager manager = getMailManager(user);
+        if (manager.isAlias(mail))
+        {
+            String[] destinations = manager.getAliasDestinations(mail);
+
+            request.setAttribute("mail", mail);
+            request.setAttribute("destinations", destinations);
+
+            return (mapping.findForward("alias_admin"));
+        }
+        else
+        {
+            request.setAttribute("mail", mail);
+            return (mapping.findForward("account_admin"));
+        }
     }
 }

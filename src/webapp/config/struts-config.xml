@@ -77,10 +77,6 @@
     <action path="/private/account_admin"
             type="jamm.webapp.AccountAdminAction">
       <forward name="account_admin" path="/private/account_admin.jsp"/>
-    </action>
-
-    <action path="/private/alias_admin"
-            type="jamm.webapp.AliasAdminAction">
       <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
