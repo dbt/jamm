@@ -178,20 +178,16 @@ public class DomainAdminAction extends JammAction
         dcf.setDomain(domain);
         request.setAttribute("domainAliasForm", dcf);
 
-        CatchAllForm caf = new CatchAllForm();
-        AliasInfo ai = manager.getAlias("@" + domain);
-        if (ai != null)
+        AliasInfo catchAllAlias = manager.getAlias("@" + domain);
+        if (catchAllAlias != null)
         {
-            caf.setCatchAllOn();
-            List destinations = ai.getDestinations();
-            caf.setDestination((String) destinations.get(0));
+            List destinations = catchAllAlias.getDestinations();
+            request.setAttribute("catchAllAlias", destinations.get(0));
         }
         else
         {
-            caf.setCatchAllOff();
+            request.setAttribute("catchAllAlias", "");
         }
-        caf.setDomain(domain);
-        request.setAttribute("catchAllForm", caf);
 
         DomainInfo domainInfo = manager.getDomain(domain);
         if (user.isUserInRole(User.SITE_ADMIN_ROLE) ||
