@@ -679,7 +679,7 @@ public class MailManager
         }
         catch (MailNotFoundException e)
         {
-            return null;
+            alias = null;
         }
         catch (NamingException e)
         {
