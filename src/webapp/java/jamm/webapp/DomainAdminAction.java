@@ -72,10 +72,9 @@ public class DomainAdminAction extends JammAction
                                  HttpServletResponse response)
         throws Exception
     {
+        ActionErrors errors = new ActionErrors();
         User user  = getUser(request);
         MailManager manager = getMailManager(user);
-
-        ActionErrors errors = new ActionErrors();
         
         String domain = request.getParameter("domain");
         if (domain == null)
@@ -98,8 +97,7 @@ public class DomainAdminAction extends JammAction
 
             List breadCrumbs = new ArrayList();
             BreadCrumb breadCrumb = new BreadCrumb(
-                findForward(mapping, "home", request).getPath(),
-                "Home");
+                findForward(mapping, "home", request).getPath(), "Home");
             breadCrumbs.add(breadCrumb);
             request.setAttribute("breadCrumbs", breadCrumbs);
 
@@ -127,8 +125,7 @@ public class DomainAdminAction extends JammAction
         }
 
         breadCrumb = new BreadCrumb(
-            getDomainAdminForward(mapping, domain).getPath(),
-            "Domain Admin");
+            getDomainAdminForward(mapping, domain).getPath(), "Domain Admin");
         breadCrumbs.add(breadCrumb);
         request.setAttribute("breadCrumbs", breadCrumbs);
 
