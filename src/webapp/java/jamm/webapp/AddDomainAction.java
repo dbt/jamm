@@ -73,7 +73,7 @@ public class AddDomainAction extends JammAction
         {
             String mail = MailAddress.addressFromParts("postmaster",
                                                        form.getDomain());
-            manager.changePassword(mail, form.getPassword());
+            changePassword(manager, mail, form.getPassword());
         }
 
         return mapping.findForward("site_admin");

@@ -85,7 +85,7 @@ public class ChangePasswordAction extends JammAction
             password = form.getPassword();
         }
 
-        manager.changePassword(form.getMail(), password);
+        changePassword(manager, form.getMail(), password);
 
         // Update user object stored in session with the new password,
         // if we changed our own password.
