@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Upgrades an ldif from Jamm 0.9.2 or before to Jamm 0.9.3 compliance.
+# Upgrades an ldif from Jamm pre-0.9.4 to 0.9.4 or later
 
 use Net::LDAP::LDIF;
 use Set::Scalar;
