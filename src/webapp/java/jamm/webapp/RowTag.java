@@ -64,7 +64,7 @@ public class RowTag extends BodyTagSupport
     public int doStartTag()
         throws JspTagException
     {
-        return EVAL_BODY_TAG;
+        return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag()
