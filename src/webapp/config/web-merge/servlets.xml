@@ -1,0 +1,17 @@
+<servlet>
+  <servlet-name>action</servlet-name>
+  <servlet-class>org.apache.struts.tiles.ActionComponentServlet</servlet-class>
+  <init-param>
+    <param-name>debug</param-name>
+    <param-value>3</param-value>
+  </init-param>
+  <init-param>
+    <param-name>detail</param-name>
+    <param-value>2</param-value>
+  </init-param>
+  <init-param>
+    <param-name>definitions-config</param-name>
+    <param-value>/WEB-INF/tileDefinitions.xml</param-value>
+  </init-param>
+  <load-on-startup>2</load-on-startup>
+</servlet>

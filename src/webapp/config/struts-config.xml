@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+    <!-- Example logon form bean 
+    <form-bean      name="logonForm"
+                    type="org.apache.struts.example.LogonForm"/>
+     -->
+    <form-bean name="logonForm"
+               type="simple.LogonForm"/>
+  </form-beans>
+
+  <!-- ========== Global Forward Definitions ============================== -->
+  <global-forwards>
+    <!-- Example logon forward 
+     <forward   name="logon"                path="/logon.jsp"/>
+     -->
+    <forward name="home" path="/" redirect="true"/>
+    <forward name="logoff" path="/logoff.do"/>
+  </global-forwards>
+
+
+  <!-- ========== Action Mapping Definitions ============================== -->
+  <action-mappings>
+    <!-- Example logon action 
+    <action    path="/logon"
+               type="org.apache.struts.example.LogonAction"
+               name="logonForm"
+              scope="request"
+              input="/logon.jsp">
+    </action>
+    -->
+
+    <!-- Example logoff action 
+    <action    path="/logoff"
+               type="org.apache.struts.example.LogoffAction">
+      <forward name="success"              path="/index.jsp"/>
+    </action>
+    -->
+
+    
+    <!-- This will reload tileDefinitions.xml -->
+    <action path="/admin/reload-tiles"
+            type="org.apache.struts.tiles.actions.ReloadDefinitionsAction" />
+  </action-mappings>
+
+  <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
+
+  <!-- ========== Message Resources Definitions =========================== -->
+
+  <message-resources parameter="ApplicationResources"/>
+
+  <!-- ========== Plug Ins Configuration ================================== -->
+  
+  <!-- 
+     Add multiple validator resource files by setting the pathname property. 
+     Default pluggable validator definitions are contained in validator-rules.xml. 
+     Add any validation rules for forms in validator.xml.
+  -->
+  <!--
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property property="pathname" value="/WEB-INF/validator-rules.xml"/>
+    <set-property property="pathname" value="/WEB-INF/validator.xml"/>
+  </plug-in>
+  -->
+
+</struts-config>

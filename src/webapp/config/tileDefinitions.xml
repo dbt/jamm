@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component-definitions>
+  <definition name="mainLayout" path="/WEB-INF/layouts/main.jsp">
+    <put name="title" value="Default title"/>
+    <put name="header" value="/WEB-INF/common/header.jsp"/>
+    <put name="footer" value="/WEB-INF/common/footer.jsp"/>
+    <put name="body" value=""/>
+  </definition>
+
+  <definition name="home" extends="mainLayout">
+    <put name="body" value="/WEB-INF/tiles/home.jsp"/>
+  </definition>
+</component-definitions>

@@ -59,6 +59,7 @@
     <mkdir dir="build/webapp/root/WEB-INF" />
     <mkdir dir="build/webapp/root/WEB-INF/classes" />
     <mkdir dir="build/webapp/root/WEB-INF/lib" />
+    <mkdir dir="build/webapp/root/WEB-INF/tld" />
 
     <mkdir dir="test" />
     <mkdir dir="test/backend/classes" />
@@ -113,11 +114,30 @@
       </classpath>
     </javac>
 
-    <copy todir="build/webapp/root/WEB-INF/lib" file="${cryptix.jar}" />
-
     <copy todir="build/webapp/root">
       <fileset dir="src/webapp/content" includes="**/*" />
     </copy>
+
+    <copy todir="build/webapp/root/WEB-INF/lib" file="${cryptix.jar}" />
+
+    <copy todir="build/webapp/root/WEB-INF/tld">
+      <fileset dir="${struts.lib}" includes="*.tld" />
+    </copy>
+
+    <copy todir="build/webapp/root/WEB-INF/lib">
+      <fileset dir="${struts.lib}" includes="*.jar" />
+    </copy>
+
+    <copy todir="build/webapp/root/WEB-INF/classes/">
+      <fileset dir="src/webapp/config/properties/" includes="*" />
+    </copy>
+
+    <copy todir="build/webapp/root/WEB-INF/"
+          file="src/webapp/config/struts-config.xml"/>
+    <copy todir="build/webapp/root/WEB-INF/"
+          file="src/webapp/config/tileDefinitions.xml"/>
+    <copy todir="build/webapp/root/WEB-INF/"
+          file="src/webapp/config/jamm.properties"/>
   </target>
   <target name="b-w-j" depends="build-webapp-java" />
 
@@ -133,6 +153,8 @@
 
       <deploymentdescriptor servletspec="2.3"
                             destdir="build/webapp/root/WEB-INF"
+                            sessiontimeout="30"
+                            mergedir="src/webapp/config/web-merge"
                             displayname="Jamm"
                             description="Java Mail Manager">
       </deploymentdescriptor>
