@@ -7,7 +7,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+nn * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -19,7 +19,8 @@
 
 package jamm.webapp;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
 import jamm.backend.MailManager;
+import jamm.backend.MailManagerException;
+import jamm.backend.AliasInfo;
 
 /**
  * Calls MailManager to perform the assigned actions on aliases in a
@@ -61,22 +64,35 @@ public class DomainAliasAction extends JammAction
     {
         DomainConfigForm form = (DomainConfigForm) actionForm;
         User user = getUser(request);
-        MailManager manager = getMailManager(user);
+
+        manager = getMailManager(user);
+        aliasInfos = new HashMap();
 
         System.out.println("====================================" +
                            "====================================");
-        
-        System.out.println("Delete: " +
-                           Arrays.asList(form.getItemsToDelete()));
-        System.out.println("Unchecked active: " +
-                           form.getUncheckedActiveItems());
-        System.out.println("Checked active: " +
-                           form.getCheckedActiveItems());
 
-        System.out.println("Unchecked admin: " +
-                           form.getUncheckedAdminItems());
-        System.out.println("Checked admin: " +
-                           form.getCheckedAdminItems());
+        Iterator j = form.getUncheckedActiveItems().iterator();
+        modifyActive(false, j);
+
+        j = form.getCheckedActiveItems().iterator();
+        modifyActive(true, j);
+
+        j = form.getUncheckedAdminItems().iterator();
+        modifyAdministrator(false, j);
+
+        j = form.getCheckedAdminItems().iterator();
+        modifyAdministrator(true, j);
+
+
+        // We'll modify first and then delete.  We probably should not
+        // modify anything marked for deletion, to save some cycles,
+        // but we'll do that as an improvement later.
+        j = aliasInfos.values().iterator();
+        while (j.hasNext())
+        {
+            AliasInfo ai = (AliasInfo) j.next();
+            manager.modifyAlias(ai);
+        }
 
         String[] deletions = form.getItemsToDelete();
         for (int i = 0; i < deletions.length; i++)
@@ -86,4 +102,66 @@ public class DomainAliasAction extends JammAction
 
         return findForward(mapping, "domain_admin", request);
     }
+
+    /**
+     * Gets the alias out of the aliasInfo HashMap.  If the
+     * aliasInfo isn't containted in there, it looks it up in mail
+     * manager.
+     *
+     * @param alias the e-mail address of the alias to get
+     * @return an AliasInfo object for alias
+     * @exception MailManagerException if an error occurs
+     */
+    private AliasInfo getAlias(String alias)
+        throws MailManagerException
+    {
+        AliasInfo ai = (AliasInfo) aliasInfos.get(alias);
+        if (ai == null)
+        {
+            ai = manager.getAlias(alias);
+            aliasInfos.put(alias, ai);
+        }
+        return ai;
+    }
+            
+    /**
+     * Modifies the active flag on the alias.
+     *
+     * @param setTo boolean value to set active to
+     * @param i an iterator of AliasInfo objects to change.
+     * @exception MailManagerException if an error occurs
+     */
+    private void modifyActive(boolean setTo, Iterator i)
+        throws MailManagerException
+    {
+        while (i.hasNext())
+        {
+            String alias = (String) i.next();
+            AliasInfo ai = getAlias(alias);
+            ai.setActive(setTo);
+        }
+    }
+
+    /**
+     * Modifies the administrator flag on the alias.
+     *
+     * @param setTo boolean value to set adminitrator to
+     * @param i an iterator of AliasInfo objects to change.
+     * @exception MailManagerException if an error occurs
+     */
+    private void modifyAdministrator(boolean setTo, Iterator i)
+        throws MailManagerException
+    {
+        while (i.hasNext())
+        {
+            String alias = (String) i.next();
+            AliasInfo ai = getAlias(alias);
+            ai.setAdministrator(setTo);
+        }
+    }
+
+    /** A cache of AliasInfo objects */
+    private HashMap aliasInfos;
+    /** The mail manager */
+    private MailManager manager;
 }
