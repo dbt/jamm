@@ -3,8 +3,8 @@
 <project default="build" basedir=".">
 
   <!-- This must be done before any other propertes -->
-  <property file="${user.home}/.build.properties" />
   <property file="${basedir}/build.properties" />
+  <property file="${user.home}/.build.properties" />
 
   <!-- set global properties for this build -->
   <property name="project.string"
@@ -292,6 +292,22 @@
         <pathelement location="${ant.home}/lib/junit.jar" />
       </classpath>
     </javadoc>
+  </target>
+
+  <target name="dist-src" depends="prepare">
+    <mkdir dir="build/dist-src/${project.string}"/>
+    <copy todir="build/dist-src/${project.string}">
+      <fileset dir=".">
+        <exclude name="build/**"/>
+        <exclude name="test/**"/>
+        <exclude name="dist/**"/>
+        <exclude name="build.properties"/>
+      </fileset>
+    </copy>
+    <tar tarfile="build/${project.string}.tar"
+         basedir="build/dist-src"/>
+    <gzip src="build/${project.string}.tar"
+          zipfile="dist/${project.string}.tar.gz" />
   </target>
 
   <target name="clean">
