@@ -11,7 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 
-public class DomainMenuAction extends Action
+public class DomainAdminAction extends Action
 {
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
@@ -41,6 +41,6 @@ public class DomainMenuAction extends Action
         }
         request.setAttribute("aliases", aliases);
 
-        return (mapping.findForward("domain_menu"));
+        return (mapping.findForward("domain_admin"));
     }
 }
