@@ -15,7 +15,6 @@
 
   <path id="lib.path">
     <pathelement path="${servlet.jar}" />
-    <pathelement path="${cryptix.jar}" />
     <fileset dir="${struts.lib}" includes="*.jar"/>
     <fileset dir="${jaxp.lib}" includes="*.jar"/>
     <pathelement path="${cli.jar}" />
@@ -161,8 +160,6 @@
 
     <copy todir="build/webapp/root/WEB-INF/lib"
           file="build/backend/${project.name}-backend.jar" />
-
-    <copy todir="build/webapp/root/WEB-INF/lib" file="${cryptix.jar}" />
 
     <copy todir="build/webapp/root/WEB-INF/tld">
       <fileset dir="${struts.lib}" includes="*.tld" />
