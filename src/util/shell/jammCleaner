@@ -13,4 +13,6 @@ do
     CLASSPATH=$i:$CLASSPATH
 done
 
+CLASSPATH=$JAMM_LIB_DIR:$CLASSPATH
+
 java -cp $CLASSPATH jamm.tools.JammCleaner $*
