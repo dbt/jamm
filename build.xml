@@ -4,7 +4,7 @@
 
   <!-- set global properties for this build -->
   <property name="project.name" value="jamm"/>
-  <property name="project.version" value="0.9.6-pre2"/>
+  <property name="project.version" value="0.9.6"/>
   <property name="project.string"
             value="${project.name}-${project.version}" />
 
