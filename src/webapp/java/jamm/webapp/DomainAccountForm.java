@@ -78,9 +78,9 @@ public class DomainAccountForm extends ActionForm
      */
     public void reset(ActionMapping mapping, HttpServletRequest request)
     {
-        mAccounts = new String[] {"account2", "account5"};
+        mAccounts = new String[0];
         mAccountsToDelete = new String[0];
-        mAccountsToActivate = mAccounts;
+        mAccountsToActivate = new String[0];
         mAccountsToAdmin = new String[0];
     }
 

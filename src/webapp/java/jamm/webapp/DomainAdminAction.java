@@ -41,6 +41,11 @@ public class DomainAdminAction extends Action
         }
         request.setAttribute("aliases", aliases);
 
+        DomainAccountForm daf = new DomainAccountForm();
+        daf.setOriginalAccounts(new String[] {"account2", "account5"});
+        daf.setAccountsToActivate(new String[] {"account2", "account5"});
+        request.setAttribute("domainAccountForm", daf);
+
         return (mapping.findForward("domain_admin"));
     }
 }
