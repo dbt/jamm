@@ -659,7 +659,10 @@ public class MailManager
             searchForMail(ldap, mail);
             Set objectClasses =
                 ldap.getAllResultAttributeValues("objectClass");
-            isAlias = objectClasses.contains(ALIAS_OBJECT_CLASS);
+            // FIX ME: Need to find a real way to do full case
+            // insensitive matching.
+            isAlias = (objectClasses.contains(ALIAS_OBJECT_CLASS) |
+                       objectClasses.contains("jammMailAlias"));
         }
         catch (NamingException e)
         {
