@@ -11,6 +11,7 @@
   <!-- This must be done before any other propertes -->
   <property file="${basedir}/build.properties" />
   <property file="${user.home}/.build.properties" />
+  <property file="${basedir}/src/build.properties" />
 
   <path id="lib.path">
     <pathelement path="${servlet.jar}" />
@@ -28,25 +29,7 @@
     <pathelement location="${xjavadoc.jar}"/>
   </path>
 
-  <target name="build-properties-check">
-    <condition property="build.properties.uptodate">
-      <and>
-        <available file="build.properties" />
-        <available file="src/build.properties" />
-        <uptodate targetfile="build.properties">
-          <srcfiles dir="src" includes="build.properties" />
-        </uptodate>
-      </and>
-    </condition>
-  </target>
-
-  <target name="build-properties-up-to-date"
-          unless="build.properties.uptodate"
-          depends="build-properties-check">
-    <fail message="build.properties is out of date or missing." />
-  </target>
-
-  <target name="prepare" depends="build-properties-up-to-date">
+  <target name="prepare">
     <mkdir dir="build" />
     <mkdir dir="build/backend/classes" />
     <mkdir dir="build/webapp/root" />
