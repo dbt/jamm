@@ -36,6 +36,7 @@ public class AliasInfo implements Serializable
      * and boolean flags.
      *
      * @param name Account name
+     * @param commonName alias's common name.
      * @param destinations List of destinations.
      * @param active True if this account is active.
      * @param administrator True if this account has administrator
@@ -51,7 +52,9 @@ public class AliasInfo implements Serializable
         mCommonName = commonName;
     }
     /**
-     * @return
+     * Returns the common name.
+     * 
+     * @return a string with the common name.
      */
     public String getCommonName()
     {
@@ -119,7 +122,9 @@ public class AliasInfo implements Serializable
     }
 
     /**
-     * @param string
+     * Set the common name.
+     * 
+     * @param string common name of Alias
      */
     public void setCommonName(String string)
     {

@@ -38,6 +38,19 @@ import org.apache.struts.action.ActionMapping;
 */
 public class UpdateAccountAction extends JammAction
 {
+    /**
+     * Performs the action.
+     *
+     * @param mapping an <code>ActionMapping</code> of possible destinations
+     * @param actionForm an <code>UpdateAliasForm</code> with our
+     *                   required information.
+     * @param request a <code>HttpServletRequest</code>
+     * @param response a <code>HttpServletResponse</code>
+     *
+     * @return an <code>ActionForward</code> value
+     *
+     * @exception Exception if an error occurs
+     */
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm actionForm,
                                  HttpServletRequest request,

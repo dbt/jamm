@@ -32,7 +32,9 @@ import org.apache.struts.action.ActionMapping;
 public class UpdateAccountForm extends ActionForm
 {
     /**
-     * @return
+     * The common name
+     * 
+     * @return a string
      */
     public String getCommonName()
     {
@@ -40,7 +42,9 @@ public class UpdateAccountForm extends ActionForm
     }
 
     /**
-     * @return
+     * The e-mail address.
+     * 
+     * @return a String
      */
     public String getMail()
     {
@@ -48,7 +52,9 @@ public class UpdateAccountForm extends ActionForm
     }
 
     /**
-     * @param string
+     * Set common name.
+     * 
+     * @param string a string with common name or null
      */
     public void setCommonName(String string)
     {
@@ -56,7 +62,9 @@ public class UpdateAccountForm extends ActionForm
     }
 
     /**
-     * @param string
+     * Set mail
+     * 
+     * @param string with the e-mail address
      */
     public void setMail(String string)
     {
@@ -65,8 +73,8 @@ public class UpdateAccountForm extends ActionForm
 
     /**
      * Resets the form to the default value.  It gets the value for
-     * mail from the http request, sets added to an empty string, and
-     * deleted to a zero length array.
+     * mail from the http request, and sets Mail to the attribute in the
+     * request. 
      *
      * @param mapping an <code>ActionMapping</code> used to select
      *                this instance
@@ -79,6 +87,8 @@ public class UpdateAccountForm extends ActionForm
         mCommonName = "";
     }
 
+    /** Common Name */
     private String mCommonName;
+    /** e-Mail */
     private String mMail;
 }

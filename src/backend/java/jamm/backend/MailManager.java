@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.Iterator;
-
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
 import javax.naming.AuthenticationNotSupportedException;
@@ -413,6 +412,7 @@ public class MailManager
      *
      * @param domain Domain name
      * @param account New account name
+     * @param commonName common name of new account.
      * @param password Password of new account
      * @exception PermissionException if a permission error occursb
      * @exception AccountExistsException if the account exists already
@@ -514,6 +514,7 @@ public class MailManager
      *
      * @param domain Domain name
      * @param alias Alias name
+     * @param commonName common name of new alias
      * @param destinations A collection of String objects
      * @exception AccountExistsException if the alias already exists
      * @exception MailManagerException If an error occured
@@ -522,8 +523,8 @@ public class MailManager
                             String commonName, Collection destinations)
         throws AccountExistsException, MailManagerException
     {
-        createAlias(domain, alias,
-                    commonName, (String []) destinations.toArray(new String[0]));
+        createAlias(domain, alias, commonName,
+                    (String []) destinations.toArray(new String[0]));
     }
 
     /**
@@ -532,12 +533,14 @@ public class MailManager
      *
      * @param domain Doman mame
      * @param alias Alias name
+     * @param commonName common name of the alias
      * @param destinations An array of destinations
      * @exception PermissionException if a permission error occurs
      * @exception AccountExistsException if an alias already exists
      * @exception MailManagerException If an error occured
      */
-    public void createAlias(String domain, String alias, String commonName, String[] destinations)
+    public void createAlias(String domain, String alias, String commonName,
+                            String[] destinations)
         throws PermissionException, AccountExistsException,
         MailManagerException
     {

@@ -31,17 +31,18 @@ public class AccountInfo implements Serializable
      * flags.
      *
      * @param name Account name
+     * @param commonName The account's common name.
      * @param active True if this account is active.
      * @param administrator True if this account has administrator
-     * priveleges.
+     *        priveleges.
      * @param homeDirectory The home directory of the accounts
      * @param mailbox The mailbox within the home directory
      * @param delete is this marked for deletion?
      * @param lastChange time of last change
      */
     public AccountInfo(String name, String commonName, boolean active,
-                       boolean administrator, String homeDirectory, String mailbox,
-                       boolean delete, int lastChange)
+                       boolean administrator, String homeDirectory,
+                       String mailbox, boolean delete, int lastChange)
     {
         mName = name;
         mActive = active;
