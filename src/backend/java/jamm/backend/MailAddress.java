@@ -30,7 +30,9 @@ public class MailAddress
         int separator = address.indexOf("@");
 
         if (separator == -1)
+        {
             return null;
+        }
         
         return address.substring(separator + 1);
     }
@@ -44,7 +46,9 @@ public class MailAddress
         int separator = address.indexOf("@");
 
         if (separator == -1)
+        {
             return address;
+        }
         
         return address.substring(0, separator);
     }

@@ -19,14 +19,7 @@
 
 package jamm.backend;
 
-import java.util.Set;
-import java.util.List;
-import java.util.HashSet;
-import javax.naming.NamingException;
-
 import junit.framework.TestCase;
-
-import jamm.backend.MailAddress;
 
 public class MailAddressTest extends TestCase
 {
@@ -39,23 +32,23 @@ public class MailAddressTest extends TestCase
     {
         assertEquals("testing with user@host address",
                      "realtors.org",
-                     MailAddress.hostFromAddress(mUserAtHost));
+                     MailAddress.hostFromAddress(USER_AT_HOST));
 
         assertNull("testing with user address only",
-                   MailAddress.hostFromAddress(mUserOnly));
+                   MailAddress.hostFromAddress(USER_ONLY));
     }
 
     public void testUserFromAddress()
     {
         assertEquals("testing with user@host address",
                      "kgarner",
-                     MailAddress.userFromAddress(mUserAtHost));
+                     MailAddress.userFromAddress(USER_AT_HOST));
 
         assertEquals("testing with user address only",
                      "root",
-                     MailAddress.userFromAddress(mUserOnly));
+                     MailAddress.userFromAddress(USER_ONLY));
     }
     
-    String mUserAtHost = "kgarner@realtors.org";
-    String mUserOnly = "root";
+    private static final String USER_AT_HOST = "kgarner@realtors.org";
+    private static final String USER_ONLY = "root";
 }
