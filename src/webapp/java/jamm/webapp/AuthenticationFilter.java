@@ -63,7 +63,7 @@ public class AuthenticationFilter implements Filter
     }
 
     /**
-     * Checks to see if AUTHENTICATION_KEY is set in the session, if
+     * Checks to see if AUTHENTICATION_KEY is set in the session. If
      * not it redirects to "/login.jsp?done=<ORIGINAL URL CALL>".  If
      * AUTHENTICATION_KEY is present it passes the request and
      * response to the next level of the FilterChain.
