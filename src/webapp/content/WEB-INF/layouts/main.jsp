@@ -5,6 +5,7 @@
 <html:html>
   <head>
     <title><tiles:getAsString name="title"/></title>
+    <link rel="STYLESHEET" type="text/css" href="<%= CSS %>">
     <html:base/>
   </head>
 

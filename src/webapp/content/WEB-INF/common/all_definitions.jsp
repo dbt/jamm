@@ -8,4 +8,4 @@
   <jsp:useBean id="user" scope="session" class="jamm.webapp.User"/>
 </logic:present>
 <% String ROOT = request.getContextPath(); %>
-<% String CSS = ROOT + "/main.css"; %>
+<% String CSS = ROOT + "/common.css"; %>

@@ -1,0 +1,59 @@
+body {
+  font-family: verdana,helvetica;
+}
+h3 {
+  color:#FF3300;
+  font-family: helvetica,arial;
+}
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  color:#00000;
+}
+.header {
+  font-size: 18px;
+  font-weight: bold;
+  color:#000000;
+}
+.destinations {
+  font-size: 11px;
+  color:#333333;
+}
+.datarow {
+  background-color: #E4ECF6;
+}
+.datarowon {
+  background-color: #EFF7FF;
+}
+.datarowhigh {
+  background-color: #B6D3EF;
+}
+.datarowhighon {
+  background-color: #EFF7FF;
+}
+.account {
+  background-color: #EEEEFF;
+}
+a {
+  font-family: verdana,helvetica;
+  font-size: 12px;
+  color:#333333;
+}
+a:active {
+  color:#666666;
+}
+a:visited {
+  color:#999999;
+}
+a:hover {
+  color:#FF6600;
+  text-decoration: underline;
+}
+input.button {
+  cursor: hand; 
+  background-color: #E4ECF6; 
+  text-align: center;
+  font-family: verdana, arial, sans-serif;
+  font-size:11px;
+  font-weight:bold;
+}
