@@ -578,7 +578,7 @@ public class MailManagerTest extends TestCase
         String postmasterMail = "postmaster@" + domain;
         String postmasterDn = "cn=postmaster," + domainDn;
         String postmasterPassword = "pm1";
-        manager.changePassword(postmasterMail, postmasterPassword);
+        manager.changePasswordExOp(postmasterMail, postmasterPassword);
         manager.setBindEntry(postmasterDn, postmasterPassword);
         assertTrue("Checking postmatser can authenticate",
                    manager.authenticate());
@@ -592,12 +592,12 @@ public class MailManagerTest extends TestCase
 
         manager.createAlias(domain, accountName,
                             new String[] {"mail1@abc.com", "mail2@xyz.com"});
-        manager.changePassword(mail, newPassword1);
+        manager.changePasswordHash(mail, newPassword1);
 
         manager.setBindEntry(accountDn, newPassword1);
         assertTrue("Checking authentication using new password 1",
                    manager.authenticate());
-        manager.changePassword(mail, newPassword2);
+        manager.changePasswordExOp(mail, newPassword2);
         assertTrue("Checking authentication using new password 2",
                    manager.authenticate());
         manager.setBindEntry(accountDn, originalPassword);
@@ -612,7 +612,15 @@ public class MailManagerTest extends TestCase
 
         // Clear password
         manager.setBindEntry(postmasterDn, postmasterPassword);
-        manager.changePassword(mail, null);
+        manager.changePasswordExOp(mail, null);
+        mLdap = new LdapFacade("localhost");
+        mLdap.simpleBind(postmasterDn, postmasterPassword);
+        mLdap.searchSubtree(BASE, "mail=" + mail);
+        assertTrue("Checking for result", mLdap.nextResult());
+        assertEquals("Checking mail", mail, mLdap.getResultAttribute("mail"));
+        assertNull("Checking password field does not exist",
+                   mLdap.getResultAttribute("userPassword"));
+        manager.changePasswordHash(mail, null);
         mLdap = new LdapFacade("localhost");
         mLdap.simpleBind(postmasterDn, postmasterPassword);
         mLdap.searchSubtree(BASE, "mail=" + mail);
@@ -684,7 +692,7 @@ public class MailManagerTest extends TestCase
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
                             LdapConstants.MGR_PW);
         manager.createDomain(domain);
-        manager.changePassword("postmaster@" + domain, "pm");
+        manager.changePasswordExOp("postmaster@" + domain, "pm");
 
         // Create some accounts
         manager.createAccount(domain, "zzz", "zzz");
@@ -694,16 +702,16 @@ public class MailManagerTest extends TestCase
         // Create some aliases
         manager.createAlias(domain, "zzzz", new String[]
             { "z@z.test", "M@z.test", "a@z.test"});
-        manager.changePassword("zzzz@" + domain, "zzzz");
+        manager.changePasswordExOp("zzzz@" + domain, "zzzz");
         manager.createAlias(domain, "MMMM", new String[]
             { "z@M.test", "M@M.test", "a@cMtest"});
-        manager.changePassword("MMMM@" + domain, "MMMM");
+        manager.changePasswordExOp("MMMM@" + domain, "MMMM");
         manager.createAlias(domain, "aaaa", new String[]
             { "z@a.test", "M@a.test", "a@a.test"});
-        manager.changePassword("aaaa@" + domain, "aaaa");
+        manager.changePasswordExOp("aaaa@" + domain, "aaaa");
         manager.createAlias(domain, "xxxx", new String[]
             { "z@x.test", "M@x.test", "a@x.test"});
-        manager.changePassword("xxxx@" + domain, "xxxx");
+        manager.changePasswordExOp("xxxx@" + domain, "xxxx");
         manager.createAlias(domain, "", new String[]
             { "z@x.test" });
 

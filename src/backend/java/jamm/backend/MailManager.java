@@ -163,16 +163,16 @@ public class MailManager
 
     /**
      * Changes the password for an email account or alias.  This does
-     * not hash or encode the password, so that must be done prior to
-     * calling this method.  To remove the password (so the user may
-     * not log in with this alias or account), pass <code>null</code>
-     * for the new password.
+     * not hash or encode the password, but instead uses the
+     * ModifyPassword ldap extended operation to change the password.
+     * To remove the password (so the user may not log in with this
+     * alias or account), pass <code>null</code> for the new password.
      *
      * @param mail Email address to change password for
      * @param newPassword New password for this account or alias
      * @throws MailManagerException If an error occured
      */
-    public void changePassword(String mail, String newPassword)
+    public void changePasswordExOp(String mail, String newPassword)
         throws MailManagerException
     {
         LdapFacade ldap = null;
@@ -210,6 +210,56 @@ public class MailManager
     }
 
     /**
+     * Changes the password for an email account or alias.  This
+     * hashes hashes and encodes the password.  To remove the password
+     * (so the user may not log in with this alias or account), pass
+     * <code>null</code> for the new password.
+     *
+     * @param mail Email address to change password for
+     * @param newPassword New password for this account or alias
+     * @throws MailManagerException If an error occured
+     */
+    public void changePasswordHash(String mail, String newPassword)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+
+        try
+        {
+            ldap = getLdap();
+            searchForMail(ldap, mail);
+
+            String foundDn = ldap.getResultName();
+            String hashedPassword;
+            if (newPassword != null)
+            {
+                hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
+                                                   newPassword);
+            }
+            else
+            {
+                hashedPassword = null;
+            }
+
+            ldap.modifyElementAttribute(foundDn, "userPassword",
+                                        hashedPassword);
+
+            if (foundDn.equals(mBindDn))
+            {
+                mBindPassword = newPassword;
+            }
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+    }
+
+    /**
      * Checks to see if we can bind as the specified element.
      *
      * @return True if bind as the element.
@@ -224,14 +274,26 @@ public class MailManager
         try
         {
             ldap = getLdap();
-            String active = ldap.getAttribute("accountActive");
-            if (active == null)
+
+            Set objectClasses =
+                ldap.getAllAttributeValues("objectClass");
+
+            if (objectClasses.contains("JammMailAccount") ||
+                objectClasses.contains("JammMailAlias"))
             {
-                authenticated = false;
+                String active = ldap.getAttribute("accountActive");
+                if (active == null)
+                {
+                    authenticated = false;
+                }
+                else
+                {
+                    authenticated = Boolean.valueOf(active).booleanValue();
+                }
             }
             else
             {
-                authenticated = Boolean.valueOf(active).booleanValue();
+                authenticated = true;
             }
         }
         catch (AuthenticationException e)
@@ -564,6 +626,7 @@ public class MailManager
             attributes.put("mail",
                            MailAddress.addressFromParts("postmaster", domain));
             attributes.put("maildrop", "postmaster");
+            attributes.put("accountActive", "TRUE");
             String dn = "cn=postmaster," + domainDn;
             attributes.put("roleOccupant", dn);
             ldap.addElement(dn, attributes);
