@@ -11,6 +11,7 @@ public class AllTests
 
         suite = new TestSuite();
         suite.addTestSuite(MailManagerTest.class);
+        suite.addTestSuite(MailAddressTest.class);
         return suite;
     }
 }

@@ -22,7 +22,6 @@
   <definition name="change_password" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/change_password.jsp"/>
   </definition>
-
   <definition name="site_admin" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/site_admin.jsp"/>
   </definition>
@@ -43,5 +42,8 @@
   </definition>
   <definition name="add_alias" extends="privateLayout">
     <put name="body" value="/WEB-INF/tiles/add_alias.jsp"/>
+  </definition>
+  <definition name="general_error" extends="privateLayout">
+    <put name="body" value="/WEB-INF/tiles/general_error.jsp"/>
   </definition>
 </component-definitions>

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
 import jamm.backend.AccountInfo;
@@ -26,11 +28,22 @@ public class DomainAdminAction extends JammAction
     {
         User user  = getUser(request);
         MailManager manager = getMailManager(user);
+
+        ActionErrors errors = new ActionErrors();
+        
         String domain = request.getParameter("domain");
         if (domain == null)
         {
             domain = MailAddress.hostFromAddress(user.getUsername());
         }
+        if (domain == null)
+        {
+            errors.add(ActionErrors.GLOBAL_ERROR,
+                       new ActionError("general.error.domain.is.null"));
+            saveErrors(request, errors);
+            return mapping.findForward("general_error");
+        }      
+            
         request.setAttribute("domainName", domain);
 
         List accounts = manager.getAccounts(domain);
