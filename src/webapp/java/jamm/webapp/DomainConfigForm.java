@@ -178,6 +178,26 @@ public class DomainConfigForm extends JammForm
     }
 
     /**
+     * Sets the domain name this form is for.
+     *
+     * @param domain Domain name
+     */
+    public void setDomain(String domain)
+    {
+        mDomain = domain;
+    }
+
+    /**
+     * Returns the domain name this form is for.
+     *
+     * @return The domain name this form is for
+     */
+    public String getDomain()
+    {
+        return mDomain;
+    }
+
+    /**
      * Resets the form to the default values.  In this case, all of
      * the lists become empty.
      *
@@ -192,6 +212,7 @@ public class DomainConfigForm extends JammForm
         mActiveItems = new String[0];
         mOriginalAdminItems = new String[0];
         mAdminItems = new String[0];
+        mDomain = request.getParameter("domain");
     }
 
     /** The list of items. */
@@ -206,4 +227,6 @@ public class DomainConfigForm extends JammForm
     private String[] mOriginalAdminItems;
     /** The checked list of admin items. */
     private String[] mAdminItems;
+    /** The domain name this data pertains to. */
+    private String mDomain;
 }
