@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Upgrades an ldif from Jamm 0.9.2 or before to Jamm 0.9.3 complience.
+# Upgrades an ldif from Jamm 0.9.2 or before to Jamm 0.9.3 compliance.
 
 use Net::LDAP::LDIF;
 use Set::Scalar;
@@ -30,8 +30,8 @@ $tmpfile = $oldldif_filename . "." . $$;
 $newldif_filename = $ARGV[1];
 
 # This comments out the known bad lines in the original file.
-open(INPUT, $oldldif_filename);
-open(OUTPUT, ">$tmpfile");
+open(INPUT, $oldldif_filename) || die ("Can't open old file: $!");
+open(OUTPUT, ">$tmpfile") || die ("Can't open tmpfile: $!");
 while (<INPUT>)
 {
     if (/^version:/ || /^search:/ || /^result:/)
@@ -43,7 +43,8 @@ while (<INPUT>)
 close INPUT;
 close OUTPUT;
 
-$oldldif = Net::LDAP::LDIF->new($tmpfile, "r", onerror => "warn", encode => "base64" );
+$oldldif = Net::LDAP::LDIF->new($tmpfile, "r", onerror => "warn",
+                                encode => "base64" );
 $newldif = Net::LDAP::LDIF->new($newldif_filename, "w", "warn");
 
 while (not $oldldif->eof())
