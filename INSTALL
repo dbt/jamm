@@ -27,6 +27,11 @@ Building instructions
     * Ant version 1.4.1
       http://jakarta.apache.org/ant/
 
+    * JUnit 3.7
+      http://www.junit.org/
+
+  JUnit must be installed into the ${ANT_HOME}/lib/ directory.
+
   Once all that is installed, you need to create a local
   build.properties file to tell ant the location of the various
   libraries.  To do this, copy src/build.properties to the top level
