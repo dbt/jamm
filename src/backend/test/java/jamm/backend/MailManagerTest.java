@@ -268,6 +268,16 @@ public class MailManagerTest extends TestCase
             Long.parseLong(mLdap.getResultAttribute("lastChange"));
         assertTrue("Checking account time",
                    timeOrdered(startTime, aliasTime, endTime));
+                   
+        alias.setCommonName("");
+        manager.modifyAlias(alias);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + aliasMail);
+        assertTrue("Checking for a result", mLdap.nextResult());
+        assertNull("Checking to see if CN is empty",
+                   mLdap.getResultAttribute("cn"));
     }
 
     /**
@@ -318,6 +328,16 @@ public class MailManagerTest extends TestCase
             Long.parseLong(mLdap.getResultAttribute("lastChange"));
         assertTrue("Checking account time",
                    timeOrdered(startTime, accountTime, endTime));
+                   
+        account.setCommonName("");
+        manager.modifyAccount(account);
+
+        mLdap = new LdapFacade("localhost");
+        mLdap.anonymousBind();
+        mLdap.searchSubtree(BASE, "mail=" + accountEmail);
+        assertTrue("Checking for a result", mLdap.nextResult());
+        assertNull("Checking to see if CN is null",
+                   mLdap.getResultAttribute("cn"));
     }
     
     /**
