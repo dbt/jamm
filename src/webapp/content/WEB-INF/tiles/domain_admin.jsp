@@ -132,6 +132,7 @@
           </td>
           <td> Do something for catch all.</td>
         </tr>
+      </table>
 
     </td>
   </tr>
