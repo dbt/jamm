@@ -1,0 +1,35 @@
+Building instructions
+---------------------
+
+  To build Jamm, you need to have the following installed:
+
+    * Java 1.3.x  (There are some problems we ran into with 1.4, so we're
+                   sticking with 1.3 until we figure them out.)
+
+    * The Servlet and JSP APIs
+
+    * XDoclet version 1.1
+      http://xdoclet.sourceforge.net/
+
+    * Log4j version 1.1.3
+      http://jakarta.apache.org/log4j/
+
+    * Cryptix version 3.2.0
+      http://www.cryptix.org/
+
+    * Checkstyle version 2.1
+      http://checkstyle.sourceforge.net/
+
+    * Struts version 1.1-b1 or better
+      http://jakarta.apache.org/struts/
+
+    * Ant version 1.4.1
+      http://jakarta.apache.org/ant/
+
+  Once all that is installed you can build the war file by typing:
+
+    # ant dist
+
+  If you need to clean it up
+
+    # ant clean
