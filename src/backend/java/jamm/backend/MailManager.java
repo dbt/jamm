@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.naming.NamingException;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.BasicAttributes;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
@@ -82,11 +80,9 @@ public class MailManager
             ldap = new LdapFacade(mHost);
             ldap.simpleBind(mBindDn, mBindPassword);
 
-            BasicAttribute objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("JammMailAlias");
-            BasicAttributes attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            Map attributes = new HashMap();
+            attributes.put("objectClass",
+                           new String[] {"top", "JammMailAlias"});
             attributes.put("mail", mail);
             attributes.put("maildrop", destination);
             ldap.addElement(mailDn(domain, mail), attributes);
@@ -111,8 +107,8 @@ public class MailManager
         {
             ldap = new LdapFacade(mHost);
             ldap.simpleBind(mBindDn, mBindPassword);
-            String dn = mailDn(domain, mail);
-            ldap.modifyElementAttribute(dn, "maildrop", newDestination);
+            ldap.modifyElementAttribute(mailDn(domain, mail), "maildrop",
+                                        newDestination);
         }
         catch (NamingException e)
         {
@@ -128,26 +124,21 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        BasicAttribute objectClass;
-        BasicAttributes attributes;
         String mail = mail(domain, account);
-        String hashedPassword;
 
         try
         {
             ldap = new LdapFacade(mHost);
             ldap.simpleBind(mBindDn, mBindPassword);
 
-            objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("JammMailAccount");
-            attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            Map attributes = new HashMap();
+            attributes.put("objectClass",
+                           new String[] { "top", "JammMailAccount" });
             attributes.put("homeDirectory", "/home/vmail/domains");
             attributes.put("mail", mail);
             attributes.put("mailbox", domain + "/" + account + "/");
-            hashedPassword = LdapPassword.hash(PasswordScheme.SSHA_SCHEME,
-                                               password);
+            String hashedPassword =
+                LdapPassword.hash(PasswordScheme.SSHA_SCHEME, password);
             attributes.put("userPassword", hashedPassword);
             ldap.addElement(mailDn(domain, mail), attributes);
         }
@@ -167,8 +158,6 @@ public class MailManager
         throws MailManagerException
     {
         LdapFacade ldap = null;
-        BasicAttribute objectClass;
-        BasicAttributes attributes;
         String catchAll = "@" + domain;
 
         try
@@ -176,11 +165,9 @@ public class MailManager
             ldap = new LdapFacade(mHost);
             ldap.simpleBind(mBindDn, mBindPassword);
 
-            objectClass = new BasicAttribute("objectClass");
-            objectClass.add("top");
-            objectClass.add("JammMailAlias");
-            attributes = new BasicAttributes();
-            attributes.put(objectClass);
+            Map attributes = new HashMap();
+            attributes.put("objectClass",
+                           new String[] { "top", "JammMailAlias" });
             attributes.put("mail", catchAll);
             attributes.put("maildrop", destination);
             ldap.addElement(mailDn(domain, catchAll), attributes);
@@ -197,14 +184,14 @@ public class MailManager
     }
             
 
-    private String domainDn(String domain)
+    private final String domainDn(String domain)
     {
         StringBuffer domainDn = new StringBuffer();
         domainDn.append("jvd=").append(domain).append(",").append(mBase);
         return domainDn.toString();
     }
 
-    private String mailDn(String domain, String mail)
+    private final String mailDn(String domain, String mail)
     {
         StringBuffer mailDn = new StringBuffer();
         mailDn.append("mail=").append(mail).append(",");
@@ -212,7 +199,7 @@ public class MailManager
         return mailDn.toString();
     }
 
-    private static final String mail(String domain, String user)
+    private final String mail(String domain, String user)
     {
         StringBuffer mail = new StringBuffer();
         mail.append(user).append("@").append(domain);
