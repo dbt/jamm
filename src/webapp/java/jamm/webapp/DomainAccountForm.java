@@ -27,50 +27,72 @@ public class DomainAccountForm extends ActionForm
         return mAccountsToDelete;
     }
 
-    public void setAccountsToActivate(String[] accountsToActivate)
+    public void setOriginalActiveAccounts(String[] originalActiveAccounts)
     {
-        mAccountsToActivate = accountsToActivate;
+        mOriginalActiveAccounts = originalActiveAccounts;
     }
 
-    public String[] getAccountsToActivate()
+    public String[] getOriginalActiveAccounts()
     {
-        return mAccountsToActivate;
+        return mOriginalActiveAccounts;
     }
 
-    public void setAccountsToAdmin(String[] accountsToAdmin)
+    public void setActiveAccounts(String[] activeAccounts)
     {
-        mAccountsToAdmin = accountsToAdmin;
+        mActiveAccounts = activeAccounts;
     }
 
-    public String[] getAccountsToAdmin()
+    public String[] getActiveAccounts()
     {
-        return mAccountsToAdmin;
+        return mActiveAccounts;
+    }
+    
+    public Set getCheckedActiveAccounts()
+    {
+        return getDifference(mActiveAccounts, mOriginalActiveAccounts);
     }
 
-    public String[] getOriginalAccounts()
+    public Set getUncheckedActiveAccounts()
     {
-        return mAccounts;
+        return getDifference(mOriginalActiveAccounts, mActiveAccounts);
     }
 
-    public void setOriginalAccounts(String[] accounts)
+    public void setOriginalAdminAccounts(String[] originalAdminAccounts)
     {
-        mAccounts = accounts;
+        mOriginalAdminAccounts = originalAdminAccounts;
     }
 
-    public Set getUnchecked()
+    public String[] getOriginalAdminAccounts()
     {
-        Set original = new HashSet(Arrays.asList(mAccounts));
-        Set changed = new HashSet(Arrays.asList(mAccountsToActivate));
-        original.removeAll(changed);
-        return original;
+        return mOriginalAdminAccounts;
     }
 
-    public Set getChecked()
+    public void setAdminAccounts(String[] adminAccounts)
     {
-        Set original = new HashSet(Arrays.asList(mAccounts));
-        Set changed = new HashSet(Arrays.asList(mAccountsToActivate));
-        changed.removeAll(original);
-        return changed;
+        mAdminAccounts = adminAccounts;
+    }
+
+    public String[] getAdminAccounts()
+    {
+        return mAdminAccounts;
+    }
+
+    public Set getCheckedAdminAccounts()
+    {
+        return getDifference(mAdminAccounts, mOriginalAdminAccounts);
+    }
+
+    public Set getUncheckedAdminAccounts()
+    {
+        return getDifference(mOriginalAdminAccounts, mAdminAccounts);
+    }
+
+    private Set getDifference(String[] list1, String[] list2)
+    {
+        Set set1 = new HashSet(Arrays.asList(list1));
+        Set set2 = new HashSet(Arrays.asList(list2));
+        set1.removeAll(set2);
+        return set1;
     }
 
     /**
@@ -80,12 +102,16 @@ public class DomainAccountForm extends ActionForm
     {
         mAccounts = new String[0];
         mAccountsToDelete = new String[0];
-        mAccountsToActivate = new String[0];
-        mAccountsToAdmin = new String[0];
+        mOriginalActiveAccounts = new String[0];
+        mActiveAccounts = new String[0];
+        mOriginalAdminAccounts = new String[0];
+        mAdminAccounts = new String[0];
     }
 
-    private String[] mAccountsToDelete;
-    private String[] mAccountsToActivate;
-    private String[] mAccountsToAdmin;
     private String[] mAccounts;
+    private String[] mAccountsToDelete;
+    private String[] mOriginalActiveAccounts;
+    private String[] mActiveAccounts;
+    private String[] mOriginalAdminAccounts;
+    private String[] mAdminAccounts;
 }

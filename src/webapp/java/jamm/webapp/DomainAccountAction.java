@@ -1,5 +1,6 @@
 package jamm.webapp;
 
+import java.util.Arrays;
 import jamm.backend.MailManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,36 +21,19 @@ public class DomainAccountAction extends Action
         throws Exception
     {
         DomainAccountForm form = (DomainAccountForm) actionForm;
-        String[] delete = form.getAccountsToDelete();
-        System.out.println("Delete length: " + delete.length);
-        for (int i = 0; i < delete.length; i++)
-        {
-            System.out.println("delete[" + i + "]: " + delete[i]);
-        }
 
-        String[] activate = form.getAccountsToActivate();
-        System.out.println("Activate length: " + activate.length);
-        for (int i = 0; i < activate.length; i++)
-        {
-            System.out.println("activate[" + i + "]: " + activate[i]);
-        }
+        System.out.println("========================================================================");
+        System.out.println("Delete: " +
+                           Arrays.asList(form.getAccountsToDelete()));
+        System.out.println("Unchecked active: " +
+                           form.getUncheckedActiveAccounts());
+        System.out.println("Checked active: " +
+                           form.getCheckedActiveAccounts());
 
-        String[] admin = form.getAccountsToAdmin();
-        System.out.println("Admin length: " + admin.length);
-        for (int i = 0; i < admin.length; i++)
-        {
-            System.out.println("admin[" + i + "]: " + admin[i]);
-        }
-
-        String[] accounts = form.getOriginalAccounts();
-        System.out.println("Accounts length: " + accounts.length);
-        for (int i = 0; i < accounts.length; i++)
-        {
-            System.out.println("accounts[" + i + "]: " + accounts[i]);
-        }
-
-        System.out.println("Unchecked: " + form.getUnchecked());
-        System.out.println("Checked: " + form.getChecked());
+        System.out.println("Unchecked admin: " +
+                           form.getUncheckedAdminAccounts());
+        System.out.println("Checked admin: " +
+                           form.getCheckedAdminAccounts());
 
         return mapping.findForward("domain_admin");
     }

@@ -1,7 +1,17 @@
 <!-- <%@ include file="/WEB-INF/common/all_definitions.jsp" %>  -->
 <h1 align="center">Admin Menu <bean:write name="domainName"/></h1>
 
-<html:form action="/private/domain_account" method="GET">
+<html:form action="/private/domain_account">
+  <logic:iterate id="account" name="domainAccountForm"
+                 property="originalActiveAccounts" type="String">
+    <html:hidden property="originalActiveAccounts" value="<%=account%>"/>
+  </logic:iterate>
+
+  <logic:iterate id="account" name="domainAccountForm"
+                 property="originalAdminAccounts" type="String">
+    <html:hidden property="originalAdminAccounts" value="<%=account%>"/>
+  </logic:iterate>
+
   <table width="80%" border="1" cellspacing="0" cellpadding="3"
          align="center">
     <tr>
@@ -10,10 +20,7 @@
       <th>Active</th>
       <th>Admin</th>
     </tr>
-    <logic:iterate id="account" name="domainAccountForm" property="originalAccounts">
-      <html:hidden property="originalAccounts"
-      value="<%=account.toString()%>"/>
-    </logic:iterate>
+
     <logic:iterate indexId="i" id="account" name="accounts">
       <jamm:tr index="i" evenColor="#FFFFFF" oddColor="#6495ED">
         <td><bean:write name="account"/></td>
@@ -23,12 +30,12 @@
           </html:multibox>
         </td>
         <td align="center">
-          <html:multibox property="accountsToActivate">
+          <html:multibox property="activeAccounts">
             <bean:write name="account"/>
           </html:multibox>
         </td>
         <td align="center">
-          <html:multibox property="accountsToAdmin">
+          <html:multibox property="adminAccounts">
             <bean:write name="account"/>
           </html:multibox>
         </td>

@@ -28,7 +28,6 @@
     <forward name="user_home" path="/private/" redirect="true"/>
     <forward name="login" path="/login.jsp"/>
     <forward name="logout" path="/logout.do"/>
-    <forward name="domain_admin" path="/private/domain_admin.do"/>
   </global-forwards>
 
 
@@ -64,6 +63,7 @@
     <action path="/private/index"
             type="jamm.webapp.MainMenuAction">
       <forward name="account_admin" path="/private/account_admin.jsp"/>
+      <forward name="domain_admin" path="/private/domain_admin.do"/>
       <forward name="alias_admin" path="/private/alias_admin.jsp"/>
     </action>
 
@@ -85,6 +85,8 @@
             name="domainAccountForm"
             scope="request"
             validate="false">
+      <forward name="domain_admin" path="/private/domain_admin.do"
+               redirect="true"/>
     </action>
 
     <!-- This will reload tileDefinitions.xml -->
