@@ -33,6 +33,7 @@ import javax.naming.AuthenticationException;
 import javax.naming.AuthenticationNotSupportedException;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.CommunicationException;
+import javax.naming.NoPermissionException;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
@@ -212,10 +213,11 @@ public class MailManager
      *
      * @param mail Email address to change password for
      * @param newPassword New password for this account or alias
-     * @throws MailManagerException If an error occured
+     * @exception PermissionException if an permission error occurs
+     * @exception MailManagerException If an error occured
      */
     private void changePasswordExOp(String mail, String newPassword)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
 
@@ -241,6 +243,10 @@ public class MailManager
                 mBindPassword = newPassword;
             }
         }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException("Can't change password", e);
+        }
         catch (NamingException e)
         {
             throw new MailManagerException(e);
@@ -259,10 +265,11 @@ public class MailManager
      *
      * @param mail Email address to change password for
      * @param newPassword New password for this account or alias
-     * @throws MailManagerException If an error occured
+     * @exception PermissionException if an permission error occurs
+     * @exception MailManagerException If an error occured
      */
     private void changePasswordHash(String mail, String newPassword)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
 
@@ -290,6 +297,10 @@ public class MailManager
             {
                 mBindPassword = newPassword;
             }
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException("Can't change password", e);
         }
         catch (NamingException e)
         {
@@ -569,10 +580,11 @@ public class MailManager
      * Modifies the domain's capabilities out of the DomainInfo object.
      *
      * @param domain a <code>DomainInfo</code> value
+     * @exception PermissionException if a permission error occurs
      * @exception MailManagerException if an error occurs
      */
     public void modifyDomain(DomainInfo domain)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String domainName = domain.getName();
@@ -619,6 +631,11 @@ public class MailManager
                     modifyAlias(ali);
                 }
             }
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "Can't modify domain " + domainName, e);
         }
         catch (NamingException e)
         {
@@ -728,11 +745,12 @@ public class MailManager
      * aliases, both with no password.
      *
      * @param domain Name of the new domain
-     * @exception AccountExistsException if the domain with that name exists
+     * @exception DomainExistsException if the domain already exists
+     * @exception PermissionException if a permission error occurs
      * @exception MailManagerException If an error occured
      */
     public void createDomain(String domain)
-        throws DomainExistsException, MailManagerException
+        throws DomainExistsException, PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         try
@@ -784,6 +802,11 @@ public class MailManager
             throw new DomainExistsException(
                 "Could not create domain: " + domain, e);
         }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to create domain " + domain, e);
+        }
         catch (NamingException e)
         {
             throw new MailManagerException("Could not create domain: " +
@@ -799,10 +822,11 @@ public class MailManager
      * Removes the domain and any of its contents.
      *
      * @param domain the domain to remove
+     * @exception PermissionException if a permission error occurs
      * @exception MailManagerException if an error occurs
      */
     public void deleteDomain(String domain)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String domainDn = domainDn(domain);
@@ -824,6 +848,11 @@ public class MailManager
                 ldap.deleteElement((String) i.next());
             }
             ldap.deleteElement(domainDn);
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to delete domain " + domain, e);
         }
         catch (NamingException e)
         {
@@ -861,10 +890,13 @@ public class MailManager
      * @param domain Doman mame
      * @param alias Alias name
      * @param destinations An array of destinations
-     * @throws MailManagerException If an error occured
+     * @exception PermissionException if a permission error occurs
+     * @exception AccountExistsException if an alias already exists
+     * @exception MailManagerException If an error occured
      */
     public void createAlias(String domain, String alias, String[] destinations)
-        throws MailManagerException
+        throws PermissionException, AccountExistsException,
+        MailManagerException
     {
         LdapFacade ldap = null;
         String mail = MailAddress.addressFromParts(alias, domain);
@@ -887,6 +919,11 @@ public class MailManager
             throw new AccountExistsException(
                 "Count not create alias: " + mail, e);
         }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to create alias " + mail, e);
+        }
         catch (NamingException e)
         {
             throw new MailManagerException("Could not create alias: " + mail,
@@ -902,10 +939,11 @@ public class MailManager
      * Modify an existing alias replacing existing data.
      *
      * @param alias New alias data
-     * @throws MailManagerException If an error occured
+     * @exception PermissionException if a permission error occurs
+     * @exception MailManagerException If an error occured
      */
     public void modifyAlias(AliasInfo alias)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String mail = alias.getName();
@@ -936,6 +974,11 @@ public class MailManager
 
             ldap.modifyElementAttribute(dn, "lastChange",
                                         getUnixTimeString());
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to modify alias " + alias.getName(), e);
         }
         catch (NamingException e)
         {
@@ -1090,10 +1133,11 @@ public class MailManager
      * Delete the specified alias.
      *
      * @param mail Email address of alias to delete
-     * @throws MailManagerException If the alias could not be deleted
+     * @exception PermissionException if a permission error occurs
+     * @exception MailManagerException If the alias could not be deleted
      */
     public void deleteAlias(String mail)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         try
@@ -1105,6 +1149,11 @@ public class MailManager
             ldap = getLdap();
             searchForMail(ldap, mail);
             ldap.deleteElement(ldap.getResultName());
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to delete alias " + mail, e);
         }
         catch (NamingException e)
         {
@@ -1136,11 +1185,13 @@ public class MailManager
      * @param domain Domain name
      * @param account New account name
      * @param password Password of new account
+     * @exception PermissionException if a permission error occursb
      * @exception AccountExistsException if the account exists already
      * @exception MailManagerException If the account could not be created
      */
     public void createAccount(String domain, String account, String password)
-        throws AccountExistsException, MailManagerException
+        throws PermissionException, AccountExistsException,
+        MailManagerException
     {
         LdapFacade ldap = null;
         String mail = MailAddress.addressFromParts(account, domain);
@@ -1179,6 +1230,11 @@ public class MailManager
             throw new AccountExistsException(
                 "Cound not create account: " + mail, e);
         }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to create account " + mail, e);
+        }
         catch (NamingException e)
         {
             throw new MailManagerException("Could not create account: " + mail,
@@ -1194,10 +1250,11 @@ public class MailManager
      * Modifies an account entry based on the AccountInfo passed on.
      *
      * @param account AccountInfo with current settings.
+     * @exception PermissionException if a permission error occurs
      * @exception MailManagerException if an error occurs
      */
     public void modifyAccount(AccountInfo account)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
 
@@ -1228,6 +1285,11 @@ public class MailManager
                                         getUnixTimeString());
             ldap.modifyElementAttribute(dn, "delete",
                                         booleanToString(account.getDelete()));
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to modify account " + account.getName(), e);
         }
         catch (NamingException e)
         {
@@ -1420,10 +1482,11 @@ public class MailManager
      *
      * @param domain Domain name
      * @param destination Destination alias
-     * @throws MailManagerException If the catch all could not be added
+     * @exception PermissionException if a permission error occurs
+     * @exception MailManagerException If the catch all could not be added
      */
     public void addCatchall(String domain, String destination)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String catchAll = "@" + domain;
@@ -1439,6 +1502,11 @@ public class MailManager
             attributes.put("lastChange", getUnixTimeString());
             attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(catchAll), attributes);
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to modify domain " + domain, e);
         }
         catch (NamingException e)
         {
@@ -1514,10 +1582,11 @@ public class MailManager
      *
      * @param domain The domain to grant powers in.
      * @param mail The person to give power to.
-     * @throws MailManagerException When a postmaster can't be added.
+     * @exception PermissionException if a permission error occurs
+     * @exception MailManagerException When a postmaster can't be added.
      */
     public void addPostmaster(String domain, String mail)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String pmMail = "postmaster@" + domain;
@@ -1535,6 +1604,11 @@ public class MailManager
                                             "roleOccupant", roleOccupants);
             }
         }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to add postmaster to " + domain, e);
+        }
         catch (NamingException e)
         {
             throw new MailManagerException("Adding " + mail + " as postmaster",
@@ -1547,10 +1621,11 @@ public class MailManager
      *
      * @param domain The domain to look in.
      * @param mail The mail address to remove power from.
+     * @exception PermissionException if a permission error occurs
      * @exception MailManagerException if an error occurs
      */
     public void removePostmaster(String domain, String mail)
-        throws MailManagerException
+        throws PermissionException, MailManagerException
     {
         LdapFacade ldap = null;
         String pmMail = "postmaster@" + domain;
@@ -1567,6 +1642,11 @@ public class MailManager
                 ldap.modifyElementAttribute(ldap.getResultName(),
                                             "roleOccupant", roleOccupants);
             }
+        }
+        catch (NoPermissionException e)
+        {
+            throw new PermissionException(
+                "No permission to remove postmaster from " + domain, e);
         }
         catch (NamingException e)
         {
