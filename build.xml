@@ -19,6 +19,7 @@
     <fileset dir="${struts.lib}" includes="*.jar"/>
     <fileset dir="${jaxp.lib}" includes="*.jar"/>
     <pathelement path="${cli.jar}" />
+    <pathelement path="${log4j.jar}"/>
   </path>
 
   <path id="xdoclet.path">
@@ -230,7 +231,9 @@
         <path refid="lib.path" />
       </classpath>
       <jvmarg value="-Dlog4j.disableOverride=${log4j.disableOverride}" />
-
+<!--       <jvmarg value="-Xdebug"/> -->
+<!--       <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y"/> -->
+        
       <formatter type="plain" />
       <test name="jamm.AllTests"
             outfile="test/backend/results" />
