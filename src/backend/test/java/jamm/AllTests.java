@@ -16,6 +16,8 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
+import jamm.ldap.LdapPassword;
+
 public class AllTests
 {
     public static Test suite()
@@ -57,6 +59,7 @@ public class AllTests
         throws Exception
     {
         setupLdapData();
+        setupLdapPassword();
     }
 
     /**
@@ -180,35 +183,50 @@ public class AllTests
     }
 
     private static void destroySubtree(DirContext context, String dn)
-        throws NamingException
     {
         SearchControls controls;
         NamingEnumeration results;
         SearchResult element;
         String rdn;
         
-        controls = new SearchControls();
-        controls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
-        results = context.search(dn, "objectClass=*", controls);
-
-        while (results.hasMore())
+        try
         {
-            element = (SearchResult) results.next();
-            rdn = element.getName();
-            if (rdn.equals(""))
-            {
-                rdn = dn;
-            }
-            else
-            {
-                rdn = rdn + "," + dn;
-            }
+            controls = new SearchControls();
+            controls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+            results = context.search(dn, "objectClass=*", controls);
 
-            destroySubtree(context, rdn);
+            while (results.hasMore())
+            {
+                element = (SearchResult) results.next();
+                rdn = element.getName();
+                if (rdn.equals(""))
+                {
+                    rdn = dn;
+                }
+                else
+                {
+                    rdn = rdn + "," + dn;
+                }
+
+                destroySubtree(context, rdn);
+            }
+            results.close();
+
+            context.destroySubcontext(dn);
         }
-        results.close();
-
-        context.destroySubcontext(dn);
+        catch (NamingException e)
+        {
+            // An error may be ok if, for example, there is no
+            // existing entries.  Just spit out a warning and continue.
+            System.err.println("Warning: could not delete tree: " + e);
+        }
+    }
+    
+    private static void setupLdapPassword()
+    {
+        // Use normal random as SecureRandom takes too long to
+        // initialize for testing.
+        LdapPassword.setRandomClass("java.util.Random");
     }
     
     private static void oneTimeTearDown()
