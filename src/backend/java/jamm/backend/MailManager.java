@@ -1106,59 +1106,72 @@ public class MailManager
     private List getFilteredDomains(String filter)
         throws MailManagerException
     {
-        LdapFacade derivedLdap = null; 
-        LdapFacade domainLdap = null;
+        LdapFacade ldap = null;
         List domains = new ArrayList();
         try
         {
-            domainLdap = getLdap();
-            derivedLdap = getLdap();
-
-            domainLdap.searchOneLevel(mBase, filter);
-            
-            while (domainLdap.nextResult())
+            // Get the domains
+            ldap = getLdap();
+            ldap.searchOneLevel(mBase, filter);
+            while (ldap.nextResult())
             {
-                String dn = domainLdap.getResultName();
-                String name = domainLdap.getResultAttribute("jvd");
+                String dn = ldap.getResultName();
+                String name = ldap.getResultAttribute("jvd");
                 boolean canEditAccounts = stringToBoolean(
-                    domainLdap.getResultAttribute("editAccounts"));
+                    ldap.getResultAttribute("editAccounts"));
                 boolean canEditPostmasters = stringToBoolean(
-                    domainLdap.getResultAttribute("editPostmasters"));
+                    ldap.getResultAttribute("editPostmasters"));
                 boolean active = stringToBoolean(
-                    domainLdap.getResultAttribute("accountActive"));
+                    ldap.getResultAttribute("accountActive"));
                 int lastChange = Integer.parseInt(
-                    domainLdap.getResultAttribute("lastChange"));
+                    ldap.getResultAttribute("lastChange"));
                 boolean delete = stringToBoolean(
-                    domainLdap.getResultAttribute("delete"));
+                    ldap.getResultAttribute("delete"));
+                    
+                domains.add(new DomainInfo(name, canEditAccounts,
+                                           canEditPostmasters, active, delete,
+                                           0, 0, lastChange));
+            }
+            
+            Iterator i = domains.iterator();
+            while (i.hasNext())
+            {
+                DomainInfo domain = (DomainInfo) i.next();
+                String name = domain.getName();
+                
+                
+                // Count the accounts
+                ldap.resetSearch();
+                ldap.setReturningAttributes(new String[] { "mail" });
+                ldap.searchOneLevel(
+                    domainDn(name),
+                    "objectClass=" + ACCOUNT_OBJECT_CLASS);
 
-                // Get the count the best way we can.  Maybe we can
-                // make a helper that does this?
-                derivedLdap.setReturningAttributes(new String[] { "mail" });
-                derivedLdap.searchOneLevel(
-                    domainDn(name), "objectClass=" + ACCOUNT_OBJECT_CLASS);
                 int accountCount = 0;
-                while (derivedLdap.nextResult())
+                while (ldap.nextResult())
                 {
                     accountCount++;
                 }
-                derivedLdap.searchOneLevel(
+                domain.setAccountCount(accountCount);
+                                
+                // Count the aliases
+                ldap.resetSearch();
+                ldap.setReturningAttributes(new String[] { "mail" });
+                ldap.searchOneLevel(
                     domainDn(name),
                     "(&(!(|(cn=postmaster)(cn=abuse)))(objectClass=" +
                         ALIAS_OBJECT_CLASS + "))");
                         
                 int aliasCount = 0;
-                while (derivedLdap.nextResult())
+                while (ldap.nextResult())
                 {
-                    String mail = derivedLdap.getResultAttribute("mail");
+                    String mail = ldap.getResultAttribute("mail");
                     if (mail != null && !mail.startsWith("@"))
                     {
                         aliasCount++;
                     }
                 }
-
-                domains.add(
-                    new DomainInfo(name, canEditAccounts, canEditPostmasters,
-                    active, delete, aliasCount, accountCount, lastChange));
+                domain.setAliasCount(aliasCount);
             }
         }
         catch (NamingException e)
@@ -1167,8 +1180,7 @@ public class MailManager
         }
         finally
         {
-            closeLdap(domainLdap);
-            closeLdap(derivedLdap);
+            closeLdap(ldap);
         }
 
         Collections.sort(domains, new DomainNameComparator());
