@@ -24,6 +24,6 @@ public class AddAccountAction extends JammAction
         manager.createAccount(form.getDomain(), form.getName(),
                               form.getPassword());
 
-        return mapping.findForward("success");
+        return mapping.findForward("user_home");
     }
 }

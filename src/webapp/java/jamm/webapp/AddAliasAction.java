@@ -32,6 +32,6 @@ public class AddAliasAction extends JammAction
             manager.changePassword(mail, form.getPassword());
         }
 
-        return mapping.findForward("success");
+        return mapping.findForward("user_home");
     }
 }
