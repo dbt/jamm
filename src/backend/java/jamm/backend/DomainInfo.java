@@ -34,14 +34,17 @@ public class DomainInfo implements Serializable
      * @param canEditAccounts a <code>boolean</code> value
      * @param canEditPostmasters a <code>boolean</code> value
      * @param active is domain active
+     * @param lastChange time of last change in unix time.
      */
     public DomainInfo(String name, boolean canEditAccounts,
-                      boolean canEditPostmasters, boolean active)
+                      boolean canEditPostmasters, boolean active,
+                      int lastChange)
     {
         mName = name;
         mCanEditAccounts = canEditAccounts;
         mCanEditPostmasters = canEditPostmasters;
         mActive = active;
+        mLastChange = lastChange;
     }
 
     /**
@@ -124,6 +127,16 @@ public class DomainInfo implements Serializable
         mActive = active;
     }
 
+    /**
+     * returns the last change time of this domain's info
+     *
+     * @return an int containing unixtime
+     */
+    public int getLastChange()
+    {
+        return mLastChange;
+    }
+
     /** The domain name */
     private String mName;
     /** Can domain admin edit accounts */
@@ -132,4 +145,6 @@ public class DomainInfo implements Serializable
     private boolean mCanEditPostmasters;
     /** is this domain active? */
     private boolean mActive;
+    /** time of last change */
+    private int mLastChange;
 }

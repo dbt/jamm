@@ -443,8 +443,10 @@ public class MailManager
             ldap.getResultAttribute("editPostmasters"));
         boolean active = stringToBoolean(
             ldap.getResultAttribute("accountActive"));
+        int lastChange =
+            Integer.parseInt(ldap.getResultAttribute("lastChange"));
         return new DomainInfo(name, canEditAccounts, canEditPostmasters,
-                              active);
+                              active, lastChange);
     }
 
     /**
