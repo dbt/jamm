@@ -24,7 +24,6 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,7 +35,7 @@ import org.apache.struts.action.ActionForward;
  *
  * @see jamm.webapp.DomainConfigForm
  */
-public class DomainAccountAction extends Action
+public class DomainAccountAction extends JammAction
 {
     /**
      * Performs the action.
@@ -75,6 +74,6 @@ public class DomainAccountAction extends Action
         System.out.println("Checked admin: " +
                            form.getCheckedAdminItems());
 
-        return mapping.findForward("user_home");
+        return findForward(mapping, "domain_admin", request);
     }
 }

@@ -61,7 +61,7 @@ public class AddAccountAction extends JammAction
     {
         if (isCancelled(request))
         {
-            return mapping.findForward("user_home");
+            return findForward(mapping, "domain_admin", request);
         }
 
         AddAccountForm form = (AddAccountForm) actionForm;
@@ -71,6 +71,6 @@ public class AddAccountAction extends JammAction
         manager.createAccount(form.getDomain(), form.getName(),
                               form.getPassword());
 
-        return mapping.findForward("user_home");
+        return findForward(mapping, "domain_admin", request);
     }
 }

@@ -98,14 +98,6 @@ public class UpdateAliasAction extends JammAction
         alias.setDestinations(newDestinations);
         manager.modifyAlias(alias);
 
-        // Get the forward, and then create a new forward with the mail
-        // tacked onto it.
-        ActionForward adminForward = mapping.findForward("account_admin");
-        StringBuffer pathWithMail = new StringBuffer(adminForward.getPath());
-        pathWithMail.append("?mail=").append(mail);
-        ActionForward forwardWithMail =
-            new ActionForward(pathWithMail.toString(),
-                              adminForward.getRedirect());
-        return (forwardWithMail);
+        return findForward(mapping, "account_admin", request);
     }
 }

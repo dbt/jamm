@@ -60,7 +60,7 @@ public class AddAliasAction extends JammAction
     {
         if (isCancelled(request))
         {
-            return mapping.findForward("user_home");
+            return findForward(mapping, "domain_admin", request);
         }
 
         AddAliasForm form = (AddAliasForm) actionForm;
@@ -77,6 +77,6 @@ public class AddAliasAction extends JammAction
             manager.changePassword(mail, form.getPassword());
         }
 
-        return mapping.findForward("user_home");
+        return findForward(mapping, "domain_admin", request);
     }
 }
