@@ -19,7 +19,6 @@
 
 package jamm.webapp;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.HashMap;
 
@@ -142,8 +141,12 @@ public class SiteConfigAction extends JammAction
         }
     }
 
+    /** a final meaning "call setCanEditAliases" */
     private static final int EDIT_ALIASES = 0;
+    /** a final meaning "call setCanEditAccounts" */
     private static final int EDIT_ACCOUNTS = 1;
+    /** a final meaning "call setCanEditPostmasters" */
     private static final int EDIT_POSTMASTERS = 2;
+    /** a final meaning "call setCanEditCatchalls" */
     private static final int EDIT_CATCHALLS = 3;
 }
