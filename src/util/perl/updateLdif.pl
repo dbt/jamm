@@ -44,8 +44,9 @@ close INPUT;
 close OUTPUT;
 
 $oldldif = Net::LDAP::LDIF->new($tmpfile, "r", onerror => "warn",
-                                encode => "base64" );
-$newldif = Net::LDAP::LDIF->new($newldif_filename, "w", "warn");
+                                encode => "base64");
+$newldif = Net::LDAP::LDIF->new($newldif_filename, "w", onerror => "warn",
+                                encode => "base64");
 
 while (not $oldldif->eof())
 {
@@ -62,13 +63,25 @@ while (not $oldldif->eof())
     else
     {
         $objectSet = getSet($entry->get_value("objectClass"));
+        if ($objectSet->has("organizationalrole"))
+        {
+            if (!($entry->get_value(cn) eq "Manager"))
+            {
+                $entry->replace("objectClass" =>
+                                [qw(JammMailAlias JammPostmaster)]
+                               );
+            }
+        }
         if ($objectSet->has("jammvirtualdomain"))
         {
             my $jvd = $entry->get_value("jvd");
             print "Updating entry jvd=$jvd\n";
             $entry->delete("editCatchAlls");
             $entry->delete("editAliases");
-            $entry->add("delete" => "FALSE");
+            if (!$entry->exists("delete"))
+            {
+                $entry->add("delete" => "FALSE");
+            }
             $entry->replace("accountActive" => "TRUE");
             $entry->replace("lastChange" => time());
         }
@@ -77,7 +90,10 @@ while (not $oldldif->eof())
         {
             my $account = $entry->get_value("mail");
             print "Updating account entry mail=$account\n";
-            $entry->add("delete" => "FALSE");
+            if (!$entry->exists("delete"))
+            {
+                $entry->add("delete" => "FALSE");
+            }
             $entry->replace("accountActive" => "TRUE");
             $entry->replace("lastChange" => time());
         }
