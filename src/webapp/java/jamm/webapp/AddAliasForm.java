@@ -117,6 +117,12 @@ public class AddAliasForm extends ActionForm
                        new ActionError("alias.error.non_zero_aliases"));
         }
 
+        if ((mName == null) || mName.equals(""))
+        {
+            errors.add("name",
+                       new ActionError("add_alias.error.no_name"));
+        }
+
         if (!isPasswordEmpty())
         {
             if (!PasswordValidator.validatePassword(mPassword,
