@@ -22,12 +22,16 @@ package jamm.webapp;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
@@ -214,5 +218,108 @@ public abstract class JammAction extends Action
         {
             manager.changePasswordHash(mail, password);
         }
+    }
+
+    /**
+     * If an access error occurs, this can be called to set up the
+     * access error page.
+     *
+     * @param request The request being serviced
+     * @param mapping The action mapping
+     */
+    protected void doAccessError(HttpServletRequest request,
+                                 ActionMapping mapping)
+    {
+        List breadCrumbs = new ArrayList();
+        BreadCrumb breadCrumb;
+        breadCrumb = new BreadCrumb(
+            findForward(mapping, "home", request).getPath(), "Main Page");
+        breadCrumbs.add(breadCrumb);
+        request.setAttribute("breadCrumbs", breadCrumbs);
+
+        ActionErrors errors = new ActionErrors();
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("access.error"));
+        saveErrors(request, errors);
+    }
+
+    /**
+     * To be used in Access Checks.  For now, the site admin is always
+     * allowed to do stuff.
+     *
+     * @param request a request
+     * @param extraInfo ignored in this method
+     * @return only returns true
+     */
+    protected boolean isSiteAdminAllowed(HttpServletRequest request,
+                                         Map extraInfo)
+    {
+        return true;
+    }
+
+    /**
+     * Checks to see if the domain admin is allowed to be here.  This
+     * is the default implementation, this always returns false.
+     * Classes that extend this class should override this if they
+     * want different values.
+     *
+     * @param request The request that is being serviced.
+     * @param extraInfo extra information we may need to determine access
+     * @return only returns false
+     * @exception MailManagerException if an error occurs
+     */
+    protected boolean isDomainAdminAllowed(HttpServletRequest request,
+                                           Map extraInfo)
+        throws MailManagerException
+    {
+        return false;
+    }
+
+    /**
+     * Checks to see if the domain admin is allowed to be here.  This
+     * is the default implementation, this always returns false.
+     * Classes that extend this class should override this if they
+     * want different values.
+     *
+     * @param request The request that is being serviced.
+     * @param extraInfo extra information we may need to determine access
+     * @return only returns false
+     * @exception MailManagerException if an error occurs
+     */
+    protected boolean isUserAllowed(HttpServletRequest request,
+                                    Map extraInfo)
+        throws MailManagerException
+    {
+        return false;
+    }
+
+    /**
+     * Checks to see if the user is allowed to be here.
+     *
+     * @param request the request being serviced
+     * @param extraInfo map of extra info that the helper methods might need
+     * @return a value of whether this can be edited
+     * @exception MailManagerException if an error occurs
+     */
+    protected final boolean isAllowedToBeHere(HttpServletRequest request,
+                                              Map extraInfo)
+        throws MailManagerException
+    {
+        boolean result = false;
+
+        User user = getUser(request);
+
+        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
+        {
+            result = result || isSiteAdminAllowed(request, extraInfo);
+        }
+
+        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
+        {
+            result = result || isDomainAdminAllowed(request, extraInfo);
+        }
+
+        result = result || isUserAllowed(request, extraInfo);
+        
+        return result;
     }
 }

@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
 import jamm.backend.DomainInfo;
@@ -67,21 +65,9 @@ public class SiteAdminAction extends JammAction
         User user = getUser(request);
         MailManager manager = getMailManager(user);
 
-        if (!isAllowedToBeHere(user))
+        if (!isAllowedToBeHere(request, null))
         {
-            List breadCrumbs = new ArrayList();
-            BreadCrumb breadCrumb;
-            breadCrumb = new BreadCrumb(
-                findForward(mapping, "home", request).getPath(),
-                "Home");
-            breadCrumbs.add(breadCrumb);
-            request.setAttribute("breadCrumbs", breadCrumbs);
-
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("access.error"));
-            saveErrors(request, errors);
-            
+            doAccessError(request, mapping);
             return mapping.findForward("access_error");
         }
         
@@ -147,21 +133,5 @@ public class SiteAdminAction extends JammAction
         request.setAttribute("siteConfigForm", siteConfigForm);
 
         return (mapping.findForward("view"));
-    }
-
-    /**
-     * Is the user supposed to be visiting this action?
-     *
-     * @param user The user who is trying to hit the page
-     * @return the value whether they are allowed or not
-     */
-    private boolean isAllowedToBeHere(User user)
-    {
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
-        {
-            return true;
-        }
-
-        return false;
     }
 }

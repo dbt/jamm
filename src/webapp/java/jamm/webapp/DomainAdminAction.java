@@ -89,18 +89,11 @@ public class DomainAdminAction extends JammAction
             return mapping.findForward("general_error");
         }
 
-        if (!isAllowedToBeHere(manager, domain, user))
+        Map extraInfo = new HashMap();
+        extraInfo.put("domain", domain);
+        if (!isAllowedToBeHere(request, extraInfo))
         {
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("access.error"));
-            saveErrors(request, errors);
-
-            List breadCrumbs = new ArrayList();
-            BreadCrumb breadCrumb = new BreadCrumb(
-                findForward(mapping, "home", request).getPath(), "Home");
-            breadCrumbs.add(breadCrumb);
-            request.setAttribute("breadCrumbs", breadCrumbs);
-
+            doAccessError(request, mapping);
             return mapping.findForward("access_error");
         }
         
@@ -138,29 +131,22 @@ public class DomainAdminAction extends JammAction
     }
 
     /**
-     * Are we supposed to be here?
+     * Checks to see if the domain admin can be here.
      *
-     * @param manager the mail manager to use
-     * @param domain the domain trying to be looked at
-     * @param user the user who's trying to access the page
-     * @return the value of whether you are allowed
+     * @param request the request
+     * @param extraInfo map packed with "domain"
+     * @return boolean value of access allowed
      * @exception MailManagerException if an error occurs
      */
-    private boolean isAllowedToBeHere(MailManager manager, String domain,
-                                      User user)
+    protected boolean isDomainAdminAllowed(HttpServletRequest request,
+                                           Map extraInfo)
         throws MailManagerException
     {
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
-        {
-            return true;
-        }
-
-        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
-        {
-            return manager.isPostmaster(domain, user.getUsername());
-        }
-
-        return false;
+        User user = getUser(request);
+        MailManager manager = getMailManager(user);
+        String domain = (String) extraInfo.get("domain");
+        
+        return manager.isPostmaster(domain, user.getUsername());
     }
 
     /**

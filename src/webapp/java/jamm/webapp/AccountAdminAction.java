@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 
 import jamm.backend.MailManager;
 import jamm.backend.MailManagerException;
@@ -74,21 +72,11 @@ public class AccountAdminAction extends JammAction
             mail = user.getUsername();
         }
 
-        if (!isAllowedToBeHere(manager, mail, user))
+        Map extraInfo = new HashMap();
+        extraInfo.put("mail", mail);
+        if (!isAllowedToBeHere(request, extraInfo))
         {
-            List breadCrumbs = new ArrayList();
-            BreadCrumb breadCrumb;
-            breadCrumb = new BreadCrumb(
-                findForward(mapping, "home", request).getPath(),
-                "Home");
-            breadCrumbs.add(breadCrumb);
-            request.setAttribute("breadCrumbs", breadCrumbs);
-
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("access.error"));
-            saveErrors(request, errors);
-            
+            doAccessError(request, mapping);
             return mapping.findForward("access_error");
         }
         
@@ -152,30 +140,40 @@ public class AccountAdminAction extends JammAction
     }
 
     /**
-     * Checks to see if the user is allowed to be here.
+     * Checks to see if the domain admin is allowed to be here.
      *
-     * @param manager The mail manager to check
-     * @param mail the mail user attempted to be edited
-     * @param user The user attempting to do the edit
-     * @return a value of whether this can be edited
+     * @param request the request we are servicing
+     * @param extraInfo Should contain information for the "mail"
+     * @return boolean value signifying if the domain admin can be here.
      * @exception MailManagerException if an error occurs
      */
-    private boolean isAllowedToBeHere(MailManager manager, String mail,
-                                      User user)
+    protected boolean isDomainAdminAllowed(HttpServletRequest request,
+                                           Map extraInfo)
         throws MailManagerException
     {
+        User user = getUser(request);
+        MailManager manager = getMailManager(user);
+        String mail = (String) extraInfo.get("mail");
         String domain = MailAddress.hostFromAddress(mail);
 
-        if (user.isUserInRole(User.SITE_ADMIN_ROLE))
-        {
-            return true;
-        }
+        return manager.isPostmaster(domain, user.getUsername());
+    }
 
-        if (user.isUserInRole(User.DOMAIN_ADMIN_ROLE))
-        {
-            return manager.isPostmaster(domain, user.getUsername());
-        }
-
+    /**
+     * Checks to see if the domain admin is allowed to be here.
+     *
+     * @param request The request we are servicing
+     * @param extraInfo Should contain information for the "mail" address
+     * @return boolean value signifying if the user can be here.
+     * @exception MailManagerException if an error occurs
+     */
+    protected boolean isUserAllowed(HttpServletRequest request,
+                                    Map extraInfo)
+        throws MailManagerException
+    {
+        User user = getUser(request);
+        String mail = (String) extraInfo.get("mail");
+        
         return user.getUsername().equals(mail);
     }
 }
