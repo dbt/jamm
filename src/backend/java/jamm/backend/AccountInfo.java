@@ -119,6 +119,16 @@ public class AccountInfo implements Serializable
     }
 
     /**
+     * 
+     *
+     * @return a string with the full path to the mailbox
+     */
+    public String getFullPathToMailbox()
+    {
+        return mHomeDirectory + "/" + mMailbox;
+    }
+
+    /**
      * Gets the value of lastChange in unix time
      *
      * @return the value of lastChange in unix time
