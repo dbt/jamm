@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
+import javax.naming.AuthenticationNotSupportedException;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
@@ -217,6 +218,13 @@ public class MailManager
         }
         catch (AuthenticationException e)
         {
+            authenticated = false;
+        }
+        catch (AuthenticationNotSupportedException e)
+        {
+            // JDK 1.4.0 throws this exception if the entry has no
+            // userPassword attribute.  This still means the user
+            // cannot authenticate, so it's expected in this case.
             authenticated = false;
         }
         catch (NamingException e)
