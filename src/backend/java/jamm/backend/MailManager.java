@@ -1075,6 +1075,48 @@ public class MailManager
     }
 
     /**
+     * Returns all accounts for the specified domain as a list of
+     * {@link AccountInfo} objects.
+     *
+     * @param domain Domain name
+     * @return List of {@link AccountInfo} objects
+     * @throws MailManagerException If an error occured
+     */
+    public List getInactiveAccounts(String domain)
+        throws MailManagerException
+    {
+        LdapFacade ldap = null;
+        List accounts = new ArrayList();
+
+        try
+        {
+            ldap = getLdap();
+            String domainDn = domainDn(domain);
+            String searchString = "(&(objectClass=" + ACCOUNT_OBJECT_CLASS +
+                ")(accountActive=FALSE))";
+            ldap.searchOneLevel(domainDn, searchString);
+
+            while (ldap.nextResult())
+            {
+                AccountInfo account = createAccountInfo(ldap);
+                accounts.add(account);
+            }
+
+        }
+        catch (NamingException e)
+        {
+            throw new MailManagerException(e);
+        }
+        finally
+        {
+            closeLdap(ldap);
+        }
+
+        Collections.sort(accounts, new AccountNameComparator());
+        return accounts;
+    }
+
+    /**
      * Returns a single AccountInfo for a given e-mail address.
      *
      * @param mail an e-mail address
