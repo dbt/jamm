@@ -211,8 +211,9 @@
       <jsptaglib jspversion="1.2" destdir="build/webapp/root/WEB-INF/tld"
                  shortname="jamm" filename="jamm.tld" />
       <strutsconfigxml version="1.1" destdir="build/webapp/root/WEB-INF"
-                       mergedir="src/webapp/config/struts-merge"/>
-      <strutsvalidationxml destdir="build/webapp/root/WEB-INF"/>
+                       mergedir="src/webapp/config/struts-merge"
+                       templateFile="src/webapp/config/struts_config_xml.xdt"/>
+      <!-- <strutsvalidationxml destdir="build/webapp/root/WEB-INF"/> -->
     </webdoclet>
   </target>
   <target name="b-w-w" depends="build-webapp-webdoclet" />
