@@ -1,7 +1,5 @@
 Jamm itself:
 
-* Implement timestamp and enabled attributes.
-
 * Delete account.
 
 * Delete domain.
@@ -13,8 +11,6 @@ Jamm itself:
 
 * Handle exceptions better on web site
 
-* Javadoc, javadoc, javadoc!  Also, javadoc
-
 * Access control so users playing with URLs can't go someplace bad
 
 * Install doc
@@ -24,6 +20,7 @@ Jamm itself:
 * Generate passwords for accounts and/or aliases
   Port diceware to Java?
 
+* have MailManager.authenticate() pay attention to accountActive flag
 
 NAR User Requests:
 
