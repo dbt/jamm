@@ -31,6 +31,8 @@ import java.util.Iterator;
 import javax.naming.NamingException;
 import javax.naming.AuthenticationException;
 import javax.naming.AuthenticationNotSupportedException;
+import javax.naming.NameAlreadyBoundException;
+import javax.naming.CommunicationException;
 
 import jamm.ldap.LdapFacade;
 import jamm.ldap.LdapPassword;
@@ -131,19 +133,38 @@ public class MailManager
      * DN is the empty string.
      *
      * @return A new LDAP facade
-     * @throws NamingException If an error occured
+     * @exception MailManagerCommunicationException If an error occured
+     * @exception NamingException If an error occured
      */
     private LdapFacade getLdap()
-        throws NamingException
+        throws MailManagerCommunicationException, NamingException
     {
-        LdapFacade ldap = new LdapFacade(mHost, mPort);
-        if (mBindDn.equals("") && mBindPassword.equals(""))
+        LdapFacade ldap = null;
+        boolean anon = mBindDn.equals("") && mBindPassword.equals("");
+        try
         {
-            ldap.anonymousBind();
+            ldap = new LdapFacade(mHost, mPort);
+            if (anon)
+            {
+                ldap.anonymousBind();
+            }
+            else
+            {
+                ldap.simpleBind(mBindDn, mBindPassword);
+            }
         }
-        else
+        catch (CommunicationException e)
         {
-            ldap.simpleBind(mBindDn, mBindPassword);
+            String message;
+            if (anon)
+            {
+                message = "Could not bind anonymously to ldap server";
+            }
+            else
+            {
+                message = "Could not bind to ldap server as " + mBindDn;
+            }
+            throw new MailManagerCommunicationException(message, e);
         }
         return ldap;
     }
@@ -707,10 +728,11 @@ public class MailManager
      * aliases, both with no password.
      *
      * @param domain Name of the new domain
-     * @throws MailManagerException If an error occured
+     * @exception AccountExistsException if the domain with that name exists
+     * @exception MailManagerException If an error occured
      */
     public void createDomain(String domain)
-        throws MailManagerException
+        throws DomainExistsException, MailManagerException
     {
         LdapFacade ldap = null;
         try
@@ -756,6 +778,11 @@ public class MailManager
             attributes.put("lastChange", getUnixTimeString());
             attributes.put("accountActive", booleanToString(true));
             ldap.addElement(mailDn(mail), attributes);
+        }
+        catch (NameAlreadyBoundException e)
+        {
+            throw new DomainExistsException(
+                "Could not create domain: " + domain, e);
         }
         catch (NamingException e)
         {
@@ -816,11 +843,12 @@ public class MailManager
      * @param domain Domain name
      * @param alias Alias name
      * @param destinations A collection of String objects
-     * @throws MailManagerException If an error occured
+     * @exception AccountExistsException if the alias already exists
+     * @exception MailManagerException If an error occured
      */
     public void createAlias(String domain, String alias,
                             Collection destinations)
-        throws MailManagerException
+        throws AccountExistsException, MailManagerException
     {
         createAlias(domain, alias,
                     (String []) destinations.toArray(new String[0]));
@@ -853,6 +881,11 @@ public class MailManager
             attributes.put("accountActive", booleanToString(true));
             attributes.put("lastChange", getUnixTimeString());
             ldap.addElement(mailDn(mail), attributes);
+        }
+        catch (NameAlreadyBoundException e)
+        {
+            throw new AccountExistsException(
+                "Count not create alias: " + mail, e);
         }
         catch (NamingException e)
         {
@@ -1103,10 +1136,11 @@ public class MailManager
      * @param domain Domain name
      * @param account New account name
      * @param password Password of new account
-     * @throws MailManagerException If the account could not be created
+     * @exception AccountExistsException if the account exists already
+     * @exception MailManagerException If the account could not be created
      */
     public void createAccount(String domain, String account, String password)
-        throws MailManagerException
+        throws AccountExistsException, MailManagerException
     {
         LdapFacade ldap = null;
         String mail = MailAddress.addressFromParts(account, domain);
@@ -1139,6 +1173,11 @@ public class MailManager
             {
                 ldap.changePassword(maildn, password);
             }
+        }
+        catch (NameAlreadyBoundException e)
+        {
+            throw new AccountExistsException(
+                "Cound not create account: " + mail, e);
         }
         catch (NamingException e)
         {
