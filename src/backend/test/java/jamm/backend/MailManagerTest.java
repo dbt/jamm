@@ -1122,7 +1122,7 @@ public class MailManagerTest extends TestCase
         String newValue = "/new/mailmanager/value";
         MailManagerOptions.setVmailHomedir(newValue);
 
-        String domain="mmoptions.test";
+        String domain = "mmoptions.test";
         String domainDn = "jvd=" + domain + "," + BASE;
         MailManager manager =
             new MailManager("localhost", BASE, LdapConstants.MGR_DN,
