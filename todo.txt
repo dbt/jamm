@@ -16,3 +16,8 @@
 * Delete domain.
 
 * Aliases with multiple destinations.
+
+* Create more meaningful exceptions for mail manager (i.e. subclasses
+  of MailManagerException).
+
+* Javadoc, javadoc, javadoc!
